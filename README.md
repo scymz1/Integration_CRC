@@ -1,7 +1,7 @@
 # Integ_CRC_Jun_7
 Heroku Link: [Heroku](https://pure-falls-53650.herokuapp.com/)
 
-The branch we except to deploy is: **product**
+The branch we except to deploy is: **main**
 
 ### How it run on localhost:
 **1. Clone the project to local**
