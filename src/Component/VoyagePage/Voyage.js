@@ -6,6 +6,7 @@ import {Container} from "@mui/material";
 
 export default function Voyage() {
     return (
+        // hard code side bar here?
         <Container sx={{border: 1}}>
             <h1>Voyage</h1>
             {/*<SideBar/>*/}
