@@ -2,6 +2,7 @@ import Voyage from "./VoyagePage/Voyage";
 import {useQuery} from "react-query";
 import React from 'react';
 import {useState} from "react";
+import ResponsiveAppBar from "./NavBar";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -33,6 +34,7 @@ export default function App() {
 
     return (
         <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
+            <ResponsiveAppBar/>
             <Voyage />
         </GlobalContext.Provider>
     )
