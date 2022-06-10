@@ -1,5 +1,5 @@
 # Integ_CRC_Jun_7
-Heroku Link: [Heroku](https://pure-falls-53650.herokuapp.com/)
+Heroku Link: [Heroku]()
 
 The branch we except to deploy is: **main**
 
@@ -124,10 +124,6 @@ heroku config:unset GITHUB_USERNAME
 │   ├── PastPage
 │   ├── NavBar.js
 |   └─ App.js
-├── Wrapper (deprecated in future version)
-│   ├── Datastore.js
-│   ├── Result.js
-│   └── Filter.js
 └── index.js
 ```
 ------
