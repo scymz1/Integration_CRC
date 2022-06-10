@@ -111,12 +111,15 @@ heroku config:unset GITHUB_USERNAME
 ### Code Structure 
 ```
 .
-├── Main
-│   ├── Result
-│   │   ├── Pie.js
-│   │   └── Sidebaar.js
-│   ├── NavBar.js
-│   └── App.js
+├── Component
+│   ├── Main
+│   │   ├── Result
+│   │   │   └── Pie.js
+│   │   ├── Sidebar.js
+│   │   └── Main.js
+│   ├── Voyage
+│   ├── Data
+│   └── NavBar.js
 ├── Wrapper (deprecated in future version)
 │   ├── Datastore.js
 │   ├── Result.js
