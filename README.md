@@ -107,6 +107,7 @@ heroku config:unset GITHUB_USERNAME
 1. FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
 2. Some problems revelant to `package-lock.json`. For example: npm ERR! Missing: typescript@4.7.3 from lock file
 
+--------
 **Code Structure**
 ```
 .
