@@ -121,12 +121,9 @@ heroku config:unset GITHUB_USERNAME
 │   │   │   ├── Table.js ...
 │   │   │   └── Pie.js
 │   │   └── Voyage.js (with SideBar)
-│   ├── Past
-|   └─ App.js (with NavBar)
-├── Wrapper (deprecated in future version)
-│   ├── Datastore.js
-│   ├── Result.js
-│   └── Filter.js
+│   ├── PastPage
+│   ├── NavBar.js
+|   └─ App.js
 └── index.js
 ```
 ------
