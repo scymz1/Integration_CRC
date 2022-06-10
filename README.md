@@ -112,14 +112,17 @@ heroku config:unset GITHUB_USERNAME
 ```
 .
 ├── Component
-│   ├── Main
-│   │   ├── Result
-│   │   │   └── Pie.js
-│   │   ├── Sidebar.js
-│   │   └── Main.js
+│   ├── Home
 │   ├── Voyage
-│   ├── Data
-│   └── NavBar.js
+│   │   ├── Filter
+│   │   │   ├── ComponentFactory
+│   │   │   └── Menu.js
+│   │   ├── Result
+│   │   │   ├── Table.js ...
+│   │   │   └── Pie.js
+│   │   └── Voyage.js (with SideBar)
+│   ├── Past
+|   ├── App.js (with NavBar)
 ├── Wrapper (deprecated in future version)
 │   ├── Datastore.js
 │   ├── Result.js
