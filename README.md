@@ -108,6 +108,7 @@ heroku config:unset GITHUB_USERNAME
 2. Some problems revelant to `package-lock.json`. For example: npm ERR! Missing: typescript@4.7.3 from lock file
 
 **Code Structure**
+```
 .
 ├── Main
 │   ├── Result
@@ -120,4 +121,5 @@ heroku config:unset GITHUB_USERNAME
 │   ├── Result.js
 │   └── Filter.js
 └── index.js
+```
 
