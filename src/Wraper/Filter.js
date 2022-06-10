@@ -4,7 +4,7 @@ export default function Filter(props) {
     function handleClick(){
         props.setData({
             ...props.data,
-            value: ['value1', 'value2']
+            range: [0, 1700]
         })
     }
     return (
