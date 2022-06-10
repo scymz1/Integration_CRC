@@ -8,6 +8,10 @@ export default function Filter(props) {
         })
     }
     return (
+        // Dropdown, Cascading Menu
+
+        // Component-factory
+
         <Button onClick={handleClick}>
             Set New
         </Button>
