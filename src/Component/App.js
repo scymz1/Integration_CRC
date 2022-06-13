@@ -3,12 +3,7 @@ import {useQuery} from "react-query";
 import React from 'react';
 import {useState} from "react";
 import ResponsiveAppBar from "./NavBar";
-<<<<<<< HEAD
-import PlotlyCollect from "../Component/HomePage/PlotlyCollect";
-
-=======
 import Home from "./HomePage/Home"
->>>>>>> 082fb8f2cdd0438636be7bbd91490111613c2d26
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -41,13 +36,8 @@ export default function App() {
     return (
         <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
             <ResponsiveAppBar/>
-<<<<<<< HEAD
-            <Voyage />
-            {/* <PlotlyCollect/> */}
-=======
             {/* <Voyage /> */}
             <Home />
->>>>>>> 082fb8f2cdd0438636be7bbd91490111613c2d26
         </GlobalContext.Provider>
     )
 }
