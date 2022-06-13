@@ -20,9 +20,9 @@ import {Link} from "react-router-dom";
 import {Box, Tab, Tabs, Typography} from "@mui/material";
 import {useState} from "react";
 import { Container } from "@mui/system";
-// import Scatter from "../viz/Scatter";
-// import Pie from "../viz/Pie";
-// import Bar from "../viz/Bar";
+import Scatter from "./Result/Scatter";
+import Pie from "./Result/Pie";
+import Bar from "./Result/Bar";
 // import Wraper from './Wraper';
 
 function TabPanel(props) {
@@ -57,28 +57,32 @@ export default function VerticalTabs() {
   };
 
   return (
-    <div>
-
-      
-      <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex'}}
-      >
-      <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={value}
-          onChange={handleChange}
-          sx={{ borderRight: 1, borderColor: 'divider' }}
-      >
-          <Tab label="Scatter"/>
-          <Tab label="Bar" />
-          <Tab label="Pie" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-          <Result/>
-      </TabPanel>
-      </Box>
-    </div>
+    <Box
+      sx={{ bgcolor: 'background.paper', display: 'flex' }}
+    >
+    <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={value}
+        onChange={handleChange}
+        sx={{ borderRight: 1, borderColor: 'divider' }}
+    >
+        <Tab label="Scatter" />
+        <Tab label="Bar" />
+        <Tab label="Pie" />
+    </Tabs>
+    <TabPanel value={value} index={0}>
+        <Scatter/>
+    </TabPanel>
+    <TabPanel value={value} index={1}>
+        {/* <Result/> */}
+        <Bar/>
+    </TabPanel>
+    <TabPanel value={value} index={2}>
+        {/* <Result/>  */}
+        <Pie/>
+    </TabPanel>
+    </Box>
 
   );
 }
