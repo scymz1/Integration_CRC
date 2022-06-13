@@ -1,5 +1,5 @@
 # Integ_CRC_Jun_7
-Heroku Link: [Heroku](https://pure-falls-53650.herokuapp.com/)
+Heroku Link: [Heroku]()
 
 The branch we except to deploy is: **main**
 
@@ -107,5 +107,25 @@ heroku config:unset GITHUB_USERNAME
 1. FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
 2. Some problems revelant to `package-lock.json`. For example: npm ERR! Missing: typescript@4.7.3 from lock file
 
-
+--------
+### Code Structure 
+```
+.
+├── Component
+│   ├── HomePage
+│   ├── VoyagePage
+│   │   ├── Filter
+│   │   │   ├── ComponentFactory
+│   │   │   └── Menu.js
+│   │   ├── Result
+│   │   │   ├── Table.js ...
+│   │   │   └── Pie.js
+│   │   └── Voyage.js (with SideBar)
+│   ├── PastPage
+│   ├── NavBar.js
+|   └─ App.js
+└── index.js
+```
+------
+### Potential Problem 
 
