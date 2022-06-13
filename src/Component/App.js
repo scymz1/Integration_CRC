@@ -3,7 +3,7 @@ import {useQuery} from "react-query";
 import React from 'react';
 import {useState} from "react";
 import ResponsiveAppBar from "./NavBar";
-import Home from "./HomePage/Home"
+import Home from "./HomePage/home"
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -26,7 +26,22 @@ export default function App() {
 
     const [search_object, set_search_object] = useState({
         //test data
-        name: ["value1", "value2"]
+        // name: ["value1", "value2"]
+        //test data
+        // 'voyage_dates__imp_arrival_at_port_of_dis_yyyy':[1800,1810],
+
+            // "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name":[
+            //     "Barbados",
+            //     "Jamaica"
+            // ],
+
+        // groupby_fields: ["voyage_itinerary__imp_broad_region_slave_dis__geo_location__name",
+        // "voyage_slaves_numbers__imp_total_num_slaves_disembarked"],
+
+
+        // agg_fn: ["sum"],
+
+        // cachename: ["voyage_bar_and_donut_charts"]
     })
 
     if(error_flat) return 'An error has occurred on option flat: ' + error_flat.message
@@ -36,8 +51,8 @@ export default function App() {
     return (
         <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
             <ResponsiveAppBar/>
-            {/* <Voyage /> */}
-            <Home />
+            <Voyage />
+            {/* <Home /> */}
         </GlobalContext.Provider>
     )
 }

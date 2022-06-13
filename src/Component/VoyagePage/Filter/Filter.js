@@ -19,7 +19,7 @@ export default function Filter(props) {
         })
     }
     return (
-        <Container sx={{border: 1, height:200}}>
+        // <Container sx={{border: 1, height:200}}>
             <Accordion>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -39,7 +39,7 @@ export default function Filter(props) {
                 </AccordionDetails>
             </Accordion>
 
-        </Container>
+        // </Container>
         
     )
 }

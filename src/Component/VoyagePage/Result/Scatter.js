@@ -11,21 +11,16 @@ import Select from '@mui/material/Select';
 import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
-import {donut_value_vars, donut_name_vars} from './vars';
+import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { GlobalContext } from '../../App';
 
-
-
-const option_url = '/voyage/' + '?hierarchical=false'
+const option_url = '/voyage/' + '?hierarchical=false' // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-console.log(process.env.REACT_APP_BASEURL)
-
-
-function Pie () {
+function Scatter () {
 
     const {
         search_object,
@@ -34,17 +29,17 @@ function Pie () {
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
 
-    // const [option_field, setField] = React.useState(scatter_plot_x_vars[0]);
-    // const [option_value, setValue] = React.useState(scatter_plot_y_vars[1]);
-
     const [option, setOption] = useState({
-        field: donut_name_vars[0],
-        value: donut_value_vars[1]
+        field: scatter_plot_x_vars[0],
+        value: scatter_plot_y_vars[1]
     })
 
     const [aggregation, setAgg] = React.useState('sum');
-
     const {sum, average} = aggregation;
+    const [label, setLabel] = useState()
+
+    const [isLoading, setLoading] = useState(true);
+
 
     const handleChange_agg = (event) => {
         setAgg(event.target.value);
@@ -61,10 +56,10 @@ function Pie () {
         var value = option.value
         var agg = aggregation
 
-
         var data = new FormData();
         data.append('hierarchical', 'False');
 
+        console.log("sb",search_object)
         for(var property in search_object) {
             console.log("p",property)
             console.log('so', search_object[property])
@@ -73,7 +68,6 @@ function Pie () {
                 console.log("v", v)
             })
         }
-
 
         data.append('groupby_fields', option.field)
         data.append('groupby_fields', option.value)
@@ -86,8 +80,6 @@ function Pie () {
                 setarrx(Object.keys(response.data[value]))
                 setarry(Object.values(response.data[value]))
 
-                // console.log(plot_value)
-
             })
             .catch(function (error) {
                 console.log(error);
@@ -95,6 +87,22 @@ function Pie () {
 
     }, [option.field, option.value, aggregation]);
 
+    useEffect(() => {
+            axios.options(option_url)
+                .then(function (response) {
+
+                    setLabel(response.data)
+                    setLoading(false)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }, []
+    );
+
+    if (isLoading) {
+        return <div className="spinner"></div>;
+    }
 
     return (
         <div>
@@ -110,9 +118,9 @@ function Pie () {
                             onChange={(event) => {handleChange(event, "field")}}
                             name="field"
                         >
-                            {donut_name_vars.map((option) => (
-                                <MenuItem value={option}>
-                                    {option}
+                            {scatter_plot_x_vars.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {label[option]['flatlabel']}
                                 </MenuItem>
                             ))}
 
@@ -130,12 +138,11 @@ function Pie () {
                             label="Y Field"
                             onChange={(event) => {handleChange(event, "value")}}
                         >
-                            {donut_value_vars.map((option) => (
-                                <MenuItem value={option}>
-                                    {option}
+                            {scatter_plot_y_vars.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {label[option]['flatlabel']}
                                 </MenuItem>
                             ))}
-                            {/* <MenuItem value={scatter_plot_x_vars}>{scatter_plot_x_vars}</MenuItem> */}
 
                         </Select>
                     </FormControl>
@@ -160,13 +167,15 @@ function Pie () {
                 <Plot
                     data={[
                         {
-                            labels: plot_field,
-                            values: plot_value,
-                            type: 'pie',
+                            x: plot_field,
+                            y: plot_value,
+                            type: 'scatter',
                             mode: 'lines+markers',
-                        }
+                            marker: {color: 'red'},
+                        },
+                        {type: 'bar'},
                     ]}
-                    layout={ {width: 1000, height: 500, title: 'Pie Plot'} }
+                    layout={ {width: 1000, height: 500, title: 'Scatter Plot'} }
                 />
             </div>
         </div>
@@ -176,6 +185,4 @@ function Pie () {
 }
 
 
-export default Pie;
-
-
+export default Scatter;
