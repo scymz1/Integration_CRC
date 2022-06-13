@@ -11,7 +11,7 @@ import Select from '@mui/material/Select';
 import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
-import {donut_value_vars, donut_name_vars} from './vars';
+import {bar_x_vars,bar_y_vars} from './vars';
 import { GlobalContext } from '../../App';
 
 
@@ -22,10 +22,8 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-console.log(process.env.REACT_APP_BASEURL)
 
-
-function Pie () {
+function Bar () {
 
     const {
         search_object,
@@ -38,8 +36,8 @@ function Pie () {
     // const [option_value, setValue] = React.useState(scatter_plot_y_vars[1]);
 
     const [option, setOption] = useState({
-        field: donut_name_vars[0],
-        value: donut_value_vars[1]
+        field: bar_x_vars[0],
+        value: bar_y_vars[1]
     })
 
     const [aggregation, setAgg] = React.useState('sum');
@@ -74,7 +72,6 @@ function Pie () {
             })
         }
 
-
         data.append('groupby_fields', option.field)
         data.append('groupby_fields', option.value)
         data.append('agg_fn', aggregation)
@@ -99,7 +96,7 @@ function Pie () {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ minWidth: 120, my: 2}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -110,7 +107,7 @@ function Pie () {
                             onChange={(event) => {handleChange(event, "field")}}
                             name="field"
                         >
-                            {donut_name_vars.map((option) => (
+                            {bar_x_vars.map((option) => (
                                 <MenuItem value={option}>
                                     {option}
                                 </MenuItem>
@@ -119,18 +116,18 @@ function Pie () {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ minWidth: 120,my:2 }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={option.value}
-                            name="value"
                             label="Y Field"
+                            name="value"
                             onChange={(event) => {handleChange(event, "value")}}
                         >
-                            {donut_value_vars.map((option) => (
+                            {bar_y_vars.map((option) => (
                                 <MenuItem value={option}>
                                     {option}
                                 </MenuItem>
@@ -160,13 +157,14 @@ function Pie () {
                 <Plot
                     data={[
                         {
-                            labels: plot_field,
-                            values: plot_value,
-                            type: 'pie',
+                            x: plot_field,
+                            y: plot_value,
+                            type: 'bar',
                             mode: 'lines+markers',
-                        }
+                        },
+                        {type: 'bar'},
                     ]}
-                    layout={ {width: 1000, height: 500, title: 'Pie Plot'} }
+                    layout={ {width: 1000, height: 500, title: 'bar Plot'} }
                 />
             </div>
         </div>
@@ -176,6 +174,4 @@ function Pie () {
 }
 
 
-export default Pie;
-
-
+export default Bar;
