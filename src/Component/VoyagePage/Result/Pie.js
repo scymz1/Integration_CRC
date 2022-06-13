@@ -101,7 +101,7 @@ function Pie () {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ minWidth: 120}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Sectors</InputLabel>
                         <Select
@@ -151,6 +151,7 @@ function Pie () {
                         name="controlled-radio-buttons-group"
                         value={aggregation}
                         onChange={handleChange_agg}
+                        row
                     >
                         <FormControlLabel value="sum" control={<Radio />} label="Sum" />
                         <FormControlLabel value="mean" control={<Radio />} label="Average" />

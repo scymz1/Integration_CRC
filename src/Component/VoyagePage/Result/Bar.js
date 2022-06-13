@@ -97,7 +97,7 @@ function Bar () {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120, my: 2}}>
+                <Box sx={{ minWidth: 120}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -147,6 +147,7 @@ function Bar () {
                         name="controlled-radio-buttons-group"
                         value={aggregation}
                         onChange={handleChange_agg}
+                        row
                     >
                         <FormControlLabel value="sum" control={<Radio />} label="Sum" />
                         <FormControlLabel value="mean" control={<Radio />} label="Average" />
