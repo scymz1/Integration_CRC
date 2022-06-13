@@ -13,6 +13,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {bar_x_vars,bar_y_vars} from './vars';
 import { GlobalContext } from '../../App';
+import { Grid, Paper} from '@mui/material';
 
 
 
@@ -154,18 +155,30 @@ function Bar () {
             </div>
 
             <div>
-                <Plot
-                    data={[
-                        {
-                            x: plot_field,
-                            y: plot_value,
-                            type: 'bar',
-                            mode: 'lines+markers',
-                        },
-                        {type: 'bar'},
-                    ]}
-                    layout={ {width: 1000, height: 500, title: 'bar Plot'} }
-                />
+                <Grid item xs={12} md={4} lg={3}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: 500,
+                        }}
+                        >
+                        <Plot
+                            data={[
+                                {
+                                    x: plot_field,
+                                    y: plot_value,
+                                    type: 'bar',
+                                    mode: 'lines+markers',
+                                },
+                                {type: 'bar'},
+                            ]}
+                            layout={ {title: 'bar Plot'} }
+                            config={{responsive: true}}
+                        />
+                    </Paper>
+                </Grid>
             </div>
         </div>
     )
