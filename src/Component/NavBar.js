@@ -13,35 +13,38 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-
+import { Icon } from "@material-ui/core";
+import logo from "../images/sv-logo.png";
 
 const pages = ["voyages", "Past", "Blog", "Documents"];
 // const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-//   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  //   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-//   const handleOpenUserMenu = (event) => {
-//     setAnchorElUser(event.currentTarget);
-//   };
+  //   const handleOpenUserMenu = (event) => {
+  //     setAnchorElUser(event.currentTarget);
+  //   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-//   const handleCloseUserMenu = () => {
-//     setAnchorElUser(null);
-//   };
+  //   const handleCloseUserMenu = () => {
+  //     setAnchorElUser(null);
+  //   };
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
+          <Icon>
+            <img src={logo} height={30} width={60} />
+          </Icon>
           <Typography
             variant="h6"
             noWrap
@@ -54,7 +57,7 @@ const ResponsiveAppBar = () => {
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
-              textDecoration: "none"
+              textDecoration: "none",
             }}
           >
             Voyages
@@ -76,17 +79,17 @@ const ResponsiveAppBar = () => {
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "left"
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
                 vertical: "top",
-                horizontal: "left"
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: "block", md: "none" }
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
@@ -110,7 +113,7 @@ const ResponsiveAppBar = () => {
               fontWeight: 700,
               letterSpacing: ".3rem",
               color: "inherit",
-              textDecoration: "none"
+              textDecoration: "none",
             }}
           >
             Voyages
@@ -121,58 +124,58 @@ const ResponsiveAppBar = () => {
             alignItems="flex-end"
             sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
           >
-            <Link to={'/Voyages'} style={{ textDecoration: 'none' }}>
+            <Link to={"/Voyages"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
                   color: "white",
                   display: "block",
-                  position: "right"
+                  position: "right",
                 }}
               >
                 Voyages
               </Button>
-            </Link>  
-            <Link to={'/Past'} style={{ textDecoration: 'none' }}>
+            </Link>
+            <Link to={"/Past"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
                   color: "white",
                   display: "block",
-                  position: "right"
+                  position: "right",
                 }}
               >
                 Past
               </Button>
-            </Link>    
-            <Link to={'/Blog'} style={{ textDecoration: 'none' }}>
+            </Link>
+            <Link to={"/Blog"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
                   color: "white",
                   display: "block",
-                  position: "right"
+                  position: "right",
                 }}
               >
                 Blog
               </Button>
-            </Link>    
-            <Link to={'/Documents'} style={{ textDecoration: 'none' }}>
+            </Link>
+            <Link to={"/Documents"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
                   color: "white",
                   display: "block",
-                  position: "right"
+                  position: "right",
                 }}
               >
                 Documents
               </Button>
-            </Link>              
+            </Link>
           </Box>
         </Toolbar>
       </Container>
