@@ -78,7 +78,7 @@ function Table() {
   return (
     <div>
       <div>
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{ minWidth: 120, my: 2 }}>
           <FormControl fullWidth>
             <TableContainer component={Paper}>
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
