@@ -1,58 +1,38 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
-import {Box, Tab, Tabs, Typography} from "@mui/material";
+import TrackVisibility from 'react-on-screen';
+import {Animated} from "react-animated-css";
 import {useState} from "react";
-import PlotlyCollect from "./PlotlyCollect";
+import Button from "@mui/material/Button";
+import {Card, CardContent, CardHeader, List, ListItem} from "@mui/material";
 
-function TabPanel(props) {
-  const { children, value, index } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      style = {{width:"100%"}}
-    >
-      {value === index && (
-        // <Container>
-        <Box sx={{ p: 3 }}>
-          {/* <Filter /> */}
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-export default function VerticalTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
+export default function Home() {
+  const [visible, setVisible] = useState(true)
+  const sample = ["Bar", "Pie", "Scatter", "Table"]
   return (
     <div>
-      <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
-      >
-      <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={value}
-          onChange={handleChange}
-          sx={{ borderRight: 1, borderColor: 'divider' }}
-      >
-          <Tab label="Scatter"/>
-          <Tab label="Bar" />
-          <Tab label="Pie" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-          <PlotlyCollect/>
-      </TabPanel>
-      </Box>
+      <Button onClick={()=>{console.log(visible);setVisible(!visible)}}>
+        visible
+      </Button>
+      <List >
+        {
+          sample.map((label) =>
+            <ListItem key={label}>
+              <TrackVisibility>
+                {({ isVisible }) =>
+                  <Animated animationIn="bounceInLeft" animationOut="fadeOut" isVisible={isVisible}>
+                    <Card sx={{height:500, width:1000, background:"blue"}} >
+                      <CardHeader title={label}/>
+                      <CardContent>
+                        {label}
+                      </CardContent>
+                    </Card>
+                  </Animated>
+                }
+              </TrackVisibility>
+            </ListItem>
+          )
+        }
+      </List>
     </div>
-
   );
 }
