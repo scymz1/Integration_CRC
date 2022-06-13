@@ -3,6 +3,8 @@ import {useQuery} from "react-query";
 import React from 'react';
 import {useState} from "react";
 import ResponsiveAppBar from "./NavBar";
+import PlotlyCollect from "../Component/HomePage/PlotlyCollect";
+
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -36,6 +38,7 @@ export default function App() {
         <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
             <ResponsiveAppBar/>
             <Voyage />
+            {/* <PlotlyCollect/> */}
         </GlobalContext.Provider>
     )
 }
