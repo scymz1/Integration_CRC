@@ -1,9 +1,12 @@
 import Voyage from "./VoyagePage/Voyage";
-import {useQuery} from "react-query";
+import {QueryClient, useQuery} from "react-query";
 import React from 'react';
 import {useState} from "react";
 import ResponsiveAppBar from "./NavBar";
 import Home from "./HomePage/home"
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import OptionSelector from "./VoyagePage/util/optionSelector";
+import {CircularProgress} from "@mui/material";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -46,13 +49,17 @@ export default function App() {
 
     if(error_flat) return 'An error has occurred on option flat: ' + error_flat.message
     if(error_tree) return 'An error has occurred on option tree: ' + error_tree.message
-    if(isLoading_flat || isLoading_tree) return "Is Loading..."
+    if(isLoading_flat || isLoading_tree) return <CircularProgress />
 
     return (
         <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
-            <ResponsiveAppBar/>
-            <Voyage />
-            {/* <Home /> */}
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Voyage />}/>
+                    <Route path="voyage/optionSelector" element={<OptionSelector/>}/>
+                    {/* <Home /> */}
+                </Routes>
+            </BrowserRouter>
         </GlobalContext.Provider>
     )
 }
