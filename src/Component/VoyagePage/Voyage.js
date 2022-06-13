@@ -6,6 +6,7 @@ import Pie from "./Result/Pie";
 import Bar from "./Result/Bar";
 import ResponsiveAppBar from "../NavBar";
 
+
 function TabPanel(props) {
   const {children, value, index} = props;
 
