@@ -23,6 +23,7 @@ import { Container } from "@mui/system";
 import Scatter from "./Result/Scatter";
 import Pie from "./Result/Pie";
 import Bar from "./Result/Bar";
+import Table from "./Result/Table";
 // import Wraper from './Wraper';
 
 function TabPanel(props) {
@@ -70,6 +71,7 @@ export default function VerticalTabs() {
         <Tab label="Scatter" />
         <Tab label="Bar" />
         <Tab label="Pie" />
+        <Tab label="Table"/>
     </Tabs>
     <TabPanel value={value} index={0}>
         <Scatter/>
@@ -81,6 +83,10 @@ export default function VerticalTabs() {
     <TabPanel value={value} index={2}>
         {/* <Result/>  */}
         <Pie/>
+    </TabPanel>
+    <TabPanel value={value} index={3}>
+        {/* <Result/>  */}
+        <Table/>
     </TabPanel>
     </Box>
 
