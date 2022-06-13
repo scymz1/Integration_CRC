@@ -57,34 +57,6 @@ export default function VerticalTabs() {
   };
 
   return (
-<<<<<<< HEAD
-    <Box
-      sx={{ bgcolor: 'background.paper', display: 'flex' }}
-    >
-    <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        sx={{ borderRight: 1, borderColor: 'divider' }}
-    >
-        <Tab label="Scatter" />
-        <Tab label="Bar" />
-        <Tab label="Pie" />
-    </Tabs>
-    <TabPanel value={value} index={0}>
-        <Result/>
-    </TabPanel>
-    <TabPanel value={value} index={1}>
-        <Result/>
-        {/* <Pie/> */}
-    </TabPanel>
-    <TabPanel value={value} index={2}>
-        <Result/> 
-        {/* <Bar/> */}
-    </TabPanel>
-    </Box>
-=======
     <div>
 
       
@@ -107,7 +79,6 @@ export default function VerticalTabs() {
       </TabPanel>
       </Box>
     </div>
->>>>>>> 082fb8f2cdd0438636be7bbd91490111613c2d26
 
   );
 }
