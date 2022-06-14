@@ -25,41 +25,13 @@ export default function Filter(props) {
     
     const [name, setName] = React.useState(autocomplete_text_fields[0]);
     const [textInput, setTestInput] = React.useState("");
-    const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
     const [value, setValue] = React.useState([]);
-    const [label, setLabel] = React.useState(autocomplete_text_fields[0]);
-    // const [type,setType]  = React.useState("default type");
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
+    //console.log("🚀 ~ file: Filter.js ~ line 35 ~ Filter ~ output", output)
     const [menuPosition, setMenuPosition] = React.useState(null);
 
-
-    React.useEffect(()=>{
-        console.log('use effect fetch dropdown options')
-        const fetchData = async (labels,textInput) => {
-        //   console.log("Labels.option: ----->", labels.option)
-          var formdata = new FormData();
-          formdata.append(labels.option, textInput);
-
-          console.log("🚀 ~ label, textInput", label, textInput)
-          var requestOptions = {
-              method: 'POST',
-              headers: header,
-              body: formdata,
-              redirect: 'follow'
-          };
-          fetch("https://voyages3-api.crc.rice.edu/voyage/autocomplete", requestOptions)
-          .then(response => response.json())
-          .then(result => {
-              console.log("🚀YAYAYAY fetch is successful!!! result", result)
-              var newOptions = result[labels.option]
-              console.log("🚀 ~ file: Dropdown.js ~ line 43 ~ fetchData ~ newOptions", newOptions)
-              setautocompleteOptions(newOptions) })
-        }
-  
-        fetchData(labels[labels.length-1],textInput).catch(console.error)
-      },[labels,textInput])
 
 
     return (
@@ -69,14 +41,11 @@ export default function Filter(props) {
       setName,
       textInput,
       setTestInput,
-      autocompleteOptions,
-      setautocompleteOptions,
       value,
       setValue,
       options_tree,
       menuPosition, 
       setMenuPosition,
-    //   isLoading,
       setOutput,
       output,
       labels,
