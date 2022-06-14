@@ -6,13 +6,14 @@ import { AppContext } from "./Filter";
 const header={ "Authorization": 'Token bd233c83dceb9a0f70ffd2b47d6cd3a18a095260',
 }
 
-export default function Auto({option}) {
- console.log("🚀 ~ file: Autocomplete.js ~ line 10 ~ Auto ~ option", option)
+export default function Auto({key}) {
+ //console.log("🚀 ~ file: Autocomplete.js ~ line 10 ~ Auto ~ option", option)
  const { 
     setAutoInput,
-    //autocompleteOptions,   
+    autocompleteOptions,   
     value,
     setValue} = React.useContext(AppContext)
+    console.log("🚀 ~ file: Autocomplete.js ~ line 16 ~ Auto ~ autocompleteOptions", autocompleteOptions)
 
     console.log("Before returning autocomplete")
 
@@ -22,19 +23,15 @@ export default function Auto({option}) {
       disablePortal
       autoHighlight
       multiple
-      //options={autocompleteOptions}
-      options={option}
-      // value={autocompleteOptions[0]}
+      options={autocompleteOptions[key]}
+      //options={option}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
         console.log(value)
       }}
       sx={{ width: 300 }}
       renderInput={(params) => {
-        //params.inputProps.value is what i type in 
-        //console.log("🚀 ~ file: Dropdown.js ~ line 108 ~ Dropdown ~ params", params.InputProps)
         setAutoInput(params.inputProps.value)
-        console.log("AUTOCOMPLETE OUTPUT: -----> ", option)
         return <TextField {...params} label="field" />
          
     }}

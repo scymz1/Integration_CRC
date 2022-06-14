@@ -58,7 +58,7 @@ export default function Filter(props) {
               console.log("🚀YAYAYAY fetch is successful!!! result", result)
               var newOptions = result[labels.option]
               console.log("🚀 ~ file: Dropdown.js ~ line 43 ~ fetchData ~ newOptions", newOptions)
-              setautocompleteOptions(newOptions) })
+              setautocompleteOptions(prev => [...prev,newOptions]) })
         }
   
         fetchData(labels[labels.length-1],autoInput).catch(console.error)

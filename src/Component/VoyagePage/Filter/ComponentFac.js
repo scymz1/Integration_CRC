@@ -23,13 +23,6 @@ import {
 import { getValue } from '@testing-library/user-event/dist/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// import {useContext} from "react";
-// import {GlobalContext} from "../App";
-
-const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-// const baseURL = 'https://voyages3-api.crc.rice.edu/voyage/'
-// const Token = 'Token 3e9ed2e0fa70a1a5cb6f34eb7a30ebde208ecd8f'
 
 
 function ComponentFac(props){
@@ -37,6 +30,7 @@ function ComponentFac(props){
   const varDisplay = raw[2]
   const varName = raw[0]
   const varType = raw[1].split('.').pop().slice(0, -2)
+  let autoCount = 0
   
   console.log("Variable Name: ----> ", raw)
   
@@ -46,7 +40,8 @@ function ComponentFac(props){
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
-      return GetAuto();
+      autoCount += 1
+      return GetAuto(autoCount);
     default:
       return <Chip label="NA" color="primary" />;
   }
@@ -131,21 +126,13 @@ function GetSlider(varName, varDisplay) {
          );
 }
 
-function GetAuto(){
-  console.log('get auto')
-  const Test = () => {
-    return (
-      <div>testing</div>
-    )
-  }
-  const { autocompleteOptions} = useContext(AppContext)
-  const autocompleteOptions_copy = JSON.stringify(autocompleteOptions)|| ""
-  console.log("🚀 ~ file: ComponentFac.js ~ line 143 ~ GetAuto ~ autocompleteOptions_copy", autocompleteOptions_copy)
-  return <Auto option ={JSON.parse(autocompleteOptions_copy)}/>
-  // return <Chip 
-  // component={Test}
-  // onDelete={handleDelete}
-  // deleteIcon={<DeleteIcon />}
+
+function GetAuto(autoCount){
+  
+  // const { autocompleteOptions} = useContext(AppContext)
+  // const autocompleteOptions_copy = JSON.stringify(autocompleteOptions)|| ""
+ console.log("🚀 ~,autoCount-1", autoCount-1)
+  return <Auto key = {autoCount-1}/>
 
 }
 
