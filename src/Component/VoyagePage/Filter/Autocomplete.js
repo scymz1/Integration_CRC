@@ -12,8 +12,6 @@ export default function Auto() {
     value,
     setValue} = React.useContext(AppContext)
 
-    console.log("Before returning autocomplete")
-
   return (
 
     <Autocomplete
@@ -30,7 +28,7 @@ export default function Auto() {
       renderInput={(params) => {
 
         setTestInput(params.inputProps.value)
-        console.log("AUTOCOMPLETE OUTPUT: -----> ", dropdownOptions)
+        console.log("AUTOCOMPLETE OUTPUT: -----> ", value)
         return <TextField {...params} label="field" />
          
     }}
