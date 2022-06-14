@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { AppContext } from "./Filter";
+import {GlobalContext} from "../../App";
 import { styled } from '@mui/material/styles';
 import MuiInput from '@mui/material/Input';
 import axios from 'axios';
@@ -24,6 +25,8 @@ function modifyName(rawName){
 export default function GetSlider() {
     console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
+    const {search_object, set_search_object} = React.useContext(GlobalContext)
+
     const curLabel = labels[labels.length - 1];
     console.log("curLabel: ", curLabel);
     const varName = curLabel["option"];
@@ -147,6 +150,16 @@ export default function GetSlider() {
             onChangeCommitted = {handleCommittedChange}
             // valueLabelDisplay="auto"
         />
+        {
+
+          React.useEffect(() => {
+            set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+              ...search_object,
+              [varName]: [value[0], value[1]]
+            });
+            console.log("SEARCH OBJECT -----> ", search_object)
+          }, [search_object])
+        }
         </>
          );
 }
