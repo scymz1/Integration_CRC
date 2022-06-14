@@ -2,11 +2,12 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Grid, Paper, Typography, Card, CardContent, Box } from "@mui/material";
+import { Button,Grid, Paper, Typography, Card, CardContent, Box } from "@mui/material";
 import {
   scatter_plot_x_vars,
   scatter_plot_y_vars,
 } from "../../VoyagePage/Result/vars";
+import { Link } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -64,7 +65,7 @@ function ScatterComponent() {
                   marker: { color: "red" },
                 },
               ]}
-              layout={{ title: "Scatter Plot" }}
+              layout={{width:800, height:600,  title: "Scatter Plot" }}
               config={{ responsive: true }}
             />
           </CardContent>
@@ -74,9 +75,7 @@ function ScatterComponent() {
           <CardContent sx={{ flex: "1 0 auto" }}>
             <div>
               <CardContent>
-                <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography>
+              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Scatter Charts</Button>
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>

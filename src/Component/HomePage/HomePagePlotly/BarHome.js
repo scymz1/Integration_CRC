@@ -2,8 +2,9 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import {Button, Box, Typography, Card, CardContent } from "@mui/material";
 import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
+import { Link } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -61,7 +62,7 @@ function BarComponent() {
               },
               { type: "bar" },
             ]}
-            layout={{ title: "bar Plot" }}
+            layout={{ width:800, height:600, title: "bar Plot" }}
             config={{ responsive: true }}
           />
           </CardContent>
@@ -69,11 +70,9 @@ function BarComponent() {
 
        <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
+          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
             <div>
               <CardContent>
-                <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>
