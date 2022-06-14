@@ -112,15 +112,15 @@ function GetSlider() {
   //           onChangeCommitted = {handleCommittedChange}
   //           valueLabelDisplay="on"
   //       />
-  //       {
+        // {
 
-  //         React.useEffect(() => {
-  //           set_search_object({                     // <---------- UPDATE SEARCH OBJECT
-  //             ...search_object,
-  //             varName: [value[0], value[1]]
-  //           })
-  //         }, [search_object])
-  //       }
+        //   React.useEffect(() => {
+        //     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+        //       ...search_object,
+        //       varName: [value[0], value[1]]
+        //     })
+        //   }, [search_object])
+        // }
   //       </>
   //        );
 }
