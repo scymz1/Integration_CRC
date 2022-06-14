@@ -5,6 +5,7 @@ import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import * as React from 'react';
 import {GlobalContext} from "../../App";
+import { AppContext } from "./Filter";
 import {
   Typography,
   Container,
@@ -20,6 +21,7 @@ import {
 } from '@mui/material';
 // import Request from './request';
 import { getValue } from '@testing-library/user-event/dist/utils';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // import {useContext} from "react";
 // import {GlobalContext} from "../App";
@@ -57,10 +59,13 @@ function modifyName(rawName){
   return res
 }
 
+const handleDelete = () => {
+  console.info('You clicked the delete icon.');
+};
+
 function GetSlider(varName, varDisplay) {
 
   const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);     // <--------- CONTEXT
-
 
     const [range, setRange] = React.useState([0,0])
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
@@ -95,6 +100,9 @@ function GetSlider(varName, varDisplay) {
   };
 
 
+  
+
+
   return (
         <>
         <Typography gutterBottom>{varDisplay}</Typography>
@@ -125,7 +133,20 @@ function GetSlider(varName, varDisplay) {
 
 function GetAuto(){
   console.log('get auto')
-  return <Auto/>
+  const Test = () => {
+    return (
+      <div>testing</div>
+    )
+  }
+  const { autocompleteOptions} = useContext(AppContext)
+  const autocompleteOptions_copy = JSON.stringify(autocompleteOptions)|| ""
+  console.log("🚀 ~ file: ComponentFac.js ~ line 143 ~ GetAuto ~ autocompleteOptions_copy", autocompleteOptions_copy)
+  return <Auto option ={JSON.parse(autocompleteOptions_copy)}/>
+  // return <Chip 
+  // component={Test}
+  // onDelete={handleDelete}
+  // deleteIcon={<DeleteIcon />}
+
 }
 
 function GetCheck(props){
