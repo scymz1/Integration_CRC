@@ -2,7 +2,7 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Grid, Paper, Typography, Card, CardContent  } from "@mui/material";
+import { Box,Grid, Paper, Typography, Card, CardContent  } from "@mui/material";
 import {
   donut_value_vars,
   donut_name_vars,
@@ -48,46 +48,37 @@ function PieComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
-    <div>
-      <Grid container spacing={5}>
-      <Grid item xs={6}>
-          <Card>
-            <div>
-              <CardContent>
-                <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Typography variant="subtitle1" color="primary">
-                  Continue reading...
-                </Typography>
-              </CardContent>
-            </div>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={6}>
-          <Plot
-            data={[
-              {
-                labels: plot_field,
-                values: plot_value,
-                type: "pie",
-                mode: "lines+markers",
-              },
-            ]}
-            layout={{ title: "Pie Plot" }}
-            config={{ responsive: true }}
-          />
-        </Grid>
-      </Grid>
-    </div>
-  );
+    <Card sx={{display: 'flex'}}>
+        <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flex: '1 0 auto' }}>
+                <Plot
+                data={[
+                    {
+                    labels: plot_field,
+                    values: plot_value,
+                    type: "pie",
+                    mode: "lines+markers",
+                    },
+                    { type: "bar" },
+                ]}
+                layout={{width:800,height:700,title: "Pie Plot" }}
+                config={{ responsive: true }}
+                />
+            </CardContent>
+        </Box>
+        <Box>
+        <CardContent>
+            <Typography component="div" variant="h5">
+            Newspapers are printed in several languages.Newspapers are printed in several languages. They are delivered to the doorstep of individuals early in the morning. Newspapers are printed in local languages. They are also printed in several languages that are widely accepted. They newspapers may be dailies.
+
+A weekly subscription will mean that the newspaper or the digest is delivered to your family once a week. Similarly, monthly and yearly subscriptions are also present. Yearly subscriptions can be for magazines that deliver not only the news but also other entertaining stories, pictures, and poems.
+
+On several occasions, you may find a newspaper strip that comes attached with dailies once a week or month.
+            </Typography>
+        </CardContent>
+        </Box>
+    </Card>
+  )
 }
 
 export default PieComponent;

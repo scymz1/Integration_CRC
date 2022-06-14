@@ -14,19 +14,20 @@ export default function Home() {
   return (
     <div>
       <ResponsiveAppBar/>
-        <List >
+        <List>
           {
             sample.map((label) =>
-              <ListItem key={label}>
-                <TrackVisibility offset={300}>
+              <ListItem key={label}  >
+                <TrackVisibility offset={300}>      
                   {({ isVisible }) =>
                     <Animated animationIn="bounceInLeft" animationOut="fadeOut" isVisible={isVisible}>
-                      <Card >
+                      {/* <BarComponent/> */}
+                      {/* <Card >bo */}
                         {/* <CardHeader title={label}/> */}
-                        <CardContent>
+                        {/* <CardContent> */}
                           {label}
-                        </CardContent>
-                      </Card>
+                        {/* </CardContent>
+                      </Card> */}
                     </Animated>
                   }
                 </TrackVisibility>
