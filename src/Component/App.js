@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import OptionSelector from "./VoyagePage/util/optionSelector";
 import {CircularProgress} from "@mui/material";
-import Home from "./HomePage/home";
+import Home from "./HomePage/Home";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;

@@ -4,13 +4,13 @@ import {Animated} from "react-animated-css";
 import {Card, CardContent, CardHeader, List, ListItem} from "@mui/material";
 import ResponsiveAppBar from "../NavBar";
 import Container from "@mui/material/Container";
-import Bar from "../VoyagePage/Result/Bar";
-import Pie from "../VoyagePage/Result/Pie";
-import Scatter from "../VoyagePage/Result/Scatter";
+import BarComponent from "./HomePagePlotly/BarHome";
+import PieComponent from './HomePagePlotly/PieHome';
+import ScatterComponent from './HomePagePlotly/ScatterHome';
 
 export default function Home() {
 
-  const sample = [<Bar/>, <Pie/>, <Scatter/>]
+  const sample = [<BarComponent/>,<PieComponent/>,<ScatterComponent/>]
   return (
     <div>
       <ResponsiveAppBar/>
@@ -23,7 +23,7 @@ export default function Home() {
                   {({ isVisible }) =>
                     <Animated animationIn="bounceInLeft" animationOut="fadeOut" isVisible={isVisible}>
                       <Card >
-                        {/*<CardHeader title={label}/>*/}
+                        {/* <CardHeader title={label}/> */}
                         <CardContent>
                           {label}
                         </CardContent>
