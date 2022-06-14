@@ -2,7 +2,7 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Grid, Paper, Typography, Card, CardContent } from "@mui/material";
+import { Grid, Paper, Typography, Card, CardContent, Stack } from "@mui/material";
 import {
   scatter_plot_x_vars,
   scatter_plot_y_vars,
@@ -68,7 +68,7 @@ function ScatterComponent() {
           />
         </Grid>
 
-        <Grid item xs={4}>
+        <Stack item xs={4}>
           <Card>
             <div>
               <CardContent>
@@ -87,7 +87,7 @@ function ScatterComponent() {
               </CardContent>
             </div>
           </Card>
-        </Grid>
+        </Stack>
       </Grid>
     </div>
   );

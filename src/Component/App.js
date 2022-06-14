@@ -19,7 +19,7 @@ export default function App() {
     }).then(res => res.json())
   )
   const {isLoading: isLoading_flat, error: error_flat, data: options_flat} = useQuery('repoData',
-    () => fetch(base_url + "voyage/", {
+    () => fetch(base_url + "voyage/?hierarchical=false", {
       method: "OPTIONS",
       headers: {'Authorization': auth_token}
     }).then(res => res.json())
