@@ -115,8 +115,10 @@ function GetSlider(varName, varDisplay) {
           React.useEffect(() => {
             set_search_object({                     // <---------- UPDATE SEARCH OBJECT
               ...search_object,
-              varName: [value[0], value[1]]
+              [varName]: [value[0], value[1]]
             })
+            console.log("Search Object Name: ", varName)
+            console.log("Slider Search Object: ", search_object)
           }, [search_object])
         }
         </>
