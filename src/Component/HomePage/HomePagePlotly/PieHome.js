@@ -2,11 +2,13 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import {Button, Box, Typography, Card, CardContent } from "@mui/material";
 import {
   donut_value_vars,
   donut_name_vars,
 } from "../../VoyagePage/Result/vars";
+import { Link } from 'react-router-dom';
+
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -55,9 +57,7 @@ function PieComponent() {
           <CardContent sx={{ flex: "1 0 auto" }}>
             <div>
               <CardContent>
-                <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography>
+              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>
@@ -83,7 +83,7 @@ function PieComponent() {
                   mode: "lines+markers",
                 },
               ]}
-              layout={{ title: "Pie Plot" }}
+              layout={{ width:800, height:600, title: "Pie Plot" }}
               config={{ responsive: true }}
             />
           </CardContent>
