@@ -16,7 +16,8 @@ import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
 import { useQuery } from 'react-query'
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
-import NestedMenuItem from "material-ui-nested-menu-item";
+// import NestedMenuItem from "material-ui-nested-menu-item";
+import {NestedMenuItem} from 'mui-nested-menu';
 import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
 
@@ -26,12 +27,14 @@ import {GlobalContext} from "../../App";
 function Cascading() {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
-
     const [option, setOption] = React.useState('');
-
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-
     const {options_tree} = useContext(GlobalContext);     // <--------- CONTEXT
+
+    const handleClick = (e: React.MouseEvent) => setAnchorEl(e.currentTarget);
+    const handleClose = () => setAnchorEl(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
 
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
@@ -47,7 +50,8 @@ function Cascading() {
   
     const handleOptionClick = (option, type, flatlabel) => {
         if (option === "__id") option = "id"
-        setMenuPosition(null);
+        // setMenuPosition(null);
+        handleClose();
         setOption(option);
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
@@ -81,9 +85,8 @@ function Cascading() {
                         : <NestedMenuItem
                             key={nodes[key].label}
                             label={nodes[key].label}
-                            parentMenuOpen={!!menuPosition}
-                            onClick={handleItemClick}
-                            value={nodes[key].flatlabel}
+                            parentMenuOpen={open}
+                            onClick={handleClose}
                             > 
                             {renderTree(nodes[key], name+"__"+key)}
                         </NestedMenuItem>
@@ -105,16 +108,11 @@ function Cascading() {
                     >
                         <Button
                             variant="contained"
-                            onClick={handleLeftClick}
+                            onClick={handleClick}
                             >
                             New Filter
                         </Button>
-                        <Menu
-                            open={!!menuPosition}
-                            onClose={() => setMenuPosition(null)}
-                            anchorReference="anchorPosition"
-                            anchorPosition={menuPosition}
-                        >
+                        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {renderTree(options_tree, "")}
                         </Menu>
                         
