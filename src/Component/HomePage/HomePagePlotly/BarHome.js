@@ -54,46 +54,41 @@ function BarComponent() {
   }
 
   return (
-    <div>
-      <Card sx={{ display: "flex" }}>
+    <Card sx={{ display: "flex" }}>
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-          <Plot
-            data={[
-              {
-                x: plot_field,
-                y: plot_value,
-                type: "bar",
-                mode: "lines+markers",
-              },
-              { type: "bar" },
-            ]}
-            layout={{ width:800, height:600, title: "bar Plot" }}
-            config={{ responsive: true }}
-          />
-          </CardContent>
+            <CardContent sx={{ flex: "1 0 auto" }}>
+                <Plot
+                    data={[
+                    {
+                        x: plot_field,
+                        y: plot_value,
+                        type: "bar",
+                        mode: "lines+markers",
+                    },
+                    { type: "bar" },
+                    ]}
+                    layout={{ width:800, height:600, title: "bar Plot" }}
+                    config={{ responsive: true }}
+                />
+            </CardContent>
         </Box>
-
-       <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
-            <div>
-              <CardContent>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
-                  Continue reading...
-                </Button>
-              </CardContent>
-            </div>
-        </CardContent>
+        <Box>
+            <CardContent sx={{ flex: "1 0 auto" }}>
+                <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
+                    <CardContent>
+                        <Typography variant="subtitle1" color="textSecondary">
+                        {featuredPosts.date}
+                        </Typography>
+                        <Typography variant="subtitle1" paragraph>
+                        {featuredPosts.description}
+                        </Typography>
+                        <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                        Continue reading...
+                        </Button>
+                    </CardContent>
+                </CardContent>
         </Box>
     </Card>
-    </div>
   );
 }
 
