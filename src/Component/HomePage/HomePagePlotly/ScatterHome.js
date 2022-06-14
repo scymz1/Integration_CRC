@@ -2,7 +2,11 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
+<<<<<<< HEAD
 import {Box, Grid, Paper, Typography, Card, CardContent } from "@mui/material";
+=======
+import { Grid, Paper, Typography, Card, CardContent, Stack } from "@mui/material";
+>>>>>>> 608db01ca731e80a8b721640167a0cc1e9f7fe2d
 import {
   scatter_plot_x_vars,
   scatter_plot_y_vars,
@@ -50,6 +54,7 @@ function ScatterComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
+<<<<<<< HEAD
     <Card sx={{display: 'flex'}}>
         <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ flex: '1 0 auto' }}>
@@ -80,6 +85,48 @@ On several occasions, you may find a newspaper strip that comes attached with da
         </CardContent>
         </Box>
     </Card>
+=======
+    <div>
+      <Grid container spacing={5}>
+        <Grid item >
+          <Plot
+            data={[
+              {
+                x: plot_field,
+                y: plot_value,
+                type: "scatter",
+                mode: "lines+markers",
+                marker: { color: "red" },
+              },
+            ]}
+            layout={{ title: "Scatter Plot" }}
+            config={{ responsive: true }}
+          />
+        </Grid>
+
+        <Stack item xs={4}>
+          <Card>
+            <div>
+              <CardContent>
+                <Typography component="h2" variant="h5">
+                  {featuredPosts.title}
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {featuredPosts.date}
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {featuredPosts.description}
+                </Typography>
+                <Typography variant="subtitle1" color="primary">
+                  Continue reading...
+                </Typography>
+              </CardContent>
+            </div>
+          </Card>
+        </Stack>
+      </Grid>
+    </div>
+>>>>>>> 608db01ca731e80a8b721640167a0cc1e9f7fe2d
   );
 }
 
