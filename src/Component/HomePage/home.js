@@ -9,7 +9,7 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 
 export default function Home() {
-  const sample = [<BarComponent />, <PieComponent />, <ScatterComponent />];
+  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
     <div>
       <ResponsiveAppBar />

@@ -50,46 +50,41 @@ function PieComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
-
-    <div>
-      <Card sx={{ display: "flex" }}>
+    <Card sx={{ display: "flex" }}>
         <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <div>
-              <CardContent>
-              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Typography variant="subtitle1" color="primary">
-                  Continue reading...
-                </Typography>
-              </CardContent>
-            </div>
-          </CardContent>
+            <CardContent sx={{ flex: "1 0 auto" }}>
+                <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
+                <CardContent>
+                    <Typography variant="subtitle1" color="textSecondary">
+                    {featuredPosts.date}
+                    </Typography>
+                    <Typography variant="subtitle1" paragraph>
+                    {featuredPosts.description}
+                    </Typography>
+                    <Typography variant="subtitle1" color="primary">
+                    Continue reading...
+                    </Typography>
+                </CardContent>
+            </CardContent>
         </Box>
 
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Plot
-              data={[
-                {
-                  labels: plot_field,
-                  values: plot_value,
-                  type: "pie",
-                  mode: "lines+markers",
-                },
-              ]}
-              layout={{ width:800, height:600, title: "Pie Plot" }}
-              config={{ responsive: true }}
-            />
-          </CardContent>
+            <CardContent sx={{ flex: "1 0 auto" }}>
+                <Plot
+                data={[
+                    {
+                    labels: plot_field,
+                    values: plot_value,
+                    type: "pie",
+                    mode: "lines+markers",
+                    },
+                ]}
+                layout={{ width:800, height:600, title: "Pie Plot" }}
+                config={{ responsive: true }}
+                />
+            </CardContent>
         </Box>
-      </Card>
-    </div>
+    </Card>
   );
 }
 

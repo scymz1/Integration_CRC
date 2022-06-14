@@ -20,74 +20,69 @@ const featuredPosts = {
 
 
 function BarComponent() {
-  const [plot_field, setarrx] = useState([]);
-  const [plot_value, setarry] = useState([]);
-  const [option, setOption] = useState({
-    field: bar_x_vars[0],
-    value: bar_y_vars[1],
-  });
-  const [aggregation, setAgg] = React.useState("sum");
-  useEffect(() => {
-    var value = option.value;
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    data.append("groupby_fields", option.field);
-    data.append("groupby_fields", option.value);
-    data.append("agg_fn", "sum");
-    data.append("cachename", "voyage_export");
+    const [plot_field, setarrx] = useState([]);
+    const [plot_value, setarry] = useState([]);
+    const [option, setOption] = useState({
+        field: bar_x_vars[0],
+        value: bar_y_vars[1],
+    });
+    const [aggregation, setAgg] = React.useState("sum");
+    useEffect(() => {
+        var value = option.value;
+        var data = new FormData();
+        data.append("hierarchical", "False");
+        data.append("groupby_fields", option.field);
+        data.append("groupby_fields", option.value);
+        data.append("agg_fn", "sum");
+        data.append("cachename", "voyage_export");
 
-    axios
-      .post("/voyage/groupby", (data = data))
-      .then(function (response) {
-        setarrx(Object.keys(response.data[value]));
-        setarry(Object.values(response.data[value]));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [option.field, option.value, aggregation]);
+        axios
+        .post("/voyage/groupby", (data = data))
+        .then(function (response) {
+            setarrx(Object.keys(response.data[value]));
+            setarry(Object.values(response.data[value]));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, [option.field, option.value, aggregation]);
 
-  return (
-    <div>
-      <Card sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-          <Plot
-            data={[
-              {
-                x: plot_field,
-                y: plot_value,
-                type: "bar",
-                mode: "lines+markers",
-              },
-              { type: "bar" },
-            ]}
-            layout={{ width:800, height:600, title: "bar Plot" }}
-            config={{ responsive: true }}
-          />
-          </CardContent>
-        </Box>
-
-       <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
-            <div>
-              <CardContent>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Typography variant="subtitle1" color="primary">
-                  Continue reading...
-                </Typography>
-              </CardContent>
-            </div>
-        </CardContent>
-        </Box>
-    </Card>
-    </div>
+    return (
+        <Card sx={{ display: "flex" }}>
+            <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+                <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Plot
+                        data={[
+                        {
+                            x: plot_field,
+                            y: plot_value,
+                            type: "bar",
+                            mode: "lines+markers",
+                        },
+                        { type: "bar" },
+                        ]}
+                        layout={{ width:800, height:600, title: "bar Plot" }}
+                        config={{ responsive: true }}
+                    />
+                </CardContent>
+            </Box>
+            <Box>
+                <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
+                    <CardContent>
+                        <Typography variant="subtitle1" color="textSecondary">
+                        {featuredPosts.date}
+                        </Typography>
+                        <Typography variant="subtitle1" paragraph>
+                        {featuredPosts.description}
+                        </Typography>
+                        <Typography variant="subtitle1" color="primary">
+                        Continue reading...
+                        </Typography>
+                    </CardContent>
+                </CardContent>
+            </Box>
+        </Card>
   );
 }
 
