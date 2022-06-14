@@ -56,9 +56,7 @@ function PieComponent() {
   }
 
   return (
-
-    <div>
-      <Card sx={{ display: "flex" }}>
+    <Card sx={{ display: "flex" }}>
         <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <div>
@@ -79,23 +77,22 @@ function PieComponent() {
         </Box>
 
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <Plot
-              data={[
-                {
-                  labels: plot_field,
-                  values: plot_value,
-                  type: "pie",
-                  mode: "lines+markers",
-                },
-              ]}
-              layout={{ width:800, height:600, title: "Pie Plot" }}
-              config={{ responsive: true }}
-            />
-          </CardContent>
+            <CardContent sx={{ flex: "1 0 auto" }}>
+                <Plot
+                data={[
+                    {
+                    labels: plot_field,
+                    values: plot_value,
+                    type: "pie",
+                    mode: "lines+markers",
+                    },
+                ]}
+                layout={{ width:800, height:600, title: "Pie Plot" }}
+                config={{ responsive: true }}
+                />
+            </CardContent>
         </Box>
-      </Card>
-    </div>
+    </Card>
   );
 }
 

@@ -21,32 +21,32 @@ const featuredPosts = {
 
 
 function BarComponent() {
-  const [plot_field, setarrx] = useState([]);
-  const [plot_value, setarry] = useState([]);
-  const [option, setOption] = useState({
-    field: bar_x_vars[0],
-    value: bar_y_vars[1],
-  });
-  const [aggregation, setAgg] = React.useState("sum");
-  useEffect(() => {
-    var value = option.value;
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    data.append("groupby_fields", option.field);
-    data.append("groupby_fields", option.value);
-    data.append("agg_fn", "sum");
-    data.append("cachename", "voyage_export");
+    const [plot_field, setarrx] = useState([]);
+    const [plot_value, setarry] = useState([]);
+    const [option, setOption] = useState({
+        field: bar_x_vars[0],
+        value: bar_y_vars[1],
+    });
+    const [aggregation, setAgg] = React.useState("sum");
+    useEffect(() => {
+        var value = option.value;
+        var data = new FormData();
+        data.append("hierarchical", "False");
+        data.append("groupby_fields", option.field);
+        data.append("groupby_fields", option.value);
+        data.append("agg_fn", "sum");
+        data.append("cachename", "voyage_export");
 
-    axios
-      .post("/voyage/groupby", (data = data))
-      .then(function (response) {
-        setarrx(Object.keys(response.data[value]));
-        setarry(Object.values(response.data[value]));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [option.field, option.value, aggregation]);
+        axios
+        .post("/voyage/groupby", (data = data))
+        .then(function (response) {
+            setarrx(Object.keys(response.data[value]));
+            setarry(Object.values(response.data[value]));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, [option.field, option.value, aggregation]);
 
   const navigate = useNavigate();
   const GotoVoyagePage = () => {
