@@ -2,21 +2,22 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Grid, Paper, Typography, Card, CardContent } from "@mui/material";
+import { Button,Grid, Paper, Typography, Card, CardContent, Box } from "@mui/material";
 import {
   scatter_plot_x_vars,
   scatter_plot_y_vars,
 } from "../../VoyagePage/Result/vars";
+import { Link } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
-  title: "Featured post",
+  title: "Data Visualization - Scatter",
   date: "June 14, Tue",
   description:
-    "This is a wider card with supporting text below as a natural lead-in to additional content.",
+    "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the Academicians, particularly theAdirondacks and the mountains of Vermont and New Hampshire.different ways.",
 };
 
 function ScatterComponent() {
@@ -51,30 +52,30 @@ function ScatterComponent() {
 
   return (
     <div>
-      <Grid container spacing={5}>
-        <Grid item >
-          <Plot
-            data={[
-              {
-                x: plot_field,
-                y: plot_value,
-                type: "scatter",
-                mode: "lines+markers",
-                marker: { color: "red" },
-              },
-            ]}
-            layout={{ title: "Scatter Plot" }}
-            config={{ responsive: true }}
-          />
-        </Grid>
+      <Card sx={{ display: "flex" }}>
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <Plot
+              data={[
+                {
+                  x: plot_field,
+                  y: plot_value,
+                  type: "scatter",
+                  mode: "lines+markers",
+                  marker: { color: "red" },
+                },
+              ]}
+              layout={{width:800, height:600,  title: "Scatter Plot" }}
+              config={{ responsive: true }}
+            />
+          </CardContent>
+        </Box>
 
-        <Grid item xs={4}>
-          <Card>
+        <Box>
+          <CardContent sx={{ flex: "1 0 auto" }}>
             <div>
               <CardContent>
-                <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography>
+              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Scatter Charts</Button>
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>
@@ -86,9 +87,9 @@ function ScatterComponent() {
                 </Typography>
               </CardContent>
             </div>
-          </Card>
-        </Grid>
-      </Grid>
+          </CardContent>
+        </Box>
+      </Card>
     </div>
   );
 }
