@@ -1,58 +1,39 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
-import {Box, Tab, Tabs, Typography} from "@mui/material";
-import {useState} from "react";
-import PlotlyCollect from "./PlotlyCollect";
+import * as React from "react";
+import TrackVisibility from "react-on-screen";
+import { Animated } from "react-animated-css";
+import { Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
+import ResponsiveAppBar from "../NavBar";
+import Container from "@mui/material/Container";
+import BarComponent from "./HomePagePlotly/BarHome";
+import PieComponent from "./HomePagePlotly/PieHome";
+import ScatterComponent from "./HomePagePlotly/ScatterHome";
 
-function TabPanel(props) {
-  const { children, value, index } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      style = {{width:"100%"}}
-    >
-      {value === index && (
-        // <Container>
-        <Box sx={{ p: 3 }}>
-          {/* <Filter /> */}
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-export default function VerticalTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
+export default function Home() {
+  const sample = [<BarComponent />, <PieComponent />, <ScatterComponent />];
   return (
     <div>
-      <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
-      >
-      <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={value}
-          onChange={handleChange}
-          sx={{ borderRight: 1, borderColor: 'divider' }}
-      >
-          <Tab label="Scatter"/>
-          <Tab label="Bar" />
-          <Tab label="Pie" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-          <PlotlyCollect/>
-      </TabPanel>
-      </Box>
+      <ResponsiveAppBar />
+    <Container>
+      <List>
+        {sample.map((label) => (
+          <ListItem key={label}>
+            <TrackVisibility offset={300}>
+              {({ isVisible }) => (
+                <Animated
+                  animationIn="bounceInLeft"
+                  animationOut="fadeOut"
+                  isVisible={isVisible}
+                >
+                  {label}
+                  <Divider />
+                </Animated>
+              )}
+            </TrackVisibility>
+          </ListItem>
+        ))}
+   
+      </List>
+      </Container>
     </div>
-
   );
 }

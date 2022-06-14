@@ -21,13 +21,6 @@ import {
 // import Request from './request';
 import { getValue } from '@testing-library/user-event/dist/utils';
 
-// import {useContext} from "react";
-// import {GlobalContext} from "../App";
-
-const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-// const baseURL = 'https://voyages3-api.crc.rice.edu/voyage/'
-// const Token = 'Token 3e9ed2e0fa70a1a5cb6f34eb7a30ebde208ecd8f'
 
 
 function ComponentFac(props){
@@ -35,7 +28,7 @@ function ComponentFac(props){
   const varDisplay = raw[2]
   const varName = raw[0]
   const varType = raw[1].split('.').pop().slice(0, -2)
-  
+
   console.log("Variable Name: ----> ", raw)
   
   switch(varType){
@@ -44,6 +37,7 @@ function ComponentFac(props){
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
+
       return GetAuto();
     default:
       return <Chip label="NA" color="primary" />;
@@ -112,15 +106,15 @@ function GetSlider() {
   //           onChangeCommitted = {handleCommittedChange}
   //           valueLabelDisplay="on"
   //       />
-  //       {
+        // {
 
-  //         React.useEffect(() => {
-  //           set_search_object({                     // <---------- UPDATE SEARCH OBJECT
-  //             ...search_object,
-  //             varName: [value[0], value[1]]
-  //           })
-  //         }, [search_object])
-  //       }
+        //   React.useEffect(() => {
+        //     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+        //       ...search_object,
+        //       varName: [value[0], value[1]]
+        //     })
+        //   }, [search_object])
+        // }
   //       </>
   //        );
 }
