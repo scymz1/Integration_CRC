@@ -5,7 +5,6 @@ import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import * as React from 'react';
 import {GlobalContext} from "../../App";
-import { AppContext } from "./Filter";
 import {
   Typography,
   Container,
@@ -21,7 +20,6 @@ import {
 } from '@mui/material';
 // import Request from './request';
 import { getValue } from '@testing-library/user-event/dist/utils';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
@@ -30,8 +28,7 @@ function ComponentFac(props){
   const varDisplay = raw[2]
   const varName = raw[0]
   const varType = raw[1].split('.').pop().slice(0, -2)
-  let autoCount = 0
-  
+
   console.log("Variable Name: ----> ", raw)
   
   switch(varType){
@@ -40,8 +37,8 @@ function ComponentFac(props){
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
-      autoCount += 1
-      return GetAuto(autoCount);
+
+      return GetAuto();
     default:
       return <Chip label="NA" color="primary" />;
   }
@@ -54,13 +51,10 @@ function modifyName(rawName){
   return res
 }
 
-const handleDelete = () => {
-  console.info('You clicked the delete icon.');
-};
-
 function GetSlider(varName, varDisplay) {
 
   const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);     // <--------- CONTEXT
+
 
     const [range, setRange] = React.useState([0,0])
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
@@ -95,9 +89,6 @@ function GetSlider(varName, varDisplay) {
   };
 
 
-  
-
-
   return (
         <>
         <Typography gutterBottom>{varDisplay}</Typography>
@@ -126,14 +117,9 @@ function GetSlider(varName, varDisplay) {
          );
 }
 
-
-function GetAuto(autoCount){
-  
-  // const { autocompleteOptions} = useContext(AppContext)
-  // const autocompleteOptions_copy = JSON.stringify(autocompleteOptions)|| ""
- console.log("🚀 ~,autoCount-1", autoCount-1)
-  return <Auto key = {autoCount-1}/>
-
+function GetAuto(){
+  console.log('get auto')
+  return <Auto/>
 }
 
 function GetCheck(props){

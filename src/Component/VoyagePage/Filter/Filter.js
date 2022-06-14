@@ -24,15 +24,12 @@ export default function Filter(props) {
     const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);
     
     const [name, setName] = React.useState(autocomplete_text_fields[0]);
-    const [autoInput, setAutoInput] = React.useState("");
+    const [textInput, setTestInput] = React.useState("");
     const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
     const [value, setValue] = React.useState([]);
-    //label is a string 
-    //eg. voyage_itinerary__port_of_departure__geo_location__child_of__name
     const [label, setLabel] = React.useState(autocomplete_text_fields[0]);
-
-    //labels is an object
-    //eg. {option: 'voyage_itinerary__int_first_region_purchase_slaves__geo_location__location_type__name', type: "<class 'rest_framework.fields.CharField'>", label: 'Itinerary : First intended region of purchase of s…cation : Location Type : Geographic Location Type'}
+    // const [type,setType]  = React.useState("default type");
+  
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
@@ -40,12 +37,12 @@ export default function Filter(props) {
 
     React.useEffect(()=>{
         console.log('use effect fetch dropdown options')
-        const fetchData = async (labels,autoInput) => {
-           console.log("Labels: ----->", labels)
+        const fetchData = async (labels,textInput) => {
+        //   console.log("Labels.option: ----->", labels.option)
           var formdata = new FormData();
-          formdata.append(labels.option, autoInput);
+          formdata.append(labels.option, textInput);
 
-          console.log("🚀 ~ label, autoInput", label, autoInput)
+          console.log("🚀 ~ label, textInput", label, textInput)
           var requestOptions = {
               method: 'POST',
               headers: header,
@@ -58,11 +55,11 @@ export default function Filter(props) {
               console.log("🚀YAYAYAY fetch is successful!!! result", result)
               var newOptions = result[labels.option]
               console.log("🚀 ~ file: Dropdown.js ~ line 43 ~ fetchData ~ newOptions", newOptions)
-              setautocompleteOptions(prev => [...prev,newOptions]) })
+              setautocompleteOptions(newOptions) })
         }
   
-        fetchData(labels[labels.length-1],autoInput).catch(console.error)
-      },[labels,autoInput])
+        fetchData(labels[labels.length-1],textInput).catch(console.error)
+      },[labels,textInput])
 
 
     return (
@@ -70,8 +67,8 @@ export default function Filter(props) {
     value={{
       name,
       setName,
-      autoInput,
-      setAutoInput,
+      textInput,
+      setTestInput,
       autocompleteOptions,
       setautocompleteOptions,
       value,
