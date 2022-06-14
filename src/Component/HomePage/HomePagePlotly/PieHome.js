@@ -48,6 +48,7 @@ function PieComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
+
     <div>
       <Card sx={{ display: "flex" }}>
         <Box>
@@ -59,7 +60,7 @@ function PieComponent() {
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
-                </Typography>
+                </Typography>https://github.com/jirany/Integ_CRC/pull/2/conflict?name=src%252FComponent%252FHomePage%252FHomePagePlotly%252FPieHome.js&ancestor_oid=1b88acfb7c29775a6dafd8c6a2578704000aa78d&base_oid=60c82b8d1304f47e9a69437f9ac14d2f7298456f&head_oid=8022ed7e9b3c5f758331ddcb4796082c8b01dc33
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>

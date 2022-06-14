@@ -85,9 +85,9 @@ function BarComponent() {
                 </Typography>
               </CardContent>
             </div>
-            </CardContent>
+        </CardContent>
         </Box>
-      </Card>
+    </Card>
     </div>
   );
 }
