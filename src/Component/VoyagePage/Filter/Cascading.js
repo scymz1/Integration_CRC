@@ -36,6 +36,8 @@ function Cascading() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
+    const {search_object} = useContext(GlobalContext);
+
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -57,7 +59,10 @@ function Cascading() {
 
         var out = option + "***" + type + "***" + flatlabel;
         console.log("OUTPUT STRING: ----->", out)
-        setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        if(!search_object[option])
+            setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        else
+            alert("The variable has been selected.")
         console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
