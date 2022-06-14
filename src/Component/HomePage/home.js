@@ -14,7 +14,6 @@ export default function Home() {
   return (
     <div>
       <ResponsiveAppBar/>
-      <Container>
         <List >
           {
             sample.map((label) =>
@@ -35,7 +34,6 @@ export default function Home() {
             )
           }
         </List>
-      </Container>
     </div>
   );
 }

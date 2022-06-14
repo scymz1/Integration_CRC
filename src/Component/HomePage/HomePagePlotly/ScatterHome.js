@@ -1,68 +1,96 @@
-import React, { Component, PureComponent, useState, useEffect } from 'react'
+import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
-import axios from 'axios'
-import Plot from 'react-plotly.js';
-import { Grid, Paper} from '@mui/material';
-import {scatter_plot_x_vars,scatter_plot_y_vars} from'../../VoyagePage/Result/vars'
+import axios from "axios";
+import Plot from "react-plotly.js";
+import { Grid, Paper, Typography, Card, CardContent } from "@mui/material";
+import {
+  scatter_plot_x_vars,
+  scatter_plot_y_vars,
+} from "../../VoyagePage/Result/vars";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
-axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-function ScatterComponent () {
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
-    const [plot_field, setarrx] = useState([])
-    const [plot_value, setarry] = useState([])
-    const [option, setOption] = useState({
-        field: scatter_plot_x_vars[0],
-        value: scatter_plot_y_vars[1]
-    })
-    const [aggregation, setAgg] = React.useState('sum');
-    useEffect(() => {
-        var value = option.value
-        var data = new FormData();
-        data.append('hierarchical', 'False');
-        data.append('groupby_fields', option.field)
-        data.append('groupby_fields', option.value)
-        data.append('agg_fn', 'sum')
-        data.append('cachename','voyage_export')
+const featuredPosts = {
+  title: "Featured post",
+  date: "June 14, Tue",
+  description:
+    "This is a wider card with supporting text below as a natural lead-in to additional content.",
+};
 
-        axios.post('/voyage/groupby', data=data)
-            .then(function (response) {
+function ScatterComponent() {
+  const [plot_field, setarrx] = useState([]);
+  const [plot_value, setarry] = useState([]);
+  const [option, setOption] = useState({
+    field: scatter_plot_x_vars[0],
+    value: scatter_plot_y_vars[1],
+  });
+  const [aggregation, setAgg] = React.useState("sum");
+  useEffect(() => {
+    var value = option.value;
+    var data = new FormData();
+    data.append("hierarchical", "False");
+    data.append("groupby_fields", option.field);
+    data.append("groupby_fields", option.value);
+    data.append("agg_fn", "sum");
+    data.append("cachename", "voyage_export");
 
-                setarrx(Object.keys(response.data[value]))
-                setarry(Object.values(response.data[value]))
+    axios
+      .post("/voyage/groupby", (data = data))
+      .then(function (response) {
+        setarrx(Object.keys(response.data[value]));
+        setarry(Object.values(response.data[value]));
 
-                // console.log(plot_value)
+        // console.log(plot_value)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [option.field, option.value, aggregation]);
 
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+  return (
+    <div>
+      <Grid container spacing={5}>
+        <Grid item xs={6}>
+          <Plot
+            data={[
+              {
+                x: plot_field,
+                y: plot_value,
+                type: "scatter",
+                mode: "lines+markers",
+                marker: { color: "red" },
+              },
+            ]}
+            layout={{ title: "Scatter Plot" }}
+            config={{ responsive: true }}
+          />
+        </Grid>
 
-    }, [option.field, option.value, aggregation]);
-
-
-    return (
-        <div>
+        <Grid item xs={6}>
+          <Card>
             <div>
-                <Grid item xs={12} md={4} lg={3}>
-                    <Plot
-                        data={[
-                            {
-                                x: plot_field,
-                                y: plot_value,
-                                type: 'scatter',
-                                mode: 'lines+markers',
-                                marker: {color: 'red'},
-                            }
-                        ]}
-                        layout={ {title: 'Scatter Plot'} }
-                        config={{responsive: true}}
-                    />
-                </Grid>
+              <CardContent>
+                <Typography component="h2" variant="h5">
+                  {featuredPosts.title}
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {featuredPosts.date}
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {featuredPosts.description}
+                </Typography>
+                <Typography variant="subtitle1" color="primary">
+                  Continue reading...
+                </Typography>
+              </CardContent>
             </div>
-        </div>
-    )
+          </Card>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
 
 export default ScatterComponent;
