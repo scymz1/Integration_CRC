@@ -5,6 +5,7 @@ import Plot from "react-plotly.js";
 import {Button, Box, Typography, Card, CardContent } from "@mui/material";
 import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -47,42 +48,52 @@ function BarComponent() {
         });
     }, [option.field, option.value, aggregation]);
 
-    return (
-        <Card sx={{ display: "flex" }}>
-            <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Plot
-                        data={[
-                        {
-                            x: plot_field,
-                            y: plot_value,
-                            type: "bar",
-                            mode: "lines+markers",
-                        },
-                        { type: "bar" },
-                        ]}
-                        layout={{ width:800, height:600, title: "bar Plot" }}
-                        config={{ responsive: true }}
-                    />
-                </CardContent>
-            </Box>
-            <Box>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
-                    <CardContent>
-                        <Typography variant="subtitle1" color="textSecondary">
-                        {featuredPosts.date}
-                        </Typography>
-                        <Typography variant="subtitle1" paragraph>
-                        {featuredPosts.description}
-                        </Typography>
-                        <Typography variant="subtitle1" color="primary">
-                        Continue reading...
-                        </Typography>
-                    </CardContent>
-                </CardContent>
-            </Box>
-        </Card>
+  const navigate = useNavigate();
+  const GotoVoyagePage = () => {
+    navigate('/');
+  }
+
+  return (
+    <div>
+      <Card sx={{ display: "flex" }}>
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+          <Plot
+            data={[
+              {
+                x: plot_field,
+                y: plot_value,
+                type: "bar",
+                mode: "lines+markers",
+              },
+              { type: "bar" },
+            ]}
+            layout={{ width:800, height:600, title: "bar Plot" }}
+            config={{ responsive: true }}
+          />
+          </CardContent>
+        </Box>
+
+       <Box>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
+            <div>
+              <CardContent>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {featuredPosts.date}
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {featuredPosts.description}
+                </Typography>
+                <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                  Continue reading...
+                </Button>
+              </CardContent>
+            </div>
+        </CardContent>
+        </Box>
+    </Card>
+    </div>
   );
 }
 

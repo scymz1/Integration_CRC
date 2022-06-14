@@ -8,6 +8,7 @@ import {
   donut_name_vars,
 } from "../../VoyagePage/Result/vars";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -49,23 +50,30 @@ function PieComponent() {
       });
   }, [option.field, option.value, aggregation]);
 
+  const navigate = useNavigate();
+  const GotoVoyagePage = () => {
+    navigate('/');
+  }
+
   return (
     <Card sx={{ display: "flex" }}>
         <Box>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-                <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
-                <CardContent>
-                    <Typography variant="subtitle1" color="textSecondary">
-                    {featuredPosts.date}
-                    </Typography>
-                    <Typography variant="subtitle1" paragraph>
-                    {featuredPosts.description}
-                    </Typography>
-                    <Typography variant="subtitle1" color="primary">
-                    Continue reading...
-                    </Typography>
-                </CardContent>
-            </CardContent>
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <div>
+              <CardContent>
+              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {featuredPosts.date}
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {featuredPosts.description}
+                </Typography>
+                <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                  Continue reading...
+                </Button>
+              </CardContent>
+            </div>
+          </CardContent>
         </Box>
 
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>

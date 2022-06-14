@@ -60,6 +60,7 @@ export default function Auto() {
 
         setTestInput(params.inputProps.value)
         console.log("AUTOCOMPLETE OUTPUT: -----> ", value)
+        console.log('AUTOCOMPLETE FIELD: ----->', labels)
         return <TextField {...params} label="field" />
          
     }}
