@@ -8,6 +8,7 @@ import {
   scatter_plot_y_vars,
 } from "../../VoyagePage/Result/vars";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -50,6 +51,11 @@ function ScatterComponent() {
       });
   }, [option.field, option.value, aggregation]);
 
+  const navigate = useNavigate();
+  const GotoVoyagePage = () => {
+    navigate('/');
+  }
+
   return (
     <div>
       <Card sx={{ display: "flex" }}>
@@ -82,9 +88,9 @@ function ScatterComponent() {
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>
-                <Typography variant="subtitle1" color="primary">
+                <Button variant="text" type="button" onClick={GotoVoyagePage}>
                   Continue reading...
-                </Typography>
+                </Button>
               </CardContent>
             </div>
           </CardContent>
