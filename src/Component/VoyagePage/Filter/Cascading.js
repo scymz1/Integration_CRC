@@ -8,7 +8,7 @@ import {
     Grid,
     List,
     ListItemText,
-    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu
+    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu//, MenuItem
 } from '@mui/material';
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
@@ -46,6 +46,7 @@ function Cascading() {
       };
   
     const handleOptionClick = (option, type, flatlabel) => {
+        if (option === "__id") option = "id"
         setMenuPosition(null);
         setOption(option);
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
@@ -96,31 +97,29 @@ function Cascading() {
         <Container>
             <Grid container >
                 <Grid item xs={12}>
-                    <Card sx={{height: 500, flexGrow: 1, maxWidth: 800, overflowY: 'auto'}}>
-                        <CardContent>
-                            <TreeView
-                                aria-label="option menu"
-                                defaultCollapseIcon={<ExpandMoreIcon/>}
-                                defaultExpandIcon={<ChevronRightIcon/>}
+
+                    <TreeView
+                        aria-label="option menu"
+                        defaultCollapseIcon={<ExpandMoreIcon/>}
+                        defaultExpandIcon={<ChevronRightIcon/>}
+                    >
+                        <Button
+                            variant="contained"
+                            onClick={handleLeftClick}
                             >
-                                <Button
-                                    variant="contained"
-                                    onClick={handleLeftClick}
-                                    >
-                                    New Filter
-                                </Button>
-                                <Menu
-                                    open={!!menuPosition}
-                                    onClose={() => setMenuPosition(null)}
-                                    anchorReference="anchorPosition"
-                                    anchorPosition={menuPosition}
-                                >
-                                    {renderTree(options_tree, "")}
-                                </Menu>
-                                
-                            </TreeView>
-                        </CardContent>
-                    </Card>
+                            New Filter
+                        </Button>
+                        <Menu
+                            open={!!menuPosition}
+                            onClose={() => setMenuPosition(null)}
+                            anchorReference="anchorPosition"
+                            anchorPosition={menuPosition}
+                        >
+                            {renderTree(options_tree, "")}
+                        </Menu>
+                        
+                    </TreeView>
+
                 </Grid>
             
             </Grid>
