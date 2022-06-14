@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div>
       <ResponsiveAppBar />
-    <Container>
+    <Container maxWidth={false}>
       <List>
         {sample.map((label) => (
           <ListItem key={label}>

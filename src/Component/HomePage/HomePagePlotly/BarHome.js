@@ -2,7 +2,7 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Button,CardMedia,Box,Grid, Paper, Typography, Card, CardContent } from "@mui/material";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -10,11 +10,13 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
-  title: "Featured post",
+  title: "Data Visualization - Bar",
   date: "June 14, Tue",
   description:
-    "This is a wider card with supporting text below as a natural lead-in to additional content.",
+  "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the"
 };
+
+
 
 function BarComponent() {
   const [plot_field, setarrx] = useState([]);
@@ -46,8 +48,9 @@ function BarComponent() {
 
   return (
     <div>
-      <Grid container spacing={2}>
-        <Grid item>
+      <Card sx={{ display: "flex" }}>
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+          <CardContent sx={{ flex: "1 0 auto" }}>
           <Plot
             data={[
               {
@@ -61,9 +64,11 @@ function BarComponent() {
             layout={{ title: "bar Plot" }}
             config={{ responsive: true }}
           />
-        </Grid>
-        <Grid item xs={4}>
-          <Card>
+          </CardContent>
+        </Box>
+
+       <Box>
+          <CardContent sx={{ flex: "1 0 auto" }}>
             <div>
               <CardContent>
                 <Typography component="h2" variant="h5">
@@ -80,16 +85,10 @@ function BarComponent() {
                 </Typography>
               </CardContent>
             </div>
-<<<<<<< HEAD
         </CardContent>
         </Box>
     </Card>
-=======
-          </Card>
-        </Grid>
-      </Grid>
     </div>
->>>>>>> 608db01ca731e80a8b721640167a0cc1e9f7fe2d
   );
 }
 
