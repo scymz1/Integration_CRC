@@ -58,22 +58,20 @@ function PieComponent() {
   return (
     <Card sx={{ display: "flex" }}>
         <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <div>
-              <CardContent>
+            <CardContent sx={{ flex: "1 0 auto" }}>
               <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
-                  Continue reading...
-                </Button>
-              </CardContent>
-            </div>
-          </CardContent>
+                <CardContent>
+                    <Typography variant="subtitle1" color="textSecondary">
+                    {featuredPosts.date}
+                    </Typography>
+                    <Typography variant="subtitle1" paragraph>
+                    {featuredPosts.description}
+                    </Typography>
+                    <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                    Continue reading...
+                    </Button>
+                </CardContent>
+            </CardContent>
         </Box>
 
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
