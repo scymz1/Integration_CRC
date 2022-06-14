@@ -31,13 +31,15 @@ function ComponentFac(props){
 
   console.log("Variable Name: ----> ", raw)
   
+  const {search_object} = useContext(GlobalContext);
+
+
   switch(varType){
     case "IntegerField" || "DecimalField":
       return GetSlider();
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
-
       return GetAuto();
     default:
       return <Chip label="NA" color="primary" />;

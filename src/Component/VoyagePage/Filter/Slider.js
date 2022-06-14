@@ -69,9 +69,6 @@ export default function GetSlider() {
   
   const handleChange = (event, newValue) => {
       setValue(newValue); 
-      // console.log("slide change: ", value)
-    //   console.log("left " + value[0]);
-    //   console.log("right " + value[1]);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
