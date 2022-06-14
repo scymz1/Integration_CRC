@@ -1,38 +1,41 @@
 import * as React from 'react';
 import TrackVisibility from 'react-on-screen';
 import {Animated} from "react-animated-css";
-import {useState} from "react";
-import Button from "@mui/material/Button";
 import {Card, CardContent, CardHeader, List, ListItem} from "@mui/material";
+import ResponsiveAppBar from "../NavBar";
+import Container from "@mui/material/Container";
+import Bar from "../VoyagePage/Result/Bar";
+import Pie from "../VoyagePage/Result/Pie";
+import Scatter from "../VoyagePage/Result/Scatter";
 
 export default function Home() {
-  const [visible, setVisible] = useState(true)
-  const sample = ["Bar", "Pie", "Scatter", "Table"]
+
+  const sample = [<Bar/>, <Pie/>, <Scatter/>]
   return (
     <div>
-      <Button onClick={()=>{console.log(visible);setVisible(!visible)}}>
-        visible
-      </Button>
-      <List >
-        {
-          sample.map((label) =>
-            <ListItem key={label}>
-              <TrackVisibility>
-                {({ isVisible }) =>
-                  <Animated animationIn="bounceInLeft" animationOut="fadeOut" isVisible={isVisible}>
-                    <Card sx={{height:500, width:1000, background:"blue"}} >
-                      <CardHeader title={label}/>
-                      <CardContent>
-                        {label}
-                      </CardContent>
-                    </Card>
-                  </Animated>
-                }
-              </TrackVisibility>
-            </ListItem>
-          )
-        }
-      </List>
+      <ResponsiveAppBar/>
+      <Container>
+        <List >
+          {
+            sample.map((label) =>
+              <ListItem key={label}>
+                <TrackVisibility offset={300}>
+                  {({ isVisible }) =>
+                    <Animated animationIn="bounceInLeft" animationOut="fadeOut" isVisible={isVisible}>
+                      <Card >
+                        {/*<CardHeader title={label}/>*/}
+                        <CardContent>
+                          {label}
+                        </CardContent>
+                      </Card>
+                    </Animated>
+                  }
+                </TrackVisibility>
+              </ListItem>
+            )
+          }
+        </List>
+      </Container>
     </div>
   );
 }
