@@ -10,11 +10,11 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
-    title: "Featured post",
-    date: "June 14, Tue",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content.",
-}
+  title: "Featured post",
+  date: "June 14, Tue",
+  description:
+    "This is a wider card with supporting text below as a natural lead-in to additional content.",
+};
 
 function BarComponent() {
   const [plot_field, setarrx] = useState([]);
@@ -46,43 +46,43 @@ function BarComponent() {
 
   return (
     <div>
-    <Grid container spacing={5}>
-      <Grid item xs={6}>
-        <Plot
-          data={[
-            {
-              x: plot_field,
-              y: plot_value,
-              type: "bar",
-              mode: "lines+markers",
-            },
-            { type: "bar" },
-          ]}
-          layout={{ title: "bar Plot" }}
-          config={{ responsive: true }}
-        />
+      <Grid container spacing={2}>
+        <Grid item>
+          <Plot
+            data={[
+              {
+                x: plot_field,
+                y: plot_value,
+                type: "bar",
+                mode: "lines+markers",
+              },
+              { type: "bar" },
+            ]}
+            layout={{ title: "bar Plot" }}
+            config={{ responsive: true }}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Card>
+            <div>
+              <CardContent>
+                <Typography component="h2" variant="h5">
+                  {featuredPosts.title}
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {featuredPosts.date}
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {featuredPosts.description}
+                </Typography>
+                <Typography variant="subtitle1" color="primary">
+                  Continue reading...
+                </Typography>
+              </CardContent>
+            </div>
+          </Card>
+        </Grid>
       </Grid>
-      <Grid item xs={6}>
-      <Card>
-        <div>
-          <CardContent>
-            <Typography component="h2" variant="h5">
-              {featuredPosts.title}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {featuredPosts.date}
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-              {featuredPosts.description}
-            </Typography>
-            <Typography variant="subtitle1" color="primary">
-              Continue reading...
-            </Typography>
-          </CardContent>
-        </div>
-      </Card>
-      </Grid>
-    </Grid>
     </div>
   );
 }

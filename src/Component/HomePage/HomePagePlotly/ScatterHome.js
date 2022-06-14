@@ -52,7 +52,7 @@ function ScatterComponent() {
   return (
     <div>
       <Grid container spacing={5}>
-        <Grid item xs={6}>
+        <Grid item >
           <Plot
             data={[
               {
@@ -68,7 +68,7 @@ function ScatterComponent() {
           />
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <Card>
             <div>
               <CardContent>
