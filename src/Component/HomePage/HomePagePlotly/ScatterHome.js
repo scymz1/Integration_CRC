@@ -54,38 +54,6 @@ function ScatterComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
-<<<<<<< HEAD
-    <Card sx={{display: 'flex'}}>
-        <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-            <CardContent sx={{ flex: '1 0 auto' }}>
-                <Plot
-                data={[
-                    {
-                    x: plot_field,
-                    y: plot_value,
-                    type: "scatter",
-                    mode: "lines+markers",
-                    },
-                    { type: "bar" },
-                ]}
-                layout={{width:800,height:700,title: "Scatter Plot" }}
-                config={{ responsive: true }}
-                />
-            </CardContent>
-        </Box>
-        <Box>
-        <CardContent>
-            <Typography component="div" variant="h5">
-            Newspapers are printed in several languages.Newspapers are printed in several languages. They are delivered to the doorstep of individuals early in the morning. Newspapers are printed in local languages. They are also printed in several languages that are widely accepted. They newspapers may be dailies.
-
-A weekly subscription will mean that the newspaper or the digest is delivered to your family once a week. Similarly, monthly and yearly subscriptions are also present. Yearly subscriptions can be for magazines that deliver not only the news but also other entertaining stories, pictures, and poems.
-
-On several occasions, you may find a newspaper strip that comes attached with dailies once a week or month.
-            </Typography>
-        </CardContent>
-        </Box>
-    </Card>
-=======
     <div>
       <Grid container spacing={5}>
         <Grid item >
@@ -126,7 +94,6 @@ On several occasions, you may find a newspaper strip that comes attached with da
         </Stack>
       </Grid>
     </div>
->>>>>>> 608db01ca731e80a8b721640167a0cc1e9f7fe2d
   );
 }
 

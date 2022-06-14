@@ -53,34 +53,6 @@ function BarComponent() {
   }, [option.field, option.value, aggregation]);
 
   return (
-<<<<<<< HEAD
-    <Card sx={{display: 'flex'}}>
-        <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-            <CardContent sx={{ flex: '1 0 auto' }}>
-                <Plot
-                data={[
-                    {
-                    x: plot_field,
-                    y: plot_value,
-                    type: "bar",
-                    mode: "lines+markers",
-                    },
-                    { type: "bar" },
-                ]}
-                layout={{width:800,height:700,title: "bar Plot" }}
-                config={{ responsive: true }}
-                />
-            </CardContent>
-        </Box>
-        <Box>
-        <CardContent>
-            <Button variant="text" style={{ fontSize: '25px' }}>Data Visualization: Bar Charts </Button>
-        <div>
-              <CardContent>
-                {/* <Typography component="h2" variant="h5">
-                  {featuredPosts.title}
-                </Typography> */}
-=======
     <div>
       <Grid container spacing={2}>
         <Grid item>
@@ -105,7 +77,6 @@ function BarComponent() {
                 <Typography component="h2" variant="h5">
                   {featuredPosts.title}
                 </Typography>
->>>>>>> 608db01ca731e80a8b721640167a0cc1e9f7fe2d
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>
