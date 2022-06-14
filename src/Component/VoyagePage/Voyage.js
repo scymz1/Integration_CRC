@@ -4,6 +4,7 @@ import {Box, Tab, Tabs, Typography} from "@mui/material";
 import Scatter from "./Result/Scatter";
 import Pie from "./Result/Pie";
 import Bar from "./Result/Bar";
+import Table from "./Result/Table";
 import ResponsiveAppBar from "../NavBar";
 
 
@@ -21,7 +22,6 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{p: 3}}>
-                    <Filter/>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -39,6 +39,7 @@ export default function Voyage() {
     return (
         <div>
             <ResponsiveAppBar/>
+            <Filter/>
             <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
                 <Tabs
                     orientation="vertical"
@@ -50,17 +51,19 @@ export default function Voyage() {
                     <Tab label="Scatter"/>
                     <Tab label="Bar"/>
                     <Tab label="Pie"/>
+                    <Tab label="Table"/>
                 </Tabs>
                     <TabPanel value={value} index={0}>
                         <Scatter/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        {/* <Result/> */}
                         <Bar/>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        {/* <Result/>  */}
                         <Pie/>
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <Table/>
                     </TabPanel>
             </Box>
         </div>

@@ -13,7 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-import { Icon } from "@material-ui/core";
+//import { Icon } from "@material-ui/core";
+import Icon from '@mui/material/Icon';
 import logo from "../images/sv-logo.png";
 
 const pages = ["voyages", "Past", "Blog", "Documents"];

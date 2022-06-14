@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
 import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
 import { useQuery } from 'react-query'
 import * as React from 'react';
-import { MenuItem} from "@material-ui/core";
+import { MenuItem } from '@mui/material';
 import NestedMenuItem from "material-ui-nested-menu-item";
 import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
