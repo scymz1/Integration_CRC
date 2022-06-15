@@ -2,6 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
+import {GlobalContext} from "../../App";
 const header={ "Authorization": 'Token bd233c83dceb9a0f70ffd2b47d6cd3a18a095260',
 }
 
@@ -13,6 +14,8 @@ export default function Auto() {
     textInput,   
     value,
     setValue} = React.useContext(AppContext)
+
+  const {search_object, set_search_object} = React.useContext(GlobalContext)
 
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
 
@@ -41,6 +44,19 @@ export default function Auto() {
 
       fetchData(labels[labels.length-1],textInput).catch(console.error)
     },[])
+
+    React.useEffect(() => {
+      set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+        ...search_object,
+        [labels]: value
+      });
+        // "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name":[
+    //     "Barbados",
+    //     "Jamaica"
+    // ],
+      console.log("AUTO SEARCH OBJECT -----> ", search_object)
+    }, [value])
+
 
 
   return (
