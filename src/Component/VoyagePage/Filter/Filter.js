@@ -20,7 +20,7 @@ import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": 'Token 6eca1c4d65c47d438b5beb852674bacb7e38ed1d'}
+const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
@@ -41,6 +41,12 @@ export default function Filter(props) {
         var varName = raw[0]
         let newObject = {...search_object};
         delete newObject[varName];
+    };
+
+    const handlePrint = (item) => { 
+        console.log('Current Output is', output);
+        var raw = item.split("***")
+        console.log('FlatLabel is', item.split("***")[2]);
     };
 
     return (
@@ -72,7 +78,7 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'row'} spacing={2} alignItems="center">
+          <Grid container direction={'row'} spacing={2}>
             <Grid item xs={4} >
               <Cascading />
             </Grid>
@@ -82,10 +88,9 @@ export default function Filter(props) {
                 return(
                   <Card>
                     <CardHeader
-                      title={"Sample Header"}
+                      title={item.split("***")[2]}
                       action={
-                        <IconButton onClick={()=>{handleDelete(item)}}
-                        >
+                        <IconButton onClick={()=>{handleDelete(item)}}>
                           <RemoveCircleOutlineIcon />
                         </IconButton>
                         }
@@ -93,6 +98,11 @@ export default function Filter(props) {
                     <CardContent>
                       <ComponentFac params={item} />
                     </CardContent>
+                    <CardActions>
+                        <IconButton onClick={()=>{handlePrint(item)}}>
+                          <ExpandMoreIcon />
+                        </IconButton>
+                    </CardActions>
                 </Card>
                 )})
               }

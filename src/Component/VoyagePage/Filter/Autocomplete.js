@@ -2,8 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
-const header={ "Authorization": 'Token 6eca1c4d65c47d438b5beb852674bacb7e38ed1d',
-}
+const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Auto() {
  //console.log("🚀 ~ file: Autocomplete.js ~ line 10 ~ Auto ~ option", option)
