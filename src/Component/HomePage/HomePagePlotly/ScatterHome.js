@@ -58,7 +58,7 @@ function ScatterComponent() {
 
   return (
     <div>
-      <Card sx={{ display: "flex" }}>
+      <Card sx={{ display: "flex" }} style={{background: 'transparent', boxShadow: 'none'}}>
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Plot
@@ -78,7 +78,7 @@ function ScatterComponent() {
         </Box>
 
         <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
+          <CardContent sx={{ flex: "1 0 auto" }} style={{backgroundColor: "#f1f1f1"}}>
             <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/Scatter">Data Visualization - Scatter Charts</Button>
               <CardContent>
                 <Typography variant="subtitle1" color="textSecondary">
