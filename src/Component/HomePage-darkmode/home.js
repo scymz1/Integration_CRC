@@ -9,7 +9,6 @@ import BarComponent from "./HomePagePlotly/BarHome";
 import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 // const darkTheme = createTheme({
 //   palette: {
@@ -39,7 +38,7 @@ export default function Home() {
 
   const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
-    // <ThemeProvider theme={darkTheme}>
+  <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
     <Container maxWidth={false}>
@@ -76,7 +75,6 @@ export default function Home() {
       
     </div>
 
-    
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 }
