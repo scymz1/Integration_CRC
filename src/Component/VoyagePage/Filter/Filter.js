@@ -20,7 +20,7 @@ import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": 'Token bd233c83dceb9a0f70ffd2b47d6cd3a18a095260'}
+const header={ "Authorization": 'Token 77e6b7487f5c3aa4275257eb5f77ad06e8c62a39'}
 
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
@@ -72,20 +72,20 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'row'} spacing={2} alignItems="center">
-            <Grid item xs={4} >
+          <Grid container direction={'col'} spacing={2}>
+            <Grid item xs={2} align="center">
               <Cascading />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={10}>
               <Card>
               {output.map((item) => {
                 return(
                   <Card>
                     <CardHeader
-                      title={"Sample Header"}
+                      title={item.split("***")[2]}
+                      titleTypographyProps={{variant:'body1'}}
                       action={
-                        <IconButton onClick={()=>{handleDelete(item)}}
-                        >
+                        <IconButton onClick={()=>{handleDelete(item)}}>
                           <RemoveCircleOutlineIcon />
                         </IconButton>
                         }

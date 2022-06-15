@@ -6,7 +6,7 @@ import { Button, Box, Typography, Card, CardContent } from "@mui/material";
 import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import Backdrop from '@mui/material/Backdrop';
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -53,9 +53,9 @@ function BarComponent() {
 
   return (
     <div>
-      <Card sx={{ display: "flex" }}>
-        <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
+      <Card sx={{ display: "flex" }} style={{ background: 'transparent', boxShadow: 'none'}}>
+        <Box sx={{margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+          <CardContent sx={{ flex: "1 0 auto" }} >
             <Button
               variant="text"
               style={{ fontSize: "24px" }}
@@ -92,12 +92,21 @@ function BarComponent() {
                 },
                 { type: "bar" },
               ]}
+<<<<<<< HEAD
               layout={{ width: 800, height: 600, title: "bar Plot", paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",  font:{color: "rgba(255,255,255,1)"} }}
+=======
+              layout={{ width: 800, height: 600, title: "Bar Plot" }}
+>>>>>>> b2a471dff9f804508905a6a8f2123a3f7bc8ce77
               config={{ responsive: true }}
             />
           </CardContent>
         </Box>
       </Card>
+      {/* <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+      </Backdrop> */}
     </div>
   );
 }

@@ -27,40 +27,23 @@ function Table() {
   const { search_object, options_flat } = useContext(GlobalContext);
 
   const total_results_count = 5816;
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  
-  // const search_object = {
-  //   voyage_itinerary__imp_principal_region_slave_dis__geo_location__name: [
-  //     "Barbados",
-  //     "Jamaica",
-  //   ],
-  //   results_page: ["1"],
-  //   results_per_page: ["3"],
-  //   selected_fields: [
-  //     "id",
-  //     "voyage_itinerary",
-  //     "voyage_slaves_numbers__imp_total_num_slaves_embarked",
-  //     "voyage_itinerary__first_landing_region__geo_location__name",
-  //     "voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name",
-  //   ],
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
   // };
 
-  const var_names = {
-    id: "id",
-    voyage_itinerary: "voyage_itinerary",
-    voyage_slaves_numbers__imp_total_num_slaves_embarked:
-      "total_num_slaves_embarked",
-    voyage_itinerary__first_landing_region__geo_location__name:
-      "first_landing_region",
-    voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name:
-      "broad_region_voyage_begin",
-  };
+  // const handleChangeRowsPerPage = (event, newRowsPerPage) => {
+  //   setRowsPerPage(newRowsPerPage);
+  // };
 
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
+    data.append("results_page", page+1);
+    data.append("results_per_page", rowsPerPage);
+
 
     for (var property in search_object) {
       search_object[property].forEach((v) => {
@@ -77,7 +60,8 @@ function Table() {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  // }, [handleChangePage, handleChangeRowsPerPage]);
+  }, [page, rowsPerPage]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -96,14 +80,19 @@ function Table() {
   }
 
   const handleChangePage = (event, newPage) => {
+    console.log("newpage", newPage)
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    console.log("newRowsperpage", event.target.value)
+    setRowsPerPage(parseInt(event.target.value));
   };
 
+  const handleChangePagePagination = (event, newPage) => {
+    console.log("newPagePagi", newPage)
+    setPage(newPage - 1)
+  }
   return (
     <div>
       <div>
@@ -145,7 +134,7 @@ function Table() {
               direction="row"
               justifyContent="flex-end"
             >
-              <Pagination count={10} />
+              <Pagination count={Math.ceil(total_results_count/rowsPerPage) } page={page+1} onChange={handleChangePagePagination}/>
             </Stack>
           </FormControl>
         </Box>
