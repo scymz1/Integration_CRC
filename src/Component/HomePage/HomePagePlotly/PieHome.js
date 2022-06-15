@@ -2,13 +2,13 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import {Button, Box, Typography, Card, CardContent } from "@mui/material";
+import { Button, Box, Typography, Card, CardContent } from "@mui/material";
 import {
   donut_value_vars,
   donut_name_vars,
 } from "../../VoyagePage/Result/vars";
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -52,46 +52,52 @@ function PieComponent() {
 
   const navigate = useNavigate();
   const GotoVoyagePage = () => {
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   return (
     <Card sx={{ display: "flex" }}>
-        <Box>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <div>
-              <CardContent>
-              <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Pie Charts</Button>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {featuredPosts.date}
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  {featuredPosts.description}
-                </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
-                  Continue reading...
-                </Button>
-              </CardContent>
-            </div>
-          </CardContent>
-        </Box>
-
-        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-                <Plot
-                data={[
-                    {
-                    labels: plot_field,
-                    values: plot_value,
-                    type: "pie",
-                    mode: "lines+markers",
-                    },
-                ]}
-                layout={{ width:800, height:600, title: "Pie Plot" }}
-                config={{ responsive: true }}
-                />
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <CardContent sx={{ flex: "1 0 auto" }}>
+          <Plot
+            data={[
+              {
+                labels: plot_field,
+                values: plot_value,
+                type: "pie",
+                mode: "lines+markers",
+              },
+            ]}
+            layout={{ width: 800, height: 600, title: "Pie Plot" }}
+            config={{ responsive: true }}
+          />
+        </CardContent>
+      </Box>
+      <Box>
+        <CardContent sx={{ flex: "1 0 auto" }}>
+          <div>
+            <CardContent>
+              <Button
+                variant="text"
+                style={{ fontSize: "24px" }}
+                component={Link}
+                to="/"
+              >
+                Data Visualization - Pie Charts
+              </Button>
+              <Typography variant="subtitle1" color="textSecondary">
+                {featuredPosts.date}
+              </Typography>
+              <Typography variant="subtitle1" paragraph>
+                {featuredPosts.description}
+              </Typography>
+              <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                Continue reading...
+              </Button>
             </CardContent>
-        </Box>
+          </div>
+        </CardContent>
+      </Box>
     </Card>
   );
 }
