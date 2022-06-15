@@ -14,6 +14,7 @@ import { GlobalContext } from "../../App";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { styled } from '@mui/material/styles';
 
 const option_url = "/voyage/" + "?hierarchical=false"; // labels in dropdowns
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -78,6 +79,18 @@ function Table() {
       });
   }, []);
 
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+
+
   if (isLoading) {
     return <div className="spinner"></div>;
   }
@@ -115,11 +128,13 @@ function Table() {
                 </TableHead>
                 <TableBody>
                   {value.map((row) => (
-                    <TableRow>
+                    // <TableRow>
+                    <StyledTableRow key={row.name}>
                       {Object.values(row).map((k) => (
                         <TableCell>{k}</TableCell>
                       ))}
-                    </TableRow>
+                     {/* </TableRow> */}
+                    </StyledTableRow>
                   ))}
                 </TableBody>
               </Tables>

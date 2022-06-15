@@ -16,7 +16,7 @@ const darkTheme = createTheme({
 });
 
 export default function Home() {
-  const sample = [<BarComponent />, <PieComponent />, <ScatterComponent />];
+  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
     <ThemeProvider theme={darkTheme}>
     <div>

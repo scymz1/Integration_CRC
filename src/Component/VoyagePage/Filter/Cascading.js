@@ -1,7 +1,7 @@
 import {
     Container,
     Slider,
-    Button,
+    IconButton,
     Checkbox,
     FormControlLabel,
     ListItem,
@@ -13,6 +13,7 @@ import {
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
 import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useQuery } from 'react-query'
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
@@ -36,6 +37,8 @@ function Cascading() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
+    const {search_object} = useContext(GlobalContext);
+
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -57,7 +60,10 @@ function Cascading() {
 
         var out = option + "***" + type + "***" + flatlabel;
         console.log("OUTPUT STRING: ----->", out)
-        setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        if(!search_object[option])
+            setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        else
+            alert("The variable has been selected.")
         console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
@@ -106,12 +112,12 @@ function Cascading() {
                         defaultCollapseIcon={<ExpandMoreIcon/>}
                         defaultExpandIcon={<ChevronRightIcon/>}
                     >
-                        <Button
+                        <IconButton
                             variant="contained"
                             onClick={handleClick}
                             >
-                            New Filter
-                        </Button>
+                            <AddCircleOutlineIcon />
+                        </IconButton>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {renderTree(options_tree, "")}
                         </Menu>
