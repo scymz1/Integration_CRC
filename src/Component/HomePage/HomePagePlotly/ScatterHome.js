@@ -77,8 +77,8 @@ function ScatterComponent() {
           </CardContent>
         </Box>
 
-        <Box>
-          <CardContent sx={{ flex: "1 0 auto" }} style={{backgroundColor: "#f1f1f1"}}>
+        <Box sx={{margin: 2, padding:1}} style={{backgroundColor: "#f1f1f1"}}>
+          <CardContent sx={{ flex: "1 0 auto" }}>
             <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/Scatter">Data Visualization - Scatter Charts</Button>
               <CardContent>
                 <Typography variant="subtitle1" color="textSecondary">
