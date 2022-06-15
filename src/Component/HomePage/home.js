@@ -9,7 +9,6 @@ import BarComponent from "./HomePagePlotly/BarHome";
 import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 // const darkTheme = createTheme({
 //   palette: {
