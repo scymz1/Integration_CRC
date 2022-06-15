@@ -81,7 +81,7 @@ function PieComponent() {
                 variant="text"
                 style={{ fontSize: "24px" }}
                 component={Link}
-                to="/"
+                to="/Pie"
               >
                 Data Visualization - Pie Charts
               </Button>

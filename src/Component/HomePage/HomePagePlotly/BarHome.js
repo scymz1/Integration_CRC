@@ -60,7 +60,7 @@ function BarComponent() {
               variant="text"
               style={{ fontSize: "24px" }}
               component={Link}
-              to="/"
+              to="/Bar"
             >
               Data Visualization - Bar Charts
             </Button>

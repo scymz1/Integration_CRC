@@ -25,6 +25,8 @@ export default function App() {
     }).then(res => res.json())
   )
 
+  // const [chartType, setChartType] = useState(0)
+
   const [search_object, set_search_object] = useState({
     //test data
     // name: ["value1", "value2"]
@@ -63,10 +65,13 @@ export default function App() {
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
 
   return (
-    <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object}}>
+    <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object, 
+    // chartType, setChartType
+    }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Voyage/>}/>
+          <Route path="/:id" element={<Voyage/>}/>
           <Route path="home" element={<Home/>}/>
           <Route path="voyage/optionSelector" element={<OptionSelector/>}/>
           {/* <Home /> */}
