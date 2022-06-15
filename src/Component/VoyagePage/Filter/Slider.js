@@ -46,7 +46,7 @@ export default function GetSlider() {
     const config =  {
         method: 'post',
         baseURL: 'https://voyages3-api.crc.rice.edu/voyage/aggregations',
-        headers: {'Authorization': 'Token 4b6dcc9a91cf8e48fc137eeabe026464064a9446'},
+        headers: {'Authorization': 'Token 77e6b7487f5c3aa4275257eb5f77ad06e8c62a39'},
         data:d
     }
 
@@ -112,7 +112,7 @@ export default function GetSlider() {
 
   return (
         <>
-        <Typography gutterBottom>{varDisplay}</Typography>
+        {/* <Typography gutterBottom>{varDisplay}</Typography> */}
         <div class = "sliderInputs">
           <Input 
             color = "secondary"
