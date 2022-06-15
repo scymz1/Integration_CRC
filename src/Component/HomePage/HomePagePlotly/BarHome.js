@@ -7,6 +7,7 @@ import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -51,6 +52,7 @@ function BarComponent() {
   const navigate = useNavigate();
   const GotoVoyagePage = () => {
     navigate('/');
+
   }
 
   return (
@@ -76,7 +78,7 @@ function BarComponent() {
 
        <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
-          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/">Data Visualization - Bar Charts</Button>
+          <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/Bar">Data Visualization - Bar Charts</Button>
             <div>
               <CardContent>
                 <Typography variant="subtitle1" color="textSecondary">

@@ -6,10 +6,12 @@ import Pie from "./Result/Pie";
 import Bar from "./Result/Bar";
 import Table from "./Result/Table";
 import ResponsiveAppBar from "../NavBar";
+import {useParams} from 'react-router';
 
 
 function TabPanel(props) {
     const {children, value, index} = props;
+
 
     return (
         <div
@@ -32,8 +34,30 @@ function TabPanel(props) {
 export default function Voyage() {
     const [value, setValue] = React.useState(0);
 
+    const { id } = useParams();
+
+    React.useEffect(()=>{
+        switch (id) {
+            case "Scatter":
+                setValue(0)
+                break;
+            case "Bar":
+                setValue(1)
+                break;
+            case "Pie":
+                setValue(2)
+                break;
+            case "Table":
+                setValue(3)
+                break;
+            default:
+                setValue(0)
+        }
+        //setValue(id?id:"Scatter")
+    },[])
+
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setValue(newValue)
     };
 
     return (
