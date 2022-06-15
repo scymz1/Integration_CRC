@@ -55,6 +55,8 @@ function PieComponent() {
     navigate("/");
   };
 
+
+
   return (
     <Card sx={{ display: "flex" }}>
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
@@ -68,7 +70,7 @@ function PieComponent() {
                 mode: "lines+markers",
               },
             ]}
-            layout={{ width: 800, height: 600, title: "Pie Plot" }}
+            layout={{ width: 800, height: 600, title: "Pie Plot" , paper_bgcolor: "rgba(0,0,0,0)", font:{color: "rgba(255,255,255,1)"}}}
             config={{ responsive: true }}
           />
         </CardContent>

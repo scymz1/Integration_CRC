@@ -1,23 +1,27 @@
 import * as React from "react";
 import TrackVisibility from "react-on-screen";
 import { Animated } from "react-animated-css";
-import { Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
 import ResponsiveAppBar from "../NavBar";
 import Container from "@mui/material/Container";
 import BarComponent from "./HomePagePlotly/BarHome";
 import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import './home.css';
 
 const darkTheme = createTheme({
+  
   palette: {
     mode: 'dark',
   },
 });
 
 export default function Home() {
+  document.body.style = 'background: rgba(17, 7, 12, 0.8);';
   const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
+    // <Box sx={{backgroundColor: "black"}}>
     <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
@@ -44,5 +48,6 @@ export default function Home() {
       </Container>
     </div>
     </ThemeProvider>
+    // </Box>
   );
 }

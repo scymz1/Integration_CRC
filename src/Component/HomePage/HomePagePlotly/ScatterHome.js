@@ -71,7 +71,7 @@ function ScatterComponent() {
                   marker: { color: "red" },
                 },
               ]}
-              layout={{width:800, height:600,  title: "Scatter Plot" }}
+              layout={{width:800, height:600,  title: "Scatter Plot", paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)", font:{color: "rgba(255,255,255,1)"} }}
               config={{ responsive: true }}
             />
           </CardContent>
