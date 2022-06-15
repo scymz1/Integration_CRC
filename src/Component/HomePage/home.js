@@ -28,9 +28,10 @@ export default function Home() {
             <TrackVisibility offset={300}>
               {({ isVisible }) => (
                 <Animated
-                  animationIn="bounceInLeft"
+                  animationIn="slideInLeft"
                   animationOut="fadeOut"
                   isVisible={isVisible}
+                  // animationInDuration ="2000"
                 >
                   {label}
                   <Divider />
