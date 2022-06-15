@@ -1,4 +1,4 @@
-import {Button, Container, Grid, Card} from "@mui/material";
+import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
 import {useContext} from "react";
 import {GlobalContext} from "../../App";
 
@@ -8,9 +8,11 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import FilterAlt from '@mui/icons-material/FilterAlt';
+
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 
@@ -31,8 +33,15 @@ export default function Filter(props) {
     const [output, setOutput] = React.useState([]);
     //console.log("🚀 ~ file: Filter.js ~ line 35 ~ Filter ~ output", output)
     const [menuPosition, setMenuPosition] = React.useState(null);
-
-
+    
+    // Handle delete by removing the specified key
+    const handleDelete = (item) => { 
+        setOutput(output.filter((e)=>e!==item))
+        var raw = item.split("***")
+        var varName = raw[0]
+        let newObject = {...search_object};
+        delete newObject[varName];
+    };
 
     return (
     <AppContext.Provider
@@ -71,18 +80,27 @@ export default function Filter(props) {
               <Card>
               {output.map((item) => {
                 return(
-                  <Grid margin={3} >
-                    <Grid item>
+                  <Card>
+                    <CardHeader
+                      title={"Sample Header"}
+                      action={
+                        <IconButton onClick={()=>{handleDelete(item)}}
+                        >
+                          <RemoveCircleOutlineIcon />
+                        </IconButton>
+                        }
+                    />
+                    <CardContent>
                       <ComponentFac params={item} />
-                    </Grid>
-                  </Grid>
+                    </CardContent>
+                </Card>
                 )})
               }
               </Card>
             </Grid>
           </Grid>
           </AccordionDetails>
-        </Accordion>
+      </Accordion>
     </AppContext.Provider>
   );
 }

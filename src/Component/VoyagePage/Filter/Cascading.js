@@ -1,7 +1,7 @@
 import {
     Container,
     Slider,
-    Button,
+    IconButton,
     Checkbox,
     FormControlLabel,
     ListItem,
@@ -13,10 +13,12 @@ import {
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
 import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useQuery } from 'react-query'
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
-import NestedMenuItem from "material-ui-nested-menu-item";
+// import NestedMenuItem from "material-ui-nested-menu-item";
+import {NestedMenuItem} from 'mui-nested-menu';
 import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
 
@@ -26,12 +28,16 @@ import {GlobalContext} from "../../App";
 function Cascading() {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
-
     const [option, setOption] = React.useState('');
-
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-
     const {options_tree} = useContext(GlobalContext);     // <--------- CONTEXT
+
+    const handleClick = (e: React.MouseEvent) => setAnchorEl(e.currentTarget);
+    const handleClose = () => setAnchorEl(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const {search_object} = useContext(GlobalContext);
 
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
@@ -47,13 +53,17 @@ function Cascading() {
   
     const handleOptionClick = (option, type, flatlabel) => {
         if (option === "__id") option = "id"
-        setMenuPosition(null);
+        // setMenuPosition(null);
+        handleClose();
         setOption(option);
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
         console.log("OUTPUT STRING: ----->", out)
-        setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        if(!search_object[option])
+            setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        else
+            alert("The variable has been selected.")
         console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
@@ -81,9 +91,8 @@ function Cascading() {
                         : <NestedMenuItem
                             key={nodes[key].label}
                             label={nodes[key].label}
-                            parentMenuOpen={!!menuPosition}
-                            onClick={handleItemClick}
-                            value={nodes[key].flatlabel}
+                            parentMenuOpen={open}
+                            onClick={handleClose}
                             > 
                             {renderTree(nodes[key], name+"__"+key)}
                         </NestedMenuItem>
@@ -103,18 +112,13 @@ function Cascading() {
                         defaultCollapseIcon={<ExpandMoreIcon/>}
                         defaultExpandIcon={<ChevronRightIcon/>}
                     >
-                        <Button
+                        <IconButton
                             variant="contained"
-                            onClick={handleLeftClick}
+                            onClick={handleClick}
                             >
-                            New Filter
-                        </Button>
-                        <Menu
-                            open={!!menuPosition}
-                            onClose={() => setMenuPosition(null)}
-                            anchorReference="anchorPosition"
-                            anchorPosition={menuPosition}
-                        >
+                            <AddCircleOutlineIcon />
+                        </IconButton>
+                        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {renderTree(options_tree, "")}
                         </Menu>
                         

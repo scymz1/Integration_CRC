@@ -86,7 +86,7 @@ function Scatter () {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation, search_object]);
+    }, [option.field, option.value, aggregation]);
 
     useEffect(() => {
             axios.options(option_url)
