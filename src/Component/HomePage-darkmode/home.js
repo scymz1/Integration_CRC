@@ -2,13 +2,34 @@ import * as React from "react";
 import { Component, PureComponent, useState, useEffect } from 'react'
 import TrackVisibility from "react-on-screen";
 import { Animated } from "react-animated-css";
+<<<<<<< HEAD
+import { Box, Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
+=======
 import { Box, Button, Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
+>>>>>>> b2a471dff9f804508905a6a8f2123a3f7bc8ce77
 import ResponsiveAppBar from "../NavBar";
 import Container from "@mui/material/Container";
 import BarComponent from "./HomePagePlotly/BarHome";
 import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+<<<<<<< HEAD
+import './home.css';
+
+const darkTheme = createTheme({
+  
+  palette: {
+    mode: 'dark',
+  },
+});
+
+export default function Home() {
+  document.body.style = 'background: rgba(17, 7, 12, 0.8);';
+  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
+  return (
+    // <Box sx={{backgroundColor: "black"}}>
+    <ThemeProvider theme={darkTheme}>
+=======
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 // const darkTheme = createTheme({
 //   palette: {
@@ -39,6 +60,7 @@ export default function Home() {
   const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
     // <ThemeProvider theme={darkTheme}>
+>>>>>>> b2a471dff9f804508905a6a8f2123a3f7bc8ce77
     <div>
       <ResponsiveAppBar />
     <Container maxWidth={false}>
@@ -74,8 +96,13 @@ export default function Home() {
       </Container>
       
     </div>
+<<<<<<< HEAD
+    </ThemeProvider>
+    // </Box>
+=======
 
     
     // </ThemeProvider>
+>>>>>>> b2a471dff9f804508905a6a8f2123a3f7bc8ce77
   );
 }
