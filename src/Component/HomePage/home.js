@@ -9,16 +9,16 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+// const darkTheme = createTheme({
+//   palette: {
+//     mode: 'dark',
+//   },
+// });
 
 export default function Home() {
   const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
-    <ThemeProvider theme={darkTheme}>
+    // <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
     <Container maxWidth={false}>
@@ -43,6 +43,6 @@ export default function Home() {
       </List>
       </Container>
     </div>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
