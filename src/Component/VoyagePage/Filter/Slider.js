@@ -31,7 +31,7 @@ export default function GetSlider() {
     // console.log("labels: ", labels);
     const varName = curLabel["option"];
     const varDisplay = modifyName(curLabel["label"])
-    // console.log("varName: ", varName);
+    console.log("varName: ", varName);
     // console.log("varDisplay: ", varDisplay);
 
     // console.log("fetch from Provider completed")
@@ -42,11 +42,12 @@ export default function GetSlider() {
     var d = new FormData();
     d.append('aggregate_fields', varName);
     //"voyage_slaves_numbers__imp_total_num_slaves_disembarked"
-
+    const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+    
     const config =  {
         method: 'post',
         baseURL: 'https://voyages3-api.crc.rice.edu/voyage/aggregations',
-        headers: {'Authorization': 'Token 4b6dcc9a91cf8e48fc137eeabe026464064a9446'},
+        headers: {'Authorization': AUTH_TOKEN},
         data:d
     }
 

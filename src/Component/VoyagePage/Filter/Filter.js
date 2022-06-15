@@ -20,7 +20,7 @@ import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": 'Token bd233c83dceb9a0f70ffd2b47d6cd3a18a095260'}
+const header={ "Authorization": 'Token 6eca1c4d65c47d438b5beb852674bacb7e38ed1d'}
 
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object} = useContext(GlobalContext);

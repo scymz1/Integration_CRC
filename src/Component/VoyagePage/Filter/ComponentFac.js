@@ -33,6 +33,7 @@ function ComponentFac(props){
   
   const {search_object} = useContext(GlobalContext);
 
+  console.log(search_object)
 
   switch(varType){
     case "IntegerField" || "DecimalField":
