@@ -41,6 +41,7 @@ export default function Filter(props) {
         var varName = raw[0]
         let newObject = {...search_object};
         delete newObject[varName];
+        set_search_object(newObject); 
     };
 
     const handlePrint = (item) => {
