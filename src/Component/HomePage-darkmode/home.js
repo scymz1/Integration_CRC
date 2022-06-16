@@ -38,7 +38,7 @@ export default function Home() {
 
   const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
-    // <ThemeProvider theme={darkTheme}>
+  <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
     <Container maxWidth={false}>
@@ -75,7 +75,6 @@ export default function Home() {
       
     </div>
 
-    
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 }

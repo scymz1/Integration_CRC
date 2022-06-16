@@ -43,12 +43,6 @@ export default function Filter(props) {
         delete newObject[varName];
     };
 
-    const handlePrint = (item) => { 
-        console.log('Current Output is', output);
-        var raw = item.split("***")
-        console.log('FlatLabel is', item.split("***")[2]);
-    };
-
     return (
     <AppContext.Provider
     value={{
@@ -78,17 +72,18 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'row'} spacing={2}>
-            <Grid item xs={4} >
+          <Grid container direction={'col'} spacing={2}>
+            <Grid item xs={2} align="center">
               <Cascading />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={10}>
               <Card>
               {output.map((item) => {
                 return(
                   <Card>
                     <CardHeader
                       title={item.split("***")[2]}
+                      titleTypographyProps={{variant:'body1'}}
                       action={
                         <IconButton onClick={()=>{handleDelete(item)}}>
                           <RemoveCircleOutlineIcon />
@@ -98,11 +93,6 @@ export default function Filter(props) {
                     <CardContent>
                       <ComponentFac params={item} />
                     </CardContent>
-                    <CardActions>
-                        <IconButton onClick={()=>{handlePrint(item)}}>
-                          <ExpandMoreIcon />
-                        </IconButton>
-                    </CardActions>
                 </Card>
                 )})
               }
