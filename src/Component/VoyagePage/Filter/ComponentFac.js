@@ -21,7 +21,7 @@ import {
 // import Request from './request';
 import { getValue } from '@testing-library/user-event/dist/utils';
 
-
+export const ComponentContext = React.createContext();
 
 function ComponentFac(props){
   const raw = props.params.split("***")
@@ -29,15 +29,25 @@ function ComponentFac(props){
   const varName = raw[0]
   const varType = raw[1].split('.').pop().slice(0, -2)
 
+  const index = props.index;
+
   console.log("Variable Name: ----> ", raw)
   
   const {search_object} = useContext(GlobalContext);
 
   console.log(search_object)
 
+
+
   switch(varType){
     case "IntegerField" || "DecimalField":
-      return GetSlider();
+      
+        return (
+          <ComponentContext.Provider value = {{index}}>
+            {GetSlider()}
+          </ComponentContext.Provider>  
+        )
+      // return GetSlider();
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
@@ -56,7 +66,7 @@ function modifyName(rawName){
 
 function GetSlider() {
   console.log("get slider request");
-  return <Slider />
+  return <Slider/>
 
   // const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);     // <--------- CONTEXT
 

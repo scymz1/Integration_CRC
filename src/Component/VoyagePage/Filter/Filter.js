@@ -43,6 +43,10 @@ export default function Filter(props) {
         delete newObject[varName];
     };
 
+    const handlePrint = (item) => {
+        console.log('Current SEARCH OBJECT: ', search_object)
+    }
+
     return (
     <AppContext.Provider
     value={{
@@ -78,7 +82,7 @@ export default function Filter(props) {
             </Grid>
             <Grid item xs={10}>
               <Card>
-              {output.map((item) => {
+              {output.map((item, index) => {
                 return(
                   <Card>
                     <CardHeader
@@ -91,8 +95,13 @@ export default function Filter(props) {
                         }
                     />
                     <CardContent>
-                      <ComponentFac params={item} />
+                      <ComponentFac params={item} index={index} />
                     </CardContent>
+                    <CardActions>
+                        <IconButton onClick={()=>{handlePrint(item)}}>
+                            <ExpandMoreIcon/>
+                        </IconButton>
+                    </CardActions>    
                 </Card>
                 )})
               }
