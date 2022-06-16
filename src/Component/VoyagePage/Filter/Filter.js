@@ -36,12 +36,13 @@ export default function Filter(props) {
     
     // Handle delete by removing the specified key
     const handleDelete = (item) => { 
-        setOutput(output.filter((e)=>e!==item))
         var raw = item.split("***")
         var varName = raw[0]
         let newObject = {...search_object};
         delete newObject[varName];
         set_search_object(newObject); 
+        setOutput(output.filter((e)=>e!==item))
+        setLabels(labels.filter((e)=>e.option!==varName))
     };
 
     return (
