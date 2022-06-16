@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
 import {GlobalContext} from "../../App";
-const header={ "Authorization": 'Token bd233c83dceb9a0f70ffd2b47d6cd3a18a095260',
+const header={ "Authorization": 'Token f960287a8f35db0718fae95abc398a14a77ac1a3',
 }
 
 export default function Auto() {
@@ -45,18 +45,14 @@ export default function Auto() {
       fetchData(labels[labels.length-1],textInput).catch(console.error)
     },[])
 
-    React.useEffect(() => {
-      set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+    React.useEffect(()=>{
+      set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
         ...search_object,
-        [labels]: value
-      });
-        // "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name":[
-    //     "Barbados",
-    //     "Jamaica"
-    // ],
-      console.log("AUTO SEARCH OBJECT -----> ", search_object)
-    }, [value])
+        [labels[labels.length-1].option]: value
+      }));
+      console.log("🚀 ~ file: Autocomplete.js ~ line 64 ~ Auto ~ search_object", search_object)
 
+    },[value])
 
 
   return (
@@ -70,6 +66,11 @@ export default function Auto() {
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
         console.log(value)
+        // set_search_object({                     // <---------- UPDATE SEARCH OBJECT
+        //   ...search_object,
+        //   [labels[labels.length-1].option]: value
+        // });
+        // console.log("🚀 ~ file: Autocomplete.js ~ line 64 ~ Auto ~ search_object", search_object)
       }}
       sx={{ width: 300 }}
       renderInput={(params) => {
@@ -77,6 +78,7 @@ export default function Auto() {
         setTestInput(params.inputProps.value)
         console.log("AUTOCOMPLETE OUTPUT: -----> ", value)
         console.log('AUTOCOMPLETE FIELD: ----->', labels)
+
         return <TextField {...params} label="field" />
          
     }}

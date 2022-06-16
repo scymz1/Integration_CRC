@@ -71,7 +71,7 @@ export default function GetSlider() {
       setValue(newValue); 
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event) => {
     const startVal = value[0]
     const endVal = value[1]
     var res = [0, 0]
@@ -86,7 +86,7 @@ export default function GetSlider() {
     setValue(res)
   };
 
-  const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlur = (event => {
     const curStart = value[0]
     const curEnd = value[1]
     // console.log(curStart, curEnd)
@@ -107,7 +107,7 @@ export default function GetSlider() {
     });
     console.log("SEARCH OBJECT injection -----> ", search_object)
 
-  };
+  });
 
 
   return (
