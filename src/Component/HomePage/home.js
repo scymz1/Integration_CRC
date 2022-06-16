@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component, PureComponent, useState, useEffect } from 'react'
 import TrackVisibility from "react-on-screen";
 import { Animated } from "react-animated-css";
-import { Box, Button, Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, List, ListItem,Divider, Tab  } from "@mui/material";
 import ResponsiveAppBar from "../NavBar";
 import Container from "@mui/material/Container";
 import BarComponent from "./HomePagePlotly/BarHome";
@@ -10,6 +10,7 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import TableHome from "./HomePagePlotly/TableHome/TableHome";
 // const darkTheme = createTheme({
 //   palette: {
 //     mode: 'dark',
@@ -36,7 +37,7 @@ export default function Home() {
     });
   }, []);
 
-  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
+  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
     <div>
