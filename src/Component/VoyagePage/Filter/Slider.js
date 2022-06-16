@@ -11,6 +11,9 @@ import {
     Chip, TextField
   } from '@mui/material';
 
+import {ComponentContext} from "./ComponentFac"
+
+
 const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const Input = styled(MuiInput)`
   width: 80px;
@@ -23,15 +26,21 @@ function modifyName(rawName){
 }
 
 export default function GetSlider() {
+  const { index } = React.useContext(ComponentContext)
+  console.log("INDEX: ", index)
+
     console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
     const {search_object, set_search_object} = React.useContext(GlobalContext)
 
-    const curLabel = labels[labels.length - 1];
+    // const curLabel = labels[labels.length - 1];
+
+    const curLabel = labels[index];
+
     // console.log("labels: ", labels);
     const varName = curLabel["option"];
     const varDisplay = modifyName(curLabel["label"])
-    // console.log("varName: ", varName);
+    console.log("varName: ", varName);
     // console.log("varDisplay: ", varDisplay);
 
     // console.log("fetch from Provider completed")
@@ -42,11 +51,12 @@ export default function GetSlider() {
     var d = new FormData();
     d.append('aggregate_fields', varName);
     //"voyage_slaves_numbers__imp_total_num_slaves_disembarked"
-
+    const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+    
     const config =  {
         method: 'post',
         baseURL: 'https://voyages3-api.crc.rice.edu/voyage/aggregations',
-        headers: {'Authorization': 'Token 77e6b7487f5c3aa4275257eb5f77ad06e8c62a39'},
+        headers: {'Authorization': AUTH_TOKEN},
         data:d
     }
 
@@ -112,7 +122,7 @@ export default function GetSlider() {
 
   return (
         <>
-        {/* <Typography gutterBottom>{varDisplay}</Typography> */}
+        <Typography gutterBottom>{varDisplay}</Typography>
         <div class = "sliderInputs">
           <Input 
             color = "secondary"
