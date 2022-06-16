@@ -2,7 +2,7 @@ import React, { Component, PureComponent, useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Button,Grid, Paper, Typography, Card, CardContent, Box } from "@mui/material";
+import { Button,Typography, Card, CardContent, Box } from "@mui/material";
 import {
   scatter_plot_x_vars,
   scatter_plot_y_vars,
