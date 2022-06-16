@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
 import {GlobalContext} from "../../App";
+import {ComponentContext} from "./ComponentFac"
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Auto() {
@@ -15,7 +16,10 @@ export default function Auto() {
     setValue} = React.useContext(AppContext)
 
   const {search_object, set_search_object} = React.useContext(GlobalContext)
-  const searchLabel = labels[labels.length-1]
+  const { index } = React.useContext(ComponentContext)
+  //const searchLabel = labels[labels.length-1]
+  const searchLabel = labels[index];
+  console.log("🚀 ~ file: Autocomplete.js ~ line 22 ~ Auto ~ searchLabel", searchLabel)
 
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
 
@@ -51,8 +55,9 @@ export default function Auto() {
         [searchLabel.option]: value
       }));
       console.log("🚀 ~ file: Autocomplete.js ~ line 64 ~ Auto ~ search_object", search_object)
+      console.log("🚀 ~ file: Autocomplete.js ~ line 56 ~ React.useEffect ~ searchLabel", searchLabel)
 
-    },[value])
+    },[])
 
 
   return (

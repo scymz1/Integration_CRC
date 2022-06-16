@@ -51,7 +51,11 @@ function ComponentFac(props){
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
-      return GetAuto();
+      return (
+        <ComponentContext.Provider value = {{index}}>
+          {GetAuto()}
+        </ComponentContext.Provider>  
+      )
     default:
       return <Chip label="NA" color="primary" />;
   }
