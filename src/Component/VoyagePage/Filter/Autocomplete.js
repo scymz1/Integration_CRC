@@ -16,6 +16,7 @@ export default function Auto() {
     setValue} = React.useContext(AppContext)
 
   const {search_object, set_search_object} = React.useContext(GlobalContext)
+  const searchLabel = labels[labels.length-1]
 
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
 
@@ -42,13 +43,13 @@ export default function Auto() {
             setautocompleteOptions(newOptions) })
       }
 
-      fetchData(labels[labels.length-1],textInput).catch(console.error)
+      fetchData(searchLabel,textInput).catch(console.error)
     },[])
 
     React.useEffect(()=>{
       set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
         ...search_object,
-        [labels[labels.length-1].option]: value
+        [searchLabel.option]: value
       }));
       console.log("🚀 ~ file: Autocomplete.js ~ line 64 ~ Auto ~ search_object", search_object)
 
@@ -66,11 +67,7 @@ export default function Auto() {
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
         console.log(value)
-        // set_search_object({                     // <---------- UPDATE SEARCH OBJECT
-        //   ...search_object,
-        //   [labels[labels.length-1].option]: value
-        // });
-        // console.log("🚀 ~ file: Autocomplete.js ~ line 64 ~ Auto ~ search_object", search_object)
+        console.log("🚀 ~ file: Autocomplete.js ~ line 70 ~ Auto ~ value", value)
       }}
       sx={{ width: 300 }}
       renderInput={(params) => {
