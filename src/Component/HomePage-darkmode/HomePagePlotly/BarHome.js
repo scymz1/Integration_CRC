@@ -53,8 +53,8 @@ function BarComponent() {
 
   return (
     <div>
-      <Card sx={{ display: "flex" }} style={{ background: 'transparent', boxShadow: 'none'}}>
-        <Box sx={{margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+      <Card sx={{ display: "flex" }} >
+        <Box sx={{margin: 2, padding:2, borderRadius: '10px'}}>
           <CardContent sx={{ flex: "1 0 auto" }} >
             <Button
               variant="text"
@@ -92,11 +92,7 @@ function BarComponent() {
                 },
                 { type: "bar" },
               ]}
-<<<<<<< HEAD
               layout={{ width: 800, height: 600, title: "bar Plot", paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor:"rgba(0,0,0,0)",  font:{color: "rgba(255,255,255,1)"} }}
-=======
-              layout={{ width: 800, height: 600, title: "Bar Plot" }}
->>>>>>> b2a471dff9f804508905a6a8f2123a3f7bc8ce77
               config={{ responsive: true }}
             />
           </CardContent>

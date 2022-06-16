@@ -4,7 +4,10 @@ import React, {useState} from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import OptionSelector from "./VoyagePage/util/optionSelector";
 import {CircularProgress} from "@mui/material";
+
 import Home from './HomePage/home'
+import Home2 from './HomePage-darkmode/home'
+
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -12,7 +15,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 export const GlobalContext = React.createContext({});
 
 export default function App() {
-  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('Options_tree',
+  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('repoData',
     () => fetch(base_url + "voyage/", {
       method: "OPTIONS",
       headers: {'Authorization': auth_token}
@@ -73,6 +76,7 @@ export default function App() {
           <Route path="/" element={<Voyage/>}/>
           <Route path="/:id" element={<Voyage/>}/>
           <Route path="home" element={<Home/>}/>
+          <Route path="home2" element={<Home2/>}/>
           <Route path="voyage/optionSelector" element={<OptionSelector/>}/>
           {/* <Home /> */}
         </Routes>
