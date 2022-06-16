@@ -75,7 +75,7 @@ function PieComponent() {
           />
         </CardContent>
       </Box>
-      <Box sx={{ boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+      <Box sx={{ boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <div>
             <CardContent>

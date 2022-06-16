@@ -10,14 +10,17 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-// const darkTheme = createTheme({
-//   palette: {
-//     mode: 'dark',
-//   },
-// });
 
 
 export default function Home() {
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+
+  
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -25,6 +28,7 @@ export default function Home() {
     });
   };
   const [showButton, setShowButton] = useState(false);
+  document.body.style = 'background: rgba(30, 20, 25, 0.8);';
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -41,7 +45,7 @@ export default function Home() {
   <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
-    <Container maxWidth={false}>
+    <Card maxWidth={false}>
       <List>
         {sample.map((label) => (
           <ListItem key={label}>
@@ -71,7 +75,7 @@ export default function Home() {
         </Button>
       )}
       </Box>
-      </Container>
+      </Card>
       
     </div>
 
