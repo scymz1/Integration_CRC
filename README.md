@@ -92,16 +92,16 @@ heroku open
 heroku config
 # Example:
 GITHUB_USERNAME: joesmith
-REACT_APP_AUTHTOKEN: 'Token asdbchuawjfv112baisuyofgkue'    
-REACT_APP_BASEURL: https://voyages3-api.crc.rice.edu
+REACT_APP_AUTHTOKEN: 'Token ABCDEF.... (replace it with your authentication token)'
+REACT_APP_BASEURL: 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
 ```
 or
 ```shell
 # Set all config vars in the terminal
 # Example:
 heroku config:set GITHUB_USERNAME=joesmith
-heroku config:set REACT_APP_AUTHTOKEN='Token asdbchuawjfv112baisuyofgkue'   
-heroku config:set REACT_APP_BASEURL='https://voyages3-api.crc.rice.edu'
+heroku config:set REACT_APP_AUTHTOKEN = 'Token ABCDEF.... (replace it with your authentication token)' 
+heroku config:set REACT_APP_BASEURL = 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
 ```
 ```shell
 # Remove config vars example:
