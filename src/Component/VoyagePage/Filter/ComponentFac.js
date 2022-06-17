@@ -23,6 +23,7 @@ import { getValue } from '@testing-library/user-event/dist/utils';
 
 export const ComponentContext = React.createContext();
 
+// <ComponentFac params={item} index={index} />
 function ComponentFac(props){
   const raw = props.params.split("***")
   const varDisplay = raw[2]

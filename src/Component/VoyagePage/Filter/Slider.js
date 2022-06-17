@@ -68,12 +68,13 @@ export default function GetSlider() {
   }, [])
 
   function handleCommittedChange(event, newValue) {
-    setValue(newValue); 
+    console.log("🚀 ~ file: Slider.js ~ line 71 ~ handleCommittedChange ~ handleCommittedChange", handleCommittedChange)
+    //setValue(newValue); 
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    console.log("SEARCH OBJECT injection -----> ", search_object)
+    console.log("73 SEARCH OBJECT injection -----> ", search_object)
     // console.log(varName, ": onchange", value);
   }
   
@@ -97,6 +98,7 @@ export default function GetSlider() {
   };
 
   const handleBlur = (event => {
+    console.log("🚀 ~ file: Slider.js ~ line 122 ~ GetSlider ~ handleBlur", handleBlur)
     const curStart = value[0]
     const curEnd = value[1]
     // console.log(curStart, curEnd)
@@ -115,9 +117,10 @@ export default function GetSlider() {
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    console.log("SEARCH OBJECT injection -----> ", search_object)
+    console.log("116 SEARCH OBJECT injection -----> ", search_object)
 
   });
+
 
 
   return (
@@ -168,16 +171,7 @@ export default function GetSlider() {
             onChangeCommitted = {handleCommittedChange}
             // valueLabelDisplay="auto"
         />
-        {
 
-          // React.useEffect(() => {
-          //   set_search_object({                     // <---------- UPDATE SEARCH OBJECT
-          //     ...search_object,
-          //     [varName]: [value[0], value[1]]
-          //   });
-          //   console.log("SEARCH OBJECT injection -----> ", search_object)
-          // }, [handleCommittedChange])
-        }
         </>
          );
 }
