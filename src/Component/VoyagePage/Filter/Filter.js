@@ -70,8 +70,8 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'col'} spacing={2}>
-            <Grid item xs={1} align="center">
+          <Grid container direction={'col'} spacing={1}>
+            <Grid item xs={2} align="center">
               {/* <Cascading menuName=""/> */}
               <Cascading menuName="voyage_id" button="ID"/>
               <Cascading menuName="voyage_itinerary" button="Itinerary"/>
