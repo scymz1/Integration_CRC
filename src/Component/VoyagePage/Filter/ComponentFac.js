@@ -23,6 +23,7 @@ import { getValue } from '@testing-library/user-event/dist/utils';
 
 export const ComponentContext = React.createContext();
 
+// <ComponentFac params={item} index={index} />
 function ComponentFac(props){
   const raw = props.params.split("***")
   const varDisplay = raw[2]
@@ -51,7 +52,11 @@ function ComponentFac(props){
     case "BooleanField":
       return <Chip label={modifyName(varDisplay)} color="primary" />;
     case "CharField":
-      return GetAuto();
+      return (
+        <ComponentContext.Provider value = {{index}}>
+          {GetAuto()}
+        </ComponentContext.Provider>  
+      )
     default:
       return <Chip label="NA" color="primary" />;
   }

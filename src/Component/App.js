@@ -44,7 +44,7 @@ export default function App() {
     // groupby_fields: ["voyage_itinerary__imp_broad_region_slave_dis__geo_location__name",
     // "voyage_slaves_numbers__imp_total_num_slaves_disembarked"],
 
-
+//[{option: "voyage_slaves_numbers__imp_total_num_slaves_disembarked", type:jjjj}, {option: "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name", type:jjjj}]
     // agg_fn: ["sum"],
 
     // cachename: ["voyage_bar_and_donut_charts"]

@@ -24,10 +24,8 @@ const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
-    
-    const [name, setName] = React.useState(autocomplete_text_fields[0]);
-    const [textInput, setTestInput] = React.useState("");
-    const [value, setValue] = React.useState([]);
+
+
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
@@ -52,12 +50,6 @@ export default function Filter(props) {
     return (
     <AppContext.Provider
     value={{
-      name,
-      setName,
-      textInput,
-      setTestInput,
-      value,
-      setValue,
       options_tree,
       menuPosition, 
       setMenuPosition,

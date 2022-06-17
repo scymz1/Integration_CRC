@@ -33,7 +33,7 @@ function Cascading() {
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
     const {options_tree} = useContext(GlobalContext);     // <--------- CONTEXT
 
-    const handleClick = (e: React.MouseEvent) => setAnchorEl(e.currentTarget);
+    const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
