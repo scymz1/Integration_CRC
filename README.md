@@ -4,7 +4,7 @@ Heroku Link: [Heroku]()
 OCI Deployment Link: [OCI]()
 
 The branch we except to deploy is: **production**
-
+-------------
 **Deploy Problem Solution && Wordflow**
 Since we found `package-lock.json` will casuse `OCI` deployment process error, we summarized a workflow to avoid that:
 
