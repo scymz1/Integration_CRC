@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component, PureComponent, useState, useEffect } from 'react'
 import TrackVisibility from "react-on-screen";
 import { Animated } from "react-animated-css";
-import { Box, Button, Card, CardContent, CardHeader, List, ListItem,Divider, Tab  } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, List, ListItem,Divider  } from "@mui/material";
 import ResponsiveAppBar from "../NavBar";
 import Container from "@mui/material/Container";
 import BarComponent from "./HomePagePlotly/BarHome";
@@ -10,15 +10,17 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import TableHome from "./HomePagePlotly/TableHome/TableHome";
-// const darkTheme = createTheme({
-//   palette: {
-//     mode: 'dark',
-//   },
-// });
 
 
 export default function Home() {
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+
+  
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -26,6 +28,7 @@ export default function Home() {
     });
   };
   const [showButton, setShowButton] = useState(false);
+  document.body.style = 'background: rgba(30, 20, 25, 0.8);';
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -37,12 +40,12 @@ export default function Home() {
     });
   }, []);
 
-  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />, < TableHome/>];
+  const sample = [<ScatterComponent />,<BarComponent />, <PieComponent />];
   return (
-    // <ThemeProvider theme={darkTheme}>
+  <ThemeProvider theme={darkTheme}>
     <div>
       <ResponsiveAppBar />
-    <Container maxWidth={false}>
+    <Card maxWidth={false}>
       <List>
         {sample.map((label) => (
           <ListItem key={label}>
@@ -72,11 +75,10 @@ export default function Home() {
         </Button>
       )}
       </Box>
-      </Container>
+      </Card>
       
     </div>
 
-    
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 }

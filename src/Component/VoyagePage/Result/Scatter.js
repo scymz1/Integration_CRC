@@ -13,6 +13,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { GlobalContext } from '../../App';
+import {Grid, Paper} from '@mui/material';
 
 const option_url = '/voyage/' + '?hierarchical=false' // labels in dropdowns
 
@@ -107,7 +108,7 @@ function Scatter () {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ minWidth: 120}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -156,6 +157,7 @@ function Scatter () {
                         name="controlled-radio-buttons-group"
                         value={aggregation}
                         onChange={handleChange_agg}
+                        row
                     >
                         <FormControlLabel value="sum" control={<Radio />} label="Sum" />
                         <FormControlLabel value="mean" control={<Radio />} label="Average" />
@@ -164,6 +166,15 @@ function Scatter () {
             </div>
 
             <div>
+            <Grid item xs={12} md={4} lg={3}>
+                <Paper
+                    sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 500,
+                    }}
+                    >
                 <Plot
                     data={[
                         {
@@ -175,8 +186,11 @@ function Scatter () {
                         },
                         {type: 'bar'},
                     ]}
-                    layout={ {width: 1000, height: 500, title: 'Scatter Plot'} }
+                    layout={{title: 'Scatter Plot'}}
+                    config={{responsive: true}}
                 />
+                </Paper>
+            </Grid>
             </div>
         </div>
     )

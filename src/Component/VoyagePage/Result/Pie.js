@@ -13,6 +13,8 @@ import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {donut_value_vars, donut_name_vars} from './vars';
 import { GlobalContext } from '../../App';
+import { Grid, Paper} from '@mui/material';
+
 
 
 
@@ -99,14 +101,14 @@ function Pie () {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ minWidth: 120}}>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">X Field</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Sectors</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={option.field}
-                            label="X Field"
+                            label="Sectors"
                             onChange={(event) => {handleChange(event, "field")}}
                             name="field"
                         >
@@ -121,13 +123,13 @@ function Pie () {
                 </Box>
                 <Box sx={{ minWidth: 120,my:2  }}>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Values</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={option.value}
                             name="value"
-                            label="Y Field"
+                            label="Values"
                             onChange={(event) => {handleChange(event, "value")}}
                         >
                             {donut_value_vars.map((option) => (
@@ -149,6 +151,7 @@ function Pie () {
                         name="controlled-radio-buttons-group"
                         value={aggregation}
                         onChange={handleChange_agg}
+                        row
                     >
                         <FormControlLabel value="sum" control={<Radio />} label="Sum" />
                         <FormControlLabel value="mean" control={<Radio />} label="Average" />
@@ -157,17 +160,29 @@ function Pie () {
             </div>
 
             <div>
-                <Plot
-                    data={[
-                        {
-                            labels: plot_field,
-                            values: plot_value,
-                            type: 'pie',
-                            mode: 'lines+markers',
-                        }
-                    ]}
-                    layout={ {width: 1000, height: 500, title: 'Pie Plot'} }
-                />
+                <Grid item xs={12} md={4} lg={3}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: 500,
+                        }}
+                        >
+                        <Plot
+                            data={[
+                                {
+                                    labels: plot_field,
+                                    values: plot_value,
+                                    type: 'pie',
+                                    mode: 'lines+markers',
+                                }
+                            ]}
+                            layout={ {title: 'Pie Plot'} }
+                            config={{responsive: true}}
+                        />
+                    </Paper>
+                </Grid>
             </div>
         </div>
     )
