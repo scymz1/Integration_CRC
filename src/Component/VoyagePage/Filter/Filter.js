@@ -70,36 +70,33 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'col'} spacing={2}>
-            <Grid item xs={2} align="center">
+          <Grid container direction="row" spacing={2}>
+            <Grid item xs={1} align="center">
               <Cascading />
             </Grid>
-            <Grid item xs={10}>
-              <Card>
+            <Grid item xs={11}>
               {output.map((item, index) => {
                 return(
-                  <Card>
-                    <CardHeader
-                      title={item.split("***")[2]}
-                      titleTypographyProps={{variant:'body1'}}
-                      action={
-                        <IconButton onClick={()=>{handleDelete(item)}}>
+                  <Grid container direction="row" spacing={2}>
+                    <Grid item xs={11} align="center">
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                          <Typography>{item.split("***")[2]}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <ComponentFac params={item} index={index} />
+                        </AccordionDetails>
+                      </Accordion>
+                    </Grid>
+                    <Grid item xs={1} align="center">
+                      <IconButton onClick={()=>{handleDelete(item)}}>
                           <RemoveCircleOutlineIcon />
-                        </IconButton>
-                        }
-                    />
-                    <CardContent>
-                      <ComponentFac params={item} index={index} />
-                    </CardContent>
-                    <CardActions>
-                        <IconButton onClick={()=>{handlePrint(item)}}>
-                            <ExpandMoreIcon/>
-                        </IconButton>
-                    </CardActions>    
-                </Card>
+                      </IconButton>
+                    </Grid>
+                  </Grid>
                 )})
               }
-              </Card>
+              
             </Grid>
           </Grid>
           </AccordionDetails>
