@@ -2,6 +2,7 @@ import {
     Container,
     Slider,
     IconButton,
+    Button,
     Checkbox,
     FormControlLabel,
     ListItem,
@@ -26,7 +27,9 @@ import {autocomplete_text_fields} from './var'
 import {useContext} from "react";
 import {GlobalContext} from "../../App";
 
-function Cascading() {
+export const MenuContext = React.createContext();
+
+function Cascading(props) {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
@@ -40,6 +43,12 @@ function Cascading() {
 
     const {search_object} = useContext(GlobalContext);
 
+    const menuName = props.menuName;
+    const buttonName = props.button;
+
+    var render = null;
+    render = menuName== "" ? options_tree : options_tree[menuName]
+    
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -103,6 +112,17 @@ function Cascading() {
     };
 
 
+    // Voyage ID
+    // itinerary
+    // Dates
+    // Crew
+    // Ship
+    // Caption
+    // Ship Owner
+    // Voyage Outcome
+    // Voyage Sources
+
+
     return (
         <Container>
             <Grid container >
@@ -113,14 +133,21 @@ function Cascading() {
                         defaultCollapseIcon={<ExpandMoreIcon/>}
                         defaultExpandIcon={<ChevronRightIcon/>}
                     >
-                        <IconButton
+                        {/* <IconButton
                             variant="contained"
                             onClick={handleClick}
                             >
                             <AddCircleOutlineIcon />
-                        </IconButton>
+                        </IconButton> */}
+
+                        <Button 
+                         variant="contained"
+                         onClick={handleClick}
+                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}>
+                            {buttonName}
+                        </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {renderTree(options_tree, "")}
+                            {renderTree(render, "")}
                         </Menu>
                         
                     </TreeView>
