@@ -7,7 +7,7 @@ The branch we except to deploy is: **main**
 **1. Clone the project to local**
 
 ```
-git clone [project link]
+git clone git@github.com:ZhihaoWan/Integ_CRC.git
 ```
 
 **2. Run `npm install`** 
@@ -38,8 +38,13 @@ npm install dotenv
 npm install @mui/material @emotion/react @emotion/styled
 ```
 
-**3. Authorization**
-In the `.env`, you could change `REACT_APP_AUTHTOKEN` 
+**3. Authorization**</br>
+In the `.env_sample`, you need to set `REACT_APP_AUTHTOKEN` and `REACT_APP_BASEURL` and change file name to `.env` 
+```
+#Example
+REACT_APP_AUTHTOKEN = 'Token ABCDEF.... (replace it with your authentication token)'
+REACT_APP_BASEURL = 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
+```
 
 **4. Run Application**
 ```javaScript
@@ -52,10 +57,10 @@ npm start
 ### Deployment on Heroku
 **Deployment Process:**
 ```shell
-git clone [this project]
+git clone git@github.com:ZhihaoWan/Integ_CRC.git
 ```
 ```shell
-cd [this project]
+cd Integ_CRC
 ```
 ```shell
 git init 
@@ -83,19 +88,20 @@ heroku open
 
 **Configiration Process**
 ```shell
-# View current config var values
+# View current config var values in heroku website
 heroku config
 # Example:
-# GITHUB_USERNAME: Jiran
-# REACT_APP_AUTHTOKEN: 'Token asdbchuawjfv112baisuyofgkue'    
-# REACT_APP_BASEURL: https://voyages3-api.crc.rice.edu
+GITHUB_USERNAME: joesmith
+REACT_APP_AUTHTOKEN: 'Token ABCDEF.... (replace it with your authentication token)'
+REACT_APP_BASEURL: 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
 ```
-
+or
 ```shell
-# Set all config vars example:
+# Set all config vars in the terminal
+# Example:
 heroku config:set GITHUB_USERNAME=joesmith
-heroku config:set REACT_APP_AUTHTOKEN='Token asdbchuawjfv112baisuyofgkue'   
-heroku config:set REACT_APP_BASEURL='https://voyages3-api.crc.rice.edu'
+heroku config:set REACT_APP_AUTHTOKEN = 'Token ABCDEF.... (replace it with your authentication token)' 
+heroku config:set REACT_APP_BASEURL = 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
 ```
 ```shell
 # Remove config vars example:
