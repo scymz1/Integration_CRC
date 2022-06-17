@@ -15,6 +15,7 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
+import RadioButton from "./radio";
 
 import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
 
@@ -70,15 +71,15 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs={1} align="center">
+          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
+            <Grid item align="center">
               <Cascading />
             </Grid>
-            <Grid item xs={11}>
+            <Grid item>
               {output.map((item, index) => {
                 return(
-                  <Grid container direction="row" spacing={2}>
-                    <Grid item xs={11} align="center">
+                  <Grid container direction="row" spacing={2} sx ={{m:'10px'}}>
+                    <Grid item xs={11} align="center" >
                       <Accordion>
                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                           <Typography>{item.split("***")[2]}</Typography>
@@ -97,6 +98,9 @@ export default function Filter(props) {
                 )})
               }
               
+            </Grid>
+            <Grid item >
+              <RadioButton/>
             </Grid>
           </Grid>
           </AccordionDetails>
