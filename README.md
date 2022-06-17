@@ -11,6 +11,7 @@ Since we found `package-lock.json` will casuse `OCI` deployment process error, w
 1. use nvm (Node version management) tool make sure node -version is "correct <same version everybody>"
  
     1.1: Check your local node version by `node -v` and npm version with `npm -v`
+ 
     1.2: Make sure the versions are same as top of this README
 
 2. Delete `node_modules` && `package-lock.json` file
