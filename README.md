@@ -39,11 +39,11 @@ npm install @mui/material @emotion/react @emotion/styled
 ```
 
 **3. Authorization**</br>
-In the `.env_example`, you need to set `REACT_APP_AUTHTOKEN` and change file name to `.env` 
+In the `.env_sample`, you need to set `REACT_APP_AUTHTOKEN` and `REACT_APP_BASEURL` and change file name to `.env` 
 ```
 #Example
-REACT_APP_AUTHTOKEN = 'Token asdbchuawjfv112baisuyofgkue'
-REACT_APP_BASEURL = 'https://voyages3-api.crc.rice.edu/'
+REACT_APP_AUTHTOKEN = 'Token ABCDEF.... (replace it with your authentication token)'
+REACT_APP_BASEURL = 'https://voyages.ilove.you.haha..... (replace it with your own url for api call)'
 ```
 
 **4. Run Application**
