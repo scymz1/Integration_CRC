@@ -89,6 +89,7 @@ function Cascading(props) {
     };
 
     const renderTree = (nodes, name) => {
+    console.log("🚀 ~ file: Cascading.js ~ line 83 ~ renderTree ~ nodes, name", nodes, name)
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -126,7 +127,7 @@ function Cascading(props) {
     return (
         <Container>
             <Grid container >
-                <Grid item xs={12}>
+                <Grid item xs={12} >
 
                     <TreeView
                         aria-label="option menu"
@@ -147,7 +148,7 @@ function Cascading(props) {
                             {buttonName}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {renderTree(render, "")}
+                            {renderTree(render, "__"+menuName)}
                         </Menu>
                         
                     </TreeView>

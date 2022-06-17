@@ -15,6 +15,7 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
+import RadioButton from "./radio";
 
 import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
 
@@ -47,6 +48,8 @@ export default function Filter(props) {
         console.log('Current SEARCH OBJECT: ', search_object)
     }
 
+    console.log('Current SEARCH OBJECT: ', search_object)
+
     return (
     <AppContext.Provider
     value={{
@@ -70,28 +73,8 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-
-          {/* <Grid container direction={'col'} spacing={1}>
-            <Grid item xs={2} align="center">
-              {/* <Cascading menuName=""/> 
-              <Cascading menuName="voyage_id" button="ID"/>
-              <Cascading menuName="voyage_itinerary" button="Itinerary"/>
-              <Cascading menuName="voyage_dates" button="Dates"/>
-              <Cascading menuName="voyage_crew" button="Crew"/>
-              <Cascading menuName="voyage_ship" button="Ship"/>
-              <Cascading menuName="voyage_captainconnection" button="Captain"/>
-              <Cascading menuName="voyage_shipownerconnection" button="Ship Owner"/>
-              <Cascading menuName="voyage_outcome" button="Outcome"/>
-              <Cascading menuName="voyage_sourceconnection" button="Source"/>
-
-            </Grid> */}
-
-
-            {/* <Grid item xs={10}>
-              <Card> */}
-
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs={1} align="center">
+          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
+            <Grid item align="center">
               <Cascading menuName="voyage_id" button="ID"/>
               <Cascading menuName="voyage_itinerary" button="Itinerary"/>
               <Cascading menuName="voyage_dates" button="Dates"/>
@@ -102,11 +85,11 @@ export default function Filter(props) {
               <Cascading menuName="voyage_outcome" button="Outcome"/>
               <Cascading menuName="voyage_sourceconnection" button="Source"/>
             </Grid>
-            <Grid item xs={11}>
+            <Grid item>
               {output.map((item, index) => {
                 return(
-                  <Grid container direction="row" spacing={2}>
-                    <Grid item xs={11} align="center">
+                  <Grid container direction="row" spacing={2} sx ={{m:'10px'}}>
+                    <Grid item xs={11} align="center" >
                       <Accordion>
                         <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                           <Typography>{item.split("***")[2]}</Typography>
@@ -125,6 +108,9 @@ export default function Filter(props) {
                 )})
               }
               
+            </Grid>
+            <Grid item >
+              <RadioButton/>
             </Grid>
           </Grid>
           </AccordionDetails>
