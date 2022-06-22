@@ -12,7 +12,7 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {bar_x_vars,bar_y_vars} from './vars';
-import { VoyageContext } from '../Voyage';
+import { VoyageContext } from '../VoyageApp';
 import { Grid, Paper} from '@mui/material';
 
 

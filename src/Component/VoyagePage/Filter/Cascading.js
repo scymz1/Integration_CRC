@@ -25,7 +25,7 @@ import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
 
 import {useContext} from "react";
-import {VoyageContext} from "../Voyage";
+import {VoyageContext} from "../VoyageApp";
 
 export const MenuContext = React.createContext();
 

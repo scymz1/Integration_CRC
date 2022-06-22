@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppContext } from "./Filter";
-import {VoyageContext} from "../Voyage";
+import {VoyageContext} from "../VoyageApp";
 import { styled } from '@mui/material/styles';
 import MuiInput from '@mui/material/Input';
 import axios from 'axios';

@@ -5,7 +5,7 @@ import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
 import * as React from 'react';
-import {VoyageContext} from "../Voyage";
+import {VoyageContext} from "../VoyageApp";
 import {
   Typography,
   Container,
