@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppContext } from "./Filter";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 import { styled } from '@mui/material/styles';
 import MuiInput from '@mui/material/Input';
 import axios from 'axios';
@@ -31,7 +31,7 @@ export default function GetSlider() {
 
     console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {search_object, set_search_object} = React.useContext(GlobalContext)
+    const {search_object, set_search_object} = React.useContext(VoyageContext)
 
     // const curLabel = labels[labels.length - 1];
 

@@ -12,7 +12,7 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
-import { GlobalContext } from '../../App';
+import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
 
 const option_url = '/voyage/' + '?hierarchical=false' // labels in dropdowns
@@ -25,7 +25,7 @@ function Scatter () {
 
     const {
         search_object,
-    } = React.useContext(GlobalContext)
+    } = React.useContext(VoyageContext)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])

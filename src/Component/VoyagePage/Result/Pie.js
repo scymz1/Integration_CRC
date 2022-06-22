@@ -12,7 +12,7 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {donut_value_vars, donut_name_vars} from './vars';
-import { GlobalContext } from '../../App';
+import { VoyageContext } from '../VoyageApp';
 import { Grid, Paper} from '@mui/material';
 
 
@@ -31,7 +31,7 @@ function Pie () {
 
     const {
         search_object,
-    } = React.useContext(GlobalContext)
+    } = React.useContext(VoyageContext)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
