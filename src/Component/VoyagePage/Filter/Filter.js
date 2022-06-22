@@ -1,6 +1,6 @@
 import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
 import {useContext} from "react";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 
 import React from 'react';
 
@@ -24,7 +24,7 @@ export const AppContext = React.createContext();
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
+    const {options_tree, search_object, set_search_object} = useContext(VoyageContext);
 
 
   
