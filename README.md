@@ -146,8 +146,7 @@ heroku config:unset GITHUB_USERNAME
 │   │   │   └── Pie.js
 │   │   └── Voyage.js (with SideBar)
 │   ├── PastPage
-│   ├── NavBar.js
-|   └─ App.js
+│   └── NavBar.js
 └── index.js
 ```
 ------

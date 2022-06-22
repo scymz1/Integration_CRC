@@ -1,23 +1,28 @@
 import * as React from "react";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {
   Box,
   Button,
-  Card, CardActions,
+  Card,
+  CardActions,
   CardContent,
   CardHeader,
   Checkbox,
-  Grid, InputAdornment,
-  ListItem,InputLabel,
-  ListItemText, OutlinedInput,
-  TablePagination, FormControl
+  CircularProgress,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  ListItem,
+  ListItemText,
+  OutlinedInput,
+  TablePagination
 } from '@mui/material';
 import {TreeItem, TreeView} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {GlobalContext} from "../../App";
 import _ from 'lodash';
-import { usePagination } from "react-use-pagination";
+import {usePagination} from "react-use-pagination";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -25,22 +30,33 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from '@mui/icons-material/Menu';
 import fileDownload from 'js-file-download';
 import CloseIcon from '@mui/icons-material/Close';
+import {useQuery} from "react-query";
+
+const auth_token = process.env.REACT_APP_AUTHTOKEN
+const base_url = process.env.REACT_APP_BASEURL;
 
 function OptionSelector(props) {
   const [resultObject, setResultObject] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const resultObjectPage = usePagination({totalItems: Object.keys(resultObject).length, initialPageSize: 8});
-  const {options_tree: options} = useContext(GlobalContext);
+  const [endPoint, setEndPoint] = useState('voyage');
+  const {isLoading, error, data: options} = useQuery('Options',
+    () => fetch(base_url + endPoint + "/", {
+      method: "OPTIONS",
+      headers: {'Authorization': auth_token}
+    }).then(res => res.json())
+  )
+
   const getChildrenPath = (node) => {
     let result = []
     node = node ? node : options
     const helper = (node, path) => Object.keys(node).forEach((key) => {
       if (isLast(node[key])) {
-        if(isChildren(key)){
+        if (isChildren(key)) {
           result.push([...path, key])
         }
-      }else{
-        return helper (node[key], [...path, key])
+      } else {
+        return helper(node[key], [...path, key])
       }
     })
     helper(node, [])
@@ -56,9 +72,9 @@ function OptionSelector(props) {
   }
 
   function handleClick(path) {
-    if(_.has(resultObject, path.join('__'))){
+    if (_.has(resultObject, path.join('__'))) {
       setResultObject(_.omit(resultObject, path.join("__")))
-    }else{
+    } else {
       setResultObject({
         [path.join('__')]: _.get(options, path),
         ...resultObject
@@ -69,7 +85,7 @@ function OptionSelector(props) {
   function isAllChildrenChecked(path) {
     let result = true;
     getChildrenPath(_.get(options, path)).forEach((itemPath) => {
-      if(!_.has(resultObject, [...path, ...itemPath].join("__"))){
+      if (!_.has(resultObject, [...path, ...itemPath].join("__"))) {
         result = false;
       }
     })
@@ -79,22 +95,22 @@ function OptionSelector(props) {
   function isAllChildrenUnChecked(path) {
     let result = true;
     getChildrenPath(_.get(options, path)).forEach((itemPath) => {
-      if(_.has(resultObject, [...path, ...itemPath].join("__"))){
+      if (_.has(resultObject, [...path, ...itemPath].join("__"))) {
         result = false;
       }
     })
     return result;
   }
 
-  function handleClickParent(event, path){
+  function handleClickParent(event, path) {
     event.stopPropagation();
-    if(isAllChildrenChecked(path)){
+    if (isAllChildrenChecked(path)) {
       let newResult = {...resultObject}
       getChildrenPath(_.get(options, path)).forEach((itemPath) => {
         newResult = _.omit(newResult, [...path, ...itemPath].join("__"))
       })
       setResultObject(newResult)
-    }else{
+    } else {
       let newResult = {...resultObject}
       getChildrenPath(_.get(options, path)).forEach((itemPath) => {
         newResult = {
@@ -118,17 +134,19 @@ function OptionSelector(props) {
   };
 
   const pageSelector =
-    <div  hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
+    <div hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
       <TablePagination
         count={Object.keys(resultObject).length}
         page={resultObjectPage.currentPage}
-        onPageChange={(e, v)=> {resultObjectPage.setPage(v)}}
+        onPageChange={(e, v) => {
+          resultObjectPage.setPage(v)
+        }}
         rowsPerPage={resultObjectPage.pageSize}
         onRowsPerPageChange={(e) => {
           resultObjectPage.setPageSize(parseInt(e.target.value, 10))
           resultObjectPage.setPage(0)
         }}
-        rowsPerPageOptions={[4, 8 ,16, 32, 64]}
+        rowsPerPageOptions={[4, 8, 16, 32, 64]}
       />
     </div>
 
@@ -137,7 +155,8 @@ function OptionSelector(props) {
     <TreeItem key={nodes.label} nodeId={"" + count++} label={
       <div>
         <Checkbox
-          checked={isAllChildrenChecked(path)} indeterminate={!isAllChildrenUnChecked(path) && !isAllChildrenChecked(path)}
+          checked={isAllChildrenChecked(path)}
+          indeterminate={!isAllChildrenUnChecked(path) && !isAllChildrenChecked(path)}
           onClick={(event) => handleClickParent(event, path)}/>
         {nodes.label ? nodes.label : "Menu"}
       </div>
@@ -146,63 +165,71 @@ function OptionSelector(props) {
         isChildren(key)
           ? isLast(nodes[key])
             ? <ListItem key={key} disablePadding>
-                <Checkbox checked={_.has(resultObject, [...path, key].join('__'))}
-                  onClick={(event) => handleClick([...path, key])}/>
-                <ListItemText primary={key} secondary={nodes[key].flatlabel}/>
-              </ListItem>
+              <Checkbox checked={_.has(resultObject, [...path, key].join('__'))}
+                        onClick={(event) => handleClick([...path, key])}/>
+              <ListItemText primary={key} secondary={nodes[key].flatlabel}/>
+            </ListItem>
             : renderTree(nodes[key], [...path, key])
           : null
-        )
+      )
       }
     </TreeItem>
   );
+
+  if (error) return 'An error has occurred on options: ' + error.message
+  if (isLoading) return <CircularProgress/>
 
   return (
     <div>
       <AppBar position="static">
         <Toolbar>
-          <IconButton size="large" color="inherit" onClick={()=>{setIsMenuOpen(!isMenuOpen)}}>
-            <MenuIcon />
+          <IconButton size="large" color="inherit" onClick={() => {
+            setIsMenuOpen(!isMenuOpen)
+          }}>
+            <MenuIcon/>
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{flexGrow: 1}}>
             Option Selector
           </Typography>
           <Button color="inherit" component="label">
             Import
             <input type="file" onChange={loadFile} hidden/>
           </Button>
-          <Button color="inherit" onClick={()=>{console.log(resultObject); fileDownload(JSON.stringify(resultObject), "options.json")}}>Export</Button>
+          <Button color="inherit" onClick={() => {
+            console.log(resultObject);
+            fileDownload(JSON.stringify(resultObject), "options.json")
+          }}>Export</Button>
         </Toolbar>
       </AppBar>
       <Grid container spacing={1}>
-          <Grid item xs={4} hidden={isMenuOpen}>
-            <Card sx={{height: 850, flexGrow: 1, maxWidth: 800, overflowY: 'auto', overflowX: 'auto'}}>
-              <CardContent>
-                <TreeView
-                  aria-label="option menu"
-                  defaultCollapseIcon={<ExpandMoreIcon/>}
-                  defaultExpandIcon={<ChevronRightIcon/>}
-                >
-                  {renderTree(options, [])}
-                </TreeView>
-              </CardContent>
-            </Card>
-          </Grid>
+        <Grid item xs={4} hidden={isMenuOpen}>
+          <Card sx={{height: 850, flexGrow: 1, maxWidth: 800, overflowY: 'auto', overflowX: 'auto'}}>
+            <CardContent>
+              <TreeView
+                aria-label="option menu"
+                defaultCollapseIcon={<ExpandMoreIcon/>}
+                defaultExpandIcon={<ChevronRightIcon/>}
+              >
+                {renderTree(options, [])}
+              </TreeView>
+            </CardContent>
+          </Card>
+        </Grid>
 
-        <Grid item xs={isMenuOpen? 12 : 8}>
+        <Grid item xs={isMenuOpen ? 12 : 8}>
           <Card sx={{flexGrow: 1, height: 850, overflowY: 'auto'}}>
             <CardHeader title={"Selected Options"}/>
             {pageSelector}
-            <CardContent >
+            <CardContent>
               <Box>
                 <Grid container spacing={2}>
-                  {Object.keys(resultObject).slice(resultObjectPage.startIndex, resultObjectPage.endIndex+1).map((key) =>
+                  {Object.keys(resultObject).slice(resultObjectPage.startIndex, resultObjectPage.endIndex + 1).map((key) =>
                     <Grid item key={key}>
-                      <FormControl id={key} sx={{width: key.length*10+70}} variant="outlined">
+                      <FormControl id={key} sx={{width: key.length * 10 + 70}} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">{key}</InputLabel>
                         <OutlinedInput
                           value={resultObject[key].flatlabel}
-                          onChange={(event)=>setResultObject({
+                          onChange={(event) => setResultObject({
                             ...resultObject,
                             [key]: {...resultObject[key], flatlabel: event.target.value}
                           })}
@@ -228,7 +255,7 @@ function OptionSelector(props) {
           </Card>
         </Grid>
       </Grid>
-        {/*<p>{JSON.stringify(resultObject)}</p>*/}
+      {/*<p>{JSON.stringify(resultObject)}</p>*/}
     </div>
   );
 }

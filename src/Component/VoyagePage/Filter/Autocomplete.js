@@ -2,14 +2,14 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../Voyage";
 import {ComponentContext} from "./ComponentFac"
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Auto() {
 
  const {labels} = React.useContext(AppContext)
-  const {search_object, set_search_object} = React.useContext(GlobalContext)
+  const {search_object, set_search_object} = React.useContext(VoyageContext)
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];

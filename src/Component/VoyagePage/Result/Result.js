@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
 import {Container, Grid} from "@mui/material";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../Voyage";
 
 export default function Result(props) {
-    const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);
+    const {options_tree, options_flat, search_object, set_search_object} = useContext(VoyageContext);
 
     return (
         <Container sx={{border: 1, height:400}}>

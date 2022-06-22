@@ -25,7 +25,7 @@ import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
 
 import {useContext} from "react";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../Voyage";
 
 export const MenuContext = React.createContext();
 
@@ -34,14 +34,14 @@ function Cascading(props) {
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {options_tree} = useContext(GlobalContext);     // <--------- CONTEXT
+    const {options_tree} = useContext(VoyageContext);     // <--------- CONTEXT
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const {search_object} = useContext(GlobalContext);
+    const {search_object} = useContext(VoyageContext);
 
     const menuName = props.menuName;
     const buttonName = props.button;
