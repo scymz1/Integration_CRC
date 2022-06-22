@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {Container, Grid} from "@mui/material";
-import {VoyageContext} from "../Voyage";
+import {VoyageContext} from "../VoyageApp";
 
 export default function Result(props) {
     const {options_tree, options_flat, search_object, set_search_object} = useContext(VoyageContext);

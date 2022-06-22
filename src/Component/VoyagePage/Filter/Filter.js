@@ -1,6 +1,6 @@
 import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
 import {useContext} from "react";
-import {VoyageContext} from "../Voyage";
+import {VoyageContext} from "../VoyageApp";
 
 import React from 'react';
 
