@@ -5,6 +5,7 @@ import Scatter from "./Result/Scatter";
 import Pie from "./Result/Pie";
 import Bar from "./Result/Bar";
 import Table from "./Result/Table";
+import Map from "./Result/Map";
 import ResponsiveAppBar from "../NavBar";
 import {useParams} from 'react-router';
 
@@ -76,6 +77,7 @@ export default function Voyage() {
                     <Tab label="Bar"/>
                     <Tab label="Pie"/>
                     <Tab label="Table"/>
+                    <Tab label="Map"/>
                 </Tabs>
                     <TabPanel value={value} index={0}>
                         <Scatter/>
@@ -88,6 +90,9 @@ export default function Voyage() {
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         <Table/>
+                    </TabPanel>
+                    <TabPanel value={value} index={4}>
+                        <Map/>
                     </TabPanel>
             </Box>
         </div>
