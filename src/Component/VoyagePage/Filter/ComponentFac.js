@@ -5,7 +5,7 @@ import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
 import * as React from 'react';
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../Voyage";
 import {
   Typography,
   Container,
@@ -34,7 +34,7 @@ function ComponentFac(props){
 
   console.log("Variable Name: ----> ", raw)
   
-  const {search_object} = useContext(GlobalContext);
+  const {search_object} = useContext(VoyageContext);
 
   console.log(search_object)
 

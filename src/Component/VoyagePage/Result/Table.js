@@ -10,7 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { GlobalContext } from "../../App";
+import { VoyageContext } from "../Voyage";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -25,7 +25,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Table() {
   const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
-  const { search_object, options_flat } = useContext(GlobalContext);
+  const { search_object, options_flat } = useContext(VoyageContext);
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);

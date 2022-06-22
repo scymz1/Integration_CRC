@@ -1,12 +1,11 @@
-import React, { Component, PureComponent, useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Button, Box, Typography, Card, CardContent } from "@mui/material";
-import { bar_x_vars, bar_y_vars } from "../../VoyagePage/Result/vars";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Backdrop from '@mui/material/Backdrop';
+import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {bar_x_vars, bar_y_vars} from "../../VoyagePage/Result/vars";
+import {Link, useNavigate} from "react-router-dom";
+
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -48,19 +47,19 @@ function BarComponent() {
 
   const navigate = useNavigate();
   const GotoVoyagePage = () => {
-    navigate("/");
+    navigate("/voyage/Bar");
   };
 
   return (
     <div>
-      <Card sx={{ display: "flex" }} style={{ background: 'transparent', boxShadow: 'none'}}>
-        <Box sx={{boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
-          <CardContent sx={{ flex: "1 0 auto" }} >
+      <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
+        <Box sx={{boxShadow: 4, margin: 2, padding: 2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+          <CardContent sx={{flex: "1 0 auto"}}>
             <Button
               variant="text"
-              style={{ fontSize: "24px" }}
+              style={{fontSize: "24px"}}
               component={Link}
-              to="/Bar"
+              to="voyage/Bar"
             >
               Data Visualization - Bar Charts
             </Button>
@@ -80,8 +79,8 @@ function BarComponent() {
           </CardContent>
         </Box>
 
-        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
+        <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
+          <CardContent sx={{flex: "1 0 auto"}}>
             <Plot
               data={[
                 {
@@ -90,10 +89,10 @@ function BarComponent() {
                   type: "bar",
                   mode: "lines+markers",
                 },
-                { type: "bar" },
+                {type: "bar"},
               ]}
-              layout={{ width: 800, height: 600, title: "Bar Plot" }}
-              config={{ responsive: true }}
+              layout={{width: 800, height: 600, title: "Bar Plot"}}
+              config={{responsive: true}}
             />
           </CardContent>
         </Box>
