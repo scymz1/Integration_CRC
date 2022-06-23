@@ -17,7 +17,7 @@ import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 import RadioButton from "./radio";
 
-import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
+import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 
 export const AppContext = React.createContext();
 
@@ -75,15 +75,14 @@ export default function Filter(props) {
         <AccordionDetails>
           <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
             <Grid item align="center">
-              <Cascading menuName="voyage_id" button="ID"/>
-              <Cascading menuName="voyage_itinerary" button="Itinerary"/>
-              <Cascading menuName="voyage_dates" button="Dates"/>
-              <Cascading menuName="voyage_crew" button="Crew"/>
-              <Cascading menuName="voyage_ship" button="Ship"/>
-              <Cascading menuName="voyage_captainconnection" button="Captain"/>
-              <Cascading menuName="voyage_shipownerconnection" button="Ship Owner"/>
-              <Cascading menuName="voyage_outcome" button="Outcome"/>
-              <Cascading menuName="voyage_sourceconnection" button="Source"/>
+              {
+                Object.keys(menu_label).map((key) => {
+                  return(
+                    <Cascading menuName={key} button={menu_label[key]}/>
+                  )
+                })
+              }
+
             </Grid>
             <Grid item>
               {output.map((item, index) => {
