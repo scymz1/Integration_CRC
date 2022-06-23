@@ -9,7 +9,7 @@ import {
     Grid,
     List,
     ListItemText,
-    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu//, MenuItem
+    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu, Typography//, MenuItem
 } from '@mui/material';
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
@@ -128,10 +128,11 @@ function Cascading(props) {
                         </IconButton> */}
 
                         <Button 
-                         variant="contained"
+                        //  variant="contained"
                          onClick={handleClick}
                          style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}>
-                            {buttonName}
+                            {/* {buttonName} */}
+                            <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {renderTree(render, "__"+menuName)}

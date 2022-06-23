@@ -1,4 +1,4 @@
-import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
+import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar} from "@mui/material";
 import {useContext} from "react";
 import {VoyageContext} from "../VoyageApp";
 
@@ -30,7 +30,6 @@ export default function Filter(props) {
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
-    //console.log("🚀 ~ file: Filter.js ~ line 35 ~ Filter ~ output", output)
     const [menuPosition, setMenuPosition] = React.useState(null);
     
     // Handle delete by removing the specified key
@@ -74,15 +73,20 @@ export default function Filter(props) {
         </AccordionSummary>
         <AccordionDetails>
 
-          <Grid container direction="row" spacing={1}>
-              {
-                Object.keys(menu_label).map((key) => {
-                  return(
-                    <Cascading menuName={key} button={menu_label[key]}/>
-                  )
-                })
-              }
-          </Grid>
+        <AppBar position="static">
+          {/* <Toolbar disableGutters> */}
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(menu_label).map((key) => {
+                    return(
+                      <Cascading menuName={key} button={menu_label[key]}/>
+                    )
+                  })
+                }
+            </Grid>
+          {/* </Toolbar>   */}
+        </AppBar>
+
 
           <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
 
