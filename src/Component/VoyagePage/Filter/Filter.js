@@ -73,8 +73,8 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
-            <Grid item align="center">
+
+          <Grid container direction="row" spacing={1}>
               {
                 Object.keys(menu_label).map((key) => {
                   return(
@@ -82,8 +82,17 @@ export default function Filter(props) {
                   )
                 })
               }
+          </Grid>
 
-            </Grid>
+          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
+
+            {/* {
+              Object.keys(menu_label).map((key) => {
+                return(
+                  <Cascading menuName={key} button={menu_label[key]}/>
+                )
+              })
+            } */}
             <Grid item>
               {output.map((item, index) => {
                 return(
@@ -106,11 +115,12 @@ export default function Filter(props) {
                   </Grid>
                 )})
               }
-              
             </Grid>
+
             <Grid item >
               <RadioButton/>
             </Grid>
+            
           </Grid>
           </AccordionDetails>
       </Accordion>

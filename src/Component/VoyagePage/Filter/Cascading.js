@@ -69,7 +69,6 @@ function Cascading(props) {
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
-        console.log("OUTPUT STRING: ----->", out)
         if(!search_object[option])
             setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
         else
@@ -89,7 +88,6 @@ function Cascading(props) {
     };
 
     const renderTree = (nodes, name) => {
-    console.log("🚀 ~ file: Cascading.js ~ line 83 ~ renderTree ~ nodes, name", nodes, name)
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -112,22 +110,10 @@ function Cascading(props) {
         )
     };
 
-
-    // Voyage ID
-    // itinerary
-    // Dates
-    // Crew
-    // Ship
-    // Caption
-    // Ship Owner
-    // Voyage Outcome
-    // Voyage Sources
-
-
     return (
-        <Container>
-            <Grid container >
-                <Grid item xs={12} >
+        // <Container>
+            // <Grid container >
+                <Grid item xs={1} >
 
                     <TreeView
                         aria-label="option menu"
@@ -155,10 +141,10 @@ function Cascading(props) {
 
                 </Grid>
             
-            </Grid>
+            // </Grid>
 
     
-        </Container>
+        // </Container>
     );
 }
 
