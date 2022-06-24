@@ -8,6 +8,8 @@ import Home2 from "./Component/HomePage-darkmode/home";
 import OptionSelector from "./Component/util/optionSelector";
 import PASTApp from "./Component/PAST/PASTApp";
 import Map from './Component/VoyagePage/mapping/Map2';
+import SankeyExample from './Component/VoyagePage/Sankey/SankeyExample';
+import dataset from './Component/VoyagePage/Sankey/dataset';
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,7 +23,7 @@ root.render(
           <Route path="voyage/:id" element={<VoyageApp/>}/>
           <Route path="home2" element={<Home2/>}/>
           <Route path="past" element={<PASTApp/>}/>
-          <Route path="/geo/routes" element={<Map/>}/>
+          <Route path="/geo/routes" element={<><Map/> <SankeyExample data={dataset} width={960} height={500}/></>}/>
           <Route path="optionSelector" element={<OptionSelector/>}/>
         </Routes>
       </BrowserRouter>
