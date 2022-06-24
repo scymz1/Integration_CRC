@@ -1,4 +1,4 @@
-import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
+import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar} from "@mui/material";
 import {useContext} from "react";
 import {VoyageContext} from "../VoyageApp";
 
@@ -17,7 +17,7 @@ import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 import RadioButton from "./radio";
 
-import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
+import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 
 export const AppContext = React.createContext();
 
@@ -30,7 +30,6 @@ export default function Filter(props) {
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
-    //console.log("🚀 ~ file: Filter.js ~ line 35 ~ Filter ~ output", output)
     const [menuPosition, setMenuPosition] = React.useState(null);
     
     // Handle delete by removing the specified key
@@ -73,18 +72,31 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
-            <Grid item align="center">
-              <Cascading menuName="voyage_id" button="ID"/>
-              <Cascading menuName="voyage_itinerary" button="Itinerary"/>
-              <Cascading menuName="voyage_dates" button="Dates"/>
-              <Cascading menuName="voyage_crew" button="Crew"/>
-              <Cascading menuName="voyage_ship" button="Ship"/>
-              <Cascading menuName="voyage_captainconnection" button="Captain"/>
-              <Cascading menuName="voyage_shipownerconnection" button="Ship Owner"/>
-              <Cascading menuName="voyage_outcome" button="Outcome"/>
-              <Cascading menuName="voyage_sourceconnection" button="Source"/>
+
+        <AppBar position="static">
+          {/* <Toolbar disableGutters> */}
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(menu_label).map((key) => {
+                    return(
+                      <Cascading menuName={key} button={menu_label[key]}/>
+                    )
+                  })
+                }
             </Grid>
+          {/* </Toolbar>   */}
+        </AppBar>
+
+
+          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
+
+            {/* {
+              Object.keys(menu_label).map((key) => {
+                return(
+                  <Cascading menuName={key} button={menu_label[key]}/>
+                )
+              })
+            } */}
             <Grid item>
               {output.map((item, index) => {
                 return(
@@ -107,11 +119,12 @@ export default function Filter(props) {
                   </Grid>
                 )})
               }
-              
             </Grid>
+
             <Grid item >
               <RadioButton/>
             </Grid>
+            
           </Grid>
           </AccordionDetails>
       </Accordion>
