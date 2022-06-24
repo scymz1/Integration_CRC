@@ -108,6 +108,7 @@ const Map = () => {
         >
           <Popup>
             {location.name} - {location.forecast}
+            {/* can be replaced with pivot table */}
             {customPopup}
           </Popup>
         </Marker>
@@ -116,11 +117,6 @@ const Map = () => {
 <MyComponent/>
 
 
-    {/* <Marker position={center}>
-        <Popup minWidth={300}>
-          {customPopup}
-        </Popup>
-      </Marker> */}
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
       <button onClick={handleClick}>
         Toggle Points State and Props
