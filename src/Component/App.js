@@ -7,6 +7,7 @@ import {CircularProgress} from "@mui/material";
 
 import Home from './HomePage/home'
 import Home2 from './HomePage-darkmode/home'
+import Map from "./VoyagePage/mapping/Map2";
 
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
@@ -75,6 +76,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Voyage/>}/>
           <Route path="/:id" element={<Voyage/>}/>
+          <Route path="/geo/Routes" element={<Map/>}/>
           <Route path="home" element={<Home/>}/>
           <Route path="home2" element={<Home2/>}/>
           <Route path="voyage/optionSelector" element={<OptionSelector/>}/>
