@@ -136,21 +136,23 @@ function OptionSelector(props) {
   };
 
   const pageSelector =
-    <div hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
-      <TablePagination
-        count={Object.keys(resultObject).length}
-        page={resultObjectPage.currentPage}
-        onPageChange={(e, v) => {
-          resultObjectPage.setPage(v)
-        }}
-        rowsPerPage={resultObjectPage.pageSize}
-        onRowsPerPageChange={(e) => {
-          resultObjectPage.setPageSize(parseInt(e.target.value, 10))
-          resultObjectPage.setPage(0)
-        }}
-        rowsPerPageOptions={[4, 8, 16, 32, 64]}
-      />
-    </div>
+    <table hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
+      <tbody><tr>
+        <TablePagination
+          count={Object.keys(resultObject).length}
+          page={resultObjectPage.currentPage > 0 ? resultObjectPage.currentPage : 0}
+          onPageChange={(e, v) => {
+            resultObjectPage.setPage(0)
+          }}
+          rowsPerPage={resultObjectPage.pageSize}
+          onRowsPerPageChange={(e) => {
+            resultObjectPage.setPageSize(parseInt(e.target.value, 10))
+            resultObjectPage.setPage(0)
+          }}
+          rowsPerPageOptions={[4, 8, 16, 32, 64]}
+        />
+      </tr></tbody>
+    </table>
 
   var count = 0;
   const renderTree = (nodes, path) => (

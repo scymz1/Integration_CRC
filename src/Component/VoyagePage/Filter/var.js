@@ -188,3 +188,15 @@ export const autocomplete_text_fields=
 		"voyage_sourceconnection__source__full_ref",
 		"voyage_sourceconnection__text_ref"
 	]
+
+export const menu_label = {
+	"voyage_id": "ID",
+	"voyage_itinerary": "Itinerary",
+	"voyage_dates": "Dates",
+	"voyage_crew": "Crew",
+	"voyage_ship": "Ship",
+	"voyage_captainconnection": "Captain",
+	"voyage_shipownerconnection": "Ship Owner",
+	"voyage_outcome": "Outcome",
+	"voyage_sourceconnection": "Source"
+}
