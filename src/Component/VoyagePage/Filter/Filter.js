@@ -118,5 +118,3 @@ export default function Filter(props) {
     </AppContext.Provider>
   );
 }
-
-
