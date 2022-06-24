@@ -1,6 +1,6 @@
 import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
 import {useContext} from "react";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 
 import React from 'react';
 
@@ -24,7 +24,7 @@ export const AppContext = React.createContext();
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
+    const {options_tree, search_object, set_search_object} = useContext(VoyageContext);
 
 
   
@@ -47,6 +47,8 @@ export default function Filter(props) {
     const handlePrint = (item) => {
         console.log('Current SEARCH OBJECT: ', search_object)
     }
+
+    console.log('Current SEARCH OBJECT: ', search_object)
 
     return (
     <AppContext.Provider
@@ -73,7 +75,15 @@ export default function Filter(props) {
         <AccordionDetails>
           <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
             <Grid item align="center">
-              <Cascading />
+              <Cascading menuName="voyage_id" button="ID"/>
+              <Cascading menuName="voyage_itinerary" button="Itinerary"/>
+              <Cascading menuName="voyage_dates" button="Dates"/>
+              <Cascading menuName="voyage_crew" button="Crew"/>
+              <Cascading menuName="voyage_ship" button="Ship"/>
+              <Cascading menuName="voyage_captainconnection" button="Captain"/>
+              <Cascading menuName="voyage_shipownerconnection" button="Ship Owner"/>
+              <Cascading menuName="voyage_outcome" button="Outcome"/>
+              <Cascading menuName="voyage_sourceconnection" button="Source"/>
             </Grid>
             <Grid item>
               {output.map((item, index) => {

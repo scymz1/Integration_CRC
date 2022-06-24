@@ -1,14 +1,10 @@
-import React, { Component, PureComponent, useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Button, Box, Typography, Card, CardContent } from "@mui/material";
-import {
-  donut_value_vars,
-  donut_name_vars,
-} from "../../VoyagePage/Result/vars";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {donut_name_vars, donut_value_vars,} from "../../VoyagePage/Result/vars";
+import {Link, useNavigate} from "react-router-dom";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -52,13 +48,13 @@ function PieComponent() {
 
   const navigate = useNavigate();
   const GotoVoyagePage = () => {
-    navigate("/");
+    navigate("/voyage/Pie");
   };
 
   return (
-    <Card sx={{ display: "flex" }} style={{ background: 'transparent', boxShadow: 'none'}}>
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
+    <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
+      <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
+        <CardContent sx={{flex: "1 0 auto"}}>
           <Plot
             data={[
               {
@@ -68,20 +64,20 @@ function PieComponent() {
                 mode: "lines+markers",
               },
             ]}
-            layout={{ width: 800, height: 600, title: "Pie Plot" }}
-            config={{ responsive: true }}
+            layout={{width: 800, height: 600, title: "Pie Plot"}}
+            config={{responsive: true}}
           />
         </CardContent>
       </Box>
-      <Box sx={{ boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
+      <Box sx={{boxShadow: 4, margin: 2, padding: 2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+        <CardContent sx={{flex: "1 0 auto"}}>
           <div>
             <CardContent>
               <Button
                 variant="text"
-                style={{ fontSize: "24px" }}
+                style={{fontSize: "24px"}}
                 component={Link}
-                to="/Pie"
+                to="voyage/Pie"
               >
                 Data Visualization - Pie Charts
               </Button>

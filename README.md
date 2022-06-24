@@ -1,7 +1,7 @@
 # Integ_CRC
 [![](https://img.shields.io/badge/npm-v8.11.0-brightgreen)](https://shields.io)  [![](https://img.shields.io/badge/node-v16.15.1-orange)](https://shields.io)
-Heroku Link: [Heroku]()
-OCI Deployment Link: [OCI]()
+
+Website Link: [OCI](https://voyages3-react.crc.rice.edu)
 
 The branch we except to deploy is: **production**
 -------------
@@ -146,8 +146,7 @@ heroku config:unset GITHUB_USERNAME
 │   │   │   └── Pie.js
 │   │   └── Voyage.js (with SideBar)
 │   ├── PastPage
-│   ├── NavBar.js
-|   └─ App.js
+│   └── NavBar.js
 └── index.js
 ```
 ------
