@@ -16,7 +16,7 @@
   }
   
   div.leaflet-top.leaflet-right{ display: none !important; width: 0px !important; height: 0px !important; }
-
+/* 
   button {
     position: absolute;
     bottom: 50px;
@@ -25,5 +25,5 @@
     padding: 0.5em;
     color: blue;
     font-weight: bold;
-  }
+  } */
   
