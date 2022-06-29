@@ -111,10 +111,31 @@ const Map = () => {
         console.log("Nodes ", nodes.features)
         // L.geoJSON(nodes.features).addTo(map);
 
-        // markers.addLayer(L.marker([lat, lng], { icon }));
-        markers.addLayer(L.geoJSON(nodes.features));
+        // markers.addLayer(L.marker([lat, lng], { icon }).bindPopup("Hello"));
+        
+        markers.addLayer(L.geoJSON(nodes.features, {
+          onEachFeature : function(feature, layer){
+              console.log("Feature: ", feature);
+              console.log("Layer: ", layer);
+
+              layer.bindPopup(function (layer) {
+                                console.log(layer.feature);
+                                if(layer.feature.properties.name)
+                                  return layer.feature.properties.name;
+                                else
+                                  return layer.feature.geometry.type;
+                              });
+          }
+        }));
         map.addLayer(markers);
         
+        markers.addTo(map);
+
+        // L.geoJSON(nodes.features).bindPopup(function (layer) {
+        //                                       console.log(layer.feature);
+        //                                       return layer.feature.properties.name;
+        //                                     }).addTo(map);
+
       },
 
     });
