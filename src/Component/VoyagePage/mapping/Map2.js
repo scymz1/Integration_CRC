@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "./Style.css"
 import RoutineMachine from "./RoutineMachine";
 import "leaflet/dist/leaflet.css";
 //import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
+const { BaseLayer } = LayersControl;
 
 //https://github.com/tomik23/react-leaflet-examples/tree/main/src/pages
 //pass location to routing https://codesandbox.io/s/react-leaflet-v3-how-to-dynamicallly-pass-the-routing-coordinates-to-leaflet-routing-using-react-hooks-852ji?file=/src/App.js
@@ -31,12 +32,14 @@ const points2 = [
   [33.50546582848033, 36.29547681726967]
 ];
 
-const center = [1.35, 103.8];
+
+const center = [23.486678, -88.59375]
+
 
 const locations = [
-  { name: "west", position: [1.35735, 103.7],  forecast: "cloudy" },
-  { name: "east", position: [1.35735, 103.94],  forecast: "cloudy" },
-  { name: "north", position: [1.4, 103.8], forecast: "heavy-rain" },
+  { name: "Cuba", position: [21.82801, -78.354492],  info: "lalala" },
+  { name: "Gulf of Mexico", position: [25.148824, -89.67041],  info: "lalala" },
+  { name: "Georgia", position: [32.761929, -83.232422], info: "lalala" },
 ];
 
 const icon = L.icon({
@@ -47,12 +50,29 @@ const icon = L.icon({
   shadowUrl: "https://unpkg.com/leaflet@1.7/dist/images/marker-shadow.png"
 });
 
+// const light = 'cl4t2jnz6003115mkh34qvveh'
+// const noBorder = 'cl4t3r3s9001216nwr2pj50n3' 
+
 
 const Map = () => {
   const rMachine = useRef();
   const [points, setPoints] = useState(true);
-  const pointsToUse = points ? [[1.35735, 103.7],[1.35735, 103.94]] : points2;
+  // const light = 'cl4t2jnz6003115mkh34qvveh'
+  // const noBorder = 'cl4t3r3s9001216nwr2pj50n3'
+  const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
+  const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
+  const handleClick = () => {
+    setPoints(!points)
+}
+
+  
+  //const pointsToUse = points ? [[1.3575, 104.7],[1.3535, 103.34]] : points2;
+  const pointsToUse = points ? [[30.751942, -82.2216],[15.311785, -85.627441]] : points2;
+
+ 
+
+  
   function MyComponent() {
     const map = useMapEvents({
       click: (e) => {
@@ -77,11 +97,6 @@ const Map = () => {
   );
   
 
-  const handleClick = () => {
-    setPoints(!points)
-    console.log(rMachine)
-}
-
   useEffect(() => {
     if (rMachine.current) {
       console.log(rMachine.current);
@@ -93,21 +108,38 @@ const Map = () => {
     <MapContainer
       id="mapId"
       center={center}
-      zoom={10}
+      zoom={5}
       scrollWheelZoom={false}
     >
-      <TileLayer
+      {/* <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution=' &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors"'
-      />
+      /> */}  
+     
+
+    <LayersControl position="bottomleft">
+          <BaseLayer name="modern country border">
+          <TileLayer
+            url={normal}
+            attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+          /> 
+          </BaseLayer>
+          <BaseLayer checked name="no country border">
+          <TileLayer
+            url={noBorder}
+            attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+          />
+          </BaseLayer>
+      </LayersControl>
+
 
 {locations.map((location) => (
         <Marker
           position={location.position}
-          draggable= {false}
+          draggable= {true}
         >
           <Popup>
-            {location.name} - {location.forecast}
+            {location.name} - {location.info}
             {/* can be replaced with pivot table */}
             {customPopup}
           </Popup>
@@ -118,9 +150,7 @@ const Map = () => {
 
 
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
-      <button onClick={handleClick}>
-        Toggle Points State and Props
-      </button>
+
     </MapContainer>
   );
 };

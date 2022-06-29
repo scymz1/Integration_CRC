@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -16,11 +16,19 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Button from "@mui/material/Button";
 
-const option_url = "/voyage/" + "?hierarchical=false"; // labels in dropdowns
+//const option_url = "/voyage/" + "?hierarchical=false"; // labels in dropdowns
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+
+export const ModalContext = createContext();
 
 function Table() {
   const [isLoading, setLoading] = useState(false);
@@ -37,6 +45,24 @@ function Table() {
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
 
+  // Modal
+  const [open, setOpen] = React.useState(false);
+  const [info, setInfo] = useState([]);
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  // Expand/Collapse
+  const [expanded, setExpanded] = React.useState(false);
+
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
@@ -49,13 +75,14 @@ function Table() {
     }
 
     for (var property in search_object) {
+      // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
         data.append(property, v);
       });
     }
 
     axios
-      .post("/voyage/", (data = data))
+      .post("/voyage/", data)
       .then(function (response) {
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
@@ -73,6 +100,9 @@ function Table() {
     // hide last border
     "&:last-child td, &:last-child th": {
       border: 0,
+    },
+    "&:hover": {
+      backgroundColor: "#389c90",
     },
   }));
 
@@ -101,6 +131,19 @@ function Table() {
     setDirection(direction === "asc" ? "desc" : "asc");
   };
 
+  const handleOpen = (event, info) => {
+    console.log(info.id);
+    console.log(info);
+    setOpen(true);
+    setInfo(info);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  const handleChange = () => {
+    setExpanded(expanded ? false : true);
+  };
+
   return (
     <div>
       <div>
@@ -124,12 +167,12 @@ function Table() {
                         onClick={(event) => handleSorting(event, v)}
                       >
                         <div>{options_flat[v].flatlabel}</div>
-                        <div style={{ float: "right" }}>  
-                        {/* position: 'flex', bottom:0 */}
+                        <div style={{ float: "right" }}>
+                          {/* position: 'flex', bottom:0 */}
                           <TableSortLabel
                             style={{ opacity: field === v ? 1 : 0.4 }}
                             active={true}
-                            direction={field == v ? direction : "asc"}
+                            direction={field === v ? direction : "asc"}
                           ></TableSortLabel>
                         </div>
                       </TableCell>
@@ -139,7 +182,10 @@ function Table() {
                 <TableBody>
                   {value.map((row) => (
                     // <TableRow>
-                    <StyledTableRow key={row.name}>
+                    <StyledTableRow
+                      key={row.name}
+                      onClick={(event) => handleOpen(event, row)}
+                    >
                       {Object.values(row).map((k) => (
                         <TableCell>{k}</TableCell>
                       ))}
@@ -164,6 +210,51 @@ function Table() {
           </FormControl>
         </Box>
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Full detail: {info.id}
+            <div>
+              Here are the currently available details for this voyage.
+              <Button onClick={handleChange}>Expand/Collapse</Button>to see/hide
+              all.
+            </div>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <div>
+              <Accordion expanded={expanded}>
+                <AccordionSummary
+                  // expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Ship nation owner</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>Hey, this is owner.</Typography>
+                </AccordionDetails>
+              </Accordion>
+              <Accordion expanded={expanded}>
+                <AccordionSummary
+                  // expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel2a-content"
+                  id="panel2a-header"
+                >
+                  <Typography>Outcome</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>Hey, this is outcome.</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   );
 }
