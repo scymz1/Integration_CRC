@@ -91,7 +91,7 @@ function Bar () {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]);
+    }, [option.field, option.value, aggregation, search_object]);
 
 
     return (

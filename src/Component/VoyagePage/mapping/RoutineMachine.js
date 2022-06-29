@@ -8,6 +8,8 @@ import { useEffect } from "react";
 const createRoutineMachineLayer = (props) => {
   const { waypoints } = props;
   
+  console.log("Points in routing machine: ", waypoints)
+
   const instance = L.Routing.control({
     waypoints,
     lineOptions: {
@@ -21,7 +23,7 @@ const createRoutineMachineLayer = (props) => {
     showAlternatives: false
   });
 
-
+  console.log("Points in routing machine: ", waypoints)
 
    return instance;
 };

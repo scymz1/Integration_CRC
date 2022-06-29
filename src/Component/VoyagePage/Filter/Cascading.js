@@ -128,9 +128,10 @@ function Cascading(props) {
                         </IconButton> */}
 
                         <Button 
-                        //  variant="contained"
+                         variant="text"
                          onClick={handleClick}
-                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}>
+                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}
+                         >
                             {/* {buttonName} */}
                             <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
                         </Button>
