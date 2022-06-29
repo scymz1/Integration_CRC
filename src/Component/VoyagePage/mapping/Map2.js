@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer,FeatureGroup,Marker, Popup, useMapEvents, useMap } from "react-leaflet";
+import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl, useMap } from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "./Style.css"
 import RoutineMachine from "./RoutineMachine";
@@ -14,6 +14,7 @@ import { createSvgIcon } from "@mui/material";
 
 import * as d3spatialsankey from "./spatialsankey";
 import 'leaflet.markercluster';
+const { BaseLayer } = LayersControl;
 
 //https://github.com/tomik23/react-leaflet-examples/tree/main/src/pages
 //pass location to routing https://codesandbox.io/s/react-leaflet-v3-how-to-dynamicallly-pass-the-routing-coordinates-to-leaflet-routing-using-react-hooks-852ji?file=/src/App.js
@@ -41,12 +42,14 @@ const points2 = [
   [33.50546582848033, 36.29547681726967]
 ];
 
-const center = [1.35, 103.8];
+
+const center = [23.486678, -88.59375]
+
 
 const locations = [
-  {position: [1.35735, 103.7]},
-  {position: [1.35735, 103.94],},
-  {position: [1.4, 103.8],},
+  { name: "Cuba", position: [21.82801, -78.354492],  info: "lalala" },
+  { name: "Gulf of Mexico", position: [25.148824, -89.67041],  info: "lalala" },
+  { name: "Georgia", position: [32.761929, -83.232422], info: "lalala" },
 ];
 
 const icon = L.icon({
@@ -59,13 +62,15 @@ const icon = L.icon({
 
 const file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_0_0.csv"
 // var links = csvFileToArray(file);
+// const light = 'cl4t2jnz6003115mkh34qvveh'
+// const noBorder = 'cl4t3r3s9001216nwr2pj50n3' 
+
 
 const Map = () => {
   const rMachine = useRef();
   const [points, setPoints] = useState(true);
-  const pointsToUse = points ? [[1.35735, 103.7],[1.35735, 103.94], [1.4, 103.8]] : points2;
 
-  const [locations, setLocations] = useState([[1.35735, 103.7], [1.35735, 103.94], [1.4, 103.8]]);
+  // const [locations, setLocations] = useState([[1.35735, 103.7], [1.35735, 103.94], [1.4, 103.8]]);
   const [links, setArray] = useState([]);
 
   const loadCsv = () => {
@@ -77,50 +82,23 @@ const Map = () => {
     })
   }
 
-  function GeoSankey() {
-    loadCsv();
-    
-    const map = useMap();
-    
-    map._initPathRoot();
+ 
 
-    var svg = d3.select(node).append("svg"),
-        linklayer = svg.append("g"),
-        nodelayer = svg.append("g");
+  // const light = 'cl4t2jnz6003115mkh34qvveh'
+  // const noBorder = 'cl4t3r3s9001216nwr2pj50n3'
+  const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
+  const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
-    var nodelinks = spatialsankey.links();
+  const handleClick = () => {
+    setPoints(!points)
+}
 
-    var node = document.createElement('div');
-    var spatialsankey = d3spatialsankey()
-                            .lmap(map)
-                            .nodes(nodes.features)
-                            .links(links);
-      
-    var node = spatialsankey.node();
-    var circs = nodelayer.selectAll("circle")
-                          .data(spatialsankey.nodes())
-                          .enter()
-                          .append("circle")
-                          .attr("cx", node.cx)
-                          .attr("cy", node.cy)
-                          .attr("r", node.r)
-                          .style("fill", node.fill);   
-                          
-    var link = spatialsankey.link();
-    var beziers = linklayer.selectAll("path")
-                          .data(nodelinks)
-                          .enter()
-                          .append("path")
-                          .attr("d", link)
-                          .attr('id', function(d){return d.id})
-                          .style("stroke-width", link.width())
-                          .style("fill", 'none');
-  }
-
+  
+  //const pointsToUse = points ? [[1.3575, 104.7],[1.3535, 103.34]] : points2;
+  const pointsToUse = points ? [[30.751942, -82.2216],[15.311785, -85.627441]] : points2;
+  
 
   function MyComponent() {
-
-    console.log("breakpoint 2")
 
     const map = useMapEvents({
       click: (e) => {
@@ -133,8 +111,8 @@ const Map = () => {
         console.log("Nodes ", nodes.features)
         // L.geoJSON(nodes.features).addTo(map);
 
-        markers.addLayer(L.marker([lat, lng], { icon }));
-        // markers.addLayer(L.geoJSON(nodes.features));
+        // markers.addLayer(L.marker([lat, lng], { icon }));
+        markers.addLayer(L.geoJSON(nodes.features));
         map.addLayer(markers);
         
       },
@@ -156,11 +134,6 @@ const Map = () => {
   );
   
 
-  const handleClick = () => {
-    setPoints(!points)
-    console.log(rMachine)
-}
-
   useEffect(() => {
     if (rMachine.current) {
       console.log("New Points to use: ", rMachine.current);
@@ -170,35 +143,43 @@ const Map = () => {
   }, [pointsToUse, rMachine]);
 
   return (
-    // <div>
-
     
     <MapContainer
       id="mapId"
       center={center}
-      zoom={10}
+      zoom={5}
       scrollWheelZoom={false}
     >
-      <TileLayer
+      {/* <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution=' &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors"'
-      />
+      /> */}  
+     
+
+      <LayersControl position="bottomleft">
+            <BaseLayer name="modern country border">
+            <TileLayer
+              url={normal}
+              attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+            /> 
+            </BaseLayer>
+            <BaseLayer checked name="no country border">
+            <TileLayer
+              url={noBorder}
+              attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+            />
+            </BaseLayer>
+      </LayersControl>
+
 
       {locations.map((location) => (
         <Marker
-          // position={location.position}
-          position={location}
+          position={location.position}
           draggable= {true}
-          eventHandlers={{
-            click: () => {
-              console.log('marker clicked')
-            },
-          }}
         >
-          {/* {console.log(location.position)} */}
+          {console.log(location.position)}
           <Popup>
-            {/* {location.name} - {location.position} */}
-            {location}
+            {location.name} - {location.info}
             {/* can be replaced with pivot table */}
             {/* {customPopup} */}
           </Popup>
@@ -209,16 +190,50 @@ const Map = () => {
 
       {console.log("Points to use: ", pointsToUse)}
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
-      <button onClick={handleClick}>
-        Toggle Points State and Props
-      </button>
-    </MapContainer>
 
-    // {/* <button onClick={loadCsv}>
-    //   Parse CSV
-    // </button> */}
-    // </div>
+    </MapContainer>
   );
 };
 
 export default Map;
+
+
+ // function GeoSankey() {
+  //   loadCsv();
+    
+  //   const map = useMap();
+    
+  //   map._initPathRoot();
+
+  //   var svg = d3.select(node).append("svg"),
+  //       linklayer = svg.append("g"),
+  //       nodelayer = svg.append("g");
+
+  //   var nodelinks = spatialsankey.links();
+
+  //   var node = document.createElement('div');
+  //   var spatialsankey = d3spatialsankey()
+  //                           .lmap(map)
+  //                           .nodes(nodes.features)
+  //                           .links(links);
+      
+  //   var node = spatialsankey.node();
+  //   var circs = nodelayer.selectAll("circle")
+  //                         .data(spatialsankey.nodes())
+  //                         .enter()
+  //                         .append("circle")
+  //                         .attr("cx", node.cx)
+  //                         .attr("cy", node.cy)
+  //                         .attr("r", node.r)
+  //                         .style("fill", node.fill);   
+                          
+  //   var link = spatialsankey.link();
+  //   var beziers = linklayer.selectAll("path")
+  //                         .data(nodelinks)
+  //                         .enter()
+  //                         .append("path")
+  //                         .attr("d", link)
+  //                         .attr('id', function(d){return d.id})
+  //                         .style("stroke-width", link.width())
+  //                         .style("fill", 'none');
+  // }
