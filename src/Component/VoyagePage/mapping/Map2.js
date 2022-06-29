@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl, useMap } from "react-leaflet";
+import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl, useMap, GeoJSON} from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "./Style.css"
 import RoutineMachine from "./RoutineMachine";
@@ -100,6 +100,8 @@ const Map = () => {
 
   function MyComponent() {
 
+    const [layerInfo, setLayer] = useState(null);
+
     const map = useMapEvents({
       click: (e) => {
         const { lat, lng } = e.latlng;
@@ -108,18 +110,14 @@ const Map = () => {
 
         console.log('new marker at ', e.latlng)
         // L.marker([lat, lng], { icon }).addTo(map);
-        console.log("Nodes ", nodes.features)
-        // L.geoJSON(nodes.features).addTo(map);
-
-        // markers.addLayer(L.marker([lat, lng], { icon }).bindPopup("Hello"));
-        
+        console.log("Nodes ", nodes.features)        
         markers.addLayer(L.geoJSON(nodes.features, {
           onEachFeature : function(feature, layer){
               console.log("Feature: ", feature);
               console.log("Layer: ", layer);
 
-              layer.bindPopup(function (layer) {
-                                console.log(layer.feature);
+              layer.bindPopup(function (layer) {                                // adding popup to port / link
+                                // console.log(layer.feature);
                                 if(layer.feature.properties.name)
                                   return layer.feature.properties.name;
                                 else
@@ -163,6 +161,27 @@ const Map = () => {
     console.log("Points to use: ", pointsToUse)
   }, [pointsToUse, rMachine]);
 
+  const onClickFeature = (feature, layer) => {
+      console.log(feature);
+      layer.bindPopup(function (layer) {                                // adding popup to port / link
+        // console.log(layer.feature);
+        if(layer.feature.properties.name)
+          return layer.feature.properties.name;
+        else
+          return layer.feature.geometry.type;
+      });
+
+      layer.on({
+        click: (event) => {
+          event.target.setStyle(
+            {
+              color: "green"
+            }
+          );
+        }
+      });
+  }
+
   return (
     
     <MapContainer
@@ -176,7 +195,7 @@ const Map = () => {
         attribution=' &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors"'
       /> */}  
      
-
+      <button>Example</button>
       <LayersControl position="bottomleft">
             <BaseLayer name="modern country border">
             <TileLayer
@@ -207,7 +226,9 @@ const Map = () => {
         </Marker>
       ))}
 
-      <MyComponent/>
+      <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/>
+
+      {/* <MyComponent/> */}
 
       {console.log("Points to use: ", pointsToUse)}
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
