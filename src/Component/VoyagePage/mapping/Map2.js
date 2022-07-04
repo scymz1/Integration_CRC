@@ -7,14 +7,24 @@ import "leaflet/dist/leaflet.css";
 //import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
 import * as d3 from "d3";
-// import nodes from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_0_0";
+
 import nodes from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Bahamas_New York_1715_1780_1_1";
 import csv from './voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_0_0.csv'; 
 import { createSvgIcon } from "@mui/material";
 
-import * as d3spatialsankey from "./spatialsankey";
+import { ReadFeature } from "./Spatial.js"
+
+import nodes2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1";
+import csv2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.csv"
+import {useQuery} from "react-query";
+
 import 'leaflet.markercluster';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+
 const { BaseLayer } = LayersControl;
+
+var csv_file = "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.csv";
+var json_file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.json";
 
 //https://github.com/tomik23/react-leaflet-examples/tree/main/src/pages
 //pass location to routing https://codesandbox.io/s/react-leaflet-v3-how-to-dynamicallly-pass-the-routing-coordinates-to-leaflet-routing-using-react-hooks-852ji?file=/src/App.js
@@ -70,20 +80,6 @@ const Map = () => {
   const rMachine = useRef();
   const [points, setPoints] = useState(true);
 
-  // const [locations, setLocations] = useState([[1.35735, 103.7], [1.35735, 103.94], [1.4, 103.8]]);
-  const [links, setArray] = useState([]);
-
-  const loadCsv = () => {
-    d3.csv(csv, function(data){
-     
-      console.log("CSV Data: ", data);
-      setArray(links => [...links, data])
-      console.log("Links:", links)
-    })
-  }
-
- 
-
   // const light = 'cl4t2jnz6003115mkh34qvveh'
   // const noBorder = 'cl4t3r3s9001216nwr2pj50n3'
   const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -93,19 +89,18 @@ const Map = () => {
     setPoints(!points)
 }
 
-  
   //const pointsToUse = points ? [[1.3575, 104.7],[1.3535, 103.34]] : points2;
   const pointsToUse = points ? [[30.751942, -82.2216],[15.311785, -85.627441]] : points2;
   
 
   function MyComponent() {
 
-    const [layerInfo, setLayer] = useState(null);
-
     const map = useMapEvents({
       click: (e) => {
         const { lat, lng } = e.latlng;
         
+        console.log("Nodes2: ", nodes2);
+
         var markers = L.markerClusterGroup();
 
         console.log('new marker at ', e.latlng)
@@ -161,6 +156,7 @@ const Map = () => {
     console.log("Points to use: ", pointsToUse)
   }, [pointsToUse, rMachine]);
 
+
   const onClickFeature = (feature, layer) => {
       console.log(feature);
       layer.bindPopup(function (layer) {                                // adding popup to port / link
@@ -212,23 +208,27 @@ const Map = () => {
       </LayersControl>
 
 
-      {locations.map((location) => (
+      {/* {locations.map((location) => (
         <Marker
           position={location.position}
           draggable= {true}
         >
           {console.log(location.position)}
           <Popup>
-            {location.name} - {location.info}
+            {location.name} - {location.info} */}
             {/* can be replaced with pivot table */}
             {/* {customPopup} */}
-          </Popup>
+          {/* </Popup>
         </Marker>
-      ))}
+      ))} */}
 
-      <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/>
+    {/* <MarkerClusterGroup> */}
+    {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
+    {/* </MarkerClusterGroup> */}
 
+    
       {/* <MyComponent/> */}
+      <ReadFeature/>
 
       {console.log("Points to use: ", pointsToUse)}
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
@@ -237,45 +237,5 @@ const Map = () => {
   );
 };
 
+// };
 export default Map;
-
-
- // function GeoSankey() {
-  //   loadCsv();
-    
-  //   const map = useMap();
-    
-  //   map._initPathRoot();
-
-  //   var svg = d3.select(node).append("svg"),
-  //       linklayer = svg.append("g"),
-  //       nodelayer = svg.append("g");
-
-  //   var nodelinks = spatialsankey.links();
-
-  //   var node = document.createElement('div');
-  //   var spatialsankey = d3spatialsankey()
-  //                           .lmap(map)
-  //                           .nodes(nodes.features)
-  //                           .links(links);
-      
-  //   var node = spatialsankey.node();
-  //   var circs = nodelayer.selectAll("circle")
-  //                         .data(spatialsankey.nodes())
-  //                         .enter()
-  //                         .append("circle")
-  //                         .attr("cx", node.cx)
-  //                         .attr("cy", node.cy)
-  //                         .attr("r", node.r)
-  //                         .style("fill", node.fill);   
-                          
-  //   var link = spatialsankey.link();
-  //   var beziers = linklayer.selectAll("path")
-  //                         .data(nodelinks)
-  //                         .enter()
-  //                         .append("path")
-  //                         .attr("d", link)
-  //                         .attr('id', function(d){return d.id})
-  //                         .style("stroke-width", link.width())
-  //                         .style("fill", 'none');
-  // }
