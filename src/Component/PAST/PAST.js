@@ -3,7 +3,7 @@ import * as React from "react";
 import {Box, Button, Card, Modal, Tab, Tabs, Typography} from "@mui/material";
 import Sankey from "./RelationGraph/Sankey"
 import Network from './RelationGraph/Network'
-import Text from './RelationGraph/Text'
+import Story from './RelationGraph/Story'
 import PASTTable from './PASTTable'
 
 function TabPanel(props) {
@@ -16,7 +16,7 @@ function TabPanel(props) {
       style={{width: '100%'}}
     >{value === index && (
       <Box sx={{p: 3}}>
-        <Typography>{children}</Typography>
+        {children}
       </Box>
     )}
     </div>
@@ -50,7 +50,7 @@ export default function PAST() {
             >
               <Tab label="Sankey"/>
               <Tab label="Network"/>
-              <Tab label="Text"/>
+              <Tab label="Story"/>
             </Tabs>
             <TabPanel value={value} index={0}>
               <Sankey/>
@@ -59,7 +59,7 @@ export default function PAST() {
               <Network/>
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <Text/>
+              <Story target={[3, 5]} type="slave"/>
             </TabPanel>
           </Box>
         </Card>

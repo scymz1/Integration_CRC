@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-// import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
+import React, { useState, useEffect, useContext, useReducer } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -16,16 +15,67 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Button from "@mui/material/Button";
+import { idxRelation, skeleton } from "./vars";
+import Grid from "@mui/material/Grid";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
-const option_url = "/voyage/" + "?hierarchical=false"; // labels in dropdowns
+const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
+const modalVars = [
+  "voyage_id",
+  "voyage_captainconnection__captain__name",
+  "voyage_dates__first_dis_of_slaves",
+  "voyage_itinerary__imp_port_voyage_begin__geo_location__name",
+  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
+  "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
+  "voyage_slaves_numbers__imp_total_num_slaves_embarked",
+  "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
+  "voyage_slaves_numbers__imp_mortality_during_voyage",
+  "voyage_ship__imputed_nationality__name",
+  "voyage_dates__length_middle_passage_days",
+  "voyage_ship__nationality_ship",
+  "voyage_outcome__outcome_owner__name",
+  "voyage_outcome__vessel_captured_outcome__name",
+  "voyage_outcome__outcome_slaves__name",
+  "voyage_shipownerconnection__owner__name",
+  "voyage_outcome__resistance__name",
+  "voyage_ship__ship_name",
+  "voyage_sourceconnection__source__full_ref",
+];
+
+const initialState = [true, true, true, true, true, true, true];
+
+function reducer(state, { type, index }) {
+  switch (type) {
+    case "expand-all":
+      return [true, true, true, true, true, true, true];
+    case "collapse-all":
+      return [false, false, false, false, false, false, false];
+    case "toggle":
+      return [...state, (state[index] = !state[index])];
+    default:
+      throw new Error();
+  }
+}
+
 function Table() {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
   const { search_object, options_flat } = useContext(VoyageContext);
+
+  // Label
+  const [label, setLabel] = useState();
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);
@@ -36,6 +86,43 @@ function Table() {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Modal
+  const [open, setOpen] = useState(false);
+  const [info, setInfo] = useState([]);
+  const [id, setId] = useState(1);
+  const [content, setContent] = useState([]);
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 800,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+    overflow: "scroll",
+    maxHeight: 500,
+  };
+
+  // Expand/Collapse
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Get the labels
+  useEffect(() => {
+    axios
+      .options(option_url)
+      .then(function (response) {
+        //console.log(response.data);
+        setLabel(response.data);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     var data = new FormData();
@@ -49,13 +136,14 @@ function Table() {
     }
 
     for (var property in search_object) {
+      // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
         data.append(property, v);
       });
     }
 
     axios
-      .post("/voyage/", (data = data))
+      .post("/voyage/", data)
       .then(function (response) {
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
@@ -64,7 +152,32 @@ function Table() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction]);
+  }, [page, rowsPerPage, sortingReq, field, direction]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Modal
+  useEffect(() => {
+    var data = new FormData();
+    data.append("hierarchical", "False");
+    data.append("voyage_id", id);
+    data.append("voyage_id", id);
+
+    for (var i = 0; i < modalVars.length; i++) {
+      data.append("selected_fields", modalVars[i]);
+    }
+
+    axios
+      .post("/voyage/", data)
+      .then(function (response) {
+        //console.log(response.data);
+        //console.log(Object.keys(response.data));
+        //console.log(Object.values(response.data));
+        setContent(Object.values(response.data)[Object.keys(response.data)]);
+        //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [id]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -73,6 +186,9 @@ function Table() {
     // hide last border
     "&:last-child td, &:last-child th": {
       border: 0,
+    },
+    "&:hover": {
+      backgroundColor: "#389c90",
     },
   }));
 
@@ -101,6 +217,32 @@ function Table() {
     setDirection(direction === "asc" ? "desc" : "asc");
   };
 
+  const handleOpen = (event, info) => {
+    //console.log(info.id);
+    setOpen(true);
+    setInfo(info);
+    setId(info.id);
+  };
+
+  const handleClose = () => setOpen(false);
+
+  const handleAllExpansion = () => {
+    if (isExpanded) {
+      dispatch({ type: "collapse-all" });
+    } else {
+      dispatch({ type: "expand-all" });
+    }
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleSingleExpansion = (event, title) => {
+    dispatch({ type: "toggle", index: idxRelation[title] });
+  };
+
+  if (isLoading) {
+    return <div className="spinner"></div>;
+  }
+
   return (
     <div>
       <div>
@@ -124,12 +266,12 @@ function Table() {
                         onClick={(event) => handleSorting(event, v)}
                       >
                         <div>{options_flat[v].flatlabel}</div>
-                        <div style={{ float: "right" }}>  
-                        {/* position: 'flex', bottom:0 */}
+                        <div style={{ float: "right" }}>
+                          {/* position: 'flex', bottom:0 */}
                           <TableSortLabel
                             style={{ opacity: field === v ? 1 : 0.4 }}
                             active={true}
-                            direction={field == v ? direction : "asc"}
+                            direction={field === v ? direction : "asc"}
                           ></TableSortLabel>
                         </div>
                       </TableCell>
@@ -139,7 +281,10 @@ function Table() {
                 <TableBody>
                   {value.map((row) => (
                     // <TableRow>
-                    <StyledTableRow key={row.name}>
+                    <StyledTableRow
+                      key={row.name}
+                      onClick={(event) => handleOpen(event, row)}
+                    >
                       {Object.values(row).map((k) => (
                         <TableCell>{k}</TableCell>
                       ))}
@@ -164,6 +309,67 @@ function Table() {
           </FormControl>
         </Box>
       </div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Typography
+            sx={{ fontWeight: "bold" }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            <div>
+              Full detail: {info.id}
+              <IconButton
+                sx={{ float: "right" }}
+                onClick={() => setOpen(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Typography>
+          <Typography>
+            <div>
+              Here are the currently available details for this voyage.
+              <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
+              to see/hide all.
+            </div>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {Object.keys(skeleton).map((title) => (
+              <div>
+                <Accordion
+                  expanded={state[idxRelation[title]]}
+                  onClick={(event) => handleSingleExpansion(event, title)}
+                  sx={{ margin: "5px" }}
+                >
+                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      {skeleton[title].map((obj) => (
+                        <Grid container spacing={2} columns={16}>
+                          <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                            {label[obj].flatlabel}
+                          </Grid>
+                          <Grid item xs={8}>
+                            {content[obj]}
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            ))}
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   );
 }
