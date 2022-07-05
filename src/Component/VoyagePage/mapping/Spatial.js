@@ -27,6 +27,7 @@ var selectedNode = null;
     const map = useMapEvents( {
       click: (e) => {
         
+          var markers = L.markerClusterGroup();
           // Add all features (including waypoints to nodeslayers)
           L.geoJSON(nodes2.features, {
 
@@ -79,9 +80,11 @@ var selectedNode = null;
                   });
   
                   layer.bindPopup(layer.feature.properties.name)
+                  markers.addLayer(layer);
               }
-            }).addTo(map);
-
+              
+            });
+            map.addLayer(markers)
         DrawLink(map);
       }
     });
