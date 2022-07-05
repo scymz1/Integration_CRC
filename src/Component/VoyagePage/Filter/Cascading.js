@@ -88,6 +88,15 @@ function Cascading(props) {
     };
 
     const renderTree = (nodes, name) => {
+
+        if(name == "__voyage_id") {
+            return (
+                <MenuItem value="Voyage ID" onClick={() => {handleOptionClick("voyage_id", "<class 'rest_framework.fields.IntegerField'>", "Voyage ID") }}>
+                    Voyage ID  
+                </MenuItem>
+            )
+        }
+
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
