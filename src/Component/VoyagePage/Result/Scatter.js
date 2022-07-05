@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from 'axios'
 import Plot from 'react-plotly.js';
@@ -15,7 +15,7 @@ import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
 
-const option_url = '/voyage/' + '?hierarchical=false' // labels in dropdowns
+const option_url = '/voyage/?hierarchical=false' // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -36,7 +36,7 @@ function Scatter () {
     })
 
     const [aggregation, setAgg] = React.useState('sum');
-    const {sum, average} = aggregation;
+    //const {sum, average} = aggregation;
     const [label, setLabel] = useState()
 
     const [isLoading, setLoading] = useState(true);
@@ -53,20 +53,21 @@ function Scatter () {
         })
     }
     useEffect(() => {
-        var group_by = option.field
+        //var group_by = option.field
         var value = option.value
-        var agg = aggregation
+        //var agg = aggregation
 
         var data = new FormData();
         data.append('hierarchical', 'False');
 
-        console.log("sb",search_object)
+        //console.log("sb",search_object)
         for(var property in search_object) {
-            console.log("p",property)
-            console.log('so', search_object[property])
+            //console.log("p",property)
+            //console.log('so', search_object[property])
+            // eslint-disable-next-line no-loop-func
             search_object[property].forEach((v)=>{
                 data.append(property, v)
-                console.log("v", v)
+                //console.log("v", v)
             })
         }
 
@@ -75,7 +76,7 @@ function Scatter () {
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
 
-        axios.post('/voyage/groupby', data=data)
+        axios.post('/voyage/groupby', data)
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
