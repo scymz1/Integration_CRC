@@ -1,3 +1,6 @@
+// The Spatial.js is a component to read a csv file and a Geojson file and draw the geosankey diagram on the map.
+// References: https://github.com/geodesign/spatialsankey, https://github.com/UNFPAmaldives/migration
+
 import { useMapEvents, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import * as d3 from "d3";
@@ -9,25 +12,19 @@ var nodeLayers = {};
 var linkLayers = {};
 var selectedNode = null;
 
-var transparentMarker = {
-    radius: 1,
-    fillColor: "#ff7800",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-}
 
+  // Drawing nodes and links on the map
   export function ReadFeature() {
 
+    // Function for distinguish if the feature is a waypoint
     const featureWayPt = (feature) => {
-        console.log("Filter: ", feature)
         return !feature.properties.name.includes("ocean waypt");
     }
 
     const map = useMapEvents( {
       click: (e) => {
-            
+        
+          // Add all features (including waypoints to nodeslayers)
           L.geoJSON(nodes2.features, {
 
             onEachFeature: function (feature, layer) {
@@ -39,24 +36,20 @@ var transparentMarker = {
             }
           });
           
+          // Add only actual locations to the map (with clicking events and popups)
           var nodeLayer = L.geoJSON(nodes2.features, {
               filter: featureWayPt,
             
               onEachFeature: function (feature, layer) {
               
                 layer
-                  .on('mouseover', function () {
-                    this.setSytle({
-                      'opacity': 0.9,
-                      'color':'white'
-                    });
-                  })
                   .on('click', function(e) {
                     layer.closePopup();
       
                     for(var linkPath in linkLayers) {
                       var path = linkPath.split('-');
       
+                      // when click on a node, show only the links that attach to it
                       if (selectedNode != null && selectedNode != path[0]) {
                         map.addLayer(linkLayers[linkPath].feature);
                       }
@@ -84,7 +77,6 @@ var transparentMarker = {
   
                   layer.bindPopup(layer.feature.properties.name)
               }
-
             }).addTo(map);
 
         DrawLink(map);
@@ -94,6 +86,7 @@ var transparentMarker = {
     return null;
   }
 
+  // Function to draw the links
   function DrawLink(map) {
   
     var links = [];
@@ -116,15 +109,14 @@ var transparentMarker = {
           var pathReverse = [link.target, link.source].join('-');
 
           var lineWeight = valueScale(link.flow);
-          
-          console.log(nodeLayers[link.source])
-          console.log(nodeLayers[link.target].layer._latlng)
 
+          
           var lineCenterLatLng = L.polyline([ nodeLayers[link.source].layer._latlng, nodeLayers[link.target].layer._latlng ])
                     .getBounds()
                     .getCenter();
 
 
+          // Having the link to be drawed with a curve where the link has flows in both directions
           var lineBreakLatLng = null;
           if (linkLayers[pathReverse]) {
               lineBreakLatLng = L.latLng(
@@ -158,7 +150,6 @@ var transparentMarker = {
                         opacity: 1
                     });
                 })
-
                 .addTo(map);
 
           linkLayers[path] = {
@@ -169,9 +160,6 @@ var transparentMarker = {
         }
       });
     })
-
-
-
     // });
     return null;
   }
