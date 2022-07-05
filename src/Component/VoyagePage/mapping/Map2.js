@@ -8,8 +8,6 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import * as d3 from "d3";
 
-import nodes from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Bahamas_New York_1715_1780_1_1";
-import csv from './voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_0_0.csv'; 
 import { createSvgIcon } from "@mui/material";
 
 import { ReadFeature } from "./Spatial.js"
@@ -99,20 +97,15 @@ const Map = () => {
       click: (e) => {
         const { lat, lng } = e.latlng;
         
-        console.log("Nodes2: ", nodes2);
-
         var markers = L.markerClusterGroup();
-
-        console.log('new marker at ', e.latlng)
         // L.marker([lat, lng], { icon }).addTo(map);
-        console.log("Nodes ", nodes.features)        
-        markers.addLayer(L.geoJSON(nodes.features, {
+
+        markers.addLayer(L.geoJSON(nodes2.features, {
           onEachFeature : function(feature, layer){
               console.log("Feature: ", feature);
               console.log("Layer: ", layer);
 
               layer.bindPopup(function (layer) {                                // adding popup to port / link
-                                // console.log(layer.feature);
                                 if(layer.feature.properties.name)
                                   return layer.feature.properties.name;
                                 else

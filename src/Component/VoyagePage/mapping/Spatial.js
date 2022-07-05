@@ -158,11 +158,7 @@ var transparentMarker = {
                         opacity: 1
                     });
                 })
-                .on('mouseout', function(e) {
-                    this.setStyle({
-                        opacity: 0.5
-                    });
-                })
+
                 .addTo(map);
 
           linkLayers[path] = {
