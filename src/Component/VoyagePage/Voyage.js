@@ -7,7 +7,7 @@ import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
 import Table from "./Result/Table";
-import Map from "./Result/Map";
+import MapBoundingBox from "./Result/Map";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -83,7 +83,7 @@ export default function Voyage() {
           <Table/>
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <Map/>
+          <MapBoundingBox/>
         </TabPanel>
       </Box>
     </div>
