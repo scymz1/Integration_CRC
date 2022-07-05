@@ -92,11 +92,7 @@ function Bar () {
                 console.log(error);
             });
 
-<<<<<<< HEAD
     }, [option.field, option.value, aggregation, search_object]);
-=======
-    }, [option.field, option.value, aggregation]); // eslint-disable-line react-hooks/exhaustive-deps
->>>>>>> 6e23f1501d9973f13db93df90c3f40d239de4c62
 
 
     return (
