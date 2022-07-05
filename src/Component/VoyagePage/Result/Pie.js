@@ -96,7 +96,7 @@ function Pie () {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [option.field, option.value, aggregation, search_object]);
 
 
     return (

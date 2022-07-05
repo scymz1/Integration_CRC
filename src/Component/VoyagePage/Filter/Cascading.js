@@ -88,6 +88,15 @@ function Cascading(props) {
     };
 
     const renderTree = (nodes, name) => {
+
+        if(name == "__voyage_id") {
+            return (
+                <MenuItem value="Voyage ID" onClick={() => {handleOptionClick("voyage_id", "<class 'rest_framework.fields.IntegerField'>", "Voyage ID") }}>
+                    Voyage ID  
+                </MenuItem>
+            )
+        }
+
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -128,9 +137,10 @@ function Cascading(props) {
                         </IconButton> */}
 
                         <Button 
-                        //  variant="contained"
+                         variant="text"
                          onClick={handleClick}
-                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}>
+                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}
+                         >
                             {/* {buttonName} */}
                             <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
                         </Button>
