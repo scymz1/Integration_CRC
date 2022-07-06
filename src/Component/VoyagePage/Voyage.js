@@ -7,7 +7,8 @@ import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
 import Table from "./Result/Table";
-import MapBoundingBox from "./Result/Map";
+import Pivot from "./Result/Pivot";
+import Map from "./Result/Map";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -46,6 +47,9 @@ export default function Voyage() {
       case "Table":
         setValue(3)
         break;
+      case "Pivot":
+        setValue(4)
+        break;
       default:
         setValue(0)
     }
@@ -68,6 +72,7 @@ export default function Voyage() {
           <Tab label="Bar"/>
           <Tab label="Pie"/>
           <Tab label="Table"/>
+          <Tab label="Pivot"/>
           <Tab label="Map"/>
         </Tabs>
         <TabPanel value={value} index={0}>
@@ -83,7 +88,10 @@ export default function Voyage() {
           <Table/>
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <MapBoundingBox/>
+          <Pivot/>
+        </TabPanel>
+        <TabPanel value={value} index={5}>
+          <Map/>
         </TabPanel>
       </Box>
     </div>
