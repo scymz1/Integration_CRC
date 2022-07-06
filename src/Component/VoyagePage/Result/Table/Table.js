@@ -139,7 +139,7 @@ function Table() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, cols]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortingReq, field, direction, cols, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
   useEffect(() => {
