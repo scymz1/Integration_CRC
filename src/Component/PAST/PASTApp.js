@@ -11,7 +11,7 @@ export const PASTContext = React.createContext({});
 
 export default function PASTApp(props) {
   const [queryData, setQueryData] = React.useState({
-    targets: [500001],
+    targets: [500001, 500101, 501101],
     type: "slave",
   })
   const [data, setData] = useState([]);
