@@ -14,6 +14,7 @@ import Radio from '@mui/material/Radio';
 import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
+import * as options_flat from "../../util/options.json"
 
 const option_url = '/voyage/?hierarchical=false' // labels in dropdowns
 
@@ -37,7 +38,7 @@ function Scatter (props) {
 
     const [aggregation, setAgg] = React.useState('sum');
     //const {sum, average} = aggregation;
-    const [label, setLabel] = useState()
+    // const [label, setLabel] = useState()
 
     const [isLoading, setLoading] = useState(true);
 
@@ -81,7 +82,7 @@ function Scatter (props) {
 
                 setarrx(Object.keys(response.data[value]))
                 setarry(Object.values(response.data[value]))
-
+                setLoading(false)
             })
             .catch(function (error) {
                 console.log(error);
@@ -89,18 +90,18 @@ function Scatter (props) {
 
     }, [option.field, option.value, aggregation]);
 
-    useEffect(() => {
-            axios.options(option_url)
-                .then(function (response) {
+    // useEffect(() => {
+    //         axios.options(option_url)
+    //             .then(function (response) {
 
-                    setLabel(response.data)
-                    setLoading(false)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }, []
-    );
+    //                 setLabel(response.data)
+    //                 setLoading(false)
+    //             })
+    //             .catch(function (error) {
+    //                 console.log(error);
+    //             })
+    //     }, []
+    // );
 
     if (isLoading) {
         return <div className="spinner"></div>;
@@ -122,7 +123,7 @@ function Scatter (props) {
                         >
                             {scatter_plot_x_vars.map((option) => (
                                 <MenuItem key={option} value={option}>
-                                    {label[option]['flatlabel']}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 
@@ -142,7 +143,7 @@ function Scatter (props) {
                         >
                             {scatter_plot_y_vars.map((option) => (
                                 <MenuItem key={option} value={option}>
-                                    {label[option]['flatlabel']}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 

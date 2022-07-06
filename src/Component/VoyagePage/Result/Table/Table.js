@@ -58,7 +58,7 @@ function Table() {
   const {cols} = useContext(ColContext)
 
   // Label
-  const [label, setLabel] = useState();
+  // const [label, setLabel] = useState();
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);
@@ -94,18 +94,18 @@ function Table() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Get the labels
-  useEffect(() => {
-    axios
-      .options(option_url)
-      .then(function (response) {
-        //console.log(response.data);
-        setLabel(response.data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .options(option_url)
+  //     .then(function (response) {
+  //       //console.log(response.data);
+  //       setLabel(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     var data = new FormData();
@@ -136,6 +136,14 @@ function Table() {
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
+        if (cols.length !== 0) {
+          setLoading(false);
+        }
+        else {
+          setLoading(true);
+        }
+        
+        
       })
       .catch(function (error) {
         console.log(error);
@@ -230,7 +238,7 @@ function Table() {
   if (isLoading) {
     return <div className="spinner"></div>;
   }
-
+  
   return (
     <div>
       <div>
@@ -344,7 +352,7 @@ function Table() {
                       {skeleton[title].map((obj) => (
                         <Grid container spacing={2} columns={16}>
                           <Grid sx={{ fontWeight: "bold" }} item xs={8}>
-                            {label[obj].flatlabel}
+                            {options_flat[obj].flatlabel}
                           </Grid>
                           <Grid item xs={8}>
                             {content[obj]}
