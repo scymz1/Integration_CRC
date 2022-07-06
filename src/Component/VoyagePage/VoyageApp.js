@@ -10,6 +10,20 @@ const base_url = process.env.REACT_APP_BASEURL;
 export const VoyageContext = React.createContext({});
 
 export default function VoyageApp() {
+  const endpoint = "voyage/"
+
+  const menu_label = {
+    "voyage_id": "ID",
+    "voyage_itinerary": "Itinerary",
+    "voyage_dates": "Dates",
+    "voyage_crew": "Crew",
+    "voyage_ship": "Ship",
+    "voyage_captainconnection": "Captain",
+    "voyage_shipownerconnection": "Ship Owner",
+    "voyage_outcome": "Outcome",
+    "voyage_sourceconnection": "Source"
+  }
+
   const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('Option_tree',
     () => fetch(base_url + "voyage/", {
       method: "OPTIONS",
@@ -63,7 +77,7 @@ export default function VoyageApp() {
 
   return (
     <VoyageContext.Provider value={{
-      options_tree, options_flat, search_object, set_search_object}}>
+      options_tree, options_flat, search_object, set_search_object, endpoint, menu_label}}>
       <Voyage/>
     </VoyageContext.Provider>
   );

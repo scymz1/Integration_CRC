@@ -142,7 +142,7 @@ function OptionSelector(props) {
           count={Object.keys(resultObject).length}
           page={resultObjectPage.currentPage > 0 ? resultObjectPage.currentPage : 0}
           onPageChange={(e, v) => {
-            resultObjectPage.setPage(0)
+            resultObjectPage.setPage(v)
           }}
           rowsPerPage={resultObjectPage.pageSize}
           onRowsPerPageChange={(e) => {
@@ -223,8 +223,7 @@ function OptionSelector(props) {
             <input type="file" onChange={loadFile} hidden/>
           </Button>
           <Button color="inherit" onClick={() => {
-            console.log(resultObject);
-            fileDownload(JSON.stringify(resultObject), "options.json")
+            fileDownload(JSON.stringify(resultObject, null, 2), "options.json")
           }}>Export</Button>
         </Toolbar>
       </AppBar>

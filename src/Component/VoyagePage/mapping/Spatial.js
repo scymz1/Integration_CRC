@@ -1,18 +1,17 @@
 // The Spatial.js is a component to read a csv file and a Geojson file and draw the geosankey diagram on the map.
 // References: https://github.com/geodesign/spatialsankey, https://github.com/UNFPAmaldives/migration
 
+import React, { useState, useEffect } from 'react'
+import { useMapEvents, GeoJSON, useMap } from "react-leaflet";
+import { Grid } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
-import { Grid } from "@mui/material";
-import React, { useState, useEffect } from 'react'
-import { useMapEvents, GeoJSON, useMap } from "react-leaflet";
-
 import axios from 'axios'
 
-// import nodes from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0";
-// import csv from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0.csv"
-// import { set } from 'lodash';
+import nodes2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0";
+import csv2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0.csv"
+import { set } from 'lodash';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -28,27 +27,26 @@ var cachename = 'voyage_maps'
 var dataset = [0, 0]
 var output_format = 'geosankey'
 
-
-
-  export function ReadFeature() {
-    const [search_object, set_search_object] = useState({
-      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[null,null],
-      'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
-      'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
-      'cachename':'voyage_pivot_tables'
-    })
-    
-    console.log("🚀 ~ file: Spatial.js ~ line 23 ~ ReadFeature ~ search_object", search_object)
+// Drawing nodes and links on the map
+  export function ReadFeature(props) {
 
     const [isLoading, setIsLoading] = useState(false);
     
     const [csv, setCsv] = useState(null);
     const [nodes, setNodes] = useState(null);
+    const [layers, setLayers] = useState([]);
     
+    // const {search_object} = React.useContext(PastContext);
+    const map = useMap();
 
-    
+
     useEffect(() => {
       var data = new FormData();
+      for(var property in props.search_object) {
+        props.search_object[property].forEach((v)=>{
+            data.append(property, v)
+        })
+      }
       data.append('groupby_fields', groupby_fields[0]);
       data.append('groupby_fields', groupby_fields[1]);
       data.append('value_field_tuple', value_field_tuple[0]);
@@ -62,122 +60,110 @@ var output_format = 'geosankey'
           .then(function(response) {
             setCsv(response.data.links)
             setNodes(response.data.nodes)
-
             setIsLoading(true)
           })
-    }, [])
+    }, [props.search_object])
     
-    const map = useMap();
+    useEffect(() => {
+      // Function for distinguish if the feature is a waypoint
+      // map.eachLayer(function (layer) {
+      //   console.log("aaaa", layer)
+      //   map.removeLayer(layer);
+      // });
+
+      setLayers([]);
+      const featureWayPt = (feature) => {
+          return !feature.properties.name.includes("ocean waypt");
+      }
+
+      var markers = L.markerClusterGroup();
+      // Add all features (including waypoints to nodeslayers)
+      console.log(nodes)
+      if(nodes){
+        L.geoJSON(nodes.features, {
+
+          onEachFeature: function (feature, layer) {
+              nodeLayers[feature.id] = {
+                layer: layer,
+                // center: layer.getBounds().getCenter()
+              };
+
+              layer.bindPopup(ReactDOMServer.renderToString(
+                <Grid>
+                  {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                  <div style={{ fontSize: "24px", color: "black" }}>
+                      <p>replace with pivot table</p>
+                    </div>
+                </Grid>)
+                )
+                markers.addLayer(layer);
+          }
+        });
+        map.addLayer(markers)
+        setLayers([...layers, markers]);
+        DrawLink(map, csv, layers, setLayers);
+      }
+
+    }, [nodes, csv])    
 
     if(isLoading == false) {
       return "isLoading"
     }
 
-    // Function for distinguish if the feature is a waypoint
-    const featureWayPt = (feature) => {
-        return !feature.properties.name.includes("ocean waypt");
-    }
 
-    var markers = L.markerClusterGroup();
-    // Add all features (including waypoints to nodeslayers)
-    L.geoJSON(nodes.features, {
-
-      onEachFeature: function (feature, layer) {
-
-          nodeLayers[feature.id] = {
-            layer: layer,
-            // center: layer.getBounds().getCenter()
-          }
-      }
-    });
     
     // Add only actual locations to the map (with clicking events and popups)
-    var nodeLayer = L.geoJSON(nodes.features, {
-        filter: featureWayPt,
+    // var nodeLayer = L.geoJSON(nodes.features, {
+    //     filter: featureWayPt,
       
-        onEachFeature: function (feature, layer) {
+    //     onEachFeature: function (feature, layer) {
         
-          layer
-            .on('click', function(e) {
-              layer.closePopup();
+    //       layer
+    //         .on('click', function(e) {
+    //           layer.closePopup();
 
-              for(var linkPath in linkLayers) {
-                var path = linkPath.split('-');
+    //           for(var linkPath in linkLayers) {
+    //             var path = linkPath.split('-');
 
-                // when click on a node, show only the links that attach to it
-                if (selectedNode != null && selectedNode != path[0]) {
-                  map.addLayer(linkLayers[linkPath].feature);
-                }
-            }
- 
-      
-                    if (selectedNode == null || selectedNode != feature.id) {
-                      
-                      for (var linkPath in linkLayers) {
-                        var path = linkPath.split('-');
-      
-                        if (feature.id != path[0] && feature.id != path[1]) {
-                            map.removeLayer(linkLayers[linkPath].feature);
-                        }
-                        else {
-                            // num += parseInt(linkLayers[linkPath].data.value);
-                        }
-                      }
-      
-                      selectedNode = feature.id;
-                    }
-                    else {    
-                      selectedNode = null;
-                    }
-                    //https://github.com/rice-crc/voyages-api/#crosstabs
-                    //'cachename':['voyage_maps'] 
-                    if (layer.feature.geometry.coordinates[0]>=-23.334960){
-                    set_search_object({ 
+    //             // when click on a node, show only the links that attach to it
+    //             if (selectedNode != null && selectedNode != path[0]) {
+    //               map.addLayer(linkLayers[linkPath].feature);
+    //             }
+    //           }
+
+    //           if (selectedNode == null || selectedNode != feature.id) {
+                
+    //             for (var linkPath in linkLayers) {
+    //               var path = linkPath.split('-');
+
+    //               if (feature.id != path[0] && feature.id != path[1]) {
+    //                   map.removeLayer(linkLayers[linkPath].feature);
+    //               }
+    //               else {
+    //                   // num += parseInt(linkLayers[linkPath].data.value);
+    //               }
+    //             }
+
+    //             selectedNode = feature.id;
+    //           }
+    //           else {    
+    //             selectedNode = null;
+    //           }
+    //         });
+    //         layer.bindPopup(layer.feature.properties.name)
+    //         markers.addLayer(layer);
+    //     }
         
-                      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[selectedNode,selectedNode]
-                    });}else{
-                      console.log(layer.feature.geometry.coordinates[0])
-                      set_search_object({ 
-        
-                        'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[selectedNode,selectedNode]
-                      });
-                    }
-                    console.log("🚀 ~ file: Spatial.js ~ line 62 ~ .on ~ search_object", search_object)
-                  
-                    
-                  });
+    //   });
 
-                  var popup = L.popup()
-                  .setLatLng(layer.feature.geometry.coordinates)
-                  .setContent(layer.feature.properties.name  + JSON.stringify(layer.feature.id))
-                  .openOn(map);
-
-                 
-    
-                  layer.bindPopup(ReactDOMServer.renderToString(
-                  <Grid>
-                    {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-                    <div style={{ fontSize: "24px", color: "black" }}>
-                        <p>replace with pivot table</p>
-                      </div>
-                  </Grid>)
-                  )
-     
-                  console.log("🚀 ~ file: Spatial.js ~ line 82 ~ ReadFeature ~ layer.feature.properties.name", layer.feature)
-              
-            markers.addLayer(layer);
-        }
-        
-      });
-
-    map.addLayer(markers)
-    DrawLink(map, csv);
+    // map.addLayer(markers)
+    // DrawLink(map, csv);
     
     return null;
   }
 
   // Function to draw the links
-  function DrawLink(map, links) {
+  function DrawLink(map, links, layers, setLayers) {
 
       var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
       var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
