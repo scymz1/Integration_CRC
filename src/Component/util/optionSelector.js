@@ -223,8 +223,7 @@ function OptionSelector(props) {
             <input type="file" onChange={loadFile} hidden/>
           </Button>
           <Button color="inherit" onClick={() => {
-            console.log(resultObject);
-            fileDownload(JSON.stringify(resultObject), "options.json")
+            fileDownload(JSON.stringify(resultObject, null, 2), "options.json")
           }}>Export</Button>
         </Toolbar>
       </AppBar>
