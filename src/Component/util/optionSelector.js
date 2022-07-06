@@ -31,6 +31,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import fileDownload from 'js-file-download';
 import CloseIcon from '@mui/icons-material/Close';
 import {useQuery} from "react-query";
+import TextField from "@mui/material/TextField";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -39,9 +40,10 @@ function OptionSelector(props) {
   const [resultObject, setResultObject] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const resultObjectPage = usePagination({totalItems: Object.keys(resultObject).length, initialPageSize: 8});
-  const [endPoint, setEndPoint] = useState('voyage');
-  const {isLoading, error, data: options} = useQuery('Options',
-    () => fetch(base_url + endPoint + "/", {
+  const [endPoint, setEndPoint] = useState('voyage/');
+  const [id, setId] = useState("1");
+  const {isLoading, error, data: options, refetch} = useQuery('Options',
+    () => fetch(base_url + endPoint, {
       method: "OPTIONS",
       headers: {'Authorization': auth_token}
     }).then(res => res.json())
@@ -134,21 +136,23 @@ function OptionSelector(props) {
   };
 
   const pageSelector =
-    <div hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
-      <TablePagination
-        count={Object.keys(resultObject).length}
-        page={resultObjectPage.currentPage}
-        onPageChange={(e, v) => {
-          resultObjectPage.setPage(v)
-        }}
-        rowsPerPage={resultObjectPage.pageSize}
-        onRowsPerPageChange={(e) => {
-          resultObjectPage.setPageSize(parseInt(e.target.value, 10))
-          resultObjectPage.setPage(0)
-        }}
-        rowsPerPageOptions={[4, 8, 16, 32, 64]}
-      />
-    </div>
+    <table hidden={Object.keys(resultObject).length <= resultObjectPage.pageSize}>
+      <tbody><tr>
+        <TablePagination
+          count={Object.keys(resultObject).length}
+          page={resultObjectPage.currentPage > 0 ? resultObjectPage.currentPage : 0}
+          onPageChange={(e, v) => {
+            resultObjectPage.setPage(0)
+          }}
+          rowsPerPage={resultObjectPage.pageSize}
+          onRowsPerPageChange={(e) => {
+            resultObjectPage.setPageSize(parseInt(e.target.value, 10))
+            resultObjectPage.setPage(0)
+          }}
+          rowsPerPageOptions={[4, 8, 16, 32, 64]}
+        />
+      </tr></tbody>
+    </table>
 
   var count = 0;
   const renderTree = (nodes, path) => (
@@ -158,7 +162,7 @@ function OptionSelector(props) {
           checked={isAllChildrenChecked(path)}
           indeterminate={!isAllChildrenUnChecked(path) && !isAllChildrenChecked(path)}
           onClick={(event) => handleClickParent(event, path)}/>
-        {nodes.label ? nodes.label : "Menu"}
+        {nodes.label ? nodes.label : "Select All"}
       </div>
     }>
       {Object.keys(nodes).map((key) =>
@@ -176,6 +180,17 @@ function OptionSelector(props) {
     </TreeItem>
   );
 
+  function handleShowData(){
+    let queryData = new FormData();
+    queryData.append("id", id);
+    queryData.append("id", id);
+    fetch(base_url + endPoint, {
+      method: "POST",
+      headers: {'Authorization': auth_token},
+      body: queryData,
+    }).then(res => res.json()).then(res=>console.log(res[0]))
+  }
+
   if (error) return 'An error has occurred on options: ' + error.message
   if (isLoading) return <CircularProgress/>
 
@@ -191,6 +206,18 @@ function OptionSelector(props) {
           <Typography variant="h6" sx={{flexGrow: 1}}>
             Option Selector
           </Typography>
+
+          <TextField sx={{background: "rgba(255,255, 255, 0.5)", width: 100}} label="id" variant="filled" value={id} type="number"
+                     onChange={(e)=>setId(e.target.value)}/>
+          <Button color="inherit" onClick={handleShowData} sx={{marginRight: 5}}>
+            print
+          </Button>
+
+          <TextField sx={{background: "rgba(255,255, 255, 0.5)"}} label="end point" variant="filled" value={endPoint}
+                     onChange={(e)=>setEndPoint(e.target.value)}/>
+          <Button color="inherit" onClick={()=>{setResultObject({}); refetch()}} sx={{marginRight: 5}}>
+            Set Endpoint
+          </Button>
           <Button color="inherit" component="label">
             Import
             <input type="file" onChange={loadFile} hidden/>

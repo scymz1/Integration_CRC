@@ -9,7 +9,7 @@ import {
     Grid,
     List,
     ListItemText,
-    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu//, MenuItem
+    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu, Typography//, MenuItem
 } from '@mui/material';
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
@@ -69,7 +69,6 @@ function Cascading(props) {
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
-        console.log("OUTPUT STRING: ----->", out)
         if(!search_object[option])
             setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
         else
@@ -89,7 +88,6 @@ function Cascading(props) {
     };
 
     const renderTree = (nodes, name) => {
-    console.log("🚀 ~ file: Cascading.js ~ line 83 ~ renderTree ~ nodes, name", nodes, name)
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -112,22 +110,10 @@ function Cascading(props) {
         )
     };
 
-
-    // Voyage ID
-    // itinerary
-    // Dates
-    // Crew
-    // Ship
-    // Caption
-    // Ship Owner
-    // Voyage Outcome
-    // Voyage Sources
-
-
     return (
-        <Container>
-            <Grid container >
-                <Grid item xs={12} >
+        // <Container>
+            // <Grid container >
+                <Grid item xs={1} >
 
                     <TreeView
                         aria-label="option menu"
@@ -142,10 +128,11 @@ function Cascading(props) {
                         </IconButton> */}
 
                         <Button 
-                         variant="contained"
+                        //  variant="contained"
                          onClick={handleClick}
                          style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}>
-                            {buttonName}
+                            {/* {buttonName} */}
+                            <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {renderTree(render, "__"+menuName)}
@@ -155,10 +142,10 @@ function Cascading(props) {
 
                 </Grid>
             
-            </Grid>
+            // </Grid>
 
     
-        </Container>
+        // </Container>
     );
 }
 
