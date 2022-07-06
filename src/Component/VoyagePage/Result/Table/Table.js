@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-// import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
+import React, { useState, useEffect, useContext, useReducer } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
@@ -10,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { VoyageContext } from "../VoyageApp";
+import { VoyageContext } from "../../VoyageApp";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -22,18 +21,43 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
+import { idxRelation, skeleton, modalVars } from "../vars";
+import Grid from "@mui/material/Grid";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 
-//const option_url = "/voyage/" + "?hierarchical=false"; // labels in dropdowns
+import { ColContext } from "./TableApp";
+
+const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
-export const ModalContext = createContext();
+const initialState = [true, true, true, true, true, true, true];
+
+function reducer(state, { type, index }) {
+  switch (type) {
+    case "expand-all":
+      return [true, true, true, true, true, true, true];
+    case "collapse-all":
+      return [false, false, false, false, false, false, false];
+    case "toggle":
+      return [...state, (state[index] = !state[index])];
+    default:
+      throw new Error();
+  }
+}
 
 function Table() {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
   const { search_object, options_flat } = useContext(VoyageContext);
+
+  //menu
+  const {cols} = useContext(ColContext)
+
+  // Label
+  const [label, setLabel] = useState();
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);
@@ -46,22 +70,41 @@ function Table() {
   const [direction, setDirection] = useState("asc");
 
   // Modal
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [info, setInfo] = useState([]);
+  const [id, setId] = useState(1);
+  const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 800,
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    overflow: "scroll",
+    maxHeight: 500,
   };
 
   // Expand/Collapse
-  const [expanded, setExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Get the labels
+  useEffect(() => {
+    axios
+      .options(option_url)
+      .then(function (response) {
+        //console.log(response.data);
+        setLabel(response.data);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     var data = new FormData();
@@ -81,6 +124,11 @@ function Table() {
       });
     }
 
+    cols.forEach((v) => {
+      console.log(v)
+      data.append("selected_fields", v); 
+  }); 
+
     axios
       .post("/voyage/", data)
       .then(function (response) {
@@ -91,7 +139,32 @@ function Table() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction]);
+  }, [page, rowsPerPage, sortingReq, field, direction, cols]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Modal
+  useEffect(() => {
+    var data = new FormData();
+    data.append("hierarchical", "False");
+    data.append("voyage_id", id);
+    data.append("voyage_id", id);
+
+    for (var i = 0; i < modalVars.length; i++) {
+      data.append("selected_fields", modalVars[i]);
+    }
+
+    axios
+      .post("/voyage/", data)
+      .then(function (response) {
+        //console.log(response.data);
+        //console.log(Object.keys(response.data));
+        //console.log(Object.values(response.data));
+        setContent(Object.values(response.data)[Object.keys(response.data)]);
+        //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [id]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -132,17 +205,30 @@ function Table() {
   };
 
   const handleOpen = (event, info) => {
-    console.log(info.id);
-    console.log(info);
+    //console.log(info.id);
     setOpen(true);
     setInfo(info);
+    setId(info.id);
   };
 
   const handleClose = () => setOpen(false);
 
-  const handleChange = () => {
-    setExpanded(expanded ? false : true);
+  const handleAllExpansion = () => {
+    if (isExpanded) {
+      dispatch({ type: "collapse-all" });
+    } else {
+      dispatch({ type: "expand-all" });
+    }
+    setIsExpanded(!isExpanded);
   };
+
+  const handleSingleExpansion = (event, title) => {
+    dispatch({ type: "toggle", index: idxRelation[title] });
+  };
+
+  if (isLoading) {
+    return <div className="spinner"></div>;
+  }
 
   return (
     <div>
@@ -161,7 +247,7 @@ function Table() {
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    {search_object.selected_fields.map((v) => (
+                    {cols.map((v) => (
                       <TableCell
                         style={{ color: "#389c90" }}
                         onClick={(event) => handleSorting(event, v)}
@@ -217,41 +303,57 @@ function Table() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Full detail: {info.id}
+          <Typography
+            sx={{ fontWeight: "bold" }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            <div>
+              Full detail: {info.id}
+              <IconButton
+                sx={{ float: "right" }}
+                onClick={() => setOpen(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Typography>
+          <Typography>
             <div>
               Here are the currently available details for this voyage.
-              <Button onClick={handleChange}>Expand/Collapse</Button>to see/hide
-              all.
+              <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
+              to see/hide all.
             </div>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div>
-              <Accordion expanded={expanded}>
-                <AccordionSummary
-                  // expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
+            {Object.keys(skeleton).map((title) => (
+              <div>
+                <Accordion
+                  expanded={state[idxRelation[title]]}
+                  onClick={(event) => handleSingleExpansion(event, title)}
+                  sx={{ margin: "5px" }}
                 >
-                  <Typography>Ship nation owner</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>Hey, this is owner.</Typography>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion expanded={expanded}>
-                <AccordionSummary
-                  // expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel2a-content"
-                  id="panel2a-header"
-                >
-                  <Typography>Outcome</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>Hey, this is outcome.</Typography>
-                </AccordionDetails>
-              </Accordion>
-            </div>
+                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      {skeleton[title].map((obj) => (
+                        <Grid container spacing={2} columns={16}>
+                          <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                            {label[obj].flatlabel}
+                          </Grid>
+                          <Grid item xs={8}>
+                            {content[obj]}
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            ))}
           </Typography>
         </Box>
       </Modal>

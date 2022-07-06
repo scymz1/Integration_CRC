@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from 'axios'
 import Plot from 'react-plotly.js';
@@ -17,7 +17,6 @@ import { Grid, Paper} from '@mui/material';
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-
 
 function Bar (props) {
 
@@ -38,7 +37,7 @@ function Bar (props) {
 
     const [aggregation, setAgg] = React.useState('sum');
 
-    const {sum, average} = aggregation;
+    //const {sum, average} = aggregation;
 
     const handleChange_agg = (event) => {
         setAgg(event.target.value);
@@ -51,20 +50,21 @@ function Bar (props) {
         })
     }
     useEffect(() => {
-        var group_by = option.field
+        //var group_by = option.field
         var value = option.value
-        var agg = aggregation
+        //var agg = aggregation
 
 
         var data = new FormData();
         data.append('hierarchical', 'False');
 
         for(var property in search_object) {
-            console.log("p",property)
-            console.log('so', search_object[property])
+            //console.log("p",property)
+            //console.log('so', search_object[property])
+            // eslint-disable-next-line no-loop-func
             search_object[property].forEach((v)=>{
                 data.append(property, v)
-                console.log("v", v)
+                //console.log("v", v)
             })
         }
 
@@ -72,7 +72,6 @@ function Bar (props) {
         data.append('groupby_fields', option.value)
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
-
         axios.post(endpoint + 'groupby', data=data)
             .then(function (response) {
 
@@ -86,7 +85,7 @@ function Bar (props) {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]);
+    }, [option.field, option.value, aggregation, search_object]);
 
 
     return (
