@@ -26,7 +26,7 @@ var dataset = [0, 0]
 var output_format = 'geosankey'
 
 // Drawing nodes and links on the map
-  export function ReadFeature() {
+  export function ReadFeature(props) {
 
     const [isLoading, setIsLoading] = useState(false);
     
@@ -37,6 +37,12 @@ var output_format = 'geosankey'
     
     useEffect(() => {
       var data = new FormData();
+      console.log(props.search_object)
+      for(var property in props.search_object) {
+        props.search_object[property].forEach((v)=>{
+            data.append(property, v)
+        })
+      }
       data.append('groupby_fields', groupby_fields[0]);
       data.append('groupby_fields', groupby_fields[1]);
       data.append('value_field_tuple', value_field_tuple[0]);
@@ -50,10 +56,9 @@ var output_format = 'geosankey'
           .then(function(response) {
             setCsv(response.data.links)
             setNodes(response.data.nodes)
-
             setIsLoading(true)
           })
-    }, [])
+    }, [props.search_object])
     
     const map = useMap();
 
@@ -71,7 +76,6 @@ var output_format = 'geosankey'
     L.geoJSON(nodes.features, {
 
       onEachFeature: function (feature, layer) {
-
           nodeLayers[feature.id] = {
             layer: layer,
             // center: layer.getBounds().getCenter()
@@ -117,7 +121,6 @@ var output_format = 'geosankey'
                 selectedNode = null;
               }
             });
-
             layer.bindPopup(layer.feature.properties.name)
             markers.addLayer(layer);
         }
