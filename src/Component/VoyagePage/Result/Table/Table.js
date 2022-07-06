@@ -21,7 +21,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { idxRelation, skeleton, modalVars } from "../vars";
+import { idxRelation, skeleton } from "../vars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
@@ -125,7 +125,7 @@ function Table() {
     }
 
     cols.forEach((v) => {
-      console.log(v)
+      // console.log(v)
       data.append("selected_fields", v); 
   }); 
 
@@ -148,9 +148,9 @@ function Table() {
     data.append("voyage_id", id);
     data.append("voyage_id", id);
 
-    for (var i = 0; i < modalVars.length; i++) {
-      data.append("selected_fields", modalVars[i]);
-    }
+    // for (var i = 0; i < modalVars.length; i++) {
+    //   data.append("selected_fields", modalVars[i]);
+    // }
 
     axios
       .post("/voyage/", data)
@@ -331,10 +331,11 @@ function Table() {
               <div>
                 <Accordion
                   expanded={state[idxRelation[title]]}
-                  onClick={(event) => handleSingleExpansion(event, title)}
+                  // onClick={(event) => handleSingleExpansion(event, title)}
                   sx={{ margin: "5px" }}
                 >
-                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}>
+                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}
+                  onClick={(event) => handleSingleExpansion(event, title)}>
                     <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
