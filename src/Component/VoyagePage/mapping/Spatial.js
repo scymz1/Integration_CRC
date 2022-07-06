@@ -32,7 +32,6 @@ var output_format = 'geosankey'
     
     const [csv, setCsv] = useState(null);
     const [nodes, setNodes] = useState(null);
-    const [layers, setLayers] = useState([]);
     
     // const {search_object} = React.useContext(PastContext);
     const map = useMap();
@@ -69,8 +68,22 @@ var output_format = 'geosankey'
       //   console.log("aaaa", layer)
       //   map.removeLayer(layer);
       // });
-
-      setLayers([]);
+      // if(markers in map){
+      //   map.removeLayer(markers)
+      // }
+      // if(window.polygon){
+      //   window.map.removeLayer(window.polygon);
+      // }
+      for(var i in map._layers) {
+        if(map._layers[i]._path != undefined) {
+            try {
+              map.removeLayer(map._layers[i]);
+            }
+            catch(e) {
+              console.log("problem with " + e + map._layers[i]);
+            }
+        }
+      } 
       const featureWayPt = (feature) => {
           return !feature.properties.name.includes("ocean waypt");
       }
@@ -88,9 +101,54 @@ var output_format = 'geosankey'
               }
           }
         });
-        map.addLayer(markers)
-        setLayers([...layers, markers]);
-        DrawLink(map, csv, layers, setLayers);
+
+
+        // Add only actual locations to the map (with clicking events and popups)
+        var nodeLayer = L.geoJSON(nodes.features, {
+          filter: featureWayPt,
+        
+          onEachFeature: function (feature, layer) {
+          
+            // layer
+            //   .on('click', function(e) {
+            //     layer.closePopup();
+
+            //     for(var linkPath in linkLayers) {
+            //       var path = linkPath.split('-');
+
+            //       // when click on a node, show only the links that attach to it
+            //       if (selectedNode != null && selectedNode != path[0]) {
+            //         map.addLayer(linkLayers[linkPath].feature);
+            //       }
+            //     }
+
+            //     if (selectedNode == null || selectedNode != feature.id) {
+                  
+            //       for (var linkPath in linkLayers) {
+            //         var path = linkPath.split('-');
+
+            //         if (feature.id != path[0] && feature.id != path[1]) {
+            //             map.removeLayer(linkLayers[linkPath].feature);
+            //         }
+            //         else {
+            //             // num += parseInt(linkLayers[linkPath].data.value);
+            //         }
+            //       }
+
+            //       selectedNode = feature.id;
+            //     }
+            //     else {    
+            //       selectedNode = null;
+            //     }
+            //   });
+              layer.bindPopup(layer.feature.properties.name)
+              markers.addLayer(layer);
+          }
+          
+        });
+
+        map.addLayer(markers);
+        DrawLink(map, csv);
       }
 
     }, [nodes, csv])    
@@ -101,49 +159,7 @@ var output_format = 'geosankey'
 
 
     
-    // Add only actual locations to the map (with clicking events and popups)
-    // var nodeLayer = L.geoJSON(nodes.features, {
-    //     filter: featureWayPt,
-      
-    //     onEachFeature: function (feature, layer) {
-        
-    //       layer
-    //         .on('click', function(e) {
-    //           layer.closePopup();
 
-    //           for(var linkPath in linkLayers) {
-    //             var path = linkPath.split('-');
-
-    //             // when click on a node, show only the links that attach to it
-    //             if (selectedNode != null && selectedNode != path[0]) {
-    //               map.addLayer(linkLayers[linkPath].feature);
-    //             }
-    //           }
-
-    //           if (selectedNode == null || selectedNode != feature.id) {
-                
-    //             for (var linkPath in linkLayers) {
-    //               var path = linkPath.split('-');
-
-    //               if (feature.id != path[0] && feature.id != path[1]) {
-    //                   map.removeLayer(linkLayers[linkPath].feature);
-    //               }
-    //               else {
-    //                   // num += parseInt(linkLayers[linkPath].data.value);
-    //               }
-    //             }
-
-    //             selectedNode = feature.id;
-    //           }
-    //           else {    
-    //             selectedNode = null;
-    //           }
-    //         });
-    //         layer.bindPopup(layer.feature.properties.name)
-    //         markers.addLayer(layer);
-    //     }
-        
-    //   });
 
     // map.addLayer(markers)
     // DrawLink(map, csv);
@@ -152,7 +168,7 @@ var output_format = 'geosankey'
   }
 
   // Function to draw the links
-  function DrawLink(map, links, layers, setLayers) {
+  function DrawLink(map, links) {
 
       var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
       var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
