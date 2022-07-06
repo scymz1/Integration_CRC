@@ -21,12 +21,13 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { idxRelation, skeleton } from "../vars";
+import { idxRelation, skeleton } from "./tableVars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 
 import { ColContext } from "./TableApp";
+import * as options_flat from "../../../util/options.json"
 
 const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -51,7 +52,7 @@ function reducer(state, { type, index }) {
 function Table() {
   const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
-  const { search_object, options_flat } = useContext(VoyageContext);
+  const { search_object } = useContext(VoyageContext);
 
   //menu
   const {cols} = useContext(ColContext)
