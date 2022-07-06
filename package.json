@@ -30,6 +30,7 @@
     "dotenv": "^16.0.1",
     "js-file-download": "^0.4.12",
     "leaflet": "^1.8.0",
+    "leaflet-area-select": "^1.0.5",
     "leaflet-draw": "^1.0.4",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.markercluster": "^1.5.3",
