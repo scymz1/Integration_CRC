@@ -8,6 +8,13 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import * as d3 from "d3";
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 
@@ -86,6 +93,30 @@ const Map = () => {
   const [latitude1, onChangelatitude1] = React.useState(0);
   const [latitude2, onChangelatitude2] = React.useState(0);
 
+  const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
+
+  const getRadioValue = (event) => {
+    onChangeRadioOption(event.target.value);
+    console.log(radioOptions);
+  }
+
+  const [search_object, set_search_object] = useState({});
+
+  useEffect(() => {
+    if(radioOptions=="embarkation"){
+      set_search_object({
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+      });
+    }
+    else{
+      set_search_object({
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
+      });
+    }
+  }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
+
   // const light = 'cl4t2jnz6003115mkh34qvveh'
   // const noBorder = 'cl4t3r3s9001216nwr2pj50n3'
   const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -160,7 +191,6 @@ const Map = () => {
 
 
   const onClickFeature = (feature, layer) => {
-      console.log(feature);
       layer.bindPopup(function (layer) {                                // adding popup to port / link
         // console.log(layer.feature);
         if(layer.feature.properties.name)
@@ -181,64 +211,79 @@ const Map = () => {
   }
 
   return (
-    
-    <MapContainer
-      id="mapId"
-      center={center}
-      zoom={5}
-      scrollWheelZoom={false}
-    >
-      {/* <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution=' &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors"'
-      /> */}  
-     
-      <button>Example</button>
-      <LayersControl position="bottomleft">
-            <BaseLayer name="modern country border">
-            <TileLayer
-              url={normal}
-              attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-            /> 
-            </BaseLayer>
-            <BaseLayer checked name="no country border">
-            <TileLayer
-              url={noBorder}
-              attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-            />
-            </BaseLayer>
-      </LayersControl>
-
-
-      {/* {locations.map((location) => (
-        <Marker
-          position={location.position}
-          draggable= {true}
+    <div>
+      <FormControl>
+        <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
+        <RadioGroup
+            row
+            aria-labelledby="boundingBoxFilter"
+            defaultValue="embarkation"
+            name="radio-buttons-group"
+            onChange={getRadioValue}
         >
-          {console.log(location.position)}
-          <Popup>
-            {location.name} - {location.info} */}
-            {/* can be replaced with pivot table */}
-            {/* {customPopup} */}
-          {/* </Popup>
-        </Marker>
-      ))} */}
-
-    {/* <MarkerClusterGroup> */}
-    {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
-    {/* </MarkerClusterGroup> */}
-
-    
-      {/* <MyComponent/> */}
-      <ReadFeature/>
-
-      <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
-      {console.log("Points to use: ", pointsToUse)}
+            <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+            <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+        </RadioGroup>
+        </FormControl>
+      <MapContainer
+        id="mapId"
+        center={center}
+        zoom={5}
+        scrollWheelZoom={false}
+        style={{ height: "100vh" }}
+      >
+        {/* <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution=' &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors"'
+        /> */}  
       
-      <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
+        <button>Example</button>
+        <LayersControl position="bottomleft">
+              <BaseLayer name="modern country border">
+              <TileLayer
+                url={normal}
+                attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+              /> 
+              </BaseLayer>
+              <BaseLayer checked name="no country border">
+              <TileLayer
+                url={noBorder}
+                attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+              />
+              </BaseLayer>
+        </LayersControl>
 
-    </MapContainer>
+
+        {/* {locations.map((location) => (
+          <Marker
+            position={location.position}
+            draggable= {true}
+          >
+            {console.log(location.position)}
+            <Popup>
+              {location.name} - {location.info} */}
+              {/* can be replaced with pivot table */}
+              {/* {customPopup} */}
+            {/* </Popup>
+          </Marker>
+        ))} */}
+
+      {/* <MarkerClusterGroup> */}
+      {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
+      {/* </MarkerClusterGroup> */}
+
+      
+        {/* <MyComponent/> */}
+        <ReadFeature search_object={search_object}/>
+
+        <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
+                  onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
+        {console.log("Points to use: ", pointsToUse)}
+        
+        <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
+
+      </MapContainer>
+    </div>
   );
 };
 
