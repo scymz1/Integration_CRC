@@ -7,6 +7,7 @@ import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
 import Table from "./Result/Table";
+import {VoyageContext} from "./VoyageApp";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -54,7 +55,7 @@ export default function Voyage() {
   return (
     <div>
       <ResponsiveAppBar/>
-      <Filter/>
+      <Filter context={VoyageContext}/>
       <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
         <Tabs
           orientation="vertical"
@@ -69,16 +70,16 @@ export default function Voyage() {
           <Tab label="Table"/>
         </Tabs>
         <TabPanel value={value} index={0}>
-          <Scatter/>
+          <Scatter context={VoyageContext}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Bar/>
+          <Bar context={VoyageContext}/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Pie/>
+          <Pie context={VoyageContext}/>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <Table/>
+          <Table context={VoyageContext}/>
         </TabPanel>
       </Box>
     </div>

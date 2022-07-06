@@ -27,11 +27,11 @@ axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 console.log(process.env.REACT_APP_BASEURL)
 
 
-function Pie () {
+function Pie (props) {
 
     const {
-        search_object,
-    } = React.useContext(VoyageContext)
+        search_object, endpoint
+    } = React.useContext(props.context)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
@@ -82,7 +82,7 @@ function Pie () {
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
 
-        axios.post('/voyage/groupby', data=data)
+        axios.post(endpoint+'groupby', data=data)
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))

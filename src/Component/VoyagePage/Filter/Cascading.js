@@ -34,20 +34,17 @@ function Cascading(props) {
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {options_tree} = useContext(VoyageContext);     // <--------- CONTEXT
+    const {options_tree, search_object} = useContext(props.context);     // <--------- CONTEXT
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const {search_object} = useContext(VoyageContext);
-
     const menuName = props.menuName;
     const buttonName = props.button;
 
-    var render = null;
-    render = menuName== "" ? options_tree : options_tree[menuName]
+    var render = menuName === "" ? options_tree : options_tree[menuName];
     
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
@@ -135,6 +132,7 @@ function Cascading(props) {
                             <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                            {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
                             {renderTree(render, "__"+menuName)}
                         </Menu>
                         
