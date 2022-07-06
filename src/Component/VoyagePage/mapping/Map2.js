@@ -8,6 +8,9 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import * as d3 from "d3";
 
+import 'leaflet-area-select';
+import AreaSelect from "./AreaSelect";
+
 import { createSvgIcon } from "@mui/material";
 
 import { ReadFeature } from "./Spatial.js"
@@ -77,6 +80,11 @@ const file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_loca
 const Map = () => {
   const rMachine = useRef();
   const [points, setPoints] = useState(true);
+  
+  const [longitude1, onChangelongitude1] = React.useState(0);
+  const [longitude2, onChangelongitude2] = React.useState(0);
+  const [latitude1, onChangelatitude1] = React.useState(0);
+  const [latitude2, onChangelatitude2] = React.useState(0);
 
   // const light = 'cl4t2jnz6003115mkh34qvveh'
   // const noBorder = 'cl4t3r3s9001216nwr2pj50n3'
@@ -93,6 +101,7 @@ const Map = () => {
 
   function MyComponent() {
 
+    
     const map = useMapEvents({
       click: (e) => {
         const { lat, lng } = e.latlng;
@@ -223,6 +232,10 @@ const Map = () => {
       {/* <MyComponent/> */}
       <ReadFeature/>
 
+      <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
+                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
+      {console.log("Points to use: ", pointsToUse)}
+      
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
 
     </MapContainer>
