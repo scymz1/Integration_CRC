@@ -223,7 +223,6 @@ const Map = () => {
       {/* <MyComponent/> */}
       <ReadFeature/>
 
-      {console.log("Points to use: ", pointsToUse)}
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
 
     </MapContainer>

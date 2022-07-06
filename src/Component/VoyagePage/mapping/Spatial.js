@@ -123,15 +123,10 @@ var output_format = 'geosankey'
         }
         
       });
-      map.addLayer(markers)
-  DrawLink(map, csv);
 
-    // const map = useMapEvents( {
-    //   click: (e) => {
-        
-
-    //   }
-    // });
+    map.addLayer(markers)
+    DrawLink(map, csv);
+    
     return null;
   }
 
