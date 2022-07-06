@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import * as React from "react";
 import { Graph } from "react-d3-graph";
@@ -18,21 +18,50 @@ export default function Network(props) {
   // })
   const {queryData, setQueryData, data} = useContext(PASTContext);
 
-  const testData = {
-    nodes: [
-      { id: "Harry", color: "red", size: 600},
-      { id: "Sally" },
-      { id: "Alice" }
-    ],
-    links: [
-      { source: "Harry", target: "Sally" },
-      { source: "Harry", target: "Alice" }
-    ]
-  };
+  const [graph, setGraph] = useState({
+    nodes: [],
+    links: []
+  });
+
+  useEffect(()=>{
+    let tmp = {
+      nodes: [],
+      links: []
+    };
+    data.forEach((item) => {
+      tmp = {
+        nodes: [...tmp.nodes,
+          {id: item.documented_name, color: "red", size: 600, nodeId: item.id},
+          {id: item.post_disembark_location.geo_location.child_of.name, color: "green", size: 300},
+          {id: item.voyage.voyage_captainconnection[0].captain.name, color: "blue", size: 300},
+        ],
+        links: [...tmp.links,
+          {source: item.documented_name, target: item.post_disembark_location.geo_location.child_of.name, label: "disembark location"},
+          {source: item.documented_name, target: item.voyage.voyage_captainconnection[0].captain.name, label: "captain"},
+        ]
+      }
+    })
+    setGraph(tmp)
+    console.log(tmp)
+  }, [data])
+
+
+  // const graph = {
+  //   nodes: [
+  //     { id: "Harry", color: "red", size: 600},
+  //     { id: "Sally" },
+  //     { id: "Alice" }
+  //   ],
+  //   links: [
+  //     { source: "Harry", target: "Sally" },
+  //     { source: "Harry", target: "Alice" }
+  //   ]
+  // };
 
 // the graph configuration, you only need to pass down properties
 // that you want to override, otherwise default ones will be used
   const myConfig = {
+    directed: true,
     nodeHighlightBehavior: true,
     d3: {
       gravity: -100,
@@ -54,21 +83,34 @@ export default function Network(props) {
     },
     link: {
       type: "CURVE_SMOOTH",
-      highlightColor: "lightblue"
+      highlightColor: "lightblue",
+      renderLabel: true,
     },
-    width: 300,
-    height: 300
+    width: 600,
+    height: 400
   };
+
+  function handleClickNode(nodeId, node){
+    setQueryData(
+      {
+        type: "slave",
+        targets: [node.nodeId]
+      }
+    )
+  }
 
   return (
     <div>
       <h1>NetWork</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
-        <Graph
-          id="network" // id is mandatory, if no id is defined rd3g will throw an error
-          data={testData}
-          config={myConfig}
-        />
+      <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
+      <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
+      <Graph
+        id="network" // id is mandatory, if no id is defined rd3g will throw an error
+        data={graph}
+        config={myConfig}
+        onClickNode={handleClickNode}
+      />
     </div>
   )
 }

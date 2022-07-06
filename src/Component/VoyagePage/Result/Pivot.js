@@ -12,7 +12,13 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import { pivot_row_vars, pivot_col_vars, pivot_cell_vars } from "./vars";
 // import { VoyageContext } from "../VoyageApp";
-import { Grid, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
 
@@ -56,30 +62,60 @@ function Pivot() {
     });
   };
 
+  // Set rows
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
-
     for (var property in search_object) {
+      // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
         data.append(property, v);
       });
     }
+    data.append("groupby_fields", option.col);
+    data.append("groupby_fields", option.row);
+    data.append("value_field_tuple", option.cell);
+    data.append("value_field_tuple", aggregation);
+    data.append("cachename", "voyage_export");
+    axios
+      .post("/voyage/crosstabs", data)
+      .then(function (response) {
+        //console.log("-----set rows-----");
+        //console.log(response.data);
+        const row_name = Object.keys(response.data);
+        const rows = Object.values(response.data);
+        for (var i = 0; i < rows.length; i++) {
+          rows[i][""] = row_name[i];
+        }
+        setRows(rows);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [option.row, option.col, option.cell, aggregation]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Set columns
+  useEffect(() => {
+    var data = new FormData();
+    data.append("hierarchical", "False");
+    for (var property in search_object) {
+      // eslint-disable-next-line no-loop-func
+      search_object[property].forEach((v) => {
+        data.append(property, v);
+      });
+    }
     data.append("groupby_fields", option.row);
     data.append("groupby_fields", option.col);
     data.append("value_field_tuple", option.cell);
     data.append("value_field_tuple", aggregation);
     data.append("cachename", "voyage_export");
-
     axios
       .post("/voyage/crosstabs", data)
       .then(function (response) {
-        console.log(response.data);
-        console.log(Object.keys(response.data));
-        console.log(Object.values(response.data));
-        // setarrx(Object.keys(response.data[value]));
-        // setarry(Object.values(response.data[value]));
+        //console.log("-----set columns-----");
+        const empty = [""];
+        //console.log(empty.concat(Object.keys(response.data)));
+        setCols(empty.concat(Object.keys(response.data)));
       })
       .catch(function (error) {
         console.log(error);
@@ -222,7 +258,7 @@ function Pivot() {
       </div>
 
       <div>
-        <Grid item xs={12} md={4} lg={3}>
+        {/* <Grid item xs={12} md={4} lg={3}>
           <Paper
             sx={{
               p: 2,
@@ -231,7 +267,34 @@ function Pivot() {
               height: 500,
             }}
           ></Paper>
-        </Grid>
+        </Grid> */}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
+                {cols.map((col) => (
+                  <TableCell>{col}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  {cols.map((s) => {
+                    if (typeof row[s] === "number") {
+                      return <TableCell>{Math.round(row[s])}</TableCell>;
+                    } else {
+                      return <TableCell>{row[s] || 0}</TableCell>;
+                    }
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );
