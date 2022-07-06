@@ -235,6 +235,7 @@ const Map = () => {
       <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
       {console.log("Points to use: ", pointsToUse)}
+      
       <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
 
     </MapContainer>
