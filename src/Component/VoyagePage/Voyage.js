@@ -6,7 +6,8 @@ import Filter from "./Filter/Filter";
 import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
-import Table from "./Result/Table";
+// import Table from "./Result/Table";
+import TableApp from "./Result/Table/TableApp";
 import Pivot from "./Result/Pivot";
 import Map from "./Result/Map";
 
@@ -85,7 +86,7 @@ export default function Voyage() {
           <Pie/>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <Table/>
+          <TableApp/>
         </TabPanel>
         <TabPanel value={value} index={4}>
           <Pivot/>
