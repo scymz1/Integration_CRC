@@ -142,7 +142,7 @@ function OptionSelector(props) {
           count={Object.keys(resultObject).length}
           page={resultObjectPage.currentPage > 0 ? resultObjectPage.currentPage : 0}
           onPageChange={(e, v) => {
-            resultObjectPage.setPage(0)
+            resultObjectPage.setPage(v)
           }}
           rowsPerPage={resultObjectPage.pageSize}
           onRowsPerPageChange={(e) => {

@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { VoyageContext } from "../VoyageApp";
+import { VoyageContext } from "../../VoyageApp";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -21,10 +21,12 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { idxRelation, skeleton, modalVars } from "./vars";
+import { idxRelation, skeleton } from "../vars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+
+import { ColContext } from "./TableApp";
 
 const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -50,6 +52,9 @@ function Table() {
   const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
   const { search_object, options_flat } = useContext(VoyageContext);
+
+  //menu
+  const {cols} = useContext(ColContext)
 
   // Label
   const [label, setLabel] = useState();
@@ -119,6 +124,11 @@ function Table() {
       });
     }
 
+    cols.forEach((v) => {
+      // console.log(v)
+      data.append("selected_fields", v); 
+  }); 
+
     axios
       .post("/voyage/", data)
       .then(function (response) {
@@ -129,7 +139,7 @@ function Table() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortingReq, field, direction, cols]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
   useEffect(() => {
@@ -138,9 +148,9 @@ function Table() {
     data.append("voyage_id", id);
     data.append("voyage_id", id);
 
-    for (var i = 0; i < modalVars.length; i++) {
-      data.append("selected_fields", modalVars[i]);
-    }
+    // for (var i = 0; i < modalVars.length; i++) {
+    //   data.append("selected_fields", modalVars[i]);
+    // }
 
     axios
       .post("/voyage/", data)
@@ -237,7 +247,7 @@ function Table() {
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    {search_object.selected_fields.map((v) => (
+                    {cols.map((v) => (
                       <TableCell
                         style={{ color: "#389c90" }}
                         onClick={(event) => handleSorting(event, v)}
@@ -321,10 +331,11 @@ function Table() {
               <div>
                 <Accordion
                   expanded={state[idxRelation[title]]}
-                  onClick={(event) => handleSingleExpansion(event, title)}
+                  // onClick={(event) => handleSingleExpansion(event, title)}
                   sx={{ margin: "5px" }}
                 >
-                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}>
+                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}
+                  onClick={(event) => handleSingleExpansion(event, title)}>
                     <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>

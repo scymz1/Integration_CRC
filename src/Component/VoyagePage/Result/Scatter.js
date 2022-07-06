@@ -21,11 +21,11 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-function Scatter () {
+function Scatter (props) {
 
     const {
-        search_object,
-    } = React.useContext(VoyageContext)
+        search_object, endpoint
+    } = React.useContext(props.context)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
@@ -76,7 +76,7 @@ function Scatter () {
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
 
-        axios.post('/voyage/groupby', data)
+        axios.post(endpoint+'groupby', data=data)
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))

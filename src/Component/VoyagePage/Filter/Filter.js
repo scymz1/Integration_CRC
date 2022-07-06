@@ -1,6 +1,6 @@
 import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar} from "@mui/material";
 import {useContext} from "react";
-import {VoyageContext} from "../VoyageApp";
+// import {VoyageContext} from "../VoyageApp";
 
 import React from 'react';
 
@@ -17,15 +17,15 @@ import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 import RadioButton from "./radio";
 
-import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
+// import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
+import {VoyageContext} from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object} = useContext(VoyageContext);
-
+    const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
@@ -74,7 +74,7 @@ export default function Filter(props) {
                 {
                   Object.keys(menu_label).map((key) => {
                     return(
-                      <Cascading menuName={key} button={menu_label[key]}/>
+                      <Cascading menuName={key} button={menu_label[key]} context={props.context}/>
                     )
                   })
                 }
@@ -102,7 +102,7 @@ export default function Filter(props) {
                           <Typography>{item.split("***")[2]}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                          <ComponentFac params={item} index={index} />
+                          <ComponentFac params={item} index={index} context={props.context}/>
                         </AccordionDetails>
                       </Accordion>
                     </Grid>
