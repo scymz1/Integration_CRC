@@ -75,11 +75,11 @@ export default function Network(props) {
       labelProperty: 'id',
       highlightStrokeColor: "blue",
       labelPosition: "center",
-      viewGenerator: ()=>(
-        <svg style={{width: "100%", height: "100%"}}>
-          <rect  x="20%" y="30%" width="60%" height="40%" rx="10%" ry="10%" stroke="black" fill="transparent" stroke-width="1"/>
-        </svg>
-      ),
+      // viewGenerator: ()=>(
+      //   <svg style={{width: "100%", height: "100%"}}>
+      //     <rect  x="20%" y="30%" width="60%" height="40%" rx="10%" ry="10%" stroke="black" fill="transparent" stroke-width="1"/>
+      //   </svg>
+      // ),
     },
     link: {
       type: "CURVE_SMOOTH",
