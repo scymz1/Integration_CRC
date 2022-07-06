@@ -3,6 +3,13 @@ import 'leaflet'
 import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 import axios from 'axios';
@@ -17,7 +24,8 @@ axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 export default function MapBoundingBox(){
 
-
+    const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
+    
     const [longitude1, onChangelongitude1] = React.useState(0);
     const [longitude2, onChangelongitude2] = React.useState(0);
     const [latitude1, onChangelatitude1] = React.useState(0);
@@ -30,6 +38,11 @@ export default function MapBoundingBox(){
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
+
+    const getRadioValue = (event) => {
+        onChangeRadioOption(event.target.value);
+        console.log(radioOptions);
+    }
   
 
     useEffect(() => {
@@ -51,6 +64,20 @@ export default function MapBoundingBox(){
 
     return (
         <div>
+            <FormControl>
+            <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
+            <RadioGroup
+                row
+                aria-labelledby="boundingBoxFilter"
+                defaultValue="embarkation"
+                name="radio-buttons-group"
+                onChange={getRadioValue}
+            >
+                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+            </RadioGroup>
+            </FormControl>
+
             <MapContainer center={position} zoom={5} style={{ height: "100vh" }}>
             <LayersControl position="bottomleft">
                 <BaseLayer name="modern country border">
