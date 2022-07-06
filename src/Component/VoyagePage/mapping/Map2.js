@@ -6,8 +6,10 @@ import "leaflet/dist/leaflet.css";
 //import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
 import * as d3 from "d3";
+
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
+
 import { createSvgIcon } from "@mui/material";
 
 import { ReadFeature } from "./Spatial.js"
@@ -92,13 +94,12 @@ const Map = () => {
     setPoints(!points)
 }
 
-  //const pointsToUse = points ? [[1.3575, 104.7],[1.3535, 103.34]] : points2;
-  const pointsToUse = points ? [[30.751942, -82.2216],[15.311785, -85.627441]] : points2;
   
 
   function MyComponent() {
 
 
+    
     const map = useMapEvents({
       click: (e) => {
 
@@ -228,7 +229,6 @@ const Map = () => {
 
       <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
-
 
     </MapContainer>
   );

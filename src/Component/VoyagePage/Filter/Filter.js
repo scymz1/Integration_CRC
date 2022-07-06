@@ -26,7 +26,6 @@ const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object} = useContext(VoyageContext);
 
-
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
@@ -42,10 +41,6 @@ export default function Filter(props) {
         setOutput(output.filter((e)=>e!==item))
         setLabels(labels.filter((e)=>e.option!==varName))
     };
-
-    const handlePrint = (item) => {
-        console.log('Current SEARCH OBJECT: ', search_object)
-    }
 
     console.log('Current SEARCH OBJECT: ', search_object)
 
