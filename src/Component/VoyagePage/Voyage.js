@@ -6,7 +6,8 @@ import Filter from "./Filter/Filter";
 import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
-import Table from "./Result/Table";
+// import Table from "./Result/Table";
+import TableApp from "./Result/Table/TableApp";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -78,7 +79,7 @@ export default function Voyage() {
           <Pie/>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          <Table/>
+          <TableApp/>
         </TabPanel>
       </Box>
     </div>
