@@ -21,7 +21,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { idxRelation, skeleton } from "../vars";
+import { idxRelation, skeleton, modalVars } from "../vars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
@@ -32,29 +32,6 @@ const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
-
-const modalVars = [
-  "voyage_id",
-  "voyage_captainconnection__captain__name",
-  "voyage_dates__first_dis_of_slaves",
-  "voyage_itinerary__imp_port_voyage_begin__geo_location__name",
-  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
-  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-  "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-  "voyage_slaves_numbers__imp_total_num_slaves_embarked",
-  "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
-  "voyage_slaves_numbers__imp_mortality_during_voyage",
-  "voyage_ship__imputed_nationality__name",
-  "voyage_dates__length_middle_passage_days",
-  "voyage_ship__nationality_ship",
-  "voyage_outcome__outcome_owner__name",
-  "voyage_outcome__vessel_captured_outcome__name",
-  "voyage_outcome__outcome_slaves__name",
-  "voyage_shipownerconnection__owner__name",
-  "voyage_outcome__resistance__name",
-  "voyage_ship__ship_name",
-  "voyage_sourceconnection__source__full_ref",
-];
 
 const initialState = [true, true, true, true, true, true, true];
 
