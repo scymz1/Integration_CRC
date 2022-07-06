@@ -2,8 +2,11 @@
 // References: https://github.com/geodesign/spatialsankey, https://github.com/UNFPAmaldives/migration
 
 import { useMapEvents, GeoJSON } from "react-leaflet";
+import { useState } from "react";
+import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
+import { Grid } from "@mui/material";
 
 // import nodes2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1";
 // import csv2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.csv"
@@ -16,15 +19,20 @@ var linkLayers = {};
 var selectedNode = null;
 
 
+
   // Drawing nodes and links on the map
   export function ReadFeature() {
+    const [search_object, set_search_object] = useState({'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[null,null]})
+    
+    console.log("🚀 ~ file: Spatial.js ~ line 23 ~ ReadFeature ~ search_object", search_object)
 
     // Function for distinguish if the feature is a waypoint
     const featureWayPt = (feature) => {
         return !feature.properties.name.includes("ocean waypt");
     }
 
-    const map = useMapEvents( {
+    const map = useMapEvents( 
+      {
       click: (e) => {
         
           // Add all features (including waypoints to nodeslayers)
@@ -54,6 +62,8 @@ var selectedNode = null;
       
                       // when click on a node, show only the links that attach to it
                       if (selectedNode != null && selectedNode != path[0]) {
+          
+                       
                         map.addLayer(linkLayers[linkPath].feature);
                       }
                     }
@@ -76,9 +86,41 @@ var selectedNode = null;
                     else {    
                       selectedNode = null;
                     }
+                    //https://github.com/rice-crc/voyages-api/#crosstabs
+                    //'cachename':['voyage_maps'] 
+                    if (layer.feature.geometry.coordinates[0]>=-23.334960){
+                    set_search_object({ 
+        
+                      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[selectedNode,selectedNode]
+                    });}else{
+                      console.log(layer.feature.geometry.coordinates[0])
+                      set_search_object({ 
+        
+                        'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[selectedNode,selectedNode]
+                      });
+                    }
+                    console.log("🚀 ~ file: Spatial.js ~ line 62 ~ .on ~ search_object", search_object)
+                  
+                    
                   });
-  
-                  layer.bindPopup(layer.feature.properties.name)
+
+                  var popup = L.popup()
+                  .setLatLng(layer.feature.geometry.coordinates)
+                  .setContent(layer.feature.properties.name  + JSON.stringify(layer.feature.id))
+                  .openOn(map);
+
+                 
+    
+                  layer.bindPopup(ReactDOMServer.renderToString(
+                  <Grid>
+                    {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                    <div style={{ fontSize: "24px", color: "black" }}>
+                        <p>replace with pivot table</p>
+                      </div>
+                  </Grid>)
+                  )
+     
+                  console.log("🚀 ~ file: Spatial.js ~ line 82 ~ ReadFeature ~ layer.feature.properties.name", layer.feature)
               }
             }).addTo(map);
 
@@ -99,7 +141,7 @@ var selectedNode = null;
     }).then(function() {
 
 
-      var valueMin = d3.min(links, function(l) { console.log("Flow: ", l.flow); return (l.source != l.target) ? parseInt(l.flow) : null; });
+      var valueMin = d3.min(links, function(l) {  return (l.source != l.target) ? parseInt(l.flow) : null; });
       var valueMax = d3.max(links, function(l) { return (l.source != l.target) ? parseInt(l.flow) : null; });
 
       var valueScale = d3.scaleLinear()
