@@ -130,7 +130,8 @@ function OptionSelector(props) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
-      setResultObject(JSON.parse(text))
+      // console.log(text.replace(/[\r\n\t\s]+/g, ""))
+      setResultObject(JSON.parse(text.replace(/[\r\n\t\s]+/g, "")))
     };
     reader.readAsText(e.target.files[0]);
   };

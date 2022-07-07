@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl, useMap, GeoJSON} from "react-leaflet";
 import { EditControl } from "react-leaflet-draw";
 import "./Style.css"
-import RoutineMachine from "./RoutineMachine";
 import "leaflet/dist/leaflet.css";
 //import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
@@ -87,7 +86,7 @@ const file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_loca
 const Map = () => {
   const rMachine = useRef();
   const [points, setPoints] = useState(true);
-  
+
   const [longitude1, onChangelongitude1] = React.useState(0);
   const [longitude2, onChangelongitude2] = React.useState(0);
   const [latitude1, onChangelatitude1] = React.useState(0);
@@ -126,24 +125,28 @@ const Map = () => {
     setPoints(!points)
 }
 
-  //const pointsToUse = points ? [[1.3575, 104.7],[1.3535, 103.34]] : points2;
-  const pointsToUse = points ? [[30.751942, -82.2216],[15.311785, -85.627441]] : points2;
   
 
   function MyComponent() {
 
+
     
     const map = useMapEvents({
       click: (e) => {
+
         const { lat, lng } = e.latlng;
-        
+        //add new markers
+        var marker = L.marker([lat, lng], { icon })
+
+
+        //Jason's routing
         var markers = L.markerClusterGroup();
         // L.marker([lat, lng], { icon }).addTo(map);
 
         markers.addLayer(L.geoJSON(nodes2.features, {
           onEachFeature : function(feature, layer){
-              console.log("Feature: ", feature);
-              console.log("Layer: ", layer);
+              // console.log("Feature: ", feature);
+              // console.log("Layer: ", layer);
 
               layer.bindPopup(function (layer) {                                // adding popup to port / link
                                 if(layer.feature.properties.name)
@@ -155,6 +158,7 @@ const Map = () => {
         }));
         map.addLayer(markers);
         
+        marker.addTo(map);
         markers.addTo(map);
 
         // L.geoJSON(nodes.features).bindPopup(function (layer) {
@@ -179,16 +183,8 @@ const Map = () => {
       allowFullScreen
     ></iframe>
   );
+
   
-
-  useEffect(() => {
-    if (rMachine.current) {
-      console.log("New Points to use: ", rMachine.current);
-      rMachine.current.setWaypoints(pointsToUse);
-    }
-    console.log("Points to use: ", pointsToUse)
-  }, [pointsToUse, rMachine]);
-
 
   const onClickFeature = (feature, layer) => {
       layer.bindPopup(function (layer) {                                // adding popup to port / link
@@ -254,33 +250,29 @@ const Map = () => {
         </LayersControl>
 
 
-        {/* {locations.map((location) => (
-          <Marker
-            position={location.position}
-            draggable= {true}
-          >
-            {console.log(location.position)}
-            <Popup>
-              {location.name} - {location.info} */}
-              {/* can be replaced with pivot table */}
-              {/* {customPopup} */}
-            {/* </Popup>
-          </Marker>
-        ))} */}
+        {locations.map((location) => (
+        <Marker
+          position={location.position}
+          draggable= {true}
+        >
+          <Popup>
+            pop up
+            {location.name} - {location.info} 
+            {customPopup}
+           </Popup>
+        </Marker>
+      ))}
 
-      {/* <MarkerClusterGroup> */}
-      {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
-      {/* </MarkerClusterGroup> */}
+    {/* <MarkerClusterGroup> */}
+    {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
+    {/* </MarkerClusterGroup> */}
 
-      
-        {/* <MyComponent/> */}
+    
+      <MyComponent/>
         <ReadFeature search_object={search_object}/>
 
         <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                   onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
-        {console.log("Points to use: ", pointsToUse)}
-        
-        <RoutineMachine ref={rMachine} waypoints={pointsToUse} />
 
       </MapContainer>
     </div>

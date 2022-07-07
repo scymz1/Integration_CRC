@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useMapEvents, GeoJSON, useMap } from "react-leaflet";
+import { Grid } from "@mui/material";
+import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
@@ -32,6 +34,7 @@ var output_format = 'geosankey'
     
     const [csv, setCsv] = useState(null);
     const [nodes, setNodes] = useState(null);
+    const [layers, setLayers] = useState([]);
     
     // const {search_object} = React.useContext(PastContext);
     const map = useMap();
@@ -39,7 +42,6 @@ var output_format = 'geosankey'
 
     useEffect(() => {
       var data = new FormData();
-      console.log(props.search_object)
       for(var property in props.search_object) {
         props.search_object[property].forEach((v)=>{
             data.append(property, v)
@@ -95,57 +97,22 @@ var output_format = 'geosankey'
               nodeLayers[feature.id] = {
                 layer: layer,
                 // center: layer.getBounds().getCenter()
-              }
+              };
+
+              layer.bindPopup(ReactDOMServer.renderToString(
+                <Grid>
+                  {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                  <div style={{ fontSize: "24px", color: "black" }}>
+                      <p>replace with pivot table</p>
+                    </div>
+                </Grid>)
+                )
+                markers.addLayer(layer);
           }
         });
-
-
-        // Add only actual locations to the map (with clicking events and popups)
-        var nodeLayer = L.geoJSON(nodes.features, {
-          filter: featureWayPt,
-        
-          onEachFeature: function (feature, layer) {
-          
-            // layer
-            //   .on('click', function(e) {
-            //     layer.closePopup();
-
-            //     for(var linkPath in linkLayers) {
-            //       var path = linkPath.split('-');
-
-            //       // when click on a node, show only the links that attach to it
-            //       if (selectedNode != null && selectedNode != path[0]) {
-            //         map.addLayer(linkLayers[linkPath].feature);
-            //       }
-            //     }
-
-            //     if (selectedNode == null || selectedNode != feature.id) {
-                  
-            //       for (var linkPath in linkLayers) {
-            //         var path = linkPath.split('-');
-
-            //         if (feature.id != path[0] && feature.id != path[1]) {
-            //             map.removeLayer(linkLayers[linkPath].feature);
-            //         }
-            //         else {
-            //             // num += parseInt(linkLayers[linkPath].data.value);
-            //         }
-            //       }
-
-            //       selectedNode = feature.id;
-            //     }
-            //     else {    
-            //       selectedNode = null;
-            //     }
-            //   });
-              layer.bindPopup(layer.feature.properties.name)
-              markers.addLayer(layer);
-          }
-          
-        });
-
-        map.addLayer(markers);
-        DrawLink(map, csv);
+        map.addLayer(markers)
+        setLayers([...layers, markers]);
+        DrawLink(map, csv, layers, setLayers);
       }
 
     }, [nodes, csv])    
@@ -156,7 +123,49 @@ var output_format = 'geosankey'
 
 
     
+    // Add only actual locations to the map (with clicking events and popups)
+    // var nodeLayer = L.geoJSON(nodes.features, {
+    //     filter: featureWayPt,
+      
+    //     onEachFeature: function (feature, layer) {
+        
+    //       layer
+    //         .on('click', function(e) {
+    //           layer.closePopup();
 
+    //           for(var linkPath in linkLayers) {
+    //             var path = linkPath.split('-');
+
+    //             // when click on a node, show only the links that attach to it
+    //             if (selectedNode != null && selectedNode != path[0]) {
+    //               map.addLayer(linkLayers[linkPath].feature);
+    //             }
+    //           }
+
+    //           if (selectedNode == null || selectedNode != feature.id) {
+                
+    //             for (var linkPath in linkLayers) {
+    //               var path = linkPath.split('-');
+
+    //               if (feature.id != path[0] && feature.id != path[1]) {
+    //                   map.removeLayer(linkLayers[linkPath].feature);
+    //               }
+    //               else {
+    //                   // num += parseInt(linkLayers[linkPath].data.value);
+    //               }
+    //             }
+
+    //             selectedNode = feature.id;
+    //           }
+    //           else {    
+    //             selectedNode = null;
+    //           }
+    //         });
+    //         layer.bindPopup(layer.feature.properties.name)
+    //         markers.addLayer(layer);
+    //     }
+        
+    //   });
 
     // map.addLayer(markers)
     // DrawLink(map, csv);
@@ -165,7 +174,7 @@ var output_format = 'geosankey'
   }
 
   // Function to draw the links
-  function DrawLink(map, links) {
+  function DrawLink(map, links, layers, setLayers) {
 
       var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
       var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
