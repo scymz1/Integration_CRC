@@ -32,11 +32,11 @@ var output_format = 'geosankey'
     
     const [csv, setCsv] = useState(null);
     const [nodes, setNodes] = useState(null);
-    const [layers, setLayers] = useState([]);
     
     // const {search_object} = React.useContext(PastContext);
     const map = useMap();
 
+    var markers = L.markerClusterGroup();
 
     useEffect(() => {
       var data = new FormData();
@@ -64,14 +64,15 @@ var output_format = 'geosankey'
     
     useEffect(() => {
 
-      // if(markers in map){
-      //   markers.clearLayers();
-      // }
+      // console.log("Marksers: ", markers)
+      // markers.clearLayers();
+      // console.log("After clearing: ", markers)
+
+      console.log("Map: ", map._layers)
 
       for(var i in map._layers) {
-        if(map._layers[i]._path != undefined) {
+        if(map._layers[i]._path != undefined || (map._layers[i]._layers != undefined)) {
             try {
-              console.log("Remove layer: ", map._layers[i])
               map.removeLayer(map._layers[i]);
             }
             catch(e) {
@@ -84,12 +85,9 @@ var output_format = 'geosankey'
       const featureWayPt = (feature) => {
           return !feature.properties.name.includes("ocean waypt");
       }
-
-      var markers = L.markerClusterGroup();
       
-      // Add all features (including waypoints to nodeslayers)
-
       if(nodes){
+        // Add all features for drawing links (including waypoints to nodeslayers)
         L.geoJSON(nodes.features, {
 
           onEachFeature: function (feature, layer) {
@@ -100,6 +98,7 @@ var output_format = 'geosankey'
           }
         });
 
+        // Add only actual locations to the map with markers (with clicking events and popups)
         L.geoJSON(nodes.features, {
           filter: featureWayPt,
           onEachFeature: function(feature, layer) {
@@ -116,8 +115,7 @@ var output_format = 'geosankey'
         })
 
         map.addLayer(markers)
-        setLayers([...layers, markers]);
-        DrawLink(map, csv, layers, setLayers);
+        DrawLink(map, csv);
       }
 
     }, [nodes, csv])    
@@ -127,7 +125,6 @@ var output_format = 'geosankey'
     }
 
 
-    
     // Add only actual locations to the map (with clicking events and popups)
     // var nodeLayer = L.geoJSON(nodes.features, {
     //     filter: featureWayPt,
@@ -179,7 +176,7 @@ var output_format = 'geosankey'
   }
 
   // Function to draw the links
-  function DrawLink(map, links, layers, setLayers) {
+  function DrawLink(map, links) {
 
       var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
       var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
