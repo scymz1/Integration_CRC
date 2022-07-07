@@ -9,8 +9,6 @@ import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
 
-import nodes2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0";
-import csv2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0.csv"
 import { set } from 'lodash';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -65,20 +63,32 @@ var output_format = 'geosankey'
     }, [props.search_object])
     
     useEffect(() => {
-      // Function for distinguish if the feature is a waypoint
-      // map.eachLayer(function (layer) {
-      //   console.log("aaaa", layer)
-      //   map.removeLayer(layer);
-      // });
 
-      setLayers([]);
+      // if(markers in map){
+      //   markers.clearLayers();
+      // }
+
+      for(var i in map._layers) {
+        if(map._layers[i]._path != undefined) {
+            try {
+              console.log("Remove layer: ", map._layers[i])
+              map.removeLayer(map._layers[i]);
+            }
+            catch(e) {
+              console.log("problem with " + e + map._layers[i]);
+            }
+        }
+      } 
+      
+      // Function for distinguish if the feature is a waypoint
       const featureWayPt = (feature) => {
           return !feature.properties.name.includes("ocean waypt");
       }
 
       var markers = L.markerClusterGroup();
+      
       // Add all features (including waypoints to nodeslayers)
-      console.log(nodes)
+
       if(nodes){
         L.geoJSON(nodes.features, {
 
@@ -87,18 +97,24 @@ var output_format = 'geosankey'
                 layer: layer,
                 // center: layer.getBounds().getCenter()
               };
-
-              layer.bindPopup(ReactDOMServer.renderToString(
-                <Grid>
-                  {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-                  <div style={{ fontSize: "24px", color: "black" }}>
-                      <p>replace with pivot table</p>
-                    </div>
-                </Grid>)
-                )
-                markers.addLayer(layer);
           }
         });
+
+        L.geoJSON(nodes.features, {
+          filter: featureWayPt,
+          onEachFeature: function(feature, layer) {
+            layer.bindPopup(ReactDOMServer.renderToString(
+              <Grid>
+                {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                <div style={{ fontSize: "24px", color: "black" }}>
+                    <p>replace with pivot table</p>
+                  </div>
+              </Grid>)
+              )
+            markers.addLayer(layer);
+          }
+        })
+
         map.addLayer(markers)
         setLayers([...layers, markers]);
         DrawLink(map, csv, layers, setLayers);

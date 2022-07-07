@@ -46,6 +46,9 @@ function Cascading(props) {
 
     var render = menuName === "" ? options_tree : options_tree[menuName];
     
+    // console.log("Menuname: ", menuName)
+    // console.log("Render: ", render)
+
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -53,10 +56,6 @@ function Cascading(props) {
     function isLast(node) {
         return Object.keys(node).length <= 3
     }
-
-    const handleItemClick = (click) => {
-        setMenuPosition(null);
-      };
   
     const handleOptionClick = (option, type, flatlabel) => {
         if (option === "__id") option = "id"
@@ -73,23 +72,13 @@ function Cascading(props) {
         console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
-    const handleLeftClick = (event) => {
-        if (menuPosition) {
-            return;
-        }
-        event.preventDefault();
-        setMenuPosition({
-            top: event.pageY,
-            left: event.pageX
-        });
-    };
-
     const renderTree = (nodes, name) => {
 
-        if(name == "__voyage_id") {
-            return (
-                <MenuItem value="Voyage ID" onClick={() => {handleOptionClick("voyage_id", "<class 'rest_framework.fields.IntegerField'>", "Voyage ID") }}>
-                    Voyage ID  
+        if(isLast(nodes)) {
+            console.log("Name: ", name)
+            return(
+                <MenuItem value={nodes.flatlabel} onClick={() => {handleOptionClick(name.slice(2), nodes.type, nodes.flatlabel) }}>
+                    {nodes.label}  
                 </MenuItem>
             )
         }
