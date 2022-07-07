@@ -1,21 +1,30 @@
-import Voyage from "./VoyagePage/Voyage";
-import {useQuery} from "react-query";
-import React, {useState} from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom"
-import OptionSelector from "./VoyagePage/util/optionSelector";
+import * as React from 'react';
+import {useState} from 'react';
 import {CircularProgress} from "@mui/material";
-
-import Home from './HomePage/home'
-import Home2 from './HomePage-darkmode/home'
-
+import {useQuery} from "react-query";
+import Voyage from "./Voyage";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
-export const GlobalContext = React.createContext({});
+export const VoyageContext = React.createContext({});
 
-export default function App() {
-  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('repoData',
+export default function VoyageApp() {
+  const endpoint = "voyage/"
+
+  const menu_label = {
+    "voyage_id": "ID",
+    "voyage_itinerary": "Itinerary",
+    "voyage_dates": "Dates",
+    "voyage_crew": "Crew",
+    "voyage_ship": "Ship",
+    "voyage_captainconnection": "Captain",
+    "voyage_shipownerconnection": "Ship Owner",
+    "voyage_outcome": "Outcome",
+    "voyage_sourceconnection": "Source"
+  }
+
+  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('Option_tree',
     () => fetch(base_url + "voyage/", {
       method: "OPTIONS",
       headers: {'Authorization': auth_token}
@@ -28,7 +37,6 @@ export default function App() {
     }).then(res => res.json())
   )
 
-  // const [chartType, setChartType] = useState(0)
 
   const [search_object, set_search_object] = useState({
     //test data
@@ -68,19 +76,9 @@ export default function App() {
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
 
   return (
-    <GlobalContext.Provider value={{options_tree, options_flat, search_object, set_search_object, 
-    // chartType, setChartType
-    }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Voyage/>}/>
-          <Route path="/:id" element={<Voyage/>}/>
-          <Route path="home" element={<Home/>}/>
-          <Route path="home2" element={<Home2/>}/>
-          <Route path="voyage/optionSelector" element={<OptionSelector/>}/>
-          {/* <Home /> */}
-        </Routes>
-      </BrowserRouter>
-    </GlobalContext.Provider>
-  )
+    <VoyageContext.Provider value={{
+      options_tree, options_flat, search_object, set_search_object, endpoint, menu_label}}>
+      <Voyage/>
+    </VoyageContext.Provider>
+  );
 }

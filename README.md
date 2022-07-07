@@ -1,7 +1,25 @@
-# Integ_CRC_Jun_7
-Heroku Link: [Heroku]()
+# Integ_CRC
+[![](https://img.shields.io/badge/npm-v8.11.0-brightgreen)](https://shields.io)  [![](https://img.shields.io/badge/node-v16.15.1-orange)](https://shields.io)
 
-The branch we except to deploy is: **main**
+Website Link: [OCI](https://voyages3-react.crc.rice.edu)
+
+The branch we except to deploy is: **production**
+-------------
+**Deploy Problem Solution && Wordflow**
+Since we found `package-lock.json` will casuse `OCI` deployment process error, we summarized a workflow to avoid that:
+
+1. use nvm (Node version management) tool make sure node -version is "correct <same version everybody>"
+ 
+    1.1: Check your local node version by `node -v` and npm version with `npm -v`
+ 
+    1.2: Make sure the versions are same as top of this README
+
+2. Delete `node_modules` && `package-lock.json` file
+3. npm install
+4. Delte `node_modules` 
+5. npm ci 
+6. Locally test 
+7. If funciton on local serve is perfect then push & merge
 
 ### How it run on localhost:
 **1. Clone the project to local**
@@ -128,8 +146,7 @@ heroku config:unset GITHUB_USERNAME
 │   │   │   └── Pie.js
 │   │   └── Voyage.js (with SideBar)
 │   ├── PastPage
-│   ├── NavBar.js
-|   └─ App.js
+│   └── NavBar.js
 └── index.js
 ```
 ------

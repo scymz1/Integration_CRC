@@ -2,14 +2,15 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { AppContext } from "./Filter";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 import {ComponentContext} from "./ComponentFac"
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
+const base_url = process.env.REACT_APP_BASEURL;
 
-export default function Auto() {
+export default function Auto(props) {
 
  const {labels} = React.useContext(AppContext)
-  const {search_object, set_search_object} = React.useContext(GlobalContext)
+  const {search_object, set_search_object, endpoint} = React.useContext(props.context)
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
@@ -31,7 +32,7 @@ export default function Auto() {
             body: formdata,
             redirect: 'follow'
         };
-        fetch("https://voyages3-api.crc.rice.edu/voyage/autocomplete", requestOptions)
+        fetch(base_url+endpoint+"autocomplete", requestOptions)
         .then(response => response.json())
         .then(result => {
             var newOptions = result[labels.option]

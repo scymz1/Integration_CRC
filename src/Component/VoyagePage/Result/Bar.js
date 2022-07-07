@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from 'axios'
 import Plot from 'react-plotly.js';
@@ -12,23 +12,18 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {bar_x_vars,bar_y_vars} from './vars';
-import { GlobalContext } from '../../App';
 import { Grid, Paper} from '@mui/material';
-
-
-
-const option_url = '/voyage/' + '?hierarchical=false'
+import * as options_flat from "../../util/options.json"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-
-function Bar () {
+function Bar (props) {
 
     const {
-        search_object,
-    } = React.useContext(GlobalContext)
+        search_object, endpoint
+    } = React.useContext(props.context)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
@@ -43,7 +38,7 @@ function Bar () {
 
     const [aggregation, setAgg] = React.useState('sum');
 
-    const {sum, average} = aggregation;
+    //const {sum, average} = aggregation;
 
     const handleChange_agg = (event) => {
         setAgg(event.target.value);
@@ -56,20 +51,21 @@ function Bar () {
         })
     }
     useEffect(() => {
-        var group_by = option.field
+        //var group_by = option.field
         var value = option.value
-        var agg = aggregation
+        //var agg = aggregation
 
 
         var data = new FormData();
         data.append('hierarchical', 'False');
 
         for(var property in search_object) {
-            console.log("p",property)
-            console.log('so', search_object[property])
+            //console.log("p",property)
+            //console.log('so', search_object[property])
+            // eslint-disable-next-line no-loop-func
             search_object[property].forEach((v)=>{
                 data.append(property, v)
-                console.log("v", v)
+                //console.log("v", v)
             })
         }
 
@@ -77,8 +73,7 @@ function Bar () {
         data.append('groupby_fields', option.value)
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
-
-        axios.post('/voyage/groupby', data=data)
+        axios.post(endpoint + 'groupby', data=data)
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
@@ -91,7 +86,7 @@ function Bar () {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]);
+    }, [option.field, option.value, aggregation, search_object]);
 
 
     return (
@@ -110,7 +105,7 @@ function Bar () {
                         >
                             {bar_x_vars.map((option) => (
                                 <MenuItem value={option}>
-                                    {option}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 
@@ -130,7 +125,7 @@ function Bar () {
                         >
                             {bar_y_vars.map((option) => (
                                 <MenuItem value={option}>
-                                    {option}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
                             {/* <MenuItem value={scatter_plot_x_vars}>{scatter_plot_x_vars}</MenuItem> */}

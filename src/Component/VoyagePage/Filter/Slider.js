@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppContext } from "./Filter";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 import { styled } from '@mui/material/styles';
 import MuiInput from '@mui/material/Input';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import {
   } from '@mui/material';
 
 import {ComponentContext} from "./ComponentFac"
-
+const base_url = process.env.REACT_APP_BASEURL;
 
 const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const Input = styled(MuiInput)`
@@ -25,13 +25,13 @@ function modifyName(rawName){
     return res
 }
 
-export default function GetSlider() {
+export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
   console.log("INDEX: ", index)
 
     console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {search_object, set_search_object} = React.useContext(GlobalContext)
+    const {search_object, set_search_object, endpoint} = React.useContext(props.context)
 
     // const curLabel = labels[labels.length - 1];
 
@@ -55,7 +55,7 @@ export default function GetSlider() {
     
     const config =  {
         method: 'post',
-        baseURL: 'https://voyages3-api.crc.rice.edu/voyage/aggregations',
+        baseURL: base_url+endpoint+'aggregations',
         headers: {'Authorization': AUTH_TOKEN},
         data:d
     }
@@ -125,7 +125,7 @@ export default function GetSlider() {
 
   return (
         <>
-        <Typography gutterBottom>{varDisplay}</Typography>
+        {/* <Typography gutterBottom>{varDisplay}</Typography> */}
         <div class = "sliderInputs">
           <Input 
             color = "secondary"

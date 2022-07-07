@@ -123,7 +123,7 @@ const ResponsiveAppBar = () => {
             alignItems="flex-end"
             sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
           >
-            <Link to={"/Voyages"} style={{ textDecoration: "none" }}>
+            <Link to={"/voyage/Scatter"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{
@@ -136,7 +136,7 @@ const ResponsiveAppBar = () => {
                 Voyages
               </Button>
             </Link>
-            <Link to={"/Past"} style={{ textDecoration: "none" }}>
+            <Link to={"/past"} style={{ textDecoration: "none" }}>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{

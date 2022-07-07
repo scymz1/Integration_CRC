@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from 'axios'
 import Plot from 'react-plotly.js';
@@ -12,20 +12,21 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
-import { GlobalContext } from '../../App';
+import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
+import * as options_flat from "../../util/options.json"
 
-const option_url = '/voyage/' + '?hierarchical=false' // labels in dropdowns
+const option_url = '/voyage/?hierarchical=false' // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-function Scatter () {
+function Scatter (props) {
 
     const {
-        search_object,
-    } = React.useContext(GlobalContext)
+        search_object, endpoint
+    } = React.useContext(props.context)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
@@ -36,8 +37,8 @@ function Scatter () {
     })
 
     const [aggregation, setAgg] = React.useState('sum');
-    const {sum, average} = aggregation;
-    const [label, setLabel] = useState()
+    //const {sum, average} = aggregation;
+    // const [label, setLabel] = useState()
 
     const [isLoading, setLoading] = useState(true);
 
@@ -53,20 +54,21 @@ function Scatter () {
         })
     }
     useEffect(() => {
-        var group_by = option.field
+        //var group_by = option.field
         var value = option.value
-        var agg = aggregation
+        //var agg = aggregation
 
         var data = new FormData();
         data.append('hierarchical', 'False');
 
-        console.log("sb",search_object)
+        //console.log("sb",search_object)
         for(var property in search_object) {
-            console.log("p",property)
-            console.log('so', search_object[property])
+            //console.log("p",property)
+            //console.log('so', search_object[property])
+            // eslint-disable-next-line no-loop-func
             search_object[property].forEach((v)=>{
                 data.append(property, v)
-                console.log("v", v)
+                //console.log("v", v)
             })
         }
 
@@ -75,12 +77,12 @@ function Scatter () {
         data.append('agg_fn', aggregation)
         data.append('cachename','voyage_export')
 
-        axios.post('/voyage/groupby', data=data)
+        axios.post(endpoint+'groupby', data=data)
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
                 setarry(Object.values(response.data[value]))
-
+                setLoading(false)
             })
             .catch(function (error) {
                 console.log(error);
@@ -88,18 +90,18 @@ function Scatter () {
 
     }, [option.field, option.value, aggregation]);
 
-    useEffect(() => {
-            axios.options(option_url)
-                .then(function (response) {
+    // useEffect(() => {
+    //         axios.options(option_url)
+    //             .then(function (response) {
 
-                    setLabel(response.data)
-                    setLoading(false)
-                })
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }, []
-    );
+    //                 setLabel(response.data)
+    //                 setLoading(false)
+    //             })
+    //             .catch(function (error) {
+    //                 console.log(error);
+    //             })
+    //     }, []
+    // );
 
     if (isLoading) {
         return <div className="spinner"></div>;
@@ -121,7 +123,7 @@ function Scatter () {
                         >
                             {scatter_plot_x_vars.map((option) => (
                                 <MenuItem key={option} value={option}>
-                                    {label[option]['flatlabel']}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 
@@ -141,7 +143,7 @@ function Scatter () {
                         >
                             {scatter_plot_y_vars.map((option) => (
                                 <MenuItem key={option} value={option}>
-                                    {label[option]['flatlabel']}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 

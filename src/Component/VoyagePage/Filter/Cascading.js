@@ -2,13 +2,14 @@ import {
     Container,
     Slider,
     IconButton,
+    Button,
     Checkbox,
     FormControlLabel,
     ListItem,
     Grid,
     List,
     ListItemText,
-    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu//, MenuItem
+    Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu, Typography//, MenuItem
 } from '@mui/material';
 import {TreeView, TreeItem} from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
@@ -24,22 +25,27 @@ import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
 
 import {useContext} from "react";
-import {GlobalContext} from "../../App";
+import {VoyageContext} from "../VoyageApp";
 
-function Cascading() {
+export const MenuContext = React.createContext();
+
+function Cascading(props) {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {options_tree} = useContext(GlobalContext);     // <--------- CONTEXT
+    const {options_tree, search_object} = useContext(props.context);     // <--------- CONTEXT
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const {search_object} = useContext(GlobalContext);
+    const menuName = props.menuName;
+    const buttonName = props.button;
 
+    var render = menuName === "" ? options_tree : options_tree[menuName];
+    
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -60,7 +66,6 @@ function Cascading() {
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
-        console.log("OUTPUT STRING: ----->", out)
         if(!search_object[option])
             setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
         else
@@ -80,6 +85,15 @@ function Cascading() {
     };
 
     const renderTree = (nodes, name) => {
+
+        if(name == "__voyage_id") {
+            return (
+                <MenuItem value="Voyage ID" onClick={() => {handleOptionClick("voyage_id", "<class 'rest_framework.fields.IntegerField'>", "Voyage ID") }}>
+                    Voyage ID  
+                </MenuItem>
+            )
+        }
+
         return (
              Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -102,35 +116,44 @@ function Cascading() {
         )
     };
 
-
     return (
-        <Container>
-            <Grid container >
-                <Grid item xs={12}>
+        // <Container>
+            // <Grid container >
+                <Grid item xs={1} >
 
                     <TreeView
                         aria-label="option menu"
                         defaultCollapseIcon={<ExpandMoreIcon/>}
                         defaultExpandIcon={<ChevronRightIcon/>}
                     >
-                        <IconButton
+                        {/* <IconButton
                             variant="contained"
                             onClick={handleClick}
                             >
                             <AddCircleOutlineIcon />
-                        </IconButton>
+                        </IconButton> */}
+
+                        <Button 
+                         variant="text"
+                         onClick={handleClick}
+                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}
+                         >
+                            {/* {buttonName} */}
+                            <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
+                        </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {renderTree(options_tree, "")}
+                            {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
+                            {renderTree(render, "__"+menuName)}
                         </Menu>
                         
                     </TreeView>
 
                 </Grid>
             
-            </Grid>
+            // </Grid>
 
     
-        </Container>
+        // </Container>
     );
 }
 

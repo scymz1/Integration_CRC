@@ -1,6 +1,6 @@
-import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton} from "@mui/material";
+import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar} from "@mui/material";
 import {useContext} from "react";
-import {GlobalContext} from "../../App";
+// import {VoyageContext} from "../VoyageApp";
 
 import React from 'react';
 
@@ -15,21 +15,20 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
+import RadioButton from "./radio";
 
-import {autocomplete_text_fields, obj_autocomplete_text_fields} from './var'
+// import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
+import {VoyageContext} from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
 const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object} = useContext(GlobalContext);
-
-
+    const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
   
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
-    //console.log("🚀 ~ file: Filter.js ~ line 35 ~ Filter ~ output", output)
     const [menuPosition, setMenuPosition] = React.useState(null);
     
     // Handle delete by removing the specified key
@@ -43,9 +42,7 @@ export default function Filter(props) {
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
-    const handlePrint = (item) => {
-        console.log('Current SEARCH OBJECT: ', search_object)
-    }
+    console.log('Current SEARCH OBJECT: ', search_object)
 
     return (
     <AppContext.Provider
@@ -70,42 +67,62 @@ export default function Filter(props) {
           <Typography>Filter</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container direction={'col'} spacing={2}>
-            <Grid item xs={2} align="center">
-              <Cascading />
+
+        <AppBar position="static">
+          {/* <Toolbar disableGutters> */}
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(menu_label).map((key) => {
+                    return(
+                      <Cascading menuName={key} button={menu_label[key]} context={props.context}/>
+                    )
+                  })
+                }
             </Grid>
-            <Grid item xs={10}>
-              <Card>
+          {/* </Toolbar>   */}
+        </AppBar>
+
+
+          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
+
+            {/* {
+              Object.keys(menu_label).map((key) => {
+                return(
+                  <Cascading menuName={key} button={menu_label[key]}/>
+                )
+              })
+            } */}
+            <Grid item>
               {output.map((item, index) => {
                 return(
-                  <Card>
-                    <CardHeader
-                      title={item.split("***")[2]}
-                      titleTypographyProps={{variant:'body1'}}
-                      action={
-                        <IconButton onClick={()=>{handleDelete(item)}}>
+                  <Grid container direction="row" spacing={2} sx ={{m:'10px'}}>
+                    <Grid item xs={11} align="center" >
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                          <Typography>{item.split("***")[2]}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <ComponentFac params={item} index={index} context={props.context}/>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Grid>
+                    <Grid item xs={1} align="center">
+                      <IconButton onClick={()=>{handleDelete(item)}}>
                           <RemoveCircleOutlineIcon />
-                        </IconButton>
-                        }
-                    />
-                    <CardContent>
-                      <ComponentFac params={item} index={index} />
-                    </CardContent>
-                    <CardActions>
-                        <IconButton onClick={()=>{handlePrint(item)}}>
-                            <ExpandMoreIcon/>
-                        </IconButton>
-                    </CardActions>    
-                </Card>
+                      </IconButton>
+                    </Grid>
+                  </Grid>
                 )})
               }
-              </Card>
             </Grid>
+
+            <Grid item >
+              <RadioButton/>
+            </Grid>
+            
           </Grid>
           </AccordionDetails>
       </Accordion>
     </AppContext.Provider>
   );
 }
-
-

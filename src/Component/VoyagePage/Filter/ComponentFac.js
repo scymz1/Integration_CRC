@@ -5,7 +5,6 @@ import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
 import * as React from 'react';
-import {GlobalContext} from "../../App";
 import {
   Typography,
   Container,
@@ -20,7 +19,6 @@ import {
 } from '@mui/material';
 // import Request from './request';
 import { getValue } from '@testing-library/user-event/dist/utils';
-
 export const ComponentContext = React.createContext();
 
 // <ComponentFac params={item} index={index} />
@@ -34,7 +32,7 @@ function ComponentFac(props){
 
   console.log("Variable Name: ----> ", raw)
   
-  const {search_object} = useContext(GlobalContext);
+  const {search_object} = useContext(props.context);
 
   console.log(search_object)
 
@@ -45,7 +43,7 @@ function ComponentFac(props){
       
         return (
           <ComponentContext.Provider value = {{index}}>
-            {GetSlider()}
+            <Slider context={props.context}/>
           </ComponentContext.Provider>  
         )
       // return GetSlider();
@@ -54,7 +52,7 @@ function ComponentFac(props){
     case "CharField":
       return (
         <ComponentContext.Provider value = {{index}}>
-          {GetAuto()}
+          <Auto context={props.context}/>
         </ComponentContext.Provider>  
       )
     default:
@@ -69,9 +67,9 @@ function modifyName(rawName){
   return res
 }
 
-function GetSlider() {
-  console.log("get slider request");
-  return <Slider/>
+// function GetSlider() {
+//   console.log("get slider request");
+//   return <Slider/>
 
   // const {options_tree, options_flat, search_object, set_search_object} = useContext(GlobalContext);     // <--------- CONTEXT
 
@@ -135,16 +133,16 @@ function GetSlider() {
         // }
   //       </>
   //        );
-}
+// }
 
-function GetAuto(){
-  console.log('get auto')
-  return <Auto/>
-}
-
-function GetCheck(props){
-  
-}
+// function GetAuto(){
+//   console.log('get auto')
+//   return <Auto context={}/>
+// }
+//
+// function GetCheck(props){
+//
+// }
 
 
 
