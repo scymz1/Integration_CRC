@@ -8,6 +8,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import {useContext} from "react";
 
 
 import 'leaflet-area-select';
@@ -23,7 +24,7 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-export default function MapBoundingBox(){
+export default function MapBoundingBox(props){
 
     const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
     
@@ -32,19 +33,26 @@ export default function MapBoundingBox(){
     const [latitude1, onChangelatitude1] = React.useState(-90);
     const [latitude2, onChangelatitude2] = React.useState(90);
 
-    const [search_object, set_search_object] = useState({});
+    // const [search_object, set_search_object] = useState({});
+
+    const {search_object, set_search_object} = useContext(props.context);
 
     useEffect(() => {
+    //   var rest=search_object;
+    //   for(var i in ["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude", ])
       if(radioOptions=="embarkation"){
         set_search_object({
+            ...search_object,
           "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
           "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
         });
       }
       else{
         set_search_object({
+            ...search_object,
           "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
           "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+
         });
       }
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
