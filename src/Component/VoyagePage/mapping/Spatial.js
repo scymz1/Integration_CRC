@@ -90,6 +90,27 @@ var output_format = 'geosankey'
       // Add all features (including waypoints to nodeslayers)
 
       if(nodes){
+                // Function for distinguish if the feature is a waypoint
+        if(markers in map){
+          map.removeLayer(markers)
+        }
+        
+        for(var i in map._layers) {
+          if(map._layers[i]._path != undefined) {
+              try {
+                map.removeLayer(map._layers[i]);
+              }
+              catch(e) {
+                console.log("problem with " + e + map._layers[i]);
+              }
+          }
+        } 
+        const featureWayPt = (feature) => {
+            return !feature.properties.name.includes("ocean waypt");
+        }
+
+        var markers = L.markerClusterGroup();
+        // Add all features (including waypoints to nodeslayers)
         L.geoJSON(nodes.features, {
 
           onEachFeature: function (feature, layer) {
