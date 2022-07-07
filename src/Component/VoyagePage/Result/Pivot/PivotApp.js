@@ -1,5 +1,5 @@
 import Pivot from "./Pivot";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -11,31 +11,36 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import { pivot_row_vars, pivot_col_vars, pivot_cell_vars } from "../vars";
 // import { VoyageContext } from "../VoyageApp";
+import * as options_flat from "../../../util/options.json";
 
 export const PivotContext = React.createContext({});
 
-const option_url = "/voyage/?hierarchical=false";
+//const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
-function PivotApp(props) {
-  const { search_object1, endpoint } = React.useContext(props.context);
-  //console.log(search_object1);
+const default_object = {
+  groupby_fields: [pivot_row_vars[0], pivot_col_vars[1]],
+  value_field_tuple: [pivot_cell_vars[0], "sum"],
+  cachename: ["voyage_export"],
+};
 
-  const [search_object, setSearch_object] = useState({
-    voyage_itinerary__imp_principal_region_slave_dis__region: [
-      "Barbados",
-      "Jamaica",
-    ],
-    groupby_fields: [pivot_row_vars[0], pivot_col_vars[1]],
-    value_field_tuple: [pivot_cell_vars[0], "sum"],
-    cachename: ["voyage_export"],
-  });
+function PivotApp(props) {
+  const { search_object } = useContext(props.context);
+  //console.log(search_object);
+  const [complete_object, set_complete_object] = useState(default_object);
+  const [selected_object, set_selected_object] = useState(default_object);
+  //console.log("init_selected_object= ",selected_object);
+  // const [selected_object, set_selected_object] = useState({
+  //   groupby_fields: [pivot_row_vars[0], pivot_col_vars[1]],
+  //   value_field_tuple: [pivot_cell_vars[0], "sum"],
+  //   cachename: ["voyage_export"],
+  // });
 
   // Labels
-  const [label, setLabel] = useState();
-  const [isLoading, setLoading] = useState(true);
+  // const [label, setLabel] = useState();
+  // const [isLoading, setLoading] = useState(true);
 
   // Options
   //   const [aggregation, setAgg] = React.useState("sum");
@@ -57,10 +62,10 @@ function PivotApp(props) {
       ...value,
       [idx]: event.target.value,
     });
-    let tmp = search_object["value_field_tuple"];
+    let tmp = selected_object["value_field_tuple"];
     tmp[idx] = event.target.value;
-    setSearch_object({
-      ...search_object,
+    set_selected_object({
+      ...selected_object,
       value_field_tuple: tmp,
     });
   };
@@ -70,31 +75,25 @@ function PivotApp(props) {
       ...option,
       [idx]: event.target.value,
     });
-    let tmp = search_object["groupby_fields"];
+    let tmp = selected_object["groupby_fields"];
     tmp[idx] = event.target.value;
-    setSearch_object({
-      ...search_object,
+    set_selected_object({
+      ...selected_object,
       groupby_fields: tmp,
     });
   };
 
-  // Get labels
+  // Combine the filter and the default
   useEffect(() => {
-    axios
-      .options(option_url)
-      .then(function (response) {
-        //console.log("labels = ", response.data);
-        setLabel(response.data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+    //console.log("updating");
+    //console.log(selected_object);
+    //console.log(search_object);
+    set_complete_object(Object.assign({}, search_object, selected_object));
+  }, [search_object, selected_object]);
 
-  if (isLoading) {
-    return <div className="spinner"></div>;
-  }
+  // if (isLoading) {
+  //   return <div className="spinner"></div>;
+  // }
 
   return (
     <div>
@@ -114,7 +113,7 @@ function PivotApp(props) {
             >
               {pivot_row_vars.map((option) => (
                 <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
+                  {options_flat[option]["flatlabel"]}
                 </MenuItem>
               ))}
             </Select>
@@ -135,7 +134,7 @@ function PivotApp(props) {
             >
               {pivot_col_vars.map((option) => (
                 <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
+                  {options_flat[option]["flatlabel"]}
                 </MenuItem>
               ))}
             </Select>
@@ -156,7 +155,7 @@ function PivotApp(props) {
             >
               {pivot_cell_vars.map((option) => (
                 <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
+                  {options_flat[option]["flatlabel"]}
                 </MenuItem>
               ))}
             </Select>
@@ -215,7 +214,7 @@ function PivotApp(props) {
         </FormControl>
       </div>
       <div>
-        <PivotContext.Provider value={{ search_object, setSearch_object }}>
+        <PivotContext.Provider value={{ complete_object, set_complete_object }}>
           <Pivot />
         </PivotContext.Provider>
       </div>
