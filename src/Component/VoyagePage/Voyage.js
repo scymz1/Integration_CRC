@@ -8,7 +8,7 @@ import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
 import Table from "./Result/Table/Table";
 import TableApp from "./Result/Table/TableApp";
-import Pivot from "./Result/Pivot";
+import PivotApp from "./Result/Pivot/PivotApp";
 import Map from "./Result/Map";
 import {VoyageContext} from "./VoyageApp";
 
@@ -90,7 +90,7 @@ export default function Voyage() {
           <TableApp context={VoyageContext}/>
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <Pivot context={VoyageContext}/>
+          <PivotApp context={VoyageContext}/>
         </TabPanel>
         <TabPanel value={value} index={5}>
           <Map context={VoyageContext}/>

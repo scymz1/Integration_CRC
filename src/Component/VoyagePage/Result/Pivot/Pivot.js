@@ -1,16 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-// import Plot from "react-plotly.js";
-
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { FormControlLabel, RadioGroup } from "@mui/material";
-import FormLabel from "@mui/material/FormLabel";
-import Radio from "@mui/material/Radio";
-import { pivot_row_vars, pivot_col_vars, pivot_cell_vars } from "./vars";
 // import { VoyageContext } from "../VoyageApp";
 import { Paper } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -19,64 +8,71 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { PivotContext } from "./PivotApp";
 
-const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
+// const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Pivot() {
+  const { search_object } = useContext(PivotContext);
+  //console.log(search_object);
   // const { search_object } = React.useContext(VoyageContext);
-  const search_object = {
-    voyage_itinerary__imp_principal_region_slave_dis__region: [
-      "Barbados",
-      "Jamaica",
-    ],
-  };
+  // search_object = {
+  //   voyage_itinerary__imp_principal_region_slave_dis__region: [
+  //     "Barbados",
+  //     "Jamaica",
+  //   ],
+  // };
 
   // Labels
-  const [label, setLabel] = useState();
-  const [isLoading, setLoading] = useState(true);
+  // const [label, setLabel] = useState();
+  // const [isLoading, setLoading] = useState(true);
 
   // Responses
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
 
   // Options
-  const [aggregation, setAgg] = React.useState("sum");
-  const [option, setOption] = useState({
-    row: pivot_row_vars[0],
-    col: pivot_col_vars[1],
-    cell: pivot_cell_vars[0],
-  });
+  // const [aggregation, setAgg] = React.useState("sum");
+  // const [option, setOption] = useState({
+  //   row: search_object["groupby_fields"][0],
+  //   col: search_object["groupby_fields"][1],
+  //   cell: search_object["value_field_tuple"][0],
+  // });
 
-  const handleChange_agg = (event) => {
-    setAgg(event.target.value);
-  };
+  //console.log(option);
+  // const handleChange_agg = (event) => {
+  //   setAgg(event.target.value);
+  // };
 
-  const handleChange = (event, name) => {
-    setOption({
-      ...option,
-      [name]: event.target.value,
-    });
-  };
+  // const handleChange = (event, name) => {
+  //   setOption({
+  //     ...option,
+  //     [name]: event.target.value,
+  //   });
+  // };
 
   // Set rows
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
     for (var property in search_object) {
-      // eslint-disable-next-line no-loop-func
-      search_object[property].forEach((v) => {
-        data.append(property, v);
-      });
+      if (property !== "groupby_fields") {
+        //console.log(property);
+        // eslint-disable-next-line no-loop-func
+        search_object[property].forEach((v) => {
+          data.append(property, v);
+        });
+      }
     }
-    data.append("groupby_fields", option.col);
-    data.append("groupby_fields", option.row);
-    data.append("value_field_tuple", option.cell);
-    data.append("value_field_tuple", aggregation);
-    data.append("cachename", "voyage_export");
+    data.append("groupby_fields", search_object["groupby_fields"][1]);
+    data.append("groupby_fields", search_object["groupby_fields"][0]);
+    // data.append("value_field_tuple", option.cell);
+    // data.append("value_field_tuple", aggregation);
+    // data.append("cachename", "voyage_export");
     axios
       .post("/voyage/crosstabs", data)
       .then(function (response) {
@@ -92,23 +88,26 @@ function Pivot() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [option.row, option.col, option.cell, aggregation]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [search_object]);
 
   // Set columns
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
     for (var property in search_object) {
-      // eslint-disable-next-line no-loop-func
-      search_object[property].forEach((v) => {
-        data.append(property, v);
-      });
+      if (property !== "groupby_fields") {
+        //console.log(property);
+        // eslint-disable-next-line no-loop-func
+        search_object[property].forEach((v) => {
+          data.append(property, v);
+        });
+      }
     }
-    data.append("groupby_fields", option.row);
-    data.append("groupby_fields", option.col);
-    data.append("value_field_tuple", option.cell);
-    data.append("value_field_tuple", aggregation);
-    data.append("cachename", "voyage_export");
+    data.append("groupby_fields", search_object["groupby_fields"][0]);
+    data.append("groupby_fields", search_object["groupby_fields"][1]);
+    // data.append("value_field_tuple", option.cell);
+    // data.append("value_field_tuple", aggregation);
+    // data.append("cachename", "voyage_export");
     axios
       .post("/voyage/crosstabs", data)
       .then(function (response) {
@@ -120,29 +119,29 @@ function Pivot() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [option.row, option.col, option.cell, aggregation]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [search_object]);
 
   // Get labels
-  useEffect(() => {
-    axios
-      .options(option_url)
-      .then(function (response) {
-        //console.log("labels = ", response.data);
-        setLabel(response.data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .options(option_url)
+  //     .then(function (response) {
+  //       //console.log("labels = ", response.data);
+  //       setLabel(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
 
-  if (isLoading) {
-    return <div className="spinner"></div>;
-  }
+  // if (isLoading) {
+  //   return <div className="spinner"></div>;
+  // }
 
   return (
     <div>
-      <div>
+      {/* <div>
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Rows</InputLabel>
@@ -255,7 +254,7 @@ function Pivot() {
             />
           </RadioGroup>
         </FormControl>
-      </div>
+      </div> */}
 
       <div>
         {/* <Grid item xs={12} md={4} lg={3}>
