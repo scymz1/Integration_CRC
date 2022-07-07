@@ -27,7 +27,7 @@ function Scatter (props) {
     const {
         search_object, endpoint
     } = React.useContext(props.context)
-
+    console.log(search_object)
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
 
