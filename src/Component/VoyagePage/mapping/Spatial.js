@@ -63,20 +63,15 @@ var output_format = 'geosankey'
     }, [props.search_object])
     
     useEffect(() => {
-      // Function for distinguish if the feature is a waypoint
-      // map.eachLayer(function (layer) {
-      //   console.log("aaaa", layer)
-      //   map.removeLayer(layer);
-      // });
-      // if(markers in map){
-      //   map.removeLayer(markers)
-      // }
-      // if(window.polygon){
-      //   window.map.removeLayer(window.polygon);
-      // }
+
+      if(markers in map){
+        markers.clearLayers();
+      }
+
       for(var i in map._layers) {
         if(map._layers[i]._path != undefined) {
             try {
+              console.log("Remove layer: ", map._layers[i])
               map.removeLayer(map._layers[i]);
             }
             catch(e) {
@@ -84,6 +79,8 @@ var output_format = 'geosankey'
             }
         }
       } 
+      
+      // Function for distinguish if the feature is a waypoint
       const featureWayPt = (feature) => {
           return !feature.properties.name.includes("ocean waypt");
       }
