@@ -13,6 +13,7 @@ import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {bar_x_vars,bar_y_vars} from './vars';
 import { Grid, Paper} from '@mui/material';
+import * as options_flat from "../../util/options.json"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -104,7 +105,7 @@ function Bar (props) {
                         >
                             {bar_x_vars.map((option) => (
                                 <MenuItem value={option}>
-                                    {option}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 
@@ -124,7 +125,7 @@ function Bar (props) {
                         >
                             {bar_y_vars.map((option) => (
                                 <MenuItem value={option}>
-                                    {option}
+                                    {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
                             {/* <MenuItem value={scatter_plot_x_vars}>{scatter_plot_x_vars}</MenuItem> */}
