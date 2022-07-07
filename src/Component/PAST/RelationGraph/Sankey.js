@@ -10,11 +10,11 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
     const {queryData, setQueryData, data} = useContext(PASTContext);
-    const CANVAS_WIDTH = 600;
+    const CANVAS_WIDTH = 500;
     const CANVAS_HEIGHT = 500;
     const NODE_WIDTH = 80;
     const MIN_NODE_HEIGHT = 20;
-    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 180;
+    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 200;
 
     var SampleRawData = [
     {
@@ -66,39 +66,29 @@ export default function Sankey(props) {
       },
   ];
 
-  var graphData = {
-    nodes: [],
-    links: []
-  };
+  var nodes = [];
+  var links = [];
 
   for (var i = 0; i < SampleRawData.length; i++) {
-    var tmp_nodes = [];
-    var tmp_links = []
-    tmp_nodes.push({id: SampleRawData[i].id, name: SampleRawData[i].documented_name});
+    nodes.push({id: SampleRawData[i].id, name: SampleRawData[i].documented_name});
 
       for (var j = 0; j < SampleRawData[i].transactions.length; j++) {
-          tmp_nodes.push({id: SampleRawData[i].transactions[j].id});
-          tmp_links.push({"source":0,"target":1+j,"value":5})
+        if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) === -1) {
+            nodes.push({id: SampleRawData[i].transactions[j].transaction.id, name: "Transaction"});
+        }
+        links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].id),
+                    "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                    "value":5})
           for (var z = 0; z < SampleRawData[i].transactions[j].enslavers.length; z++) {
-              tmp_nodes.push({id: SampleRawData[i].transactions[j].enslavers[z].id, 
-                              name: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.alias});
+            if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id) === -1) {
+                nodes.push({id: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id, 
+                            name: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.alias});
+            }
+            links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                    "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id),
+                    "value":5})
           }
       }
-  };
-
-  var testData = {
-    nodes : [{"id":"enslaved","name":"Person A1"},
-              {"id":"disembark","name":"Place A"},
-              {"id":"Captain","name":"Person B"},
-              {"id":"Captain?","name":"Person C"},
-              {"id":"enslaved","name":"Person D"},
-              {"id":"disembark","name":"Place E"}],
-    links : [{"source":0,"target":1,"value":5},
-              {"source":1,"target":2,"value":5},
-              {"source":1,"target":3,"value":5},
-              {"source":4,"target":1,"value":5},
-              {"source":4,"target":5,"value":5},
-              {"source":5,"target":2,"value":5}]   
   };
 
   const graph = sankey()
@@ -108,7 +98,7 @@ export default function Sankey(props) {
     .extent([
       [0, 0],
       [CANVAS_WIDTH, CANVAS_HEIGHT]
-    ])(testData);
+    ])({nodes, links});
 
   return (
     <div>
@@ -136,11 +126,14 @@ export default function Sankey(props) {
               x={node.x0}
               y={node.y0}
               width={node.x1 - node.x0}
-              height={node.y1 - node.y0}
-              fill="white" >
+              height={node.y1 - node.y0}>
               <div className="node-heading">
                 <span className="node-title">
                   {truncate(node.name, { length: 35 })}
+                </span>
+                <br/>
+                <span className="node-title">
+                  {truncate(node.id, { length: 35 })}
                 </span>
               </div>
             </foreignObject>
