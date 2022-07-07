@@ -8,6 +8,8 @@ import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
+import Pivot from '../Result/Pivot/Pivot';
+import RadioButton from '../Filter/radio';
 
 import nodes2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0";
 import csv2 from "./voyage_itinerary__imp_port_voyage_begin__geo_location__id_voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_Barbados_Jamaica_1700_1860_0_0.csv"
@@ -85,7 +87,6 @@ var output_format = 'geosankey'
 
       var markers = L.markerClusterGroup();
       // Add all features (including waypoints to nodeslayers)
-      console.log(nodes)
       if(nodes){
         L.geoJSON(nodes.features, {
 
@@ -96,24 +97,29 @@ var output_format = 'geosankey'
               };
 
               layer.on('click', function(e) {
+               
                 if (layer.feature.geometry.coordinates[0]>=-23.334960){
                   set_search_object({ 
                     ...search_object,
-                    'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[selectedNode,selectedNode]
+                    'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[layer.feature.id,layer.feature.id]
+                    
                   });}else{
                     set_search_object({ 
                       ...search_object,
-                      'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[selectedNode,selectedNode]
+                      'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[layer.feature.id,layer.feature.id]
                     });
                   }
                   console.log("🚀 ~ file: Spatial.js ~ line 108 ~ layer.on ~ search_object", search_object)
+                  console.log("🚀 ~ file: Spatial.js ~ line 104 ~ layer.on ~ feature.id", layer.feature.id)
 
               })
               .bindPopup(ReactDOMServer.renderToString(
                 <Grid>
                   {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
                   <div style={{ fontSize: "24px", color: "black" }}>
-                      <p>replace with pivot table</p>
+                    <p>pivot table</p>
+                    {/* <RadioButton/> */}
+                     <Pivot/>
                     </div>
                 </Grid>)
                 )

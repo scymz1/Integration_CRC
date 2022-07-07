@@ -15,10 +15,23 @@ import { PivotContext } from "./PivotApp";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+// var search_object = {
+//   'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[2854,2854],
+//   'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
+//   'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
+//   'cachename':'voyage_pivot_tables'
+// }
+var search_object = {
+  groupby_fields: ["voyage_ship__imputed_nationality__name", "voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name"],
+  value_field_tuple: ["voyage_slaves_numbers__imp_total_num_slaves_disembarked", "sum"],
+  cachename: ["voyage_export"],
+}
+
 
 function Pivot() {
-  const { search_object } = useContext(PivotContext);
-  //console.log(search_object);
+  //const { search_object } = useContext(PivotContext);
+
+  console.log(search_object);
   // const { search_object } = React.useContext(VoyageContext);
   // search_object = {
   //   voyage_itinerary__imp_principal_region_slave_dis__region: [
@@ -57,6 +70,7 @@ function Pivot() {
 
   // Set rows
   useEffect(() => {
+    console.log('use effect')
     var data = new FormData();
     data.append("hierarchical", "False");
     for (var property in search_object) {
@@ -70,6 +84,7 @@ function Pivot() {
     }
     data.append("groupby_fields", search_object["groupby_fields"][1]);
     data.append("groupby_fields", search_object["groupby_fields"][0]);
+    console.log("🚀 ~ file: Pivot.js ~ line 81 ~ useEffect ~ data", data)
     // data.append("value_field_tuple", option.cell);
     // data.append("value_field_tuple", aggregation);
     // data.append("cachename", "voyage_export");
@@ -111,6 +126,7 @@ function Pivot() {
     axios
       .post("/voyage/crosstabs", data)
       .then(function (response) {
+        console.log("🚀 ~ file: Pivot.js ~ line 120 ~ useEffect ~ data", data)
         //console.log("-----set columns-----");
         const empty = [""];
         //console.log(empty.concat(Object.keys(response.data)));
