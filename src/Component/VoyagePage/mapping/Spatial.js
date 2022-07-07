@@ -71,7 +71,7 @@ var output_format = 'geosankey'
       for(var i in map._layers) {
         if(map._layers[i]._path != undefined) {
             try {
-              console.log("Remove layer: ", map._layers[i])
+              //console.log("Remove layer: ", map._layers[i])
               map.removeLayer(map._layers[i]);
             }
             catch(e) {
