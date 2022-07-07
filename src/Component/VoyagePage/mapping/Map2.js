@@ -21,8 +21,6 @@ import { createSvgIcon } from "@mui/material";
 
 import { ReadFeature } from "./Spatial.js"
 
-import nodes2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1";
-import csv2 from "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.csv"
 import {useQuery} from "react-query";
 
 import 'leaflet.markercluster';
@@ -30,8 +28,6 @@ import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 const { BaseLayer } = LayersControl;
 
-var csv_file = "./voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.csv";
-var json_file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_1_1.json";
 
 //https://github.com/tomik23/react-leaflet-examples/tree/main/src/pages
 //pass location to routing https://codesandbox.io/s/react-leaflet-v3-how-to-dynamicallly-pass-the-routing-coordinates-to-leaflet-routing-using-react-hooks-852ji?file=/src/App.js
@@ -88,9 +84,9 @@ const Map = () => {
   const [points, setPoints] = useState(true);
 
   const [longitude1, onChangelongitude1] = React.useState(0);
-  const [longitude2, onChangelongitude2] = React.useState(0);
-  const [latitude1, onChangelatitude1] = React.useState(0);
-  const [latitude2, onChangelatitude2] = React.useState(0);
+  const [longitude2, onChangelongitude2] = React.useState(359);
+  const [latitude1, onChangelatitude1] = React.useState(-90);
+  const [latitude2, onChangelatitude2] = React.useState(90);
 
   const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
 
@@ -104,14 +100,14 @@ const Map = () => {
   useEffect(() => {
     if(radioOptions=="embarkation"){
       set_search_object({
-        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
-        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
       });
     }
     else{
       set_search_object({
-        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
-        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
       });
     }
   }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
@@ -127,50 +123,48 @@ const Map = () => {
 
   
 
-  function MyComponent() {
-
-
+  // function MyComponent() {
     
-    const map = useMapEvents({
-      click: (e) => {
+  //   const map = useMapEvents({
+  //     click: (e) => {
 
-        const { lat, lng } = e.latlng;
-        //add new markers
-        var marker = L.marker([lat, lng], { icon })
+  //       const { lat, lng } = e.latlng;
+  //       //add new markers
+  //       var marker = L.marker([lat, lng], { icon })
 
 
-        //Jason's routing
-        var markers = L.markerClusterGroup();
-        // L.marker([lat, lng], { icon }).addTo(map);
+  //       //Jason's routing
+  //       var markers = L.markerClusterGroup();
+  //       // L.marker([lat, lng], { icon }).addTo(map);
 
-        markers.addLayer(L.geoJSON(nodes2.features, {
-          onEachFeature : function(feature, layer){
-              // console.log("Feature: ", feature);
-              // console.log("Layer: ", layer);
+  //       markers.addLayer(L.geoJSON(nodes2.features, {
+  //         onEachFeature : function(feature, layer){
+  //             // console.log("Feature: ", feature);
+  //             // console.log("Layer: ", layer);
 
-              layer.bindPopup(function (layer) {                                // adding popup to port / link
-                                if(layer.feature.properties.name)
-                                  return layer.feature.properties.name;
-                                else
-                                  return layer.feature.geometry.type;
-                              });
-          }
-        }));
-        map.addLayer(markers);
+  //             layer.bindPopup(function (layer) {                                // adding popup to port / link
+  //                               if(layer.feature.properties.name)
+  //                                 return layer.feature.properties.name;
+  //                               else
+  //                                 return layer.feature.geometry.type;
+  //                             });
+  //         }
+  //       }));
+  //       map.addLayer(markers);
         
-        marker.addTo(map);
-        markers.addTo(map);
+  //       marker.addTo(map);
+  //       markers.addTo(map);
 
-        // L.geoJSON(nodes.features).bindPopup(function (layer) {
-        //                                       console.log(layer.feature);
-        //                                       return layer.feature.properties.name;
-        //                                     }).addTo(map);
+  //       // L.geoJSON(nodes.features).bindPopup(function (layer) {
+  //       //                                       console.log(layer.feature);
+  //       //                                       return layer.feature.properties.name;
+  //       //                                     }).addTo(map);
 
-      },
+  //     },
 
-    });
-    return null;
-  }
+  //   });
+  //   return null;
+  // }
 
   const customPopup = (
     <iframe
@@ -250,7 +244,7 @@ const Map = () => {
         </LayersControl>
 
 
-        {locations.map((location) => (
+        {/* {locations.map((location) => (
         <Marker
           position={location.position}
           draggable= {true}
@@ -261,14 +255,14 @@ const Map = () => {
             {customPopup}
            </Popup>
         </Marker>
-      ))}
+      ))} */}
 
     {/* <MarkerClusterGroup> */}
     {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
     {/* </MarkerClusterGroup> */}
 
     
-      <MyComponent/>
+      {/* <MyComponent/> */}
         <ReadFeature search_object={search_object}/>
 
         <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}

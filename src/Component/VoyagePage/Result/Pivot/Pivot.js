@@ -29,20 +29,8 @@ var search_object = {
 
 
 function Pivot() {
-  //const { search_object } = useContext(PivotContext);
-
-  console.log(search_object);
-  // const { search_object } = React.useContext(VoyageContext);
-  // search_object = {
-  //   voyage_itinerary__imp_principal_region_slave_dis__region: [
-  //     "Barbados",
-  //     "Jamaica",
-  //   ],
-  // };
-
-  // Labels
-  // const [label, setLabel] = useState();
-  // const [isLoading, setLoading] = useState(true);
+  const { complete_object } = useContext(PivotContext);
+  //console.log("updated_complete_object= ", complete_object);
 
   // Responses
   const [rows, setRows] = useState([]);
@@ -51,9 +39,9 @@ function Pivot() {
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
   // const [option, setOption] = useState({
-  //   row: search_object["groupby_fields"][0],
-  //   col: search_object["groupby_fields"][1],
-  //   cell: search_object["value_field_tuple"][0],
+  //   row: complete_object["groupby_fields"][0],
+  //   col: complete_object["groupby_fields"][1],
+  //   cell: complete_object["value_field_tuple"][0],
   // });
 
   //console.log(option);
@@ -73,11 +61,12 @@ function Pivot() {
     console.log('use effect')
     var data = new FormData();
     data.append("hierarchical", "False");
-    for (var property in search_object) {
+    for (var property in complete_object) {
       if (property !== "groupby_fields") {
         //console.log(property);
         // eslint-disable-next-line no-loop-func
-        search_object[property].forEach((v) => {
+        complete_object[property].forEach((v) => {
+          //console.log(property, v);
           data.append(property, v);
         });
       }
@@ -103,23 +92,23 @@ function Pivot() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [search_object]);
+  }, [complete_object]);
 
   // Set columns
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
-    for (var property in search_object) {
+    for (var property in complete_object) {
       if (property !== "groupby_fields") {
         //console.log(property);
         // eslint-disable-next-line no-loop-func
-        search_object[property].forEach((v) => {
+        complete_object[property].forEach((v) => {
           data.append(property, v);
         });
       }
     }
-    data.append("groupby_fields", search_object["groupby_fields"][0]);
-    data.append("groupby_fields", search_object["groupby_fields"][1]);
+    data.append("groupby_fields", complete_object["groupby_fields"][0]);
+    data.append("groupby_fields", complete_object["groupby_fields"][1]);
     // data.append("value_field_tuple", option.cell);
     // data.append("value_field_tuple", aggregation);
     // data.append("cachename", "voyage_export");
@@ -135,21 +124,7 @@ function Pivot() {
       .catch(function (error) {
         console.log(error);
       });
-  }, [search_object]);
-
-  // Get labels
-  // useEffect(() => {
-  //   axios
-  //     .options(option_url)
-  //     .then(function (response) {
-  //       //console.log("labels = ", response.data);
-  //       setLabel(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, []);
+  }, [complete_object]);
 
   // if (isLoading) {
   //   return <div className="spinner"></div>;
@@ -157,121 +132,6 @@ function Pivot() {
 
   return (
     <div>
-      {/* <div>
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Rows</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={option.row}
-              label="Rows"
-              name="Rows"
-              onChange={(event) => {
-                handleChange(event, "row");
-              }}
-            >
-              {pivot_row_vars.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box sx={{ minWidth: 120, my: 2 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Columns</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={option.col}
-              name="Columns"
-              label="Columns"
-              onChange={(event) => {
-                handleChange(event, "col");
-              }}
-            >
-              {pivot_col_vars.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box sx={{ minWidth: 120, my: 2 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Cells</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={option.cell}
-              name="Cells"
-              label="Cells"
-              onChange={(event) => {
-                handleChange(event, "cell");
-              }}
-            >
-              {pivot_cell_vars.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {label[option]["flatlabel"]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </div>
-      <div>
-        <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">
-            Remove NA? (does not work)
-          </FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            value={true}
-            //onChange={handleChange_agg}
-            row
-          >
-            <FormControlLabel value="true" control={<Radio />} label="True" />
-            <FormControlLabel
-              disabled
-              value="false"
-              control={<Radio />}
-              label="False"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">
-            Value Function
-          </FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            value={aggregation}
-            onChange={handleChange_agg}
-            row
-          >
-            <FormControlLabel value="sum" control={<Radio />} label="Sum" />
-            <FormControlLabel value="mean" control={<Radio />} label="Mean" />
-            <FormControlLabel
-              disabled
-              control={<Radio />}
-              label="Normalize_rows"
-            />
-            <FormControlLabel
-              disabled
-              control={<Radio />}
-              label="Normalize_columns"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div> */}
-
       <div>
         {/* <Grid item xs={12} md={4} lg={3}>
           <Paper

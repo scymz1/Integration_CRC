@@ -1,0 +1,11 @@
+const menu_label = {
+  "post_disembark_location": "Post Disembark Location",
+  "voyage": "Voyage",
+  "age": "Age",
+  "captive_fate": "Captive Fate",
+  "captive_status": "Captive Status",
+  "documented_name": "name",
+  "id": "Id",
+  "transactions": "Transactions",
+  "sources": "sources"
+}
