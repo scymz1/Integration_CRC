@@ -1,8 +1,11 @@
+import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-import * as React from "react";
-import { Graph } from "react-d3-graph";
+import {Graph} from "react-d3-graph";
 import {Button} from "@mui/material";
+
+const auth_token = process.env.REACT_APP_AUTHTOKEN
+const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Network(props) {
   //data: 根据queryData请求到的data，是一个list. 点击print data按钮可以在console中打印出data
@@ -23,26 +26,59 @@ export default function Network(props) {
     links: []
   });
 
+  const getSlaveOnVoyage = async (voyageId, slaveOnVoyage) => {
+    let formdata = new FormData();
+    formdata.append("voyage__id", voyageId);
+    formdata.append("voyage__id", voyageId);
+
+    const endpoint = (() => {
+      switch (queryData.type) {
+        case "slave": return "past/enslaved/"
+        case "enslaver": return "past/enslavers/"
+      }
+    })()
+    return await fetch(base_url + endpoint, {
+      method: 'POST',
+      headers: {'Authorization': auth_token},
+      body: formdata,
+    }).then(response => response.json())
+      .then(response => slaveOnVoyage = response)
+  }
+
   useEffect(()=>{
     let tmp = {
       nodes: [],
       links: []
     };
     data.forEach((item) => {
+      // let slaveOnVoyage = {}
+      // getSlaveOnVoyage(item.voyage.id, slaveOnVoyage).catch(console.error)
+      // console.log(slaveOnVoyage)
+      item.transactions.forEach((transaction)=>{
+        transaction = transaction.transaction;
+        transaction.enslavers.forEach((enslaver) => {
+          tmp = {...tmp,
+            nodes: [...tmp.nodes,
+              {id: enslaver.enslaver_alias.alias, color: "green", size: 300},
+            ],
+            links: [...tmp.links,
+              {source: item.documented_name, target: enslaver.enslaver_alias.alias, label: enslaver.role.role},
+            ]
+          }
+        })
+      })
       tmp = {
         nodes: [...tmp.nodes,
           {id: item.documented_name, color: "red", size: 600, nodeId: item.id},
-          {id: item.post_disembark_location.geo_location.child_of.name, color: "green", size: 300},
           {id: item.voyage.voyage_captainconnection[0].captain.name, color: "blue", size: 300},
         ],
         links: [...tmp.links,
-          {source: item.documented_name, target: item.post_disembark_location.geo_location.child_of.name, label: "disembark location"},
           {source: item.documented_name, target: item.voyage.voyage_captainconnection[0].captain.name, label: "captain"},
         ]
       }
     })
     setGraph(tmp)
-    console.log(tmp)
+    console.log("tmp", tmp)
   }, [data])
 
 
