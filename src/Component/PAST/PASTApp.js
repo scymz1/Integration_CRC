@@ -11,16 +11,32 @@ export const PASTContext = React.createContext({});
 
 export default function PASTApp(props) {
   const [queryData, setQueryData] = React.useState({
-    targets: [500001, 500101, 501101],
+    targets: [500001],
     type: "slave",
   })
+
   const [data, setData] = useState([]);
+
   const [endpoint, setEndpoint] = useState((() => {
     switch (queryData.type) {
       case "slave": return "past/enslaved/"
       case "enslaver": return "past/enslavers/"
     }
   })())
+
+  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('past_option_tree',
+    () => fetch(base_url + endpoint, {
+      method: "OPTIONS",
+      headers: {'Authorization': auth_token}
+    }).then(res => res.json()), {refetchOnMount: "always"}
+  )
+  const {isLoading: isLoading_flat, error: error_flat, data: options_flat} = useQuery('past_options_flat',
+    () => fetch(base_url + endpoint + "?hierarchical=false", {
+      method: "OPTIONS",
+      headers: {'Authorization': auth_token}
+    }).then(res => res.json()), {refetchOnMount: "always"}
+  )
+
   useEffect(() => {
     setEndpoint((() => {
       switch (queryData.type) {
@@ -45,30 +61,18 @@ export default function PASTApp(props) {
     fetchData().catch(console.error);
   }, [queryData])
 
-  const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('Option_tree',
-    () => fetch(base_url + endpoint, {
-      method: "OPTIONS",
-      headers: {'Authorization': auth_token}
-    }).then(res => res.json())
-  )
-  const {isLoading: isLoading_flat, error: error_flat, data: options_flat} = useQuery('Options_flat',
-    () => fetch(base_url + endpoint + "?hierarchical=false", {
-      method: "OPTIONS",
-      headers: {'Authorization': auth_token}
-    }).then(res => res.json())
-  )
-
   const menu_label = {
-    "voyage_id": "ID",
-    "voyage_itinerary": "Itinerary",
-    "voyage_dates": "Dates",
-    "voyage_crew": "Crew",
-    "voyage_ship": "Ship",
-    "voyage_captainconnection": "Captain",
-    "voyage_shipownerconnection": "Ship Owner",
-    "voyage_outcome": "Outcome",
-    "voyage_sourceconnection": "Source"
+    "post_disembark_location": "Post Disembark Location",
+    "voyage": "Voyage",
+    "age": "Age",
+    "captive_fate": "Captive Fate",
+    "captive_status": "Captive Status",
+    "documented_name": "name",
+    "id": "Id",
+    "transactions": "Transactions",
+    "sources": "sources"
   }
+
 
   const [search_object, set_search_object] = useState({
   })
@@ -77,7 +81,7 @@ export default function PASTApp(props) {
   if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
   return (
-    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label}}>
+    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label, endpoint}}>
       <PAST/>
     </PASTContext.Provider>
   )

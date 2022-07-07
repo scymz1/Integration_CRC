@@ -64,12 +64,6 @@ var output_format = 'geosankey'
     
     useEffect(() => {
 
-      // console.log("Marksers: ", markers)
-      // markers.clearLayers();
-      // console.log("After clearing: ", markers)
-
-      console.log("Map: ", map._layers)
-
       for(var i in map._layers) {
         if(map._layers[i]._path != undefined || (map._layers[i]._layers != undefined)) {
             try {
