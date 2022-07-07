@@ -6,7 +6,6 @@ import Filter from "./Filter/Filter";
 import Scatter from "./Result/Scatter";
 import Bar from "./Result/Bar";
 import Pie from "./Result/Pie";
-import Table from "./Result/Table/Table";
 import TableApp from "./Result/Table/TableApp";
 import PivotApp from "./Result/Pivot/PivotApp";
 import Map from "./Result/Map";

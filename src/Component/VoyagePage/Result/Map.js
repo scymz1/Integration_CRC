@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import 'leaflet'
 import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -13,6 +13,7 @@ import FormLabel from '@mui/material/FormLabel';
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 import axios from 'axios';
+import { ReadFeature } from "../mapping/Spatial.js"
 
 const { BaseLayer } = LayersControl;
 //+ '?hierarchical=false'
@@ -27,13 +28,27 @@ export default function MapBoundingBox(){
     const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
     
     const [longitude1, onChangelongitude1] = React.useState(0);
-    const [longitude2, onChangelongitude2] = React.useState(0);
-    const [latitude1, onChangelatitude1] = React.useState(0);
-    const [latitude2, onChangelatitude2] = React.useState(0);
+    const [longitude2, onChangelongitude2] = React.useState(359);
+    const [latitude1, onChangelatitude1] = React.useState(-90);
+    const [latitude2, onChangelatitude2] = React.useState(90);
 
-    const [latitude_var_name, setLatitude_Name] = React.useState("voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude");
-    const [longitude_var_name, setLongitude_Name] = React.useState("voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude");
+    const [search_object, set_search_object] = useState({});
 
+    useEffect(() => {
+      if(radioOptions=="embarkation"){
+        set_search_object({
+          "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
+          "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
+        });
+      }
+      else{
+        set_search_object({
+          "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
+          "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+        });
+      }
+    }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
+  
     const position = [23.486678, -88.59375];
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -43,24 +58,6 @@ export default function MapBoundingBox(){
         onChangeRadioOption(event.target.value);
         console.log(radioOptions);
     }
-  
-
-    useEffect(() => {
-        var data = new FormData();
-        data.append(latitude_var_name, latitude1);
-        data.append(latitude_var_name, latitude2);
-        data.append(longitude_var_name, longitude1);
-        data.append(longitude_var_name, longitude2);
-
-        axios.post('/voyage/', data=data)
-        .then(function (response) {
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    },
-    [longitude1, longitude2, latitude1, latitude2]);
 
     return (
         <div>
@@ -79,26 +76,21 @@ export default function MapBoundingBox(){
             </FormControl>
 
             <MapContainer center={position} zoom={5} style={{ height: "100vh" }}>
-            <LayersControl position="bottomleft">
-                <BaseLayer name="modern country border">
-                    <TileLayer
-                        url={normal}
-                        attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-                    /> 
-                </BaseLayer>
-                <BaseLayer checked name="no country border">
-                    <TileLayer
-                        url={noBorder}
-                        attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-                    />
-                </BaseLayer>
-            </LayersControl>
-
-
-                {/* <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                /> */}
+                <LayersControl position="bottomleft">
+                    <BaseLayer name="modern country border">
+                        <TileLayer
+                            url={normal}
+                            attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                        /> 
+                    </BaseLayer>
+                    <BaseLayer checked name="no country border">
+                        <TileLayer
+                            url={noBorder}
+                            attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                        />
+                    </BaseLayer>
+                </LayersControl>
+                <ReadFeature search_object={search_object}/>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
             </MapContainer>
