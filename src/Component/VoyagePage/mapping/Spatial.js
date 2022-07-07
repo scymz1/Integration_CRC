@@ -35,6 +35,13 @@ var output_format = 'geosankey'
     const [csv, setCsv] = useState(null);
     const [nodes, setNodes] = useState(null);
     const [layers, setLayers] = useState([]);
+
+    const [search_object, set_search_object] = useState({
+      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[null,null],
+      'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
+      'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
+      'cachename':'voyage_pivot_tables'
+    })
     
     // const {search_object} = React.useContext(PastContext);
     const map = useMap();
@@ -88,7 +95,21 @@ var output_format = 'geosankey'
                 // center: layer.getBounds().getCenter()
               };
 
-              layer.bindPopup(ReactDOMServer.renderToString(
+              layer.on('click', function(e) {
+                if (layer.feature.geometry.coordinates[0]>=-23.334960){
+                  set_search_object({ 
+                    ...search_object,
+                    'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[selectedNode,selectedNode]
+                  });}else{
+                    set_search_object({ 
+                      ...search_object,
+                      'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[selectedNode,selectedNode]
+                    });
+                  }
+                  console.log("🚀 ~ file: Spatial.js ~ line 108 ~ layer.on ~ search_object", search_object)
+
+              })
+              .bindPopup(ReactDOMServer.renderToString(
                 <Grid>
                   {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
                   <div style={{ fontSize: "24px", color: "black" }}>
@@ -96,7 +117,10 @@ var output_format = 'geosankey'
                     </div>
                 </Grid>)
                 )
+                
                 markers.addLayer(layer);
+
+               
           }
         });
         map.addLayer(markers)
