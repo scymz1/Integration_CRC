@@ -63,35 +63,30 @@ var output_format = 'geosankey'
     }, [props.search_object])
     
     useEffect(() => {
-      // Function for distinguish if the feature is a waypoint
-      // map.eachLayer(function (layer) {
-      //   console.log("aaaa", layer)
-      //   map.removeLayer(layer);
-      // });
-      // if(markers in map){
-      //   map.removeLayer(markers)
-      // }
-      // if(window.polygon){
-      //   window.map.removeLayer(window.polygon);
-      // }
-      for(var i in map._layers) {
-        if(map._layers[i]._path != undefined) {
-            try {
-              map.removeLayer(map._layers[i]);
-            }
-            catch(e) {
-              console.log("problem with " + e + map._layers[i]);
-            }
-        }
-      } 
-      const featureWayPt = (feature) => {
-          return !feature.properties.name.includes("ocean waypt");
-      }
 
-      var markers = L.markerClusterGroup();
-      // Add all features (including waypoints to nodeslayers)
       console.log(nodes)
       if(nodes){
+                // Function for distinguish if the feature is a waypoint
+        if(markers in map){
+          map.removeLayer(markers)
+        }
+        
+        for(var i in map._layers) {
+          if(map._layers[i]._path != undefined) {
+              try {
+                map.removeLayer(map._layers[i]);
+              }
+              catch(e) {
+                console.log("problem with " + e + map._layers[i]);
+              }
+          }
+        } 
+        const featureWayPt = (feature) => {
+            return !feature.properties.name.includes("ocean waypt");
+        }
+
+        var markers = L.markerClusterGroup();
+        // Add all features (including waypoints to nodeslayers)
         L.geoJSON(nodes.features, {
 
           onEachFeature: function (feature, layer) {

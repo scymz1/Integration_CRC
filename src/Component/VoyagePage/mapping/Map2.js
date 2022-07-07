@@ -89,9 +89,9 @@ const Map = () => {
   const [points, setPoints] = useState(true);
   
   const [longitude1, onChangelongitude1] = React.useState(0);
-  const [longitude2, onChangelongitude2] = React.useState(0);
-  const [latitude1, onChangelatitude1] = React.useState(0);
-  const [latitude2, onChangelatitude2] = React.useState(0);
+  const [longitude2, onChangelongitude2] = React.useState(359);
+  const [latitude1, onChangelatitude1] = React.useState(-90);
+  const [latitude2, onChangelatitude2] = React.useState(90);
 
   const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
 
