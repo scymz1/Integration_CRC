@@ -47,8 +47,8 @@ export function ReadFeature(props) {
     data.append('value_field_tuple', value_field_tuple[0]);
     data.append('value_field_tuple', value_field_tuple[1]);
     data.append('cachename', cachename);
-    data.append('dataset', dataset[0]);
-    data.append('dataset', dataset[1]);
+    // data.append('dataset', dataset[0]);
+    // data.append('dataset', dataset[1]);
     data.append('output_format', output_format);
 
     axios.post('/voyage/aggroutes', data)
