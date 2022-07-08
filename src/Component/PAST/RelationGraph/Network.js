@@ -1,10 +1,9 @@
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-// import {Graph} from "react-d3-graph";
-import {Button, CircularProgress} from "@mui/material";
+import {Button} from "@mui/material";
 import Graph from "react-graph-vis";
-import {red} from "@mui/material/colors";
+
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
