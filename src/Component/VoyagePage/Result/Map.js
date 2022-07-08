@@ -33,29 +33,27 @@ export default function MapBoundingBox(props){
     const [latitude1, onChangelatitude1] = React.useState(-90);
     const [latitude2, onChangelatitude2] = React.useState(90);
 
-    // const [search_object, set_search_object] = useState({});
-
-    const {search_object, set_search_object} = useContext(props.context);
+    
+    const {search_object, endpoint} = React.useContext(props.context);
+    const [map_search_object, set_map_search_object] = useState(search_object);
 
     useEffect(() => {
-    //   var rest=search_object;
-    //   for(var i in ["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude", ])
-      if(radioOptions=="embarkation"){
-        set_search_object({
-            ...search_object,
-          "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
-          "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
-        });
-      }
-      else{
-        set_search_object({
-            ...search_object,
-          "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
-          "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
 
+        if(radioOptions=="embarkation"){
+            set_map_search_object({
+            ...search_object,
+            "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
+            "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
         });
-      }
-    }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
+        }
+        else{
+            set_map_search_object({
+            ...search_object,
+            "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
+            "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+        });
+        }
+    }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
   
     const position = [23.486678, -88.59375];
 
@@ -98,7 +96,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}/>
+                <ReadFeature search_object={map_search_object}/>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
             </MapContainer>
