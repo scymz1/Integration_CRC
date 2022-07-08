@@ -76,17 +76,23 @@ export default function Sankey(props) {
         if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) === -1) {
             nodes.push({id: SampleRawData[i].transactions[j].transaction.id, name: "Transaction"});
         }
-        links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].id),
-                    "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
-                    "value":5})
+        if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].id) &&
+                                 x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id)) === -1) {
+            links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].id),
+                        "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                        "value":5})
+        }
           for (var z = 0; z < SampleRawData[i].transactions[j].enslavers.length; z++) {
             if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id) === -1) {
                 nodes.push({id: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id, 
                             name: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.alias});
             }
-            links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
-                    "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id),
-                    "value":5})
+            if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) &&
+                                     x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id)) === -1) {
+                links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                            target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id),
+                            value:5})
+            }
           }
       }
   };
