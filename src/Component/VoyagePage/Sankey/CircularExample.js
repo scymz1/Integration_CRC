@@ -97,7 +97,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
     })
 
     // console.log(nodes)
-    // console.log(links)
+    // console.log(edges)
 
     console.log(
       {

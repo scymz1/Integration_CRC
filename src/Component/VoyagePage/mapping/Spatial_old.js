@@ -103,7 +103,7 @@ var output_format = 'geosankey'
             for(var linkPath in linkLayers) {
               var path = linkPath.split('-');
 
-              // when click on a node, show only the links that attach to it
+              // when click on a node, show only the edges that attach to it
               if (selectedNode != null && selectedNode != path[0]) {
                 map.addLayer(linkLayers[linkPath].feature);
               }
@@ -180,7 +180,7 @@ var output_format = 'geosankey'
               for(var linkPath in linkLayers) {
                 var path = linkPath.split('-');
 
-                // when click on a node, show only the links that attach to it
+                // when click on a node, show only the edges that attach to it
                 if (selectedNode != null && selectedNode != path[0]) {
                   map.addLayer(linkLayers[linkPath].feature);
                 }
@@ -251,7 +251,7 @@ var output_format = 'geosankey'
     return null;
   }
 
-  // Function to draw the links
+  // Function to draw the edges
   function DrawLink(map, links) {
 
       var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
