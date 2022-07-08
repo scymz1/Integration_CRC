@@ -23,7 +23,7 @@ var cachename = 'voyage_maps'
 var dataset = [0, 0]
 var output_format = 'geosankey'
 
-// Drawing nodes and links on the map
+// Drawing nodes and edges on the map
 export function ReadFeature(props) {
 
     const [isLoading, setIsLoading] = useState(false);
@@ -118,9 +118,48 @@ export function ReadFeature(props) {
   }
 
 
-    // Add only actual locations to the map (with clicking events and popups)
-    // var nodeLayer = L.geoJSON(nodes.features, {
-    //     filter: featureWayPt,
+  
+  // Add only actual locations to the map (with clicking events and popups)
+  // var nodeLayer = L.geoJSON(nodes.features, {
+  //     filter: featureWayPt,
+    
+  //     onEachFeature: function (feature, layer) {
+      
+  //       layer
+  //         .on('click', function(e) {
+  //           layer.closePopup();
+
+  //           for(var linkPath in linkLayers) {
+  //             var path = linkPath.split('-');
+
+  //             // when click on a node, show only the edges that attach to it
+  //             if (selectedNode != null && selectedNode != path[0]) {
+  //               map.addLayer(linkLayers[linkPath].feature);
+  //             }
+  //           }
+
+  //           if (selectedNode == null || selectedNode != feature.id) {
+              
+  //             for (var linkPath in linkLayers) {
+  //               var path = linkPath.split('-');
+
+  //               if (feature.id != path[0] && feature.id != path[1]) {
+  //                   map.removeLayer(linkLayers[linkPath].feature);
+  //               }
+  //               else {
+  //                   // num += parseInt(linkLayers[linkPath].data.value);
+  //               }
+  //             }
+
+  //             selectedNode = feature.id;
+  //           }
+  //           else {    
+  //             selectedNode = null;
+  //           }
+  //         });
+  //         layer.bindPopup(layer.feature.properties.name)
+  //         markers.addLayer(layer);
+  //     }
       
     //     onEachFeature: function (feature, layer) {
         
@@ -169,7 +208,7 @@ export function ReadFeature(props) {
   }
 
 
-// Function to draw the links
+// Function to draw the edges
 function DrawLink(map, links, layers, setLayers) {
 
     var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });

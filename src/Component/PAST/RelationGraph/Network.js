@@ -1,9 +1,8 @@
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-// import {Graph} from "react-d3-graph";
 import {Button} from "@mui/material";
-// import {Button, CircularProgress} from "@mui/material";
+import Graph from "react-graph-vis";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -21,14 +20,15 @@ export default function Network(props) {
   //   targets: [...queryData.targets, "newTarget"]
   // })
   const {queryData, setQueryData, data} = useContext(PASTContext);
-  const [slaveOnVoyage, setSlaveOnVoyage] = useState([]);
 
-  const [graph, setGraph] = useState({
-    nodes: [],
-    links: []
-  });
+  const [graph, setGraph] = useState(null);
 
   useEffect(()=>{
+    let tmp = {
+      nodes: [],
+      edges: []
+    };
+    setGraph(null)
     const fetchData = async () => {
       const promises = data.map(item => {
         let formdata = new FormData();
@@ -46,40 +46,49 @@ export default function Network(props) {
           body: formdata,
         }).then(response => response.json())
       })
-      const response = await Promise.all(promises)
-      console.log("response", response)
-      let tmp = {
-        nodes: [],
-        links: []
-      };
+      const slaveOnSameVoyage = await Promise.all(promises)
+      // console.log("response", response)
       data.forEach((item, index) => {
-        //caption, self
-        tmp = {...tmp,
-          nodes: [...tmp.nodes,
-            {id: item.documented_name, color: "red", size: 600, nodeId: item.id},
-            {id: item.voyage.voyage_captainconnection[0].captain.name, color: "orange", size: 300},
-          ],
-          links: [...tmp.links,
-            {source: item.documented_name, target: item.voyage.voyage_captainconnection[0].captain.name, label: "captain"},
-          ]
+        //self
+        // console.log("self", item.id)
+        let existNode = tmp.nodes.find(node => node.id === item.id)
+        if(existNode){
+          existNode.color = "red"
+          existNode.font = {size: 30}
+        }else {
+          tmp.nodes.push({id: item.id, label: item.documented_name, color: "red", font: {size: 30}})
         }
-        //voyage
-        response[index].forEach((slave)=>{
-          if(!tmp.nodes.find(node => node.id === slave.documented_name)) {
-            tmp.nodes.push({id: slave.documented_name, color: "blue", size: 300, nodeId: slave.id})
+        //caption
+        item.voyage.voyage_captainconnection.forEach((captainData)=>{
+          // console.log("captain", captainData.captain.id)
+          if(!tmp.nodes.find(node => node.id === captainData.captain.id)) {
+            tmp.nodes.push({id: captainData.captain.id, label: captainData.captain.name, color: "orange"})
           }
-          tmp.links.push({source: item.documented_name, target: slave.documented_name, label: "peer"})
+          tmp.edges.push({from:item.id, to: captainData.captain.id, label: "captain", id: item.id+"_"+captainData.captain.id})
         })
-        //transaction
+        // voyage
+        slaveOnSameVoyage[index].forEach((slave)=>{
+          // console.log("slave", slave.id)
+          if(!tmp.nodes.find(node => node.id === slave.id)) {
+            tmp.nodes.push({id: slave.id, color: "blue", label: slave.documented_name})
+          }
+          if(item.id !== slave.id) {
+            tmp.edges.push({from:item.id, to: slave.id, label: "peer", id: item.id+"_"+slave.id})
+          }
+        })
+        //enslaver
         item.transactions.forEach((transaction)=>{
           transaction = transaction.transaction;
           transaction.enslavers.forEach((enslaver) => {
-            tmp.nodes.push({id: enslaver.enslaver_alias.alias, color: "green", size: 300})
-            let existLink = tmp.links.find(link => link.source === item.documented_name && link.target === enslaver.enslaver_alias.alias)
+            // console.log("enslaver", enslaver.enslaver_alias.id)
+            if(!tmp.nodes.find(node => node.id === enslaver.enslaver_alias.id)){
+              tmp.nodes.push({id: enslaver.enslaver_alias.id, color: "green", label: enslaver.enslaver_alias.alias})
+            }
+            let existLink = tmp.edges.find(edges => edges.from === item.id && edges.to === enslaver.enslaver_alias.id)
             if(existLink) {
               existLink.label = existLink.label+", "+enslaver.role.role
             }else{
-              tmp.links.push({source: item.documented_name, target: enslaver.enslaver_alias.alias, label: enslaver.role.role})
+              tmp.edges.push({from: item.id, to: enslaver.enslaver_alias.id, label: enslaver.role.role, id:item.id+"_"+enslaver.enslaver_alias.id})
             }
           })
         })
@@ -90,44 +99,12 @@ export default function Network(props) {
     fetchData().catch(console.error);
   }, [data])
 
-  const myConfig = {
-    directed: true,
-    nodeHighlightBehavior: true,
-    d3: {
-      gravity: -100,
-      linkLength: 100,
-      alphaTarget: 0.05,
-      linkStrength: 1,
+  const options = {
+    physics: {
+      enabled: false
     },
-    node: {
-      color: "lightgreen",
-      size: 320,
-      labelProperty: 'id',
-      highlightStrokeColor: "blue",
-      labelPosition: "center",
-      // viewGenerator: ()=>(
-      //   <svg style={{width: "100%", height: "100%"}}>
-      //     <rect  x="20%" y="30%" width="60%" height="40%" rx="10%" ry="10%" stroke="black" fill="transparent" stroke-width="1"/>
-      //   </svg>
-      // ),
-    },
-    link: {
-      type: "CURVE_SMOOTH",
-      highlightColor: "lightblue",
-      renderLabel: true,
-    },
-    width: 800,
-    height: 400
+    height: "400"
   };
-
-  function handleClickNode(nodeId, node){
-    setQueryData(
-      {
-        type: "slave",
-        targets: [node.nodeId]
-      }
-    )
-  }
 
   return (
     <div>
@@ -142,6 +119,12 @@ export default function Network(props) {
         config={myConfig}
         onClickNode={handleClickNode}
       /> */}
+      {!graph ?
+        <CircularProgress/> :
+        <Graph
+        graph={graph}
+        options={options}
+      />}
     </div>
   )
 }
