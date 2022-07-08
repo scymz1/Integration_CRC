@@ -8,6 +8,7 @@ import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
+import Pivot from '../Result/Pivot/Pivot';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -23,6 +24,8 @@ var cachename = 'voyage_maps'
 var dataset = [0, 0]
 var output_format = 'geosankey'
 
+export const PivotContext = React.createContext({});
+
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
 
@@ -33,6 +36,13 @@ export function ReadFeature(props) {
     
     // const {search_object} = React.useContext(PastContext);
     const map = useMap();
+
+    const [complete_object, set_complete_object] = useState({
+      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[20931,20931],
+      'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
+      'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
+      'cachename':['voyage_pivot_tables'],
+    })
 
     var markers = L.markerClusterGroup();
 
@@ -95,13 +105,44 @@ export function ReadFeature(props) {
       L.geoJSON(nodes.features, {
         filter: featureWayPt,
         onEachFeature: function(feature, layer) {
-          layer.bindPopup(ReactDOMServer.renderToString(
-            <Grid>
-              {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-              <div style={{ fontSize: "24px", color: "black" }}>
-                  <p>replace with pivot table</p>
-                </div>
-            </Grid>)
+          layer.on('click', function(e) {
+            console.log(layer.feature.id);
+            let tmp = complete_object["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"];
+            tmp[0] = layer.feature.id;
+            tmp[1] = layer.feature.id;
+            set_complete_object({
+              ...complete_object,
+              voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id: tmp,
+            });
+            L.popup().setContent(ReactDOMServer.renderToString(
+                <Grid>
+                  {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                  {console.log("here")}
+                  {console.log(layer)}
+
+                  <div style={{ fontSize: "24px", color: "black" }}>
+                  <div>
+                       <PivotContext.Provider value={{ complete_object, set_complete_object }}>
+                         <Pivot context={PivotContext}/>
+                        </PivotContext.Provider>
+                      </div>
+                    </div>
+                </Grid>))
+              .setLatLng(layer["_latlng"]).openOn(map);
+          // layer.popup(ReactDOMServer.renderToString(
+          //   <Grid>
+          //     {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+          //     {console.log("here")}
+          //     {console.log(layer)}
+          //     <div style={{ fontSize: "24px", color: "black" }}>
+          //     <div>
+          //          <PivotContext.Provider value={{ complete_object, set_complete_object }}>
+          //            <Pivot context={PivotContext}/>
+          //           </PivotContext.Provider>
+          //         </div>
+          //       </div>
+          //   </Grid>))
+            }
             )
           markers.addLayer(layer);
         }
