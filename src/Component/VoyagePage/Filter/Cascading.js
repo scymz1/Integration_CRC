@@ -43,9 +43,12 @@ function Cascading(props) {
 
     const menuName = props.menuName;
     const buttonName = props.button;
-
+    console.log("Menuname: ", menuName)
+    console.log("options_tree: ", options_tree)
     var render = menuName === "" ? options_tree : options_tree[menuName];
     
+
+
     function isChildren(key) {
         return key !== "type" && key !== "label" && key !== "flatlabel"
     }
@@ -53,10 +56,6 @@ function Cascading(props) {
     function isLast(node) {
         return Object.keys(node).length <= 3
     }
-
-    const handleItemClick = (click) => {
-        setMenuPosition(null);
-      };
   
     const handleOptionClick = (option, type, flatlabel) => {
         if (option === "__id") option = "id"
@@ -73,23 +72,13 @@ function Cascading(props) {
         console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
-    const handleLeftClick = (event) => {
-        if (menuPosition) {
-            return;
-        }
-        event.preventDefault();
-        setMenuPosition({
-            top: event.pageY,
-            left: event.pageX
-        });
-    };
-
     const renderTree = (nodes, name) => {
 
-        if(name == "__voyage_id") {
-            return (
-                <MenuItem value="Voyage ID" onClick={() => {handleOptionClick("voyage_id", "<class 'rest_framework.fields.IntegerField'>", "Voyage ID") }}>
-                    Voyage ID  
+        if(isLast(nodes)) {
+            console.log("Name: ", name)
+            return(
+                <MenuItem value={nodes.flatlabel} onClick={() => {handleOptionClick(name.slice(2), nodes.type, nodes.flatlabel) }}>
+                    {nodes.label}  
                 </MenuItem>
             )
         }
@@ -119,7 +108,7 @@ function Cascading(props) {
     return (
         // <Container>
             // <Grid container >
-                <Grid item xs={1} >
+                <Grid item>
 
                     <TreeView
                         aria-label="option menu"
@@ -136,10 +125,10 @@ function Cascading(props) {
                         <Button 
                          variant="text"
                          onClick={handleClick}
-                         style={{maxWidth: '180px', maxHeight: '30px', minWidth: '120px'}}
+                         style={{maxWidth: '280px', maxHeight: '30px', color: "#fff"}}
                          >
-                            {/* {buttonName} */}
-                            <Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>
+                             {buttonName}
+                            {/*<Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>*/}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}

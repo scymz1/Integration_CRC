@@ -53,7 +53,7 @@ export default function ColSelector() {
   return (
     <div>
       <FormControl sx={{ m: 1, width: 800 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <InputLabel id="demo-multiple-chip-label">Column Selector</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
