@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import cx from "classnames";
-import { Group } from "@vx/group";
-import { sankey as d3Sankey } from "d3-sankey";
-import { HierarchyDefaultNode as DefaultNode } from "@vx/hierarchy";
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { Group } from '@visx/group';
+import { sankeyCircular as d3Sankey } from 'd3-sankey-circular';
+import { HierarchyDefaultNode as DefaultNode } from '@visx/hierarchy';
 
 Sankey.propTypes = {
   data: PropTypes.object.isRequired,
@@ -36,17 +36,16 @@ export default function Sankey({
   if (nodeAlign) sankey.nodeAlign(nodeAlign);
   if (nodeWidth) sankey.nodeWidth(nodeWidth);
   if (nodePadding) sankey.nodePadding(nodePadding);
+  if (nodePaddingRatio) sankey.nodePaddingRatio(nodePaddingRatio);
   if (extent) sankey.extent(extent);
   if (iterations) sankey.iterations(iterations);
   if (circularLinkGap) sankey.circularLinkGap(circularLinkGap);
 
   const sankeyData = sankey(data);
 
-  console.log("sankeyData", sankeyData);
-
   if (!!children) {
     return (
-      <Group top={top} left={left} className={cx("vx-sankey", className)}>
+      <Group top={top} left={left} className={cx('vx-sankey', className)}>
         {children({ data: sankeyData })}
       </Group>
     );
