@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-import {Graph} from "react-d3-graph";
+// import {Graph} from "react-d3-graph";
 import {Button} from "@mui/material";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
@@ -141,12 +141,12 @@ export default function Network(props) {
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
-      <Graph
+      {/* <Graph
         id="network" // id is mandatory, if no id is defined rd3g will throw an error
         data={graph}
         config={myConfig}
         onClickNode={handleClickNode}
-      />
+      /> */}
     </div>
   )
 }

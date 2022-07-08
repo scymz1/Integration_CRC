@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Group } from '@vx/group';
+import { Group } from '@visx/group';
 import { sankeyCircular as d3Sankey } from 'd3-sankey-circular';
-import { HierarchyDefaultNode as DefaultNode } from '@vx/hierarchy';
+import { HierarchyDefaultNode as DefaultNode } from '@visx/hierarchy';
 
 Sankey.propTypes = {
   data: PropTypes.object.isRequired,
