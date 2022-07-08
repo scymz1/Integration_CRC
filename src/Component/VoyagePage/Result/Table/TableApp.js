@@ -5,7 +5,7 @@ import Table from './Table';
 export const ColContext = React.createContext({});
 
 export default function() {
-    const [cols, setCols] = React.useState(["id"]);
+    const [cols, setCols] = React.useState([]);
 
     return (
         <div>

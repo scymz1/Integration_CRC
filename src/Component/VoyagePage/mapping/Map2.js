@@ -1,30 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer,FeatureGroup,Marker, Popup,useMapEvents,LayersControl, useMap, GeoJSON} from "react-leaflet";
-import { EditControl } from "react-leaflet-draw";
 import "./Style.css"
 import "leaflet/dist/leaflet.css";
-//import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
-import * as d3 from "d3";
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
-
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
-
-import { createSvgIcon } from "@mui/material";
-
 import { ReadFeature } from "./Spatial.js"
-
-import {useQuery} from "react-query";
-
 import 'leaflet.markercluster';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 const { BaseLayer } = LayersControl;
 
@@ -100,14 +88,14 @@ const Map = () => {
   useEffect(() => {
     if(radioOptions=="embarkation"){
       set_search_object({
-        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
-        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
       });
     }
     else{
       set_search_object({
-        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
-        "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
+        "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
       });
     }
   }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
@@ -181,8 +169,8 @@ const Map = () => {
   
 
   const onClickFeature = (feature, layer) => {
-      layer.bindPopup(function (layer) {                                // adding popup to port / link
-        // console.log(layer.feature);
+      layer.bindPopup(function (layer) {
+        // adding popup to port / link
         if(layer.feature.properties.name)
           return layer.feature.properties.name;
         else
