@@ -11,18 +11,18 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
-  title: "Data Visualization - Bar",
-  date: "June 14, Tue",
+  title: "Data Visualization: Bar Charts",
+  date: "July 7, 2022",
   description:
-    "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the",
+    "This bar chart shows how many enslaved people were embarked on voyages between 1800-1830 by the different (mostly European) colonial powers that enslaved them. Click through to study more bar charts, which show qualitative variables (like colonizing nation) alongside quantitative variables (like numbers of people).",
 };
 
 function BarComponent() {
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
-    field: bar_x_vars[0],
-    value: bar_y_vars[1],
+    field: "voyage_ship__imputed_nationality__name",
+    value: "voyage_slaves_numbers__imp_total_num_slaves_embarked",
   });
   const [aggregation, setAgg] = React.useState("sum");
   useEffect(() => {
@@ -31,6 +31,8 @@ function BarComponent() {
     data.append("hierarchical", "False");
     data.append("groupby_fields", option.field);
     data.append("groupby_fields", option.value);
+    data.append("voyage_dates__imp_arrival_at_port_of_dis_yyyy", 1830);
+    data.append("voyage_dates__imp_arrival_at_port_of_dis_yyyy", 1850);
     data.append("agg_fn", "sum");
     data.append("cachename", "voyage_export");
 

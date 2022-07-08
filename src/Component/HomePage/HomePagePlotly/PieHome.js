@@ -14,15 +14,15 @@ const featuredPosts = {
   title: "Data Visualization - Pie",
   date: "June 14, Tue",
   description:
-    "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the Academicians, particularly theAdirondacks and the mountains of Vermont and New Hampshire.different ways.",
+    "This pie chart shows the aggregated numbers of people who we know were enslaved and embarked on voyages, grouped by the relative numbers / precentages of their outcome on those voyages. Most voyages completed with the transportation of most of the enslaved people on board, but some vessels were lost at sea, some were captured or attacked, and in some cases the enslaved people aboard successfully rebelled. Click to view more pie charts, which (like bar charts) show qualitative variables (like voyage outcomes) alongside quantitative variables (like numbers of people).",
 };
 
 function PieComponent() {
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
-    field: donut_name_vars[0],
-    value: donut_value_vars[1],
+    field: "voyage_outcome__outcome_slaves__name",
+    value: "voyage_slaves_numbers__imp_total_num_slaves_embarked",
   });
   const [aggregation, setAgg] = React.useState("sum");
   useEffect(() => {
@@ -32,7 +32,7 @@ function PieComponent() {
     data.append("groupby_fields", option.field);
     data.append("groupby_fields", option.value);
     data.append("agg_fn", "sum");
-    data.append("cachename", "voyage_export");
+    data.append("cachename", "voyage_bar_and_donut_charts");
 
     axios
       .post("/voyage/groupby", (data = data))
