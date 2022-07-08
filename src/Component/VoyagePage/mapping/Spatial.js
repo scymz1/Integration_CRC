@@ -26,14 +26,15 @@ var output_format = 'geosankey'
 // Drawing nodes and links on the map
 export function ReadFeature(props) {
 
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const [csv, setCsv] = useState(null);
-  const [nodes, setNodes] = useState(null);
-  const [layers, setLayers] = useState([]);
-  
-  const map = useMap();
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const [csv, setCsv] = useState(null);
+    const [nodes, setNodes] = useState(null);
+    
+    // const {search_object} = React.useContext(PastContext);
+    const map = useMap();
 
+    var markers = L.markerClusterGroup();
 
   useEffect(() => {
     var data = new FormData();
@@ -47,8 +48,6 @@ export function ReadFeature(props) {
     data.append('value_field_tuple', value_field_tuple[0]);
     data.append('value_field_tuple', value_field_tuple[1]);
     data.append('cachename', cachename);
-    // data.append('dataset', dataset[0]);
-    // data.append('dataset', dataset[1]);
     data.append('output_format', output_format);
 
     axios.post('/voyage/aggroutes', data)
@@ -58,17 +57,13 @@ export function ReadFeature(props) {
           setIsLoading(true)
         })
   }, [props.search_object])
+
   
   useEffect(() => {
 
-    // if(markers in map){
-    //   markers.clearLayers();
-    // }
-
     for(var i in map._layers) {
-      if(map._layers[i]._path != undefined) {
+      if(map._layers[i]._path != undefined || (map._layers[i]._layers != undefined)) {
           try {
-            //console.log("Remove layer: ", map._layers[i])
             map.removeLayer(map._layers[i]);
           }
           catch(e) {
@@ -81,33 +76,11 @@ export function ReadFeature(props) {
     const featureWayPt = (feature) => {
         return !feature.properties.name.includes("ocean waypt");
     }
-
-    var markers = L.markerClusterGroup();
-    
-    // Add all features (including waypoints to nodeslayers)
-
-    if(nodes){
-              // Function for distinguish if the feature is a waypoint
-      if(markers in map){
-        map.removeLayer(markers)
-      }
+ 
       
-      for(var i in map._layers) {
-        if(map._layers[i]._path != undefined) {
-            try {
-              map.removeLayer(map._layers[i]);
-            }
-            catch(e) {
-              console.log("problem with " + e + map._layers[i]);
-            }
-        }
-      } 
-      const featureWayPt = (feature) => {
-          return !feature.properties.name.includes("ocean waypt");
-      }
+    if(nodes){
 
-      var markers = L.markerClusterGroup();
-      // Add all features (including waypoints to nodeslayers)
+      // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
 
         onEachFeature: function (feature, layer) {
@@ -118,6 +91,7 @@ export function ReadFeature(props) {
         }
       });
 
+      // Add only actual locations to the map with markers (with clicking events and popups)
       L.geoJSON(nodes.features, {
         filter: featureWayPt,
         onEachFeature: function(feature, layer) {
@@ -134,8 +108,7 @@ export function ReadFeature(props) {
       })
 
       map.addLayer(markers)
-      setLayers([...layers, markers]);
-      DrawLink(map, csv, layers, setLayers);
+      DrawLink(map, csv);
     }
 
   }, [nodes, csv])    
@@ -145,56 +118,56 @@ export function ReadFeature(props) {
   }
 
 
-  
-  // Add only actual locations to the map (with clicking events and popups)
-  // var nodeLayer = L.geoJSON(nodes.features, {
-  //     filter: featureWayPt,
+    // Add only actual locations to the map (with clicking events and popups)
+    // var nodeLayer = L.geoJSON(nodes.features, {
+    //     filter: featureWayPt,
+      
+    //     onEachFeature: function (feature, layer) {
+        
+    //       layer
+    //         .on('click', function(e) {
+    //           layer.closePopup();
+
+    //           for(var linkPath in linkLayers) {
+    //             var path = linkPath.split('-');
+
+    //             // when click on a node, show only the links that attach to it
+    //             if (selectedNode != null && selectedNode != path[0]) {
+    //               map.addLayer(linkLayers[linkPath].feature);
+    //             }
+    //           }
+
+    //           if (selectedNode == null || selectedNode != feature.id) {
+                
+    //             for (var linkPath in linkLayers) {
+    //               var path = linkPath.split('-');
+
+    //               if (feature.id != path[0] && feature.id != path[1]) {
+    //                   map.removeLayer(linkLayers[linkPath].feature);
+    //               }
+    //               else {
+    //                   // num += parseInt(linkLayers[linkPath].data.value);
+    //               }
+    //             }
+
+    //             selectedNode = feature.id;
+    //           }
+    //           else {    
+    //             selectedNode = null;
+    //           }
+    //         });
+    //         layer.bindPopup(layer.feature.properties.name)
+    //         markers.addLayer(layer);
+    //     }
+        
+    //   });
+
+    // map.addLayer(markers)
+    // DrawLink(map, csv);
     
-  //     onEachFeature: function (feature, layer) {
-      
-  //       layer
-  //         .on('click', function(e) {
-  //           layer.closePopup();
+    return null;
+  }
 
-  //           for(var linkPath in linkLayers) {
-  //             var path = linkPath.split('-');
-
-  //             // when click on a node, show only the links that attach to it
-  //             if (selectedNode != null && selectedNode != path[0]) {
-  //               map.addLayer(linkLayers[linkPath].feature);
-  //             }
-  //           }
-
-  //           if (selectedNode == null || selectedNode != feature.id) {
-              
-  //             for (var linkPath in linkLayers) {
-  //               var path = linkPath.split('-');
-
-  //               if (feature.id != path[0] && feature.id != path[1]) {
-  //                   map.removeLayer(linkLayers[linkPath].feature);
-  //               }
-  //               else {
-  //                   // num += parseInt(linkLayers[linkPath].data.value);
-  //               }
-  //             }
-
-  //             selectedNode = feature.id;
-  //           }
-  //           else {    
-  //             selectedNode = null;
-  //           }
-  //         });
-  //         layer.bindPopup(layer.feature.properties.name)
-  //         markers.addLayer(layer);
-  //     }
-      
-  //   });
-
-  // map.addLayer(markers)
-  // DrawLink(map, csv);
-  
-  return null;
-}
 
 // Function to draw the links
 function DrawLink(map, links, layers, setLayers) {
