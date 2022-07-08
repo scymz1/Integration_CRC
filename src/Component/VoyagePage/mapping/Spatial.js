@@ -8,10 +8,6 @@ import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
-import Pivot from '../Result/Pivot/Pivot';
-import RadioButton from '../Filter/radio';
-
-import { set } from 'lodash';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -28,59 +24,77 @@ var dataset = [0, 0]
 var output_format = 'geosankey'
 
 // Drawing nodes and links on the map
-  export function ReadFeature(props) {
+export function ReadFeature(props) {
 
-    const [isLoading, setIsLoading] = useState(false);
-    
-    const [csv, setCsv] = useState(null);
-    const [nodes, setNodes] = useState(null);
-    const [layers, setLayers] = useState([]);
-
-    const [search_object, set_search_object] = useState({
-      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[2854,2854],
-      'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
-      'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
-      'cachename':'voyage_pivot_tables'
-    })
-    
-    // const {search_object} = React.useContext(PastContext);
-    const map = useMap();
-
-
-    useEffect(() => {
-      var data = new FormData();
-      for(var property in props.search_object) {
-        props.search_object[property].forEach((v)=>{
-            data.append(property, v)
-        })
-      }
-      data.append('groupby_fields', groupby_fields[0]);
-      data.append('groupby_fields', groupby_fields[1]);
-      data.append('value_field_tuple', value_field_tuple[0]);
-      data.append('value_field_tuple', value_field_tuple[1]);
-      data.append('cachename', cachename);
-      data.append('dataset', dataset[0]);
-      data.append('dataset', dataset[1]);
-      data.append('output_format', output_format);
+  const [isLoading, setIsLoading] = useState(false);
   
-      axios.post('/voyage/aggroutes', data)
-          .then(function(response) {
-            setCsv(response.data.links)
-            setNodes(response.data.nodes)
-            setIsLoading(true)
-          })
-    }, [props.search_object])
+  const [csv, setCsv] = useState(null);
+  const [nodes, setNodes] = useState(null);
+  const [layers, setLayers] = useState([]);
+  
+  const map = useMap();
+
+
+  useEffect(() => {
+    var data = new FormData();
+    for(var property in props.search_object) {
+      props.search_object[property].forEach((v)=>{
+          data.append(property, v)
+      })
+    }
+    data.append('groupby_fields', groupby_fields[0]);
+    data.append('groupby_fields', groupby_fields[1]);
+    data.append('value_field_tuple', value_field_tuple[0]);
+    data.append('value_field_tuple', value_field_tuple[1]);
+    data.append('cachename', cachename);
+    // data.append('dataset', dataset[0]);
+    // data.append('dataset', dataset[1]);
+    data.append('output_format', output_format);
+
+    axios.post('/voyage/aggroutes', data)
+        .then(function(response) {
+          setCsv(response.data.links)
+          setNodes(response.data.nodes)
+          setIsLoading(true)
+        })
+  }, [props.search_object])
+  
+  useEffect(() => {
+
+    // if(markers in map){
+    //   markers.clearLayers();
+    // }
+
+    for(var i in map._layers) {
+      if(map._layers[i]._path != undefined) {
+          try {
+            //console.log("Remove layer: ", map._layers[i])
+            map.removeLayer(map._layers[i]);
+          }
+          catch(e) {
+            console.log("problem with " + e + map._layers[i]);
+          }
+      }
+    } 
     
-    useEffect(() => {
+    // Function for distinguish if the feature is a waypoint
+    const featureWayPt = (feature) => {
+        return !feature.properties.name.includes("ocean waypt");
+    }
 
-      // if(markers in map){
-      //   markers.clearLayers();
-      // }
+    var markers = L.markerClusterGroup();
+    
+    // Add all features (including waypoints to nodeslayers)
 
+    if(nodes){
+              // Function for distinguish if the feature is a waypoint
+      if(markers in map){
+        map.removeLayer(markers)
+      }
+      
       for(var i in map._layers) {
         if(map._layers[i]._path != undefined) {
             try {
-              //console.log("Remove layer: ", map._layers[i])
               map.removeLayer(map._layers[i]);
             }
             catch(e) {
@@ -88,215 +102,166 @@ var output_format = 'geosankey'
             }
         }
       } 
-      
-      // Function for distinguish if the feature is a waypoint
       const featureWayPt = (feature) => {
           return !feature.properties.name.includes("ocean waypt");
       }
 
       var markers = L.markerClusterGroup();
-      
       // Add all features (including waypoints to nodeslayers)
-      if(nodes){
-                // Function for distinguish if the feature is a waypoint
-        if(markers in map){
-          map.removeLayer(markers)
-        }
-        
-        for(var i in map._layers) {
-          if(map._layers[i]._path != undefined) {
-              try {
-                map.removeLayer(map._layers[i]);
-              }
-              catch(e) {
-                console.log("problem with " + e + map._layers[i]);
-              }
-          }
-        } 
-        const featureWayPt = (feature) => {
-            return !feature.properties.name.includes("ocean waypt");
-        }
+      L.geoJSON(nodes.features, {
 
-        var markers = L.markerClusterGroup();
-        // Add all features (including waypoints to nodeslayers)
-        L.geoJSON(nodes.features, {
-
-          onEachFeature: function (feature, layer) {
-              nodeLayers[feature.id] = {
-                layer: layer,
-                // center: layer.getBounds().getCenter()
-              };
-
-  
-
-               
-          }
-        });
-
-        L.geoJSON(nodes.features, {
-          filter: featureWayPt,
-          onEachFeature: function(feature, layer) {
-            layer.on('click', function(e) {
-               
-              if (layer.feature.geometry.coordinates[0]>=-23.334960){
-                set_search_object({ 
-                  ...search_object,
-                  // 'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[layer.feature.id,layer.feature.id] 
-                }
-                );}else{
-                  set_search_object({ 
-                    ...search_object,
-                    // 'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id':[layer.feature.id,layer.feature.id]
-                  });
-                }
-                console.log("🚀 ~ file: Spatial.js ~ line 108 ~ layer.on ~ search_object", search_object)
-                console.log("🚀 ~ file: Spatial.js ~ line 104 ~ layer.on ~ feature.id", layer.feature.id)
-
-            })
-            .bindPopup(ReactDOMServer.renderToString(
-              <Grid>
-                {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-                <div style={{ fontSize: "24px", color: "black" }}>
-                  <p>pivot table</p>
-                  {/* <RadioButton/> */}
-                   <Pivot/>
-                  </div>
-              </Grid>)
-              )
-              
-              markers.addLayer(layer);
-          }
-        })
-
-        map.addLayer(markers)
-        setLayers([...layers, markers]);
-        DrawLink(map, csv, layers, setLayers);
-      }
-
-    }, [nodes, csv])    
-
-    if(isLoading == false) {
-      return "isLoading"
-    }
-
-
-    
-    // Add only actual locations to the map (with clicking events and popups)
-    // var nodeLayer = L.geoJSON(nodes.features, {
-    //     filter: featureWayPt,
-      
-    //     onEachFeature: function (feature, layer) {
-        
-    //       layer
-    //         .on('click', function(e) {
-    //           layer.closePopup();
-
-    //           for(var linkPath in linkLayers) {
-    //             var path = linkPath.split('-');
-
-    //             // when click on a node, show only the links that attach to it
-    //             if (selectedNode != null && selectedNode != path[0]) {
-    //               map.addLayer(linkLayers[linkPath].feature);
-    //             }
-    //           }
-
-    //           if (selectedNode == null || selectedNode != feature.id) {
-                
-    //             for (var linkPath in linkLayers) {
-    //               var path = linkPath.split('-');
-
-    //               if (feature.id != path[0] && feature.id != path[1]) {
-    //                   map.removeLayer(linkLayers[linkPath].feature);
-    //               }
-    //               else {
-    //                   // num += parseInt(linkLayers[linkPath].data.value);
-    //               }
-    //             }
-
-    //             selectedNode = feature.id;
-    //           }
-    //           else {    
-    //             selectedNode = null;
-    //           }
-    //         });
-    //         layer.bindPopup(layer.feature.properties.name)
-    //         markers.addLayer(layer);
-    //     }
-        
-    //   });
-
-    // map.addLayer(markers)
-    // DrawLink(map, csv);
-    
-    return null;
-  }
-
-  // Function to draw the links
-  function DrawLink(map, links, layers, setLayers) {
-
-      var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
-      var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
-
-      var valueScale = d3.scaleLinear()
-                            .domain([valueMin, valueMax])
-                            .range([1, 10]);
-
-      links.forEach(function (link) {
-        if (link[0] != link[1]) {
-          var path = [link[0], link[1]].join('-');
-          var pathReverse = [link[1], link[0]].join('-');
-
-          var lineWeight = valueScale(link[2]);
-
-          
-          var lineCenterLatLng = L.polyline([ nodeLayers[link[0]].layer._latlng, nodeLayers[link[1]].layer._latlng ])
-                    .getBounds()
-                    .getCenter();
-
-
-          // Having the link to be drawed with a curve where the link has flows in both directions
-          var lineBreakLatLng = null;
-          if (linkLayers[pathReverse]) {
-              lineBreakLatLng = L.latLng(
-                  (lineCenterLatLng.lat * .001) + lineCenterLatLng.lat, 
-                  (lineCenterLatLng.lng * .001) + lineCenterLatLng.lng
-              );
-          }
-          else {
-              lineBreakLatLng = L.latLng(
-                  lineCenterLatLng.lat - (lineCenterLatLng.lat * .001), 
-                  lineCenterLatLng.lng - (lineCenterLatLng.lng * .001)
-              );
-          }
-
-          var line = L.polyline(
-            [ 
-                nodeLayers[link[0]].layer._latlng, 
-                lineBreakLatLng, 
-                nodeLayers[link[1]].layer._latlng
-            ], {
-              weight: lineWeight
-            });
-
-            var feature = L.featureGroup([line])
-                .bindPopup('<p3>' + link[0] + '</p3> to <p3>' + link[1] + '</p3>' + '<br>' + '<p4>' + link[2] + ' migrants' + '</p4>')
-                .on('click', function(e) {
-                    
-                    this.openPopup();
-                    
-                    this.setStyle({
-                        opacity: 1
-                    });
-                })
-                .addTo(map);
-
-          linkLayers[path] = {
-            feature: feature,
-            line: line,
-            data: link
-          }
+        onEachFeature: function (feature, layer) {
+            nodeLayers[feature.id] = {
+              layer: layer,
+              // center: layer.getBounds().getCenter()
+            };
         }
       });
 
-    return null;
+      L.geoJSON(nodes.features, {
+        filter: featureWayPt,
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup(ReactDOMServer.renderToString(
+            <Grid>
+              {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+              <div style={{ fontSize: "24px", color: "black" }}>
+                  <p>replace with pivot table</p>
+                </div>
+            </Grid>)
+            )
+          markers.addLayer(layer);
+        }
+      })
+
+      map.addLayer(markers)
+      setLayers([...layers, markers]);
+      DrawLink(map, csv, layers, setLayers);
+    }
+
+  }, [nodes, csv])    
+
+  if(isLoading == false) {
+    return "isLoading"
   }
+
+
+  
+  // Add only actual locations to the map (with clicking events and popups)
+  // var nodeLayer = L.geoJSON(nodes.features, {
+  //     filter: featureWayPt,
+    
+  //     onEachFeature: function (feature, layer) {
+      
+  //       layer
+  //         .on('click', function(e) {
+  //           layer.closePopup();
+
+  //           for(var linkPath in linkLayers) {
+  //             var path = linkPath.split('-');
+
+  //             // when click on a node, show only the links that attach to it
+  //             if (selectedNode != null && selectedNode != path[0]) {
+  //               map.addLayer(linkLayers[linkPath].feature);
+  //             }
+  //           }
+
+  //           if (selectedNode == null || selectedNode != feature.id) {
+              
+  //             for (var linkPath in linkLayers) {
+  //               var path = linkPath.split('-');
+
+  //               if (feature.id != path[0] && feature.id != path[1]) {
+  //                   map.removeLayer(linkLayers[linkPath].feature);
+  //               }
+  //               else {
+  //                   // num += parseInt(linkLayers[linkPath].data.value);
+  //               }
+  //             }
+
+  //             selectedNode = feature.id;
+  //           }
+  //           else {    
+  //             selectedNode = null;
+  //           }
+  //         });
+  //         layer.bindPopup(layer.feature.properties.name)
+  //         markers.addLayer(layer);
+  //     }
+      
+  //   });
+
+  // map.addLayer(markers)
+  // DrawLink(map, csv);
+  
+  return null;
+}
+
+// Function to draw the links
+function DrawLink(map, links, layers, setLayers) {
+
+    var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
+    var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
+
+    var valueScale = d3.scaleLinear()
+                          .domain([valueMin, valueMax])
+                          .range([1, 10]);
+
+    links.forEach(function (link) {
+      if (link[0] != link[1]) {
+        var path = [link[0], link[1]].join('-');
+        var pathReverse = [link[1], link[0]].join('-');
+
+        var lineWeight = valueScale(link[2]);
+
+        
+        var lineCenterLatLng = L.polyline([ nodeLayers[link[0]].layer._latlng, nodeLayers[link[1]].layer._latlng ])
+                  .getBounds()
+                  .getCenter();
+
+
+        // Having the link to be drawed with a curve where the link has flows in both directions
+        var lineBreakLatLng = null;
+        if (linkLayers[pathReverse]) {
+            lineBreakLatLng = L.latLng(
+                (lineCenterLatLng.lat * .001) + lineCenterLatLng.lat, 
+                (lineCenterLatLng.lng * .001) + lineCenterLatLng.lng
+            );
+        }
+        else {
+            lineBreakLatLng = L.latLng(
+                lineCenterLatLng.lat - (lineCenterLatLng.lat * .001), 
+                lineCenterLatLng.lng - (lineCenterLatLng.lng * .001)
+            );
+        }
+
+        var line = L.polyline(
+          [ 
+              nodeLayers[link[0]].layer._latlng, 
+              lineBreakLatLng, 
+              nodeLayers[link[1]].layer._latlng
+          ], {
+            weight: lineWeight
+          });
+
+          var feature = L.featureGroup([line])
+              .bindPopup('<p3>' + link[0] + '</p3> to <p3>' + link[1] + '</p3>' + '<br>' + '<p4>' + link[2] + ' migrants' + '</p4>')
+              .on('click', function(e) {
+                  
+                  this.openPopup();
+                  
+                  this.setStyle({
+                      opacity: 1
+                  });
+              })
+              .addTo(map);
+
+        linkLayers[path] = {
+          feature: feature,
+          line: line,
+          data: link
+        }
+      }
+    });
+
+  return null;
+}

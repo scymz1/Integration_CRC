@@ -16,9 +16,9 @@ Since we found `package-lock.json` will casuse `OCI` deployment process error, w
 
 2. Delete `node_modules` && `package-lock.json` file
 3. npm install
-4. Delte `node_modules` 
+4. Delete `node_modules` 
 5. npm ci 
-6. Locally test 
+6. Locally test (run `npm start`, if all functions gose well, Prefect!)
 7. If funciton on local serve is perfect then push & merge
 
 ### How it run on localhost:
