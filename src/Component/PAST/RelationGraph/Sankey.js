@@ -17,85 +17,119 @@ export default function Sankey(props) {
     const MIN_SPACE_BETWEEN_NODES_VERTICAL = 200;
 
     var SampleRawData = [
-    {
-      "transactions": [
-        {
-              "id": 133597,
-              "transaction": {
-                  "id": 11495,
-                },
-                "enslavers": [
-                    {
-                        "id": 11852,
-                        "enslaver_alias": {
-                        "id": 56489,
-                        "alias": "Early, William"
-                    }}]},
       {
-              "id": 170955,
-              "transaction": {
-                  "id": 16804,
-                  },
-                "enslavers": 
-                  [{
-                    "id": 17161,
-                    "enslaver_alias": {
-                    "id": 56489,
-                    "alias": "Early, William"
-                  }}]}
-      ],
-      "id": 500001,
-      "documented_name": "Delia?"
-    },
-    {
-      "transactions": [
+        "transactions": [
           {
                 "id": 133597,
                 "transaction": {
                     "id": 11495,
-                  },
-                  "enslavers": [
+                    "relation_type": {
+                        "id": 2,
+                        "relation_type": "transportation"
+                    },
+                    "enslavers": [
+                        {
+                            "id": 11852,
+                            "enslaver_alias": {
+                            "id": 56489,
+                            "alias": "Early, William"
+                            },
+                            "role": {
+                              "id": 5,
+                              "role": "owner"
+                            }
+                        },
+                      ]
+                    }
+          },
+        {
+                "id": 170955,
+                "transaction": {
+                    "id": 16804,
+                    "relation_type": {
+                      "id": 2,
+                      "relation_type": "transportation"
+                    },
+                    "enslavers": [
                       {
-                          "id": 11852,
-                          "enslaver_alias": {
-                          "id": 56489,
-                          "alias": "Early, William"
-                      }}]}],
-        "id": 500101,
-        "documented_name": "Carter, Fanny"
-      },
-  ];
-
-  var nodes = [];
-  var links = [];
-
-  for (var i = 0; i < SampleRawData.length; i++) {
-    nodes.push({id: SampleRawData[i].id, name: SampleRawData[i].documented_name});
-
-      for (var j = 0; j < SampleRawData[i].transactions.length; j++) {
-        if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) === -1) {
-            nodes.push({id: SampleRawData[i].transactions[j].transaction.id, name: "Transaction"});
-        }
-        if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].id) &&
-                                 x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id)) === -1) {
-            links.push({"source": nodes.findIndex(x => x.id === SampleRawData[i].id),
-                        "target": nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
-                        "value":5})
-        }
-          for (var z = 0; z < SampleRawData[i].transactions[j].enslavers.length; z++) {
-            if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id) === -1) {
-                nodes.push({id: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id, 
-                            name: SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.alias});
-            }
-            if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) &&
-                                     x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id)) === -1) {
-                links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
-                            target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].enslavers[z].enslaver_alias.id),
-                            value:5})
-            }
+                        "id": 17161,
+                        "enslaver_alias": {
+                        "id": 56489,
+                        "alias": "Early, William"
+                        },
+                        "role": {
+                          "id": 7,
+                          "role": "consignor"
+                        },
+                      },
+                    ]
+                  }
           }
-      }
-  };
+        ],
+        "id": 500001,
+        "documented_name": "Delia?"
+      },
+      {
+        "transactions": [
+            {
+                  "id": 133597,
+                  "transaction": {
+                      "id": 11495,
+                      "relation_type": {
+                        "id": 2,
+                        "relation_type": "transportation"
+                      },
+                      "enslavers": [
+                          {
+                              "id": 11852,
+                              "enslaver_alias": {
+                              "id": 56489,
+                              "alias": "Early, William"
+                              },
+                              "role": {
+                                "id": 7,
+                                "role": "consignor"
+                              },
+                          }]
+                    }
+            }
+          ],
+          "id": 500101,
+          "documented_name": "Carter, Fanny"
+        },
+    ];
+  
+    var nodes = [];
+    var links = [];
+  
+    for (var i = 0; i < SampleRawData.length; i++) {
+      nodes.push({id: SampleRawData[i].id, name: SampleRawData[i].documented_name});
+  
+        for (var j = 0; j < SampleRawData[i].transactions.length; j++) {
+          if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) === -1) {
+              nodes.push({id: SampleRawData[i].transactions[j].transaction.id, 
+                          name: SampleRawData[i].transactions[j].transaction.relation_type.relation_type});
+          }
+          if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].id) &&
+                                   x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id)) === -1) {
+              links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].id),
+                          target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                          value:5})
+          }
+            for (var z = 0; z < SampleRawData[i].transactions[j].transaction.enslavers.length; z++) {
+              if (nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) === -1) {
+                  nodes.push({id: SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
+                              name: SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias});
+              }
+              if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) &&
+                                       x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id)) === -1) {
+                  links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                              target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
+                              value:5})
+              }
+            }
+        }
+    };
 
   const graph = sankey()
     .nodeAlign(sankeyLeft)
