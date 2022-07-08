@@ -1,9 +1,8 @@
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-import {Button} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
-
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
@@ -99,11 +98,22 @@ export default function Network(props) {
     fetchData().catch(console.error);
   }, [data])
 
+  const events = {
+    doubleClick: function(event) {
+      const { nodes } = event;
+      setGraph(null)
+      setQueryData({
+        type: "slave",
+        targets: nodes
+      })
+    }
+  };
+
   const options = {
     physics: {
       enabled: false
     },
-    height: "400"
+    height: "300"
   };
 
   return (
@@ -112,18 +122,12 @@ export default function Network(props) {
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
-      {/* <Graph
-      {graph.nodes.length === 0 ? <CircularProgress/>:
-        id="network" // id is mandatory, if no id is defined rd3g will throw an error
-        data={graph}
-        config={myConfig}
-        onClickNode={handleClickNode}
-      /> */}
       {!graph ?
         <CircularProgress/> :
         <Graph
         graph={graph}
         options={options}
+        events={events}
       />}
     </div>
   )
