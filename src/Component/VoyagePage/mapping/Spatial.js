@@ -30,7 +30,6 @@ export function ReadFeature(props) {
   
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
-  const [layers, setLayers] = useState([]);
   
   const map = useMap();
 
@@ -61,9 +60,6 @@ export function ReadFeature(props) {
   
   useEffect(() => {
 
-    // if(markers in map){
-    //   markers.clearLayers();
-    // }
 
     for(var i in map._layers) {
       if(map._layers[i]._path != undefined) {
@@ -134,8 +130,7 @@ export function ReadFeature(props) {
       })
 
       map.addLayer(markers)
-      setLayers([...layers, markers]);
-      DrawLink(map, csv, layers, setLayers);
+      DrawLink(map, csv);
     }
 
   }, [nodes, csv])    
@@ -197,7 +192,7 @@ export function ReadFeature(props) {
 }
 
 // Function to draw the links
-function DrawLink(map, links, layers, setLayers) {
+function DrawLink(map, links) {
 
     var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
     var valueMax = d3.max(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });
