@@ -1,8 +1,8 @@
 
 import React from "react";
 import {useQuery} from 'react-query';
-import { Group } from "@vx/group";
-import { Text } from "@vx/text";
+import { Group } from '@visx/group';
+import { Text } from '@visx/text';
 import { scaleSequential } from "d3-scale";
 import { interpolateCool } from "d3";
 import { format as d3format } from "d3-format";
@@ -11,7 +11,7 @@ import axios from "axios";
 import Sankey from "./CircularSankey";
 import { useState } from "react";
 import {Button} from "@mui/material";
-import { type } from "@testing-library/user-event/dist/type";
+// import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
 // var jp = require('jsonpath');
