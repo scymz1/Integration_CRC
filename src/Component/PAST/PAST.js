@@ -44,7 +44,7 @@ export default function PAST() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Card sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '70%'}}>
+        <Card sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%'}}>
           <Box sx={{display: 'flex'}}>
             <Tabs
               orientation="vertical"
