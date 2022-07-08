@@ -1,5 +1,5 @@
 # Integ_CRC
-[![](https://img.shields.io/badge/npm-v8.11.0-brightgreen)](https://shields.io)  [![](https://img.shields.io/badge/node-v16.15.1-orange)](https://shields.io)
+[![](https://img.shields.io/badge/npm-v8.12.2-brightgreen)](https://shields.io)  [![](https://img.shields.io/badge/node-v16.15.1-orange)](https://shields.io)
 
 Website Link: [OCI](https://voyages3-react.crc.rice.edu)
 
