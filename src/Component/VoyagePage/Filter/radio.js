@@ -11,10 +11,12 @@ export default function RadioButton() {
   const {search_object, set_search_object} = React.useContext(VoyageContext);
 
   const handleChange = (event) => {
+    console.log("adffgdabadfbad", search_object);
     var rest = search_object;
     if('dataset' in search_object){
       var {dataset, ...rest} = search_object;
     }
+    console.log("adffgdabadfbad", rest);
     if(event.target.value=="Trans-Atlantic"){
       set_search_object({'dataset':[0, 0], ...rest});
     }
