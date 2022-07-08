@@ -4,17 +4,18 @@ import * as React from "react";
 import {Button} from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
+import './styles.css'
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
     const {queryData, setQueryData, data} = useContext(PASTContext);
-    const CANVAS_WIDTH = 500;
+    const CANVAS_WIDTH = 700;
     const CANVAS_HEIGHT = 500;
-    const NODE_WIDTH = 80;
+    const NODE_WIDTH = 120;
     const MIN_NODE_HEIGHT = 20;
-    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 200;
+    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
 
     var SampleRawData = [
       {
@@ -136,7 +137,7 @@ export default function Sankey(props) {
     .nodeWidth(NODE_WIDTH)
     .nodePadding(MIN_NODE_HEIGHT + MIN_SPACE_BETWEEN_NODES_VERTICAL)
     .extent([
-      [0, 0],
+      [30, 30],
       [CANVAS_WIDTH, CANVAS_HEIGHT]
     ])({nodes, links});
 
@@ -148,21 +149,15 @@ export default function Sankey(props) {
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
       <svg 
       className="canvas"
-      width={CANVAS_WIDTH}
-      height={CANVAS_HEIGHT}
+      width={CANVAS_WIDTH+30}
+      height={CANVAS_HEIGHT+30}
       >
       {graph.nodes.map((node) => {
         return(
           <>
-            <rect
-            key={`sankey-node-${node.index}`}
-            x={node.x0}
-            y={node.y0}
-            width={node.x1 - node.x0}
-            height={node.y1 - node.y0}
-            fill="green" />
             <foreignObject
               key={`sankey-node-text-${node.index}`}
+              className="node"
               x={node.x0}
               y={node.y0}
               width={node.x1 - node.x0}
@@ -186,7 +181,7 @@ export default function Sankey(props) {
                 className="link"
                 d={sankeyLinkHorizontal()(link)}
                 fill="none"
-                stroke="#5DC389"
+                stroke="#1e3162"
                 opacity="0.5"
                 strokeWidth="5"   
               />
