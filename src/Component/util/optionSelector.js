@@ -84,6 +84,19 @@ function OptionSelector(props) {
     }
   }
 
+  function handleClickGroupLabel(event, path) {
+    event.stopPropagation();
+    if (_.has(resultObject, path.join('__'))) {
+      setResultObject(_.omit(resultObject, path.join("__")))
+    } else {
+      const groupObject = _.get(options, path)
+      setResultObject({
+        [path.join('__')]: {type: groupObject.type, label:groupObject.label, flatlabel: groupObject.flatlabel},
+        ...resultObject
+      })
+    }
+  }
+
   function isAllChildrenChecked(path) {
     let result = true;
     getChildrenPath(_.get(options, path)).forEach((itemPath) => {
@@ -164,20 +177,21 @@ function OptionSelector(props) {
           indeterminate={!isAllChildrenUnChecked(path) && !isAllChildrenChecked(path)}
           onClick={(event) => handleClickParent(event, path)}/>
         {nodes.label ? nodes.label : "Select All"}
+        <Checkbox checked={_.has(resultObject, path.join('__'))}
+                  onClick={(event) => handleClickGroupLabel(event, path)}/>
       </div>
     }>
       {Object.keys(nodes).map((key) =>
-        isChildren(key)
-          ? isLast(nodes[key])
-            ? <ListItem key={key} disablePadding>
+        isChildren(key) ?
+          isLast(nodes[key]) ?
+            <ListItem key={key} disablePadding>
               <Checkbox checked={_.has(resultObject, [...path, key].join('__'))}
                         onClick={(event) => handleClick([...path, key])}/>
               <ListItemText primary={key} secondary={nodes[key].flatlabel}/>
             </ListItem>
-            : renderTree(nodes[key], [...path, key])
-          : null
-      )
-      }
+          : renderTree(nodes[key], [...path, key])
+        : null
+      )}
     </TreeItem>
   );
 
