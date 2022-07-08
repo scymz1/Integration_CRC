@@ -23,7 +23,7 @@ var cachename = 'voyage_maps'
 var dataset = [0, 0]
 var output_format = 'geosankey'
 
-// Drawing nodes and links on the map
+// Drawing nodes and edges on the map
 export function ReadFeature(props) {
 
   const [isLoading, setIsLoading] = useState(false);
@@ -159,7 +159,7 @@ export function ReadFeature(props) {
   //           for(var linkPath in linkLayers) {
   //             var path = linkPath.split('-');
 
-  //             // when click on a node, show only the links that attach to it
+  //             // when click on a node, show only the edges that attach to it
   //             if (selectedNode != null && selectedNode != path[0]) {
   //               map.addLayer(linkLayers[linkPath].feature);
   //             }
@@ -196,7 +196,7 @@ export function ReadFeature(props) {
   return null;
 }
 
-// Function to draw the links
+// Function to draw the edges
 function DrawLink(map, links, layers, setLayers) {
 
     var valueMin = d3.min(links, function(l) { return (l[0] != l[1]) ? parseInt(l[2]) : null; });

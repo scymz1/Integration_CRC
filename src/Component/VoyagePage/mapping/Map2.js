@@ -62,7 +62,7 @@ const icon = L.icon({
 });
 
 const file = "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id_voyage_itinerary__imp_broad_region_slave_dis__geo_location__id_Barbados_1800_1810_0_0.csv"
-// var links = csvFileToArray(file);
+// var edges = csvFileToArray(file);
 // const light = 'cl4t2jnz6003115mkh34qvveh'
 // const noBorder = 'cl4t3r3s9001216nwr2pj50n3' 
 
