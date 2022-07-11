@@ -1,6 +1,6 @@
 import * as React from "react";
 import PAST from "./PAST";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {useQuery} from "react-query";
 import {CircularProgress} from "@mui/material";
 
@@ -14,6 +14,8 @@ export default function PASTApp(props) {
     targets: [500001,500002,500003],
     type: "slave",
   })
+
+  const windowRef = useRef(null);
 
   const [data, setData] = useState([]);
 
@@ -81,7 +83,7 @@ export default function PASTApp(props) {
   if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
   return (
-    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label, endpoint}}>
+    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label, endpoint, windowRef}}>
       <PAST/>
     </PASTContext.Provider>
   )
