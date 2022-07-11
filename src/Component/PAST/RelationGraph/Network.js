@@ -1,14 +1,8 @@
 import * as React from "react";
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
-<<<<<<< HEAD
-// import {Graph} from "react-d3-graph";
-import {Button} from "@mui/material";
-
-=======
 import {Button, CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
->>>>>>> 96a288cc1c3e10b6f49da4905a1185f040c6f8b8
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
@@ -128,14 +122,6 @@ export default function Network(props) {
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
-<<<<<<< HEAD
-      {/* <Graph
-        id="network" // id is mandatory, if no id is defined rd3g will throw an error
-        data={graph}
-        config={myConfig}
-        onClickNode={handleClickNode}
-      /> */}
-=======
       {!graph ?
         <CircularProgress/> :
         <Graph
@@ -143,7 +129,6 @@ export default function Network(props) {
         options={options}
         events={events}
       />}
->>>>>>> 96a288cc1c3e10b6f49da4905a1185f040c6f8b8
     </div>
   )
 }

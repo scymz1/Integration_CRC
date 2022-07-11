@@ -1,13 +1,8 @@
 
 import React from "react";
 import {useQuery} from 'react-query';
-<<<<<<< HEAD
-import { Group } from "@visx/group";
-import { Text } from "@visx/text";
-=======
 import { Group } from '@visx/group';
 import { Text } from '@visx/text';
->>>>>>> 96a288cc1c3e10b6f49da4905a1185f040c6f8b8
 import { scaleSequential } from "d3-scale";
 import { interpolateCool } from "d3";
 import { linkHorizontal } from "d3-shape";
