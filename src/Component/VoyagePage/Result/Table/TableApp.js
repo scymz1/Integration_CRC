@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 export const ColContext = React.createContext({});
 
 export default function(props) {
-    const [cols, setCols] = React.useState([]);
+    const [cols, setCols] = React.useState(["id"]);
     const {
         options_tree, endpoint
     } = React.useContext(props.context)
