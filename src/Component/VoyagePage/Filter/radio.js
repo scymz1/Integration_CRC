@@ -4,11 +4,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import {VoyageContext} from "../VoyageApp";
+//import {VoyageContext} from "../VoyageApp";
 
 
-export default function RadioButton() {
-  const {search_object, set_search_object} = React.useContext(VoyageContext);
+export default function RadioButton(props) {
+  const {search_object, set_search_object} = React.useContext(props.context);
 
   const handleChange = (event) => {
     if(event.target.value=="Trans-Atlantic"){
