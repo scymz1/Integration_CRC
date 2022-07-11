@@ -173,9 +173,9 @@ export default function Sankey(props) {
   return (
     <div>
       <h1>Sankey</h1>
-      <Button onClick={()=>console.log("data:", data)}>print data</Button>
-      <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
-      <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
+      <Button onClick={()=>console.log("data:", SampleRawData)}>print data</Button>
+      <Button onClick={()=>console.log("nodes:", nodes)}>print nodes</Button>
+      <Button onClick={()=>console.log("links:", links)}>print links</Button>
       <svg 
       className="canvas"
       width={CANVAS_WIDTH+30}
@@ -204,24 +204,24 @@ export default function Sankey(props) {
           </>
       )})}
           {graph.links.map((link) => {
-            return(
-              <g>
-                  <path
-                    id={`sankey-link-${link.index}`}
-                    key={`sankey-link-${link.index}`}
-                    className="link"
-                    d={sankeyLinkHorizontal()(link)}
-                    fill="none"
-                    stroke={link.color}
-                    opacity="0.5"
-                    strokeWidth="5"/>
-                    <text font-size = "20" fill={link.color}>
-                      <textPath href = {`#sankey-link-${link.index}`}>
-                          {link.info}
-                      </textPath>
-                    </text>
-              </g>
-            )
+        return(
+          <g>
+            <path
+              id={`sankey-link-${link.index}`}
+              key={`sankey-link-${link.index}`}
+              className="link"
+              d={sankeyLinkHorizontal()(link)}
+              fill="none"
+              stroke={link.color}
+              opacity="0.5"
+              strokeWidth="5"/>
+            <text font-size = "20" fill={link.color}>
+              <textPath href = {`#sankey-link-${link.index}`} startOffset="50%" text-anchor="middle">
+                  {link.info}
+              </textPath>
+            </text>
+          </g>
+        )
             })}
     </svg>
     </div>
