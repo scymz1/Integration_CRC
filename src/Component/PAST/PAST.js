@@ -1,6 +1,7 @@
 import ResponsiveAppBar from "../NavBar";
 import * as React from "react";
-import {Box, Button, Card, Modal, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, Card, Modal, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import Sankey from "./RelationGraph/Sankey"
 import Network from './RelationGraph/Network'
 import Story from './RelationGraph/Story'
@@ -30,24 +31,47 @@ export default function PAST() {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const {options_tree, options_flat, search_object, set_search_object} = useContext(PASTContext)
+  const [scroll, setScroll] = React.useState('body');
+  // const Transition = React.forwardRef(function Transition(props, ref) {
+  //   return <Slide direction="up" ref={ref} {...props} />;
+  // });
+  const handleClickOpen = (scrollType) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <ResponsiveAppBar/>
       <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
-      {/*<Filter context={PASTContext}/>*/}
-      <Button onClick={() => setOpen(true)}>Open modal</Button>
-      <Modal
+      <Filter context={PASTContext}/>
+      <Button onClick={handleClickOpen('body')}>Open modal</Button>
+      <Dialog
+        fullScreen
         open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        onClose={handleClose}
+        scroll={scroll}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+        // TransitionComponent={Transition}
       >
-        <Card sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%'}}>
-          <Box sx={{display: 'flex'}}>
+        <AppBar sx={{ position: 'relative', background: 'white'}}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon color="action"/>
+            </IconButton>
             <Tabs
-              orientation="vertical"
               variant="scrollable"
               value={value}
               onChange={(event, newValue) => {
@@ -59,6 +83,12 @@ export default function PAST() {
               <Tab label="Network"/>
               <Tab label="Story"/>
             </Tabs>
+          </Toolbar>
+        </AppBar>
+
+          {/* <Card sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%'}}> */}
+          <Box>
+            
             <TabPanel value={value} index={0}>
               <Sankey/>
             </TabPanel>
@@ -69,8 +99,8 @@ export default function PAST() {
               <Story target={500001} type="slave"/>
             </TabPanel>
           </Box>
-        </Card>
-      </Modal>
+        {/* </Card> */}
+      </Dialog>
 
     </div>
   )

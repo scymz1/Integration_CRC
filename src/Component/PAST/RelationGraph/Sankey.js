@@ -115,6 +115,8 @@ export default function Sankey(props) {
                                    x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id)) === -1) {
               links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].id),
                           target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
+                          color: "#1e3162",
+                          info: "",
                           value:5})
           }
             for (var z = 0; z < SampleRawData[i].transactions[j].transaction.enslavers.length; z++) {
@@ -122,10 +124,37 @@ export default function Sankey(props) {
                   nodes.push({id: SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
                               name: SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias});
               }
+              
               if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id) &&
                                        x.target === nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id)) === -1) {
+                  var link_color;
+                  switch (SampleRawData[i].transactions[j].transaction.enslavers[z].role.id) {
+                    case 1:
+                      link_color = "#53d4b6";
+                      break;
+                    case 2:
+                      link_color = "#e89a4d";
+                      break;
+                    case 3:
+                      link_color = "#7a8fa1";
+                      break;
+                    case 4:
+                      link_color = "#d188c2";
+                      break;
+                    case 5:
+                      link_color = "#a2e66e";
+                      break;
+                    case 6:
+                      link_color = "#1aa6d9";
+                      break;
+                    case 7:
+                    link_color = "#fcda14";
+                    break;
+                  }
                   links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
                               target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
+                              color: link_color,
+                              info: SampleRawData[i].transactions[j].transaction.enslavers[z].role.role,
                               value:5})
               }
             }
@@ -143,7 +172,7 @@ export default function Sankey(props) {
 
   return (
     <div>
-      <h1>NetWork</h1>
+      <h1>Sankey</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
@@ -176,15 +205,22 @@ export default function Sankey(props) {
       )})}
           {graph.links.map((link) => {
             return(
-              <path
-                key={`sankey-link-${link.index}`}
-                className="link"
-                d={sankeyLinkHorizontal()(link)}
-                fill="none"
-                stroke="#1e3162"
-                opacity="0.5"
-                strokeWidth="5"   
-              />
+              <g>
+                  <path
+                    id={`sankey-link-${link.index}`}
+                    key={`sankey-link-${link.index}`}
+                    className="link"
+                    d={sankeyLinkHorizontal()(link)}
+                    fill="none"
+                    stroke={link.color}
+                    opacity="0.5"
+                    strokeWidth="5"/>
+                    <text font-size = "20" fill={link.color}>
+                      <textPath href = {`#sankey-link-${link.index}`}>
+                          {link.info}
+                      </textPath>
+                    </text>
+              </g>
             )
             })}
     </svg>
