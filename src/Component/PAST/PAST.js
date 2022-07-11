@@ -32,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint} = useContext(PASTContext)
+  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef} = useContext(PASTContext)
   const [scroll, setScroll] = React.useState('body');
   console.log(endpoint);
   // const Transition = React.forwardRef(function Transition(props, ref) {
@@ -64,6 +64,7 @@ export default function PAST() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
+        ref={windowRef}
       >
         <AppBar sx={{ position: 'relative', background: 'white'}}>
           <Toolbar>
@@ -89,21 +90,15 @@ export default function PAST() {
             </Tabs>
           </Toolbar>
         </AppBar>
-
-          {/* <Card sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', height: '60%'}}> */}
-          <Box>
-            
-            <TabPanel value={value} index={0}>
-              <Sankey/>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Network/>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <Story target={500001} type="slave"/>
-            </TabPanel>
-          </Box>
-        {/* </Card> */}
+        <TabPanel value={value} index={0}>
+          <Sankey/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Network/>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <Story target={500001} type="slave"/>
+        </TabPanel>
       </Dialog>
 
     </div>
