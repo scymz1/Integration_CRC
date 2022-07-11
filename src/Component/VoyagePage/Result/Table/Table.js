@@ -49,13 +49,13 @@ function reducer(state, { type, index }) {
   }
 }
 
-function Table() {
+function Table(props) {
   const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
   const { search_object } = useContext(VoyageContext);
 
   //menu
-  const {cols, endpoint} = useContext(ColContext)
+  const {cols, endpoint} = useContext(props.context);
 
   // Label
   // const [label, setLabel] = useState();
@@ -151,29 +151,29 @@ function Table() {
   }, [page, rowsPerPage, sortingReq, field, direction, cols, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
-  useEffect(() => {
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    data.append("voyage_id", id);
-    data.append("voyage_id", id);
+  // useEffect(() => {
+  //   var data = new FormData();
+  //   data.append("hierarchical", "False");
+  //   data.append("voyage_id", id);
+  //   data.append("voyage_id", id);
 
-    // for (var i = 0; i < modalVars.length; i++) {
-    //   data.append("selected_fields", modalVars[i]);
-    // }
+  //   // for (var i = 0; i < modalVars.length; i++) {
+  //   //   data.append("selected_fields", modalVars[i]);
+  //   // }
 
-    axios
-      .post("/" + endpoint, data)
-      .then(function (response) {
-        //console.log(response.data);
-        //console.log(Object.keys(response.data));
-        //console.log(Object.values(response.data));
-        setContent(Object.values(response.data)[Object.keys(response.data)]);
-        //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [id]);
+  //   axios
+  //     .post("/" + endpoint, data)
+  //     .then(function (response) {
+  //       //console.log(response.data);
+  //       //console.log(Object.keys(response.data));
+  //       //console.log(Object.values(response.data));
+  //       setContent(Object.values(response.data)[Object.keys(response.data)]);
+  //       //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
