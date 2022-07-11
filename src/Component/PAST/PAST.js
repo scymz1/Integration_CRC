@@ -36,7 +36,7 @@ export default function PAST() {
       <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
-      {/*<Filter context={PASTContext}/>*/}
+      <Filter context={PASTContext}/>
       <Button onClick={() => setOpen(true)}>Open modal</Button>
       <Modal
         open={open}
