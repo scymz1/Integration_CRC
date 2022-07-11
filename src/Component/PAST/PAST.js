@@ -26,7 +26,9 @@ function TabPanel(props) {
     </div>
   );
 }
-
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function PAST() {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -61,7 +63,7 @@ export default function PAST() {
         scroll={scroll}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
-        // TransitionComponent={Transition}
+        TransitionComponent={Transition}
       >
         <AppBar sx={{ position: 'relative', background: 'white'}}>
           <Toolbar>
