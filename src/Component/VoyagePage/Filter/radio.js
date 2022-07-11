@@ -10,6 +10,10 @@ import FormLabel from '@mui/material/FormLabel';
 export default function RadioButton(props) {
   const {search_object, set_search_object} = React.useContext(props.context);
 
+  React.useEffect(()=>{
+    set_search_object({...search_object, 'dataset':[0, 0]});
+  }, []);
+
   const handleChange = (event) => {
     if(event.target.value=="Trans-Atlantic"){
       set_search_object({...search_object, 'dataset':[0, 0]});
