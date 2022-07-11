@@ -52,10 +52,8 @@ export default function PAST() {
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
       {/*<Filter context={PASTContext}/>*/}
       <Button onClick={handleClickOpen('body')}>Open modal</Button>
-      {/* <Button onClick={() => setOpen(true)}>Open modal</Button> */}
       <Dialog
         fullScreen
-        // fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         scroll={scroll}
