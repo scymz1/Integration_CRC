@@ -150,6 +150,7 @@ export default function Sankey(props) {
           )
           })}
       </svg>
+    :null}
     </div>
   )
 }
