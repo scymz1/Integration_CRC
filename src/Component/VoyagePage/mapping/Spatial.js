@@ -8,6 +8,7 @@ import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
 import axios from 'axios'
+import Pivot from '../Result/Pivot/Pivot';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -23,16 +24,27 @@ var cachename = 'voyage_maps'
 var dataset = [0, 0]
 var output_format = 'geosankey'
 
-// Drawing nodes and links on the map
+export const PivotContext = React.createContext({});
+
+// Drawing nodes and edges on the map
 export function ReadFeature(props) {
 
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const [csv, setCsv] = useState(null);
-  const [nodes, setNodes] = useState(null);
-  
-  const map = useMap();
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const [csv, setCsv] = useState(null);
+    const [nodes, setNodes] = useState(null);
+    
+    // const {search_object} = React.useContext(PastContext);
+    const map = useMap();
 
+    const [complete_object, set_complete_object] = useState({
+      'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id':[20931,20931],
+      'groupby_fields':['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name'],
+      'value_field_tuple':['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum'],
+      'cachename':['voyage_pivot_tables'],
+    })
+
+    var markers = L.markerClusterGroup();
 
   useEffect(() => {
     var data = new FormData();
@@ -46,8 +58,6 @@ export function ReadFeature(props) {
     data.append('value_field_tuple', value_field_tuple[0]);
     data.append('value_field_tuple', value_field_tuple[1]);
     data.append('cachename', cachename);
-    // data.append('dataset', dataset[0]);
-    // data.append('dataset', dataset[1]);
     data.append('output_format', output_format);
 
     axios.post('/voyage/aggroutes', data)
@@ -57,14 +67,13 @@ export function ReadFeature(props) {
           setIsLoading(true)
         })
   }, [props.search_object])
+
   
   useEffect(() => {
 
-
     for(var i in map._layers) {
-      if(map._layers[i]._path != undefined) {
+      if(map._layers[i]._path != undefined || (map._layers[i]._layers != undefined)) {
           try {
-            //console.log("Remove layer: ", map._layers[i])
             map.removeLayer(map._layers[i]);
           }
           catch(e) {
@@ -77,33 +86,11 @@ export function ReadFeature(props) {
     const featureWayPt = (feature) => {
         return !feature.properties.name.includes("ocean waypt");
     }
-
-    var markers = L.markerClusterGroup();
-    
-    // Add all features (including waypoints to nodeslayers)
-
-    if(nodes){
-              // Function for distinguish if the feature is a waypoint
-      if(markers in map){
-        map.removeLayer(markers)
-      }
+ 
       
-      for(var i in map._layers) {
-        if(map._layers[i]._path != undefined) {
-            try {
-              map.removeLayer(map._layers[i]);
-            }
-            catch(e) {
-              console.log("problem with " + e + map._layers[i]);
-            }
-        }
-      } 
-      const featureWayPt = (feature) => {
-          return !feature.properties.name.includes("ocean waypt");
-      }
+    if(nodes){
 
-      var markers = L.markerClusterGroup();
-      // Add all features (including waypoints to nodeslayers)
+      // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
 
         onEachFeature: function (feature, layer) {
@@ -114,16 +101,48 @@ export function ReadFeature(props) {
         }
       });
 
+      // Add only actual locations to the map with markers (with clicking events and popups)
       L.geoJSON(nodes.features, {
         filter: featureWayPt,
         onEachFeature: function(feature, layer) {
-          layer.bindPopup(ReactDOMServer.renderToString(
-            <Grid>
-              {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-              <div style={{ fontSize: "24px", color: "black" }}>
-                  <p>replace with pivot table</p>
-                </div>
-            </Grid>)
+          layer.on('click', function(e) {
+            console.log(layer.feature.id);
+            let tmp = complete_object["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"];
+            tmp[0] = layer.feature.id;
+            tmp[1] = layer.feature.id;
+            set_complete_object({
+              ...complete_object,
+              voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id: tmp,
+            });
+            L.popup().setContent(ReactDOMServer.renderToString(
+                <Grid>
+                  {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+                  {console.log("here")}
+                  {console.log(layer)}
+
+                  <div style={{ fontSize: "24px", color: "black" }}>
+                  <div>
+                       <PivotContext.Provider value={{ complete_object, set_complete_object }}>
+                         <Pivot context={PivotContext}/>
+                        </PivotContext.Provider>
+                      </div>
+                    </div>
+                </Grid>))
+              .setLatLng(layer["_latlng"]).openOn(map);
+          // layer.popup(ReactDOMServer.renderToString(
+          //   <Grid>
+          //     {layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
+          //     {console.log("here")}
+          //     {console.log(layer)}
+          //     <div style={{ fontSize: "24px", color: "black" }}>
+          //     <div>
+          //          <PivotContext.Provider value={{ complete_object, set_complete_object }}>
+          //            <Pivot context={PivotContext}/>
+          //           </PivotContext.Provider>
+          //         </div>
+          //       </div>
+          //   </Grid>))
+            }
             )
           markers.addLayer(layer);
         }
@@ -154,7 +173,7 @@ export function ReadFeature(props) {
   //           for(var linkPath in linkLayers) {
   //             var path = linkPath.split('-');
 
-  //             // when click on a node, show only the links that attach to it
+  //             // when click on a node, show only the edges that attach to it
   //             if (selectedNode != null && selectedNode != path[0]) {
   //               map.addLayer(linkLayers[linkPath].feature);
   //             }
@@ -183,13 +202,52 @@ export function ReadFeature(props) {
   //         markers.addLayer(layer);
   //     }
       
-  //   });
+    //     onEachFeature: function (feature, layer) {
+        
+    //       layer
+    //         .on('click', function(e) {
+    //           layer.closePopup();
 
-  // map.addLayer(markers)
-  // DrawLink(map, csv);
-  
-  return null;
-}
+    //           for(var linkPath in linkLayers) {
+    //             var path = linkPath.split('-');
+
+    //             // when click on a node, show only the links that attach to it
+    //             if (selectedNode != null && selectedNode != path[0]) {
+    //               map.addLayer(linkLayers[linkPath].feature);
+    //             }
+    //           }
+
+    //           if (selectedNode == null || selectedNode != feature.id) {
+                
+    //             for (var linkPath in linkLayers) {
+    //               var path = linkPath.split('-');
+
+    //               if (feature.id != path[0] && feature.id != path[1]) {
+    //                   map.removeLayer(linkLayers[linkPath].feature);
+    //               }
+    //               else {
+    //                   // num += parseInt(linkLayers[linkPath].data.value);
+    //               }
+    //             }
+
+    //             selectedNode = feature.id;
+    //           }
+    //           else {    
+    //             selectedNode = null;
+    //           }
+    //         });
+    //         layer.bindPopup(layer.feature.properties.name)
+    //         markers.addLayer(layer);
+    //     }
+        
+    //   });
+
+    // map.addLayer(markers)
+    // DrawLink(map, csv);
+    
+    return null;
+  }
+
 
 // Function to draw the links
 function DrawLink(map, links) {

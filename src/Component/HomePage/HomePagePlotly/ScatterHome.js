@@ -12,17 +12,17 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
   title: "Data Visualization - Scatter",
-  date: "June 14, Tue",
+  date: "July 8, 2022",
   description:
-    "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the Academicians, particularly theAdirondacks and the mountains of Vermont and New Hampshire.different ways.",
+    "This scatter/line chart shows the number of enslaved people who we estimate died during transportation each year during the slave trade. Click through to view more scatter/line charts, which compare 2 quantitative variables, such as mortality on the Y/vertical axis, and year on the X/horizontal axis",
 };
 
 function ScatterComponent() {
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
-    field: scatter_plot_x_vars[0],
-    value: scatter_plot_y_vars[1],
+    field: "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
+    value: "voyage_slaves_numbers__imp_adult_death_middle_passage",
   });
   const [aggregation, setAgg] = React.useState("sum");
   useEffect(() => {
@@ -32,7 +32,7 @@ function ScatterComponent() {
     data.append("groupby_fields", option.field);
     data.append("groupby_fields", option.value);
     data.append("agg_fn", "sum");
-    data.append("cachename", "voyage_export");
+    data.append("cachename", "voyage_xyscatter");
 
     axios
       .post("/voyage/groupby", (data = data))

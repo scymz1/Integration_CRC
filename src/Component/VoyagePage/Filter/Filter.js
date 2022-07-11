@@ -42,7 +42,7 @@ export default function Filter(props) {
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
-    console.log('Current SEARCH OBJECT: ', search_object)
+    //console.log('Current SEARCH OBJECT: ', search_object)
 
     return (
     <AppContext.Provider
