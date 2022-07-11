@@ -11,15 +11,11 @@ export default function RadioButton() {
   const {search_object, set_search_object} = React.useContext(VoyageContext);
 
   const handleChange = (event) => {
-    var rest = search_object;
-    if('dataset' in search_object){
-      var {dataset, ...rest} = search_object;
-    }
     if(event.target.value=="Trans-Atlantic"){
-      set_search_object({'dataset':[0, 0], ...rest});
+      set_search_object({...search_object, 'dataset':[0, 0]});
     }
     else{
-      set_search_object({'dataset':[1, 1], ...rest});
+      set_search_object({...search_object, 'dataset':[1, 1]});
     }
   };
 
@@ -27,6 +23,7 @@ export default function RadioButton() {
     <FormControl>
       <FormLabel id="radio-button">Radio button</FormLabel>
       <RadioGroup
+        defaultValue="Trans-Atlantic"
         onChange={handleChange}
       >
         <FormControlLabel value="Trans-Atlantic" control={<Radio />} label="Trans-Atlantic" />

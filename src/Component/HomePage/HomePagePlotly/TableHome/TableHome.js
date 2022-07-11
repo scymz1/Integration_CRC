@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const featuredPosts = {
-    title: "Data Visualization - Scatter",
-    date: "June 14, Tue",
+    title: "Data Table",
+    date: "July 8, 2022",
     description:
-      "The sobriquet was first applied around 1879. While it was not intended as flattering, it washardly inappropriate. The Academicians at whom it was aimed had worked and socialized in NewYork, the Hudson's port city, and had painted the river and its shores with varying frequency.Most important, perhaps, was that they had all maintained with a certain fidelity a manner oftechnique and composition consistent with those of America's first popular landscape artist,Thomas Cole, who built a career painting the Catskill Mountain scenery bordering the HudsonRiver. A possible implication in the term applied to the group of landscapists was that many ofthem had, like Cole, lived on or near the banks of the Hudson. Further, the river had long servedas the principal route to other sketching grounds favored by the Academicians, particularly theAdirondacks and the mountains of Vermont and New Hampshire.different ways.",
+      "This table shows some data on several voyages: the place and year where enslaved people were forced aboard and the name of the ship. Click through to read through many more of our linked records of the history of the slave trade in the Atlantic and American Oceanic worlds.",
   };
 
 

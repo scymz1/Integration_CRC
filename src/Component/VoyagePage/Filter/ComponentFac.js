@@ -30,11 +30,11 @@ function ComponentFac(props){
 
   const index = props.index;
 
-  console.log("Variable Name: ----> ", raw)
+  //console.log("Variable Name: ----> ", raw)
   
   const {search_object} = useContext(props.context);
 
-  console.log(search_object)
+  //console.log(search_object)
 
 
 

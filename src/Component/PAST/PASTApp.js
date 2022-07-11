@@ -11,7 +11,7 @@ export const PASTContext = React.createContext({});
 
 export default function PASTApp(props) {
   const [queryData, setQueryData] = React.useState({
-    targets: [500001],
+    targets: [500001,500002,500003],
     type: "slave",
   })
 
@@ -49,7 +49,7 @@ export default function PASTApp(props) {
         let queryData = new FormData();
         queryData.append("id", target.toString());
         queryData.append("id", target.toString());
-        return  fetch(base_url + endpoint, {
+        return fetch(base_url + endpoint, {
           method: "POST",
           body: queryData,
           headers: {'Authorization': auth_token}
