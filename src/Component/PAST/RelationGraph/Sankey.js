@@ -116,6 +116,7 @@ export default function Sankey(props) {
               links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].id),
                           target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
                           color: "#1e3162",
+                          info: "",
                           value:5})
           }
             for (var z = 0; z < SampleRawData[i].transactions[j].transaction.enslavers.length; z++) {
@@ -153,6 +154,7 @@ export default function Sankey(props) {
                   links.push({source: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.id),
                               target: nodes.findIndex(x => x.id === SampleRawData[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
                               color: link_color,
+                              info: SampleRawData[i].transactions[j].transaction.enslavers[z].role.role,
                               value:5})
               }
             }
@@ -171,9 +173,9 @@ export default function Sankey(props) {
   return (
     <div>
       <h1>Sankey</h1>
-      <Button onClick={()=>console.log("data:", data)}>print data</Button>
-      <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
-      <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
+      <Button onClick={()=>console.log("data:", SampleRawData)}>print data</Button>
+      <Button onClick={()=>console.log("nodes:", nodes)}>print nodes</Button>
+      <Button onClick={()=>console.log("links:", links)}>print links</Button>
       <svg 
       className="canvas"
       width={CANVAS_WIDTH+30}
@@ -202,17 +204,24 @@ export default function Sankey(props) {
           </>
       )})}
           {graph.links.map((link) => {
-            return(
-              <path
-                key={`sankey-link-${link.index}`}
-                className="link"
-                d={sankeyLinkHorizontal()(link)}
-                fill="none"
-                stroke="#1e3162"
-                opacity="0.5"
-                strokeWidth="5"   
-              />
-            )
+        return(
+          <g>
+            <path
+              id={`sankey-link-${link.index}`}
+              key={`sankey-link-${link.index}`}
+              className="link"
+              d={sankeyLinkHorizontal()(link)}
+              fill="none"
+              stroke={link.color}
+              opacity="0.5"
+              strokeWidth="5"/>
+            <text font-size = "20" fill={link.color}>
+              <textPath href = {`#sankey-link-${link.index}`} startOffset="50%" text-anchor="middle">
+                  {link.info}
+              </textPath>
+            </text>
+          </g>
+        )
             })}
     </svg>
     </div>
