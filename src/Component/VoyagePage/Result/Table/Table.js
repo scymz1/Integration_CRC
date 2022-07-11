@@ -25,6 +25,7 @@ import { idxRelation, skeleton } from "./tableVars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import Checkbox from '@mui/material/Checkbox';
 
 import { ColContext } from "./TableApp";
 import * as options_flat from "../../../util/options.json"
@@ -55,7 +56,7 @@ function Table(props) {
   const { search_object } = useContext(VoyageContext);
 
   //menu
-  const {cols, endpoint} = useContext(props.context);
+  const {cols, endpoint, checkbox, modal} = useContext(props.context);
 
   // Label
   // const [label, setLabel] = useState();
@@ -256,6 +257,11 @@ function Table(props) {
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    {checkbox && (<TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                      />
+                    </TableCell>)}
                     {cols.map((v) => (
                       <TableCell
                         style={{ color: "#389c90" }}
@@ -281,6 +287,11 @@ function Table(props) {
                       key={row.name}
                       onClick={(event) => handleOpen(event, row)}
                     >
+                      {checkbox && (<TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                        />
+                      </TableCell>)}
                       {Object.values(row).map((k) => (
                         <TableCell>{k}</TableCell>
                       ))}
@@ -305,7 +316,7 @@ function Table(props) {
           </FormControl>
         </Box>
       </div>
-      <Modal
+      {modal && (<div><Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -366,7 +377,8 @@ function Table(props) {
             ))}
           </Typography>
         </Box>
-      </Modal>
+      </Modal></div>
+      )}
     </div>
   );
 }

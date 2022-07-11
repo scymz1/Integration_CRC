@@ -14,7 +14,7 @@ export default function(props) {
     return (
         <div>
             {/* <Button onClick={()=>console.log("options_tree:", endpoint)}>print options_tree</Button> */}
-            <ColContext.Provider value={{cols, setCols, endpoint}}>
+            <ColContext.Provider value={{cols, setCols, endpoint, checkbox: false, modal: true}}>
                 <ColSelector context={ColContext}/>
                 <Table context={ColContext}/>
             </ColContext.Provider>
