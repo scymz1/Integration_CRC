@@ -25,6 +25,7 @@ import { idxRelation, skeleton } from "./tableVars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import Checkbox from '@mui/material/Checkbox';
 
 import { ColContext } from "./TableApp";
 import * as options_flat from "../../../util/options.json"
@@ -49,13 +50,13 @@ function reducer(state, { type, index }) {
   }
 }
 
-function Table() {
+function Table(props) {
   const [isLoading, setLoading] = useState(true);
   const [value, setValue] = useState([]);
   const { search_object } = useContext(VoyageContext);
 
   //menu
-  const {cols, endpoint} = useContext(ColContext)
+  const {cols, endpoint, checkbox, modal} = useContext(props.context);
 
   // Label
   // const [label, setLabel] = useState();
@@ -151,29 +152,29 @@ function Table() {
   }, [page, rowsPerPage, sortingReq, field, direction, cols, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
-  useEffect(() => {
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    data.append("voyage_id", id);
-    data.append("voyage_id", id);
+  // useEffect(() => {
+  //   var data = new FormData();
+  //   data.append("hierarchical", "False");
+  //   data.append("voyage_id", id);
+  //   data.append("voyage_id", id);
 
-    // for (var i = 0; i < modalVars.length; i++) {
-    //   data.append("selected_fields", modalVars[i]);
-    // }
+  //   // for (var i = 0; i < modalVars.length; i++) {
+  //   //   data.append("selected_fields", modalVars[i]);
+  //   // }
 
-    axios
-      .post("/" + endpoint, data)
-      .then(function (response) {
-        //console.log(response.data);
-        //console.log(Object.keys(response.data));
-        //console.log(Object.values(response.data));
-        setContent(Object.values(response.data)[Object.keys(response.data)]);
-        //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [id]);
+  //   axios
+  //     .post("/" + endpoint, data)
+  //     .then(function (response) {
+  //       //console.log(response.data);
+  //       //console.log(Object.keys(response.data));
+  //       //console.log(Object.values(response.data));
+  //       setContent(Object.values(response.data)[Object.keys(response.data)]);
+  //       //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -256,6 +257,11 @@ function Table() {
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    {checkbox && (<TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                      />
+                    </TableCell>)}
                     {cols.map((v) => (
                       <TableCell
                         style={{ color: "#389c90" }}
@@ -281,6 +287,11 @@ function Table() {
                       key={row.name}
                       onClick={(event) => handleOpen(event, row)}
                     >
+                      {checkbox && (<TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                        />
+                      </TableCell>)}
                       {Object.values(row).map((k) => (
                         <TableCell>{k}</TableCell>
                       ))}
@@ -305,7 +316,7 @@ function Table() {
           </FormControl>
         </Box>
       </div>
-      <Modal
+      {modal && (<div><Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -366,7 +377,8 @@ function Table() {
             ))}
           </Typography>
         </Box>
-      </Modal>
+      </Modal></div>
+      )}
     </div>
   );
 }
