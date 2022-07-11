@@ -27,9 +27,9 @@ function modifyName(rawName){
 
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
-  console.log("INDEX: ", index)
+  //console.log("INDEX: ", index)
 
-    console.log("getSlider got called")
+    //console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
     const {search_object, set_search_object, endpoint} = React.useContext(props.context)
 
@@ -40,7 +40,7 @@ export default function GetSlider(props) {
     // console.log("labels: ", labels);
     const varName = curLabel["option"];
     const varDisplay = modifyName(curLabel["label"])
-    console.log("varName: ", varName);
+    //console.log("varName: ", varName);
     // console.log("varDisplay: ", varDisplay);
 
     // console.log("fetch from Provider completed")
@@ -68,13 +68,13 @@ export default function GetSlider(props) {
   }, [])
 
   function handleCommittedChange(event, newValue) {
-    console.log("🚀 ~ file: Slider.js ~ line 71 ~ handleCommittedChange ~ handleCommittedChange", handleCommittedChange)
+    //console.log("🚀 ~ file: Slider.js ~ line 71 ~ handleCommittedChange ~ handleCommittedChange", handleCommittedChange)
     //setValue(newValue); 
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    console.log("73 SEARCH OBJECT injection -----> ", search_object)
+    //console.log("73 SEARCH OBJECT injection -----> ", search_object)
     // console.log(varName, ": onchange", value);
   }
   
@@ -98,7 +98,7 @@ export default function GetSlider(props) {
   };
 
   const handleBlur = (event => {
-    console.log("🚀 ~ file: Slider.js ~ line 122 ~ GetSlider ~ handleBlur", handleBlur)
+    //console.log("🚀 ~ file: Slider.js ~ line 122 ~ GetSlider ~ handleBlur", handleBlur)
     const curStart = value[0]
     const curEnd = value[1]
     // console.log(curStart, curEnd)
@@ -110,14 +110,14 @@ export default function GetSlider(props) {
       if(event.target.value > curEnd) setValue([curEnd - 1 < range[0] ? range[0] : curEnd - 1 , curEnd]);
       if(event.target.value < range[0]) setValue([range[0], curEnd]);     
     }else{
-      console.log("range selection legit", value)
+      //console.log("range selection legit", value)
     }
 
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    console.log("116 SEARCH OBJECT injection -----> ", search_object)
+    //console.log("116 SEARCH OBJECT injection -----> ", search_object)
 
   });
 
