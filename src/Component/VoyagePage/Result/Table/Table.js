@@ -55,7 +55,7 @@ function Table() {
   const { search_object } = useContext(VoyageContext);
 
   //menu
-  const {cols} = useContext(ColContext)
+  const {cols, endpoint} = useContext(ColContext)
 
   // Label
   // const [label, setLabel] = useState();
@@ -131,7 +131,7 @@ function Table() {
   }); 
 
     axios
-      .post("/voyage/", data)
+      .post("/" + endpoint, data)
       .then(function (response) {
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
@@ -162,7 +162,7 @@ function Table() {
     // }
 
     axios
-      .post("/voyage/", data)
+      .post("/" + endpoint, data)
       .then(function (response) {
         //console.log(response.data);
         //console.log(Object.keys(response.data));

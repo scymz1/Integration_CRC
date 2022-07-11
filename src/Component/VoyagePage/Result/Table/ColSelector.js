@@ -11,6 +11,8 @@ import { useContext } from 'react';
 import { ColContext } from './TableApp';
 import { columnOptions } from './tableVars';
 import * as options_flat from "../../../util/options.json"
+import Cascading from '../../Filter/Cascading';
+import {menu_label} from '../../Filter/var'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,7 +41,7 @@ export default function ColSelector() {
   const theme = useTheme();
   // const [cols, setCols] = React.useState(["id"]);
   const {cols, setCols} = useContext(ColContext)
-
+  console.log()
   const handleChange = (event) => {
     const {
       target: { value },
