@@ -170,7 +170,7 @@ export default function Sankey(props) {
 
   return (
     <div>
-      <h1>NetWork</h1>
+      <h1>Sankey</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
       <Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>
