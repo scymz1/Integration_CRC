@@ -117,7 +117,7 @@ export default function Filter(props) {
             </Grid>
 
             <Grid item >
-              <RadioButton/>
+              <RadioButton context={props.context}/>
             </Grid>
             
           </Grid>
