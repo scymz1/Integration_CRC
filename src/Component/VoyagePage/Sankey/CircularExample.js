@@ -1,17 +1,15 @@
 
 import React from "react";
 import {useQuery} from 'react-query';
-import { Group } from "@vx/group";
-import { Text } from "@vx/text";
+import { Group } from "@visx/group";
+import { Text } from "@visx/text";
 import { scaleSequential } from "d3-scale";
 import { interpolateCool } from "d3";
-import { format as d3format } from "d3-format";
 import { linkHorizontal } from "d3-shape";
-import axios from "axios";
 import Sankey from "./CircularSankey";
 import { useState } from "react";
 import {Button} from "@mui/material";
-import { type } from "@testing-library/user-event/dist/type";
+// import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
 // var jp = require('jsonpath');
@@ -50,9 +48,9 @@ export default function SankeyExample(props) {
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", "voyage_itinerary__imp_broad_region_voyage_begin__geo_location__id");
-formdata.append("groupby_fields", "voyage_itinerary__imp_region_voyage_begin__geo_location__id");
-formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_disembarked");
+formdata.append("groupby_fields", "voyage_itinerary__imp_port_voyage_begin__geo_location__id");
+formdata.append("groupby_fields", "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id");
+formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
 formdata.append("cachename", "voyage_maps");
 
@@ -67,12 +65,12 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   .then(response => response.json())
   .then(result => {
 
-    let allNodes=new Set()
+    let allNodes= new Set()
     let nodes = []
     let links = []
 
     // console.log(result)
-    console.log(typeof(result))
+    // console.log(typeof(result))
     
     Object.keys(result).forEach(source =>{
       allNodes.add(source)
@@ -80,6 +78,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
         allNodes.add(target)
       })
     })
+
     console.log(allNodes)
 
    allNodes.forEach((source) =>{
@@ -144,14 +143,6 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
 
   if (width < 10) return null;
   if(isLoading) return "loading";
-  // state = {
-  //   highlightLinkIndexes: [],
-  //   nodePadding: 10,
-  //   component: "Sankey"
-  // };
-  // return{
-
-  // }
 
   return (
     <div>
@@ -175,25 +166,29 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
           {({ data }) => (
             <Group>
               {data.nodes.map((node, i) => (
+                // console.log(node,i),
                 <Group top={node.y0} left={node.x0} key={`node-${i}`}>
                   <rect
                     id={`rect-${i}`}
-                    width={node.x1 - node.x0}
-                    height={node.y1 - node.y0}
+                    width={Math.abs(node.x1 - node.x0)}
+                    height={Math.abs(node.y1 - node.y0)}
                     fill={color(node.depth)}
                     opacity={0.5}
                     stroke="white"
                     strokeWidth={2}
                     onMouseOver={(e) => {
                       setState({
+                        ...state,
                         highlightLinkIndexes: [
                           ...node.sourceLinks.map((l) => l.index),
                           ...node.targetLinks.map((l) => l.index),
                         ],
-                      });
+                      }
+                      );
                     }}
+
                     onMouseOut={(e) => {
-                      setState({ highlightLinkIndexes: [] });
+                      setState({ ...state,highlightLinkIndexes: [] });
                     }}
                   />
 
@@ -225,12 +220,12 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
                       state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
                     }
                     fill="none"
-                    // onMouseOver={(e) => {
-                    //   setState({ highlightLinkIndexes: [i] });
-                    // }}
-                    // onMouseOut={(e) => {
-                    //   setState({ highlightLinkIndexes: [] });
-                    // }}
+                    onMouseOver={(e) => {
+                      setState({...state, highlightLinkIndexes: [i] });
+                    }}
+                    onMouseOut={(e) => {
+                      setState({ ...state,highlightLinkIndexes: [] });
+                    }}
                   />
                 ))}
               </Group>
