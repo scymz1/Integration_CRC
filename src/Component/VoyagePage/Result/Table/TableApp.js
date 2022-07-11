@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 export const ColContext = React.createContext({});
 
 export default function(props) {
-    const [cols, setCols] = React.useState([]);
+    const [cols, setCols] = React.useState(["id"]);
     const {
         options_tree, endpoint
     } = React.useContext(props.context)
@@ -14,7 +14,7 @@ export default function(props) {
     return (
         <div>
             {/* <Button onClick={()=>console.log("options_tree:", endpoint)}>print options_tree</Button> */}
-            <ColContext.Provider value={{cols, setCols, endpoint}}>
+            <ColContext.Provider value={{cols, setCols, endpoint, checkbox: false, modal: true}}>
                 <ColSelector context={ColContext}/>
                 <Table context={ColContext}/>
             </ColContext.Provider>
