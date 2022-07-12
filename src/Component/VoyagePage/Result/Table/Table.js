@@ -25,10 +25,10 @@ import { idxRelation, skeleton } from "./tableVars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox from "@mui/material/Checkbox";
 
 //import { ColContext } from "./TableApp";
-import * as options_flat from "../../../util/options.json"
+import * as options_flat from "../../../util/options.json";
 
 //const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -51,12 +51,12 @@ function reducer(state, { type, index }) {
 }
 
 function Table(props) {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
   const { search_object } = useContext(VoyageContext);
 
   //menu
-  const {cols, endpoint, checkbox, modal} = useContext(props.context);
+  const { cols, endpoint, checkbox, modal } = useContext(props.context);
 
   // Label
   // const [label, setLabel] = useState();
@@ -126,30 +126,30 @@ function Table(props) {
       });
     }
 
-    cols.forEach((v) => {
-      // console.log(v)
-      data.append("selected_fields", v); 
-  }); 
+    //   cols.forEach((v) => {
+    //     // console.log(v)
+    //     data.append("selected_fields", v);
+    // });
 
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
+        //console.log(response.data);
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
-        if (cols.length !== 0) {
-          setLoading(false);
-        }
-        else {
-          setLoading(true);
-        }
-        
-        
+        // if (cols.length !== 0) {
+        //   setLoading(false);
+        // }
+        // else {
+        //   setLoading(true);
+        // }
+        setLoading(false);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, cols, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortingReq, field, direction, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
   useEffect(() => {
@@ -233,10 +233,10 @@ function Table(props) {
     dispatch({ type: "toggle", index: idxRelation[title] });
   };
 
-  if (isLoading) {
-    return <div className="spinner"></div>;
-  }
-  
+  // if (isLoading) {
+  //   return <div className="spinner"></div>;
+  // }
+
   return (
     <div>
       <div>
@@ -254,11 +254,13 @@ function Table(props) {
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    {checkbox && (<TableCell padding="checkbox">
-                      {/* <Checkbox
+                    {checkbox && (
+                      <TableCell padding="checkbox">
+                        {/* <Checkbox
                         color="primary"
                       /> */}
-                    </TableCell>)}
+                      </TableCell>
+                    )}
                     {cols.map((v) => (
                       <TableCell
                         style={{ color: "#389c90" }}
@@ -283,15 +285,14 @@ function Table(props) {
                     <StyledTableRow
                       key={row.name}
                       onClick={(event) => handleOpen(event, row)}
-                      
                     >
-                      {checkbox && (<TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                        />
-                      </TableCell>)}
-                      {Object.values(row).map((k) => (
-                        <TableCell>{k}</TableCell>
+                      {checkbox && (
+                        <TableCell padding="checkbox">
+                          <Checkbox color="primary" />
+                        </TableCell>
+                      )}
+                      {cols.map((k) => (
+                        <TableCell>{row[k]}</TableCell>
                       ))}
                       {/* </TableRow> */}
                     </StyledTableRow>
@@ -314,68 +315,75 @@ function Table(props) {
           </FormControl>
         </Box>
       </div>
-      {modal && (<div><Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Typography
-            sx={{ fontWeight: "bold" }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
+      {modal && (
+        <div>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
           >
-            <div>
-              Full detail: {info.id}
-              <IconButton
-                sx={{ float: "right" }}
-                onClick={() => setOpen(false)}
+            <Box sx={modalStyle}>
+              <Typography
+                sx={{ fontWeight: "bold" }}
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
               >
-                <CloseIcon />
-              </IconButton>
-            </div>
-          </Typography>
-          <Typography>
-            <div>
-              Here are the currently available details for this voyage.
-              <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
-              to see/hide all.
-            </div>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {Object.keys(skeleton).map((title) => (
-              <div>
-                <Accordion
-                  expanded={state[idxRelation[title]]}
-                  // onClick={(event) => handleSingleExpansion(event, title)}
-                  sx={{ margin: "5px" }}
-                >
-                  <AccordionSummary sx={{ backgroundColor: "#f2f2f2" }}
-                  onClick={(event) => handleSingleExpansion(event, title)}>
-                    <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>
-                      {skeleton[title].map((obj) => (
-                        <Grid container spacing={2} columns={16}>
-                          <Grid sx={{ fontWeight: "bold" }} item xs={8}>
-                            {options_flat[obj].flatlabel}
-                          </Grid>
-                          <Grid item xs={8}>
-                            {content[obj]}
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            ))}
-          </Typography>
-        </Box>
-      </Modal></div>
+                <div>
+                  Full detail: {info.id}
+                  <IconButton
+                    sx={{ float: "right" }}
+                    onClick={() => setOpen(false)}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </div>
+              </Typography>
+              <Typography>
+                <div>
+                  Here are the currently available details for this voyage.
+                  <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
+                  to see/hide all.
+                </div>
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                {Object.keys(skeleton).map((title) => (
+                  <div>
+                    <Accordion
+                      expanded={state[idxRelation[title]]}
+                      // onClick={(event) => handleSingleExpansion(event, title)}
+                      sx={{ margin: "5px" }}
+                    >
+                      <AccordionSummary
+                        sx={{ backgroundColor: "#f2f2f2" }}
+                        onClick={(event) => handleSingleExpansion(event, title)}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {title}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          {skeleton[title].map((obj) => (
+                            <Grid container spacing={2} columns={16}>
+                              <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                                {options_flat[obj].flatlabel}
+                              </Grid>
+                              <Grid item xs={8}>
+                                {content[obj]}
+                              </Grid>
+                            </Grid>
+                          ))}
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                ))}
+              </Typography>
+            </Box>
+          </Modal>
+        </div>
       )}
     </div>
   );
