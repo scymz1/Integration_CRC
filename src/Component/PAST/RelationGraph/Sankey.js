@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import * as React from "react";
-import {Box,Button, Modal,Typography} from "@mui/material";
+import {Box,Button, Modal,Typography,Popover} from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 
@@ -21,6 +21,18 @@ export default function Sankey(props) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const popopen = Boolean(anchorEl);
     const style = {
       position: 'absolute',
       top: '50%',
@@ -136,6 +148,21 @@ export default function Sankey(props) {
 
   return (
     <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
       {/* <h1>Sankey</h1> */}
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
@@ -159,24 +186,40 @@ export default function Sankey(props) {
                 width={node.x1 - node.x0}
                 height={node.y1 - node.y0}>
                 <div className="node-heading">
+                <Popover
+                  id="mouse-over-popover"
+                  sx={{
+                    pointerEvents: 'none',
+                  }}
+                  open={popopen}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  onClose={handlePopoverClose}
+                  disableRestoreFocus
+                >
+                  {node.information}
+                </Popover>
+                <Typography
+                  aria-owns={popopen ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                >
+                
                   <tbody>
-                    {node.information}
-                    <Modal
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                          Text in a modal
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                        </Typography>
-                      </Box>
-                    </Modal>
+                    {/* {node.information} */}
+                    {node.name}
+                    {node.id}
+                    {node.voyage_id}
                   </tbody>
+                  </Typography>
                 </div>
               </foreignObject>
             </>
