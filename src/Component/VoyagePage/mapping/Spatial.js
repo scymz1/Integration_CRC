@@ -61,8 +61,10 @@ export function ReadFeature(props) {
   var markers = L.markerClusterGroup();
 
   useEffect(() => {
+    console.log("🚀 ~ file: Spatial.js ~ line 66 ~ useEffect ~ props.search_object", props.search_object)
     var data = new FormData();
     for (var property in props.search_object) {
+ 
       props.search_object[property].forEach((v) => {
         data.append(property, v);
       });
@@ -100,13 +102,26 @@ export function ReadFeature(props) {
       return !feature.properties.name.includes("ocean waypt");
     };
 
+
+  const filterNodes = (feature) => {
+    console.log("🚀 ~ file: Spatial.js ~ line 110 ~ filterNodes ~ props.radio", props.radio)
+    //if embarkation is selected; only show nodes on African side
+    if(props.radio == "embarkation"){
+      return feature.geometry.coordinates[0]>=-23.334960
+    }else{ //if disembarkation is selected, only show nodes on American side
+      return feature.geometry.coordinates[0]<23.334960
+    }
+    
+  };
+
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
+        //filter: filterNodes,
         onEachFeature: function (feature, layer) {
+          console.log('112')
           nodeLayers[feature.id] = {
             layer: layer,
-            // center: layer.getBounds().getCenter()
           };
         },
       });
@@ -114,7 +129,9 @@ export function ReadFeature(props) {
       // Add only actual locations to the map with markers (with clicking events and popups)
       L.geoJSON(nodes.features, {
         filter: featureWayPt,
+        filter: filterNodes,
         onEachFeature: function (feature, layer) {
+          console.log('124')
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             console.log("current id = ", layer.feature.id);
