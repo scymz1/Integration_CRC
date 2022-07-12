@@ -50,9 +50,8 @@ export default function SankeyExample(props) {
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name");
-formdata.append("groupby_fields", "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name");
-
+formdata.append("groupby_fields", "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name");
+formdata.append("groupby_fields", "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name");
 formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
 formdata.append("cachename", "voyage_pivot_tables");
@@ -86,7 +85,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
    let res = new Map(Object.entries(result));
 
   // Use Map to deal with Json -> with less memory usage 
-  
+
   res.forEach((value, key) => {
     new Map(Object.entries(value)).forEach ((val, target) => {
     links.push({
