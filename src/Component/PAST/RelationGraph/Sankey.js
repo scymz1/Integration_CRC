@@ -1,9 +1,10 @@
 import {useContext, useEffect, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import * as React from "react";
-import {Button} from "@mui/material";
+import {Box,Button, Modal,Typography,Popover} from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
+
 import './styles.css'
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
@@ -17,20 +18,46 @@ export default function Sankey(props) {
     const NODE_WIDTH = 140;
     const MIN_NODE_HEIGHT = 20;
     const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const popopen = Boolean(anchorEl);
+    const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #000',
+      boxShadow: 24,
+      p: 4,
+    };
+    
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8*windowRef.current.offsetWidth;
       let new_CANVAS_HEIGHT = data.length * 100;
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
-        nodes.push({id: data[i].id, name: data[i].documented_name});
+        nodes.push({id: data[i].id, name: data[i].documented_name}); 
     
           for (var j = 0; j < data[i].transactions.length; j++) {
             if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) === -1) {
                 nodes.push({id: data[i].transactions[j].transaction.id, 
-                            name: data[i].transactions[j].transaction.relation_type.relation_type});
+                            name: data[i].transactions[j].transaction.relation_type.relation_type,
+                            voyage_id: data[i].transactions[j].transaction.voyage.id});
             }
             if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].id) &&
                                     x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id)) === -1) {
@@ -83,17 +110,23 @@ export default function Sankey(props) {
       };
 
       nodes.forEach((node)=>{
+        // console.log(node)
         const result = [];
         for (var i = 0; i < Object.keys(node).length; i++) {
+          if(Object.keys(node)[i]==="voyage_id"){
+            // console.log(Object.values(node)[i])
+            node.voyage_id = <Button onClick={handleOpen}>{Object.values(node)[i]}</Button>
+            // console.log(Object.values(node)[i]) 
+          }
           result.push(
-            <tr>
+            <tr key = {Object.keys(node)[i]}>
               <th>{Object.keys(node)[i]}</th>
               <td>{Object.values(node)[i]}</td>
             </tr>
           );
         }
         node.information = result;
-        // console.log(node.id,result)
+        // console.log(node.id,node.information)
       })
       
       setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
@@ -101,6 +134,7 @@ export default function Sankey(props) {
       const tmpGraph = sankey()
         .nodeAlign(sankeyLeft)
         .nodeWidth(NODE_WIDTH)
+        // .nodeheight(40)
         .extent([
           [30, 30],
           [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
@@ -114,6 +148,21 @@ export default function Sankey(props) {
 
   return (
     <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+      </Modal>
       {/* <h1>Sankey</h1> */}
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
@@ -137,9 +186,40 @@ export default function Sankey(props) {
                 width={node.x1 - node.x0}
                 height={node.y1 - node.y0}>
                 <div className="node-heading">
-                  <table>
-                    {node.information}
-                  </table>
+                <Popover
+                  id="mouse-over-popover"
+                  sx={{
+                    pointerEvents: 'none',
+                  }}
+                  open={popopen}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  onClose={handlePopoverClose}
+                  disableRestoreFocus
+                >
+                  {node.information}
+                </Popover>
+                <Typography
+                  aria-owns={popopen ? 'mouse-over-popover' : undefined}
+                  aria-haspopup="true"
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                >
+                
+                  <tbody>
+                    {/* {node.information} */}
+                    {node.name}
+                    {node.id}
+                    {node.voyage_id}
+                  </tbody>
+                  </Typography>
                 </div>
               </foreignObject>
             </>
