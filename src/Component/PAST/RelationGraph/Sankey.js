@@ -14,7 +14,7 @@ export default function Sankey(props) {
     const [graph, setGraph] = useState(null);
     const CANVAS_WIDTH = 700;
     const CANVAS_HEIGHT = 450;
-    const NODE_WIDTH = 120;
+    const NODE_WIDTH = 140;
     const MIN_NODE_HEIGHT = 20;
     const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
 
@@ -78,7 +78,21 @@ export default function Sankey(props) {
               }
           }
       };
-      
+
+      nodes.forEach((node)=>{
+        const result = [];
+        for (var i = 0; i < Object.keys(node).length; i++) {
+          result.push(
+            <tr>
+              <th>{Object.keys(node)[i]}</th>
+              <td>{Object.values(node)[i]}</td>
+            </tr>
+          );
+        }
+        node.information = result;
+        console.log(node.id,result)
+      })
+
       const tmpGraph = sankey()
         .nodeAlign(sankeyLeft)
         .nodeWidth(NODE_WIDTH)
@@ -90,6 +104,9 @@ export default function Sankey(props) {
       
       setGraph(tmpGraph)  
     }, [data]);
+
+    
+    
 
   return (
     <div>
@@ -116,13 +133,9 @@ export default function Sankey(props) {
                 width={node.x1 - node.x0}
                 height={node.y1 - node.y0}>
                 <div className="node-heading">
-                  <span className="node-title">
-                    {truncate(node.name, { length: 35 })}
-                  </span>
-                  <br/>
-                  <span className="node-title">
-                    {truncate(node.id, { length: 35 })}
-                  </span>
+                  <table>
+                    {node.information}
+                  </table>
                 </div>
               </foreignObject>
             </>
