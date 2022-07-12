@@ -232,23 +232,6 @@ const Map = () => {
         </LayersControl>
 
 
-        {/* {locations.map((location) => (
-        <Marker
-          position={location.position}
-          draggable= {true}
-        >
-          <Popup>
-            pop up
-            {location.name} - {location.info} 
-            {customPopup}
-           </Popup>
-        </Marker>
-      ))} */}
-
-    {/* <MarkerClusterGroup> */}
-    {/* <GeoJSON data={nodes.features} onEachFeature={onClickFeature}/> */}
-    {/* </MarkerClusterGroup> */}
-
     
       {/* <MyComponent/> */}
         <ReadFeature search_object={search_object}/>
