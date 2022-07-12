@@ -28,9 +28,8 @@ function Table(props) {
   const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId } = useContext(
-    props.context
-  );
+  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal } =
+    useContext(props.context);
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);
@@ -114,9 +113,11 @@ function Table(props) {
 
   const handleOpen = (event, info) => {
     //console.log(info.id);
-    setOpen(true);
-    setInfo(info);
-    setId(info.id);
+    if (modal) {
+      setOpen(true);
+      setInfo(info);
+      setId(info.id);
+    }
   };
 
   return (
