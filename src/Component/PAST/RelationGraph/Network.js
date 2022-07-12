@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import {Button, CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
@@ -18,9 +18,12 @@ export default function Network(props) {
   //   type: "newType",
   //   targets: [...queryData.targets, "newTarget"]
   // })
-  const {queryData, setQueryData, data} = useContext(PASTContext);
-
+  const {queryData, setQueryData, data, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
+  const [height, setHeight] = useState("300");
+  useEffect(()=> {
+    setHeight((0.7 * windowRef.current.offsetHeight).toString())
+  }, [])
 
   useEffect(()=>{
     let tmp = {
@@ -53,9 +56,9 @@ export default function Network(props) {
         let existNode = tmp.nodes.find(node => node.id === item.id)
         if(existNode){
           existNode.color = "red"
-          existNode.font = {size: 30}
+          existNode.font = {size: windowRef.current.offsetHeight*0.03}
         }else {
-          tmp.nodes.push({id: item.id, label: item.documented_name, color: "red", font: {size: 30}})
+          tmp.nodes.push({id: item.id, label: item.documented_name, color: "red", font: {size: windowRef.current.offsetHeight*0.03}})
         }
         //caption
         item.voyage.voyage_captainconnection.forEach((captainData)=>{
@@ -113,7 +116,7 @@ export default function Network(props) {
     physics: {
       enabled: false
     },
-    height: "300"
+    height: height
   };
 
   return (
