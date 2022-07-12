@@ -10,15 +10,18 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {data} = useContext(PASTContext);
+    const {data,windowRef} = useContext(PASTContext);
     const [graph, setGraph] = useState(null);
-    const CANVAS_WIDTH = 700;
-    const CANVAS_HEIGHT = 450;
+    const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
+    const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
     const MIN_NODE_HEIGHT = 20;
     const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
 
+
     useEffect(()=>{
+      let new_CANVAS_WIDTH = 0.8*windowRef.current.offsetWidth;
+      let new_CANVAS_HEIGHT = data.length * 100;
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
@@ -90,16 +93,17 @@ export default function Sankey(props) {
           );
         }
         node.information = result;
-        console.log(node.id,result)
+        // console.log(node.id,result)
       })
-
+      
+      setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
+      setCANVAS_WIDTH(new_CANVAS_WIDTH);
       const tmpGraph = sankey()
         .nodeAlign(sankeyLeft)
         .nodeWidth(NODE_WIDTH)
-        .nodePadding(MIN_NODE_HEIGHT + MIN_SPACE_BETWEEN_NODES_VERTICAL)
         .extent([
           [30, 30],
-          [CANVAS_WIDTH, CANVAS_HEIGHT]
+          [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
         ])({nodes, links});
       
       setGraph(tmpGraph)  
