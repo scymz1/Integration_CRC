@@ -2,7 +2,7 @@
 // References: https://github.com/geodesign/spatialsankey, https://github.com/UNFPAmaldives/migration
 
 import React, { useState, useEffect } from "react";
-import { useMapEvents, GeoJSON, useMap } from "react-leaflet";
+import { useMap } from "react-leaflet";
 import { Grid } from "@mui/material";
 //import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
@@ -17,7 +17,6 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 var nodeLayers = {};
 var linkLayers = {};
-var selectedNode = null;
 
 var groupby_fields = [
   "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
@@ -63,6 +62,7 @@ export function ReadFeature(props) {
   useEffect(() => {
     var data = new FormData();
     for (var property in props.search_object) {
+ 
       props.search_object[property].forEach((v) => {
         data.append(property, v);
       });
@@ -81,6 +81,7 @@ export function ReadFeature(props) {
     });
   }, [props.search_object]);
 
+
   useEffect(() => {
     for (var i in map._layers) {
       if (
@@ -96,28 +97,49 @@ export function ReadFeature(props) {
     }
 
     // Function for distinguish if the feature is a waypoint
-    const featureWayPt = (feature) => {
-      return !feature.properties.name.includes("ocean waypt");
+    // const featureWayPt = (feature) => {
+    //   return !feature.properties.name.includes("ocean waypt");
+    // };
+
+    //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
+    const filterNodes = (feature) => {
+      console.log("🚀 ~ file: Spatial.js ~ line 110 ~ filterNodes ~ props.radio", props.radio)
+      //if embarkation is selected; only show nodes on African side
+      if(props.radio == "embarkation"){
+        return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
+      }else{ //if disembarkation is selected, only show nodes on American side
+        return feature.geometry.coordinates[0]<-23.334960 && !feature.properties.name.includes("ocean waypt");
+      }
+      
     };
+
+
+
+
 
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
+        //filter: filterNodes,
         onEachFeature: function (feature, layer) {
+          console.log('112')
           nodeLayers[feature.id] = {
             layer: layer,
-            // center: layer.getBounds().getCenter()
           };
         },
       });
 
       // Add only actual locations to the map with markers (with clicking events and popups)
       L.geoJSON(nodes.features, {
-        filter: featureWayPt,
+        //filter: featureWayPt,
+        filter: filterNodes,
         onEachFeature: function (feature, layer) {
+        
+          console.log('124')
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             console.log("current id = ", layer.feature.id);
+            console.log("🚀 ~ file: Spatial.js ~ line 137 ~ useEffect ~ layer", layer)
             let tmp =
               complete_object[
                 "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
@@ -171,91 +193,6 @@ export function ReadFeature(props) {
   if (isLoading == false) {
     return "isLoading";
   }
-
-  // Add only actual locations to the map (with clicking events and popups)
-  // var nodeLayer = L.geoJSON(nodes.features, {
-  //     filter: featureWayPt,
-
-  //     onEachFeature: function (feature, layer) {
-
-  //       layer
-  //         .on('click', function(e) {
-  //           layer.closePopup();
-
-  //           for(var linkPath in linkLayers) {
-  //             var path = linkPath.split('-');
-
-  //             // when click on a node, show only the edges that attach to it
-  //             if (selectedNode != null && selectedNode != path[0]) {
-  //               map.addLayer(linkLayers[linkPath].feature);
-  //             }
-  //           }
-
-  //           if (selectedNode == null || selectedNode != feature.id) {
-
-  //             for (var linkPath in linkLayers) {
-  //               var path = linkPath.split('-');
-
-  //               if (feature.id != path[0] && feature.id != path[1]) {
-  //                   map.removeLayer(linkLayers[linkPath].feature);
-  //               }
-  //               else {
-  //                   // num += parseInt(linkLayers[linkPath].data.value);
-  //               }
-  //             }
-
-  //             selectedNode = feature.id;
-  //           }
-  //           else {
-  //             selectedNode = null;
-  //           }
-  //         });
-  //         layer.bindPopup(layer.feature.properties.name)
-  //         markers.addLayer(layer);
-  //     }
-
-  //     onEachFeature: function (feature, layer) {
-
-  //       layer
-  //         .on('click', function(e) {
-  //           layer.closePopup();
-
-  //           for(var linkPath in linkLayers) {
-  //             var path = linkPath.split('-');
-
-  //             // when click on a node, show only the links that attach to it
-  //             if (selectedNode != null && selectedNode != path[0]) {
-  //               map.addLayer(linkLayers[linkPath].feature);
-  //             }
-  //           }
-
-  //           if (selectedNode == null || selectedNode != feature.id) {
-
-  //             for (var linkPath in linkLayers) {
-  //               var path = linkPath.split('-');
-
-  //               if (feature.id != path[0] && feature.id != path[1]) {
-  //                   map.removeLayer(linkLayers[linkPath].feature);
-  //               }
-  //               else {
-  //                   // num += parseInt(linkLayers[linkPath].data.value);
-  //               }
-  //             }
-
-  //             selectedNode = feature.id;
-  //           }
-  //           else {
-  //             selectedNode = null;
-  //           }
-  //         });
-  //         layer.bindPopup(layer.feature.properties.name)
-  //         markers.addLayer(layer);
-  //     }
-
-  //   });
-
-  // map.addLayer(markers)
-  // DrawLink(map, csv);
 
   return null;
 }

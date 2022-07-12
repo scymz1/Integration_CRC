@@ -37,10 +37,14 @@ function getStyles(name, cols, theme) {
 
 // export const ColContext = React.createContext({});
 
-export default function ColSelector() {
+export default function ColSelector(props) {
   const theme = useTheme();
   // const [cols, setCols] = React.useState(["id"]);
-  const {cols, setCols} = useContext(ColContext)
+  // const {cols, setCols} = useContext(ColContext)
+  const {
+    cols, setCols 
+} = React.useContext(props.context)
+
   console.log()
   const handleChange = (event) => {
     const {

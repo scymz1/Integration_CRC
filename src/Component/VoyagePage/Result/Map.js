@@ -122,7 +122,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                {/* <ReadFeature search_object={map_search_object}/> */}
+                <ReadFeature search_object={map_search_object} radio = {radioOptions}/>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
                 {

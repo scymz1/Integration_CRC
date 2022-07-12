@@ -92,6 +92,9 @@ export default function Filter(props) {
                 )
               })
             } */}
+            <Grid item >
+              <RadioButton context={props.context}/>
+            </Grid>
             <Grid item>
               {output.map((item, index) => {
                 return(
@@ -115,11 +118,6 @@ export default function Filter(props) {
                 )})
               }
             </Grid>
-
-            <Grid item >
-              <RadioButton context={props.context}/>
-            </Grid>
-            
           </Grid>
           </AccordionDetails>
       </Accordion>
