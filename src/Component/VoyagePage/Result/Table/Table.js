@@ -27,10 +27,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Checkbox from '@mui/material/Checkbox';
 
-import { ColContext } from "./TableApp";
+//import { ColContext } from "./TableApp";
 import * as options_flat from "../../../util/options.json"
 
-const option_url = "/voyage/?hierarchical=false";
+//const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -152,29 +152,26 @@ function Table(props) {
   }, [page, rowsPerPage, sortingReq, field, direction, cols, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Modal
-  // useEffect(() => {
-  //   var data = new FormData();
-  //   data.append("hierarchical", "False");
-  //   data.append("voyage_id", id);
-  //   data.append("voyage_id", id);
-
-  //   // for (var i = 0; i < modalVars.length; i++) {
-  //   //   data.append("selected_fields", modalVars[i]);
-  //   // }
-
-  //   axios
-  //     .post("/" + endpoint, data)
-  //     .then(function (response) {
-  //       //console.log(response.data);
-  //       //console.log(Object.keys(response.data));
-  //       //console.log(Object.values(response.data));
-  //       setContent(Object.values(response.data)[Object.keys(response.data)]);
-  //       //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    if (modal) {
+      var data = new FormData();
+      data.append("hierarchical", "False");
+      data.append("voyage_id", id);
+      data.append("voyage_id", id);
+      axios
+        .post("/" + endpoint, data)
+        .then(function (response) {
+          //console.log(response.data);
+          //console.log(Object.keys(response.data));
+          //console.log(Object.values(response.data));
+          setContent(Object.values(response.data)[Object.keys(response.data)]);
+          //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }, [id]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -258,9 +255,9 @@ function Table(props) {
                 <TableHead>
                   <TableRow>
                     {checkbox && (<TableCell padding="checkbox">
-                      <Checkbox
+                      {/* <Checkbox
                         color="primary"
-                      />
+                      /> */}
                     </TableCell>)}
                     {cols.map((v) => (
                       <TableCell
@@ -286,6 +283,7 @@ function Table(props) {
                     <StyledTableRow
                       key={row.name}
                       onClick={(event) => handleOpen(event, row)}
+                      
                     >
                       {checkbox && (<TableCell padding="checkbox">
                         <Checkbox
