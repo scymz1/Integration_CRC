@@ -42,7 +42,7 @@ export default function Filter(props) {
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
-    console.log('Current SEARCH OBJECT: ', search_object)
+    //console.log('Current SEARCH OBJECT: ', search_object)
 
     return (
     <AppContext.Provider
@@ -92,6 +92,9 @@ export default function Filter(props) {
                 )
               })
             } */}
+            <Grid item >
+              <RadioButton context={props.context}/>
+            </Grid>
             <Grid item>
               {output.map((item, index) => {
                 return(
@@ -115,11 +118,6 @@ export default function Filter(props) {
                 )})
               }
             </Grid>
-
-            <Grid item >
-              <RadioButton/>
-            </Grid>
-            
           </Grid>
           </AccordionDetails>
       </Accordion>

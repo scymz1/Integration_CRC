@@ -43,8 +43,8 @@ function Cascading(props) {
 
     const menuName = props.menuName;
     const buttonName = props.button;
-    console.log("Menuname: ", menuName)
-    console.log("options_tree: ", options_tree)
+    //console.log("Menuname: ", menuName)
+    //console.log("options_tree: ", options_tree)
     var render = menuName === "" ? options_tree : options_tree[menuName];
     
 
@@ -69,13 +69,13 @@ function Cascading(props) {
             setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
         else
             alert("The variable has been selected.")
-        console.log("OUTPUT STRING ARRAY: ----->",output)
+        //console.log("OUTPUT STRING ARRAY: ----->",output)
     }
 
     const renderTree = (nodes, name) => {
 
         if(isLast(nodes)) {
-            console.log("Name: ", name)
+            //console.log("Name: ", name)
             return(
                 <MenuItem value={nodes.flatlabel} onClick={() => {handleOptionClick(name.slice(2), nodes.type, nodes.flatlabel) }}>
                     {nodes.label}  

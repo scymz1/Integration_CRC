@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
   Box,
   Button,
@@ -32,6 +32,8 @@ import fileDownload from 'js-file-download';
 import CloseIcon from '@mui/icons-material/Close';
 import {useQuery} from "react-query";
 import TextField from "@mui/material/TextField";
+// import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+// import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -47,7 +49,27 @@ function OptionSelector(props) {
       method: "OPTIONS",
       headers: {'Authorization': auth_token}
     }).then(res => res.json())
+      .then((res => {
+        addSelf(res)
+        return res
+      }))
   )
+
+  function addSelf(node) {
+    Object.keys(node).forEach(key => {
+      if(!isLast(node[key])) {
+        node[key] = {
+          self : {
+            type: "group label",
+            label: node[key].label,
+            flatlabel: node[key].flatlabel
+          },
+          ...node[key]
+        }
+        addSelf(node[key])
+      }
+    })
+  }
 
   const getChildrenPath = (node) => {
     let result = []
@@ -83,6 +105,19 @@ function OptionSelector(props) {
       })
     }
   }
+
+  // function handleClickGroupLabel(event, path) {
+  //   event.stopPropagation();
+  //   if (_.has(resultObject, path.join('__'))) {
+  //     setResultObject(_.omit(resultObject, path.join("__")))
+  //   } else {
+  //     const groupObject = _.get(options, path)
+  //     setResultObject({
+  //       [path.join('__')]: {type: groupObject.type, label:groupObject.label, flatlabel: groupObject.flatlabel},
+  //       ...resultObject
+  //     })
+  //   }
+  // }
 
   function isAllChildrenChecked(path) {
     let result = true;
@@ -131,7 +166,15 @@ function OptionSelector(props) {
     reader.onload = (e) => {
       const text = e.target.result;
       // console.log(text.replace(/[\r\n\t\s]+/g, ""))
-      setResultObject(JSON.parse(text.replace(/[\r\n\t\s]+/g, "")))
+      const tmp = JSON.parse(text.replace(/[\r\n\t\s]+/g, ""));
+      _.forIn(tmp, (value, key) =>{
+        console.log(value)
+        if(value.type === "table"){
+          tmp[key+"__self"] = {...value, type:"group label"}
+          delete tmp[key]
+        }
+      })
+      setResultObject(tmp)
     };
     reader.readAsText(e.target.files[0]);
   };
@@ -163,21 +206,28 @@ function OptionSelector(props) {
           checked={isAllChildrenChecked(path)}
           indeterminate={!isAllChildrenUnChecked(path) && !isAllChildrenChecked(path)}
           onClick={(event) => handleClickParent(event, path)}/>
-        {nodes.label ? nodes.label : "Select All"}
+        {nodes.label ?
+          <label>{nodes.label}
+            {/*<Checkbox checked={_.has(resultObject, path.join('__'))}*/}
+            {/*          onClick={(event) => handleClickGroupLabel(event, path)}*/}
+            {/*          icon={<BookmarkBorderIcon />}*/}
+            {/*          checkedIcon={<BookmarkIcon />}/>*/}
+          </label>
+          : "Select All"}
+
       </div>
     }>
       {Object.keys(nodes).map((key) =>
-        isChildren(key)
-          ? isLast(nodes[key])
-            ? <ListItem key={key} disablePadding>
+        isChildren(key)?
+          isLast(nodes[key]) ?
+            <ListItem key={key} disablePadding>
               <Checkbox checked={_.has(resultObject, [...path, key].join('__'))}
                         onClick={(event) => handleClick([...path, key])}/>
               <ListItemText primary={key} secondary={nodes[key].flatlabel}/>
             </ListItem>
             : renderTree(nodes[key], [...path, key])
-          : null
-      )
-      }
+          :null
+      )}
     </TreeItem>
   );
 
@@ -224,7 +274,10 @@ function OptionSelector(props) {
             <input type="file" onChange={loadFile} hidden/>
           </Button>
           <Button color="inherit" onClick={() => {
-            fileDownload(JSON.stringify(resultObject, null, 2), "options.json")
+            fileDownload(JSON.stringify(resultObject, null, 2)
+              .replaceAll("__self", "")
+              .replaceAll("\"type\": \"group label\"", "\"type\": \"table\""),
+              "options.json")
           }}>Export</Button>
         </Toolbar>
       </AppBar>
