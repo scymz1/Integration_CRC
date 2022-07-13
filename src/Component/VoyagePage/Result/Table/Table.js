@@ -29,7 +29,7 @@ function Table(props) {
 
   // Menu
   const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat, queryData, setQueryData,
-  search_object } =
+  search_object, chipData, setChipData } =
     useContext(props.context);
 
   // Pagination
@@ -118,12 +118,31 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else {
+      //console.log(info.documented_name);
+      let selected = queryData["targets"];
+      const selectedIndex = selected.indexOf(info.id);
+      let newSelected = [];
+      let newChipData = [];
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, info.id);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1),
+        );
+      }
+      setQueryData({...queryData, targets: newSelected});
     }
   };
 
   const isSelected = (name) => {
     if (checkbox) {
-      console.log(queryData["targets"]);
+      //console.log(queryData["targets"]);
       return queryData["targets"].indexOf(name) !== -1;
     }
     return false;
