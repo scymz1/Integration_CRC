@@ -1,16 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Modal, Typography, Popover } from "@mui/material";
+import { Box, Button, Typography, Popover } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 import './styles.css'
+import { MODALContext } from "../PAST";
+
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {data,windowRef} = useContext(PASTContext);
+    const {data,windowRef,setOpen, setInfo, setId, modal} = useContext(PASTContext);
     const [graph, setGraph] = useState(null);
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
@@ -18,7 +20,14 @@ export default function Sankey(props) {
     const MIN_NODE_HEIGHT = 60;
 
     // const [open, setOpen] = React.useState(false);
-    // const handleOpen = () => setOpen(true);
+    const handleOpen = (event,info,modal) => {
+      if (modal) {
+        console.log("voyage id",info)
+      setOpen(true);
+      setId(info);
+      // setId(info.id);
+    }
+  };
     // const handleClose = () => setOpen(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [popOpen, setPopOpen] = React.useState(null);
@@ -26,27 +35,27 @@ export default function Sankey(props) {
     const handlePopoverOpen = (event, node) => {
         setAnchorEl(event.currentTarget);
         setPopOpen(node.id);
-        console.log("Hover Success on", node.id);
+        // console.log("Hover Success on", node.id);
     };
 
     const handlePopoverClose = () => {
         setAnchorEl(null);
         setPopOpen(null);
-        console.log("Hover Leave from node")
+        // console.log("Hover Leave from node")
     };
 
     // const popOpen = Boolean(anchorEl);
-    //     const style = {
-    //     position: 'absolute',
-    //     top: '50%',
-    //     left: '50%',
-    //     transform: 'translate(-50%, -50%)',
-    //     width: 400,
-    //     bgcolor: 'background.paper',
-    //     border: '2px solid #000',
-    //     boxShadow: 24,
-    //     p: 4,
-    // };
+        const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
 
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
@@ -115,25 +124,25 @@ export default function Sankey(props) {
           }
       };
 
-      // nodes.forEach((node)=>{
-      //   // console.log(node)
-      //   const result = [];
-      //   for (var i = 0; i < Object.keys(node).length; i++) {
-      //     if(Object.keys(node)[i]==="voyage_id"){
-      //       // console.log(Object.values(node)[i])
-      //       node.voyage_id = <Button onClick={handleOpen}>{Object.values(node)[i]}</Button>
-      //       // console.log(Object.values(node)[i]) 
-      //     }
-      //     result.push(
-      //       <tr key = {Object.keys(node)[i]}>
-      //         <th>{Object.keys(node)[i]}</th>
-      //         <td>{Object.values(node)[i]}</td>
-      //       </tr>
-      //     );
-      //   }
-      //   node.information = result;
-      //   // console.log(node.id,node.information)
-      // })
+      nodes.forEach((node)=>{
+        // console.log(node)
+        const result = [];
+        for (var i = 0; i < Object.keys(node).length; i++) {
+          // if(Object.keys(node)[i]==="voyage_id"){
+          //   // console.log(node.voyage_id)
+          //   node.voyage_id = <Button onClick={(event) => handleOpen(event,node.voyage_id,true)}>{Object.values(node)[i]}</Button>
+          //   // console.log(node.voyage_id) 
+          // }
+          result.push(
+            <tr key = {Object.keys(node)[i]}>
+              <th>{Object.keys(node)[i]}</th>
+              <td>{Object.values(node)[i]}</td>
+            </tr>
+          );
+        }
+        node.information = result;
+        // console.log(node.id,node.information)
+      })
       
       new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
@@ -199,8 +208,10 @@ export default function Sankey(props) {
                     // onMouseEnter={()=>{console.log("hover enter", node)}}
                     onMouseLeave={handlePopoverClose}
                     >
+                    <Button onClick={(event) => handleOpen(event,node.voyage_id,true)}>{node.voyage_id}</Button>
                     <Typography align="center">{node.name}</Typography>
-                    <Typography align="center">{node.id}</Typography>
+                    {/* <Typography align="center">{node.id}</Typography> */}
+                    <Typography align="center">{node.voyage_id}</Typography>
                   </Box>
                   <Popover
                     id="mouse-over-popover"
@@ -219,7 +230,7 @@ export default function Sankey(props) {
                     }}
                     onClose={handlePopoverClose}
                     >
-                    {node.name}
+                    {node.information}
                   </Popover>
                 </div>
               </foreignObject>
