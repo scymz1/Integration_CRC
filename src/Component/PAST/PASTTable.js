@@ -24,20 +24,20 @@ export default function PASTTable(props) {
   const [cols, setCols] = React.useState(enslaved_default_list);
   const { options_tree, endpoint, queryData, setQueryData, search_object } = React.useContext(props.context);
   const [chipData, setChipData] = React.useState([
-    { id: 1, documented_name: "jQuery" },
-    { id: 2, documented_name: "Polymer" },
-    { id: 3, documented_name: "Vue.js" },
-    { id: 5, documented_name: "jQuery" },
-    { id: 6, documented_name: "Polymer" },
-    { id: 7, documented_name: "React" },
-    { id: 8, documented_name: "Vue.js" },
-    { id: 11, documented_name: "jQuery" },
-    { id: 12, documented_name: "Polymer" },
-    { id: 13, documented_name: "Vue.js" },
-    { id: 15, documented_name: "jQuery" },
-    { id: 16, documented_name: "Polymer" },
-    { id: 17, documented_name: "React" },
-    { id: 18, documented_name: "Vue.js" },
+    // { id: 1, documented_name: "jQuery" },
+    // { id: 2, documented_name: "Polymer" },
+    // { id: 3, documented_name: "Vue.js" },
+    // { id: 5, documented_name: "jQuery" },
+    // { id: 6, documented_name: "Polymer" },
+    // { id: 7, documented_name: "React" },
+    // { id: 8, documented_name: "Vue.js" },
+    // { id: 11, documented_name: "jQuery" },
+    // { id: 12, documented_name: "Polymer" },
+    // { id: 13, documented_name: "Vue.js" },
+    // { id: 15, documented_name: "jQuery" },
+    // { id: 16, documented_name: "Polymer" },
+    // { id: 17, documented_name: "React" },
+    // { id: 18, documented_name: "Vue.js" },
   ]);
 
   const handleDelete = (chipToDelete) => () => {
@@ -57,7 +57,7 @@ export default function PASTTable(props) {
           columnOptions: enslaved_var_list,
           options_flat: labels,
           queryData, setQueryData,
-          search_object,
+          search_object, chipData, setChipData,
         }}
       >
         <ColSelector context={ColContext} />
