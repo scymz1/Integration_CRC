@@ -2,6 +2,9 @@ import ColSelector from "./ColSelector";
 import Table from "./Table";
 import Modal from "./TableModal";
 import React, { useState } from "react";
+import { columnOptions } from "./tableVars";
+import * as labels from "../../../util/options.json";
+
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
@@ -27,6 +30,8 @@ function TableApp(props) {
           setOpen,
           info,
           setInfo,
+          columnOptions,
+          options_flat: labels,
         }}
       >
         <ColSelector context={ColContext} />

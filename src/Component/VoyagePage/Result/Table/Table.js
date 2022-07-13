@@ -16,7 +16,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
-import * as options_flat from "../../../util/options.json";
+//import * as options_flat from "../../../util/options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -28,7 +28,7 @@ function Table(props) {
   const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal } =
+  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat } =
     useContext(props.context);
 
   // Pagination
