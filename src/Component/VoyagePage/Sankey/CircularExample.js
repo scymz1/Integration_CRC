@@ -152,8 +152,8 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   const [optionSet, setOptionSet] = useState([...voyage_pivot_tables])
   // const [optionSet2, setOptionSet2] = useState([...voyage_pivot_tables])
   const [option, setOption] = useState({
-    fieldSource: voyage_pivot_tables[10],
-    fieldTarget: voyage_pivot_tables[8]
+    fieldSource: voyage_pivot_tables[0],
+    fieldTarget: voyage_pivot_tables[5]
 })
 
 const handleChange = (event, name, type) => {
