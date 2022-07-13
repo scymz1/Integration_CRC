@@ -132,11 +132,11 @@ export default function Sankey(props) {
         // console.log(node)
         const result = [];
         for (var i = 0; i < Object.keys(node).length; i++) {
-          // if(Object.keys(node)[i]==="voyage_id"){
-          //   // console.log(node.voyage_id)
-          //   node.voyage_id = <Button onClick={(event) => handleOpen(event,node.voyage_id,true)}>{Object.values(node)[i]}</Button>
-          //   // console.log(node.voyage_id) 
-          // }
+          if(Object.keys(node)[i]==="voyage_id"){
+            // console.log(node.voyage_id)
+            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,true)}>Voyage id:{node.voyage_id}</Button>
+            // console.log(node.voyage_id) 
+          }
           result.push(
             <tr key = {Object.keys(node)[i]}>
               <th>{Object.keys(node)[i]}</th>
@@ -223,10 +223,10 @@ export default function Sankey(props) {
                     // onMouseEnter={()=>{console.log("hover enter", node)}}
                     onMouseLeave={handlePopoverClose}
                     >
-                    <Button onClick={(event) => handleOpen(event,node.voyage_id,true)}>{node.voyage_id}</Button>
+                    
                     <Typography align="center">{node.name}</Typography>
                     {/* <Typography align="center">{node.id}</Typography> */}
-                    <Typography align="center">{node.voyage_id}</Typography>
+                    <Typography align="center">{node.voyagebutton}</Typography>
                   </Box>
                   <Popover
                     id={`sankey-node-text-${node.index}`}
