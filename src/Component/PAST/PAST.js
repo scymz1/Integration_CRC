@@ -1,6 +1,6 @@
 import ResponsiveAppBar from "../NavBar";
 import * as React from "react";
-import {Box, Button, Card, Modal, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide} from "@mui/material";
+import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Sankey from "./RelationGraph/Sankey"
 import Network from './RelationGraph/Network'
@@ -9,6 +9,7 @@ import PASTTable from './PASTTable'
 import Filter from "../VoyagePage/Filter/Filter";
 import {PASTContext} from "./PASTApp";
 import {useContext} from "react";
+import Modal from "../VoyagePage/Result/Table/TableModal";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -31,7 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 export default function PAST() {
   const [value, setValue] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [dialogopen, setdialogOpen] = React.useState(false);
   const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef} = useContext(PASTContext)
   const [scroll, setScroll] = React.useState('body');
   //console.log(endpoint);
@@ -39,12 +40,12 @@ export default function PAST() {
   //   return <Slide direction="up" ref={ref} {...props} />;
   // });
   const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
+    setdialogOpen(true);
     setScroll(scrollType);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setdialogOpen(false);
   };
 
   return (
@@ -58,7 +59,7 @@ export default function PAST() {
       <PASTTable context={PASTContext}/>
       <Dialog
         fullScreen
-        open={open}
+        open={dialogopen}
         onClose={handleClose}
         scroll={scroll}
         aria-labelledby="scroll-dialog-title"
@@ -92,6 +93,7 @@ export default function PAST() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <Sankey/>
+          <Modal context={PASTContext} endpoint="voyage/"/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network/>
