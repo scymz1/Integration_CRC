@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Modal,Typography, Popover } from "@mui/material";
+import { Box, Button, Modal, Typography, Popover } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 import './styles.css'
@@ -134,6 +134,8 @@ export default function Sankey(props) {
       //   node.information = result;
       //   // console.log(node.id,node.information)
       // })
+      
+      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
       new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
