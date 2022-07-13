@@ -328,7 +328,7 @@ function Table(props) {
             component="h2"
           >
             <div>
-              Full detail: {info.id}
+              Full detail: {id}
               <IconButton
                 sx={{ float: "right" }}
                 onClick={() => setOpen(false)}
