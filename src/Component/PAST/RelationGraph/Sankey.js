@@ -210,7 +210,7 @@ export default function Sankey(props) {
                 height={node.y1 - node.y0}>
                 <div className="node-name">
                   <Box
-                    onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
+                    onClick={(e)=>{handlePopoverOpen(e, node)}}
                     // onMouseEnter={()=>{console.log("hover enter", node)}}
                     onMouseLeave={handlePopoverClose}
                     >
