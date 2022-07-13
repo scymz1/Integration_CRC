@@ -9,6 +9,7 @@ import { linkHorizontal } from "d3-shape";
 import Sankey from "./CircularSankey";
 import { useState } from "react";
 import {Button} from "@mui/material";
+import { forEach, isError } from "lodash";
 // import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
@@ -43,16 +44,17 @@ import {Button} from "@mui/material";
 // });
 
 export default function SankeyExample(props) {
+  
   const {isLoading, error, data} = useQuery('',() => {
     var myHeaders = new Headers();
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", "voyage_itinerary__imp_port_voyage_begin__geo_location__id");
-formdata.append("groupby_fields", "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id");
+formdata.append("groupby_fields", "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name");
+formdata.append("groupby_fields", "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name");
 formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
-formdata.append("cachename", "voyage_maps");
+formdata.append("cachename", "voyage_pivot_tables");
 
 var requestOptions = {
   method: 'POST',
@@ -64,39 +66,49 @@ var requestOptions = {
 return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOptions)
   .then(response => response.json())
   .then(result => {
-
     let allNodes= new Set()
     let nodes = []
     let links = []
 
-    // console.log(result)
-    // console.log(typeof(result))
-    
     Object.keys(result).forEach(source =>{
       allNodes.add(source)
       Object.keys(result[source]).forEach(target =>{
         allNodes.add(target)
       })
     })
-
-    console.log(allNodes)
-
+ 
    allNodes.forEach((source) =>{
       nodes.push({"name": source})
    })
 
-    Object.keys(result).forEach(source =>{
-      Object.keys(result[source]).forEach(target =>{
-        links.push({
-          "source": [...allNodes].indexOf(source),
-          "target": [...allNodes].indexOf(target),
-          "value": result[source][target]
-        })
-      })
-    })
 
-    // console.log(nodes)
-    // console.log(edges)
+   let res = new Map(Object.entries(result));
+
+  // Use Map to deal with Json -> with less memory usage 
+
+  res.forEach((value, key) => {
+    new Map(Object.entries(value)).forEach ((val, target) => {
+    links.push({
+      "source": [...allNodes].indexOf(key),
+      "target": [...allNodes].indexOf(target),
+      "value": val
+    })
+  })})
+  
+
+  // use Object to deal with Json 
+
+    // Object.keys(result).forEach(source =>{
+    //   // console.log("🔥",source)
+    //   Object.keys(result[source]).forEach(target =>{
+    //     // console.log("     🧍‍♀️",target)
+    //     links.push({
+    //       "source": [...allNodes].indexOf(source),
+    //       "target": [...allNodes].indexOf(target),
+    //       "value": result[source][target]
+    //     })
+    //   })
+    // })
 
     console.log(
       {
@@ -114,6 +126,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   })
   .catch(error => console.log('error', error));
   })
+
 
   
   // print the request data 
@@ -143,6 +156,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
 
   if (width < 10) return null;
   if(isLoading) return "loading";
+  if(error) return error.message;
 
   return (
     <div>
