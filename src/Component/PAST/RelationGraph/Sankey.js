@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box,Button, Modal,Typography,Popover } from "@mui/material";
+import { Box, Button, Modal, Typography, Popover } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 import './styles.css'
@@ -17,31 +17,36 @@ export default function Sankey(props) {
     const NODE_WIDTH = 140;
     const MIN_NODE_HEIGHT = 60;
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    // const [open, setOpen] = React.useState(false);
+    // const handleOpen = () => setOpen(true);
+    // const handleClose = () => setOpen(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [popOpen, setPopOpen] = React.useState(null);
 
-    const handlePopoverOpen = (event) => {
+    const handlePopoverOpen = (event, node) => {
         setAnchorEl(event.currentTarget);
+        setPopOpen(node.id);
+        console.log("Hover Success on", node.id);
     };
 
     const handlePopoverClose = () => {
         setAnchorEl(null);
+        setPopOpen(null);
+        console.log("Hover Leave from node")
     };
 
-    const popopen = Boolean(anchorEl);
-        const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
+    // const popOpen = Boolean(anchorEl);
+    //     const style = {
+    //     position: 'absolute',
+    //     top: '50%',
+    //     left: '50%',
+    //     transform: 'translate(-50%, -50%)',
+    //     width: 400,
+    //     bgcolor: 'background.paper',
+    //     border: '2px solid #000',
+    //     boxShadow: 24,
+    //     p: 4,
+    // };
 
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
@@ -110,25 +115,27 @@ export default function Sankey(props) {
           }
       };
 
-      nodes.forEach((node)=>{
-        // console.log(node)
-        const result = [];
-        for (var i = 0; i < Object.keys(node).length; i++) {
-          if(Object.keys(node)[i]==="voyage_id"){
-            // console.log(Object.values(node)[i])
-            node.voyage_id = <Button onClick={handleOpen}>{Object.values(node)[i]}</Button>
-            // console.log(Object.values(node)[i]) 
-          }
-          result.push(
-            <tr key = {Object.keys(node)[i]}>
-              <th>{Object.keys(node)[i]}</th>
-              <td>{Object.values(node)[i]}</td>
-            </tr>
-          );
-        }
-        node.information = result;
-        // console.log(node.id,node.information)
-      })
+      // nodes.forEach((node)=>{
+      //   // console.log(node)
+      //   const result = [];
+      //   for (var i = 0; i < Object.keys(node).length; i++) {
+      //     if(Object.keys(node)[i]==="voyage_id"){
+      //       // console.log(Object.values(node)[i])
+      //       node.voyage_id = <Button onClick={handleOpen}>{Object.values(node)[i]}</Button>
+      //       // console.log(Object.values(node)[i]) 
+      //     }
+      //     result.push(
+      //       <tr key = {Object.keys(node)[i]}>
+      //         <th>{Object.keys(node)[i]}</th>
+      //         <td>{Object.values(node)[i]}</td>
+      //       </tr>
+      //     );
+      //   }
+      //   node.information = result;
+      //   // console.log(node.id,node.information)
+      // })
+      
+      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
       new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
@@ -147,11 +154,9 @@ export default function Sankey(props) {
     }, [data]);
 
     
-    
-
   return (
     <div>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -163,10 +168,10 @@ export default function Sankey(props) {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          </Typography>s
         </Box>
-      </Modal>
-      {/* <h1>Sankey</h1> */}
+      </Modal> */}
+      <h1>Sankey</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
@@ -188,41 +193,34 @@ export default function Sankey(props) {
                 y={node.y0}
                 width={node.x1 - node.x0}
                 height={node.y1 - node.y0}>
-                <div className="node-heading">
-                <Popover
-                  id="mouse-over-popover"
-                  sx={{
-                    pointerEvents: 'none',
-                  }}
-                  open={popopen}
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  onClose={handlePopoverClose}
-                  disableRestoreFocus
-                >
-                  {node.information}
-                </Popover>
-                <Typography
-                  aria-owns={popopen ? 'mouse-over-popover' : undefined}
-                  aria-haspopup="true"
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
-                >
-                
-                  <tbody>
-                    {/* {node.information} */}
+                <div className="node-name">
+                  <Box
+                    onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
+                    // onMouseEnter={()=>{console.log("hover enter", node)}}
+                    onMouseLeave={handlePopoverClose}
+                    >
+                    <Typography align="center">{node.name}</Typography>
+                    <Typography align="center">{node.id}</Typography>
+                  </Box>
+                  <Popover
+                    id="mouse-over-popover"
+                    sx={{
+                      pointerEvents: 'none',
+                    }}
+                    open={popOpen === node.id}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    onClose={handlePopoverClose}
+                    >
                     {node.name}
-                    {node.id}
-                    {node.voyage_id}
-                  </tbody>
-                  </Typography>
+                  </Popover>
                 </div>
               </foreignObject>
             </>
