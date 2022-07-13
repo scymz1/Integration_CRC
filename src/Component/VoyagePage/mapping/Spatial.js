@@ -10,6 +10,7 @@ import * as d3 from "d3";
 import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
+import IntraTabs from "./Tab";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -82,6 +83,8 @@ export function ReadFeature(props) {
   }, [props.search_object]);
 
 
+
+
   useEffect(() => {
     for (var i in map._layers) {
       if (
@@ -96,14 +99,8 @@ export function ReadFeature(props) {
       }
     }
 
-    // Function for distinguish if the feature is a waypoint
-    // const featureWayPt = (feature) => {
-    //   return !feature.properties.name.includes("ocean waypt");
-    // };
-
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     const filterNodes = (feature) => {
-      console.log("🚀 ~ file: Spatial.js ~ line 110 ~ filterNodes ~ props.radio", props.radio)
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -114,8 +111,7 @@ export function ReadFeature(props) {
     };
 
 
-
-
+    
 
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
@@ -135,7 +131,6 @@ export function ReadFeature(props) {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
         
-          console.log('124')
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             console.log("current id = ", layer.feature.id);
@@ -154,9 +149,13 @@ export function ReadFeature(props) {
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <Grid>
-                {layer.feature.properties.name +
+                                {layer.feature.properties.name +
                   " " +
                   layer.feature.geometry.coordinates}
+              {/* TODO: if props.search_object.dataset[0] ==0, then hidden */}
+              <div >
+              <IntraTabs/>
+              </div>
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
                     <PivotContext.Provider
