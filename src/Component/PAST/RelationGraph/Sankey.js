@@ -7,6 +7,7 @@ import { truncate } from "lodash";
 import './styles.css'
 import { MODALContext } from "../PAST";
 
+import Story from "./Story";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -22,7 +23,7 @@ export default function Sankey(props) {
     // const [open, setOpen] = React.useState(false);
     const handleOpen = (event,info,modal) => {
       if (modal) {
-        console.log("voyage id",info)
+        // console.log("voyage id",info)
       setOpen(true);
       setId(info);
       // setId(info.id);
@@ -65,13 +66,14 @@ export default function Sankey(props) {
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
-        nodes.push({id: data[i].id, name: data[i].documented_name}); 
+        nodes.push({id: data[i].id, name: data[i].documented_name, type: "enslaved"}); 
         transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
             if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) === -1) {
                 nodes.push({id: data[i].transactions[j].transaction.id, 
                             name: data[i].transactions[j].transaction.relation_type.relation_type,
-                            voyage_id: data[i].transactions[j].transaction.voyage.id});
+                            voyage_id: data[i].transactions[j].transaction.voyage.id,
+                            type: "transaction"});
             }
             if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].id) &&
                                     x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id)) === -1) {
@@ -85,7 +87,9 @@ export default function Sankey(props) {
               for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
                 if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) === -1) {
                   nodes.push({id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
-                                name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias});
+                              name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias,
+                              type: "enslaver"
+                            });
                 }
                 
                 if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) &&
@@ -162,7 +166,19 @@ export default function Sankey(props) {
       setGraph(tmpGraph)  
     }, [data]);
 
+  function renderStory(node) {
+    // if(node.type === "enslaved")
+    // console.log("hover node", data.find((slave)=> slave.id === node.id))
+    // console.log("renderStory")
+    switch(node.type) {
+      case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
+      case "transaction": return "transaction"
+      case "enslaver": return "enslaver story"
+      default: return ""
+    }
     
+  }
+
   return (
     <div>
       {/* <Modal
@@ -194,7 +210,6 @@ export default function Sankey(props) {
         >
         {graph.nodes.map((node) => {
           return(
-            <>
               <foreignObject
                 key={`sankey-node-text-${node.index}`}
                 className="node"
@@ -204,7 +219,7 @@ export default function Sankey(props) {
                 height={node.y1 - node.y0}>
                 <div className="node-name">
                   <Box
-                    onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
+                    onClick={(e)=>{handlePopoverOpen(e, node)}}
                     // onMouseEnter={()=>{console.log("hover enter", node)}}
                     onMouseLeave={handlePopoverClose}
                     >
@@ -214,7 +229,7 @@ export default function Sankey(props) {
                     <Typography align="center">{node.voyage_id}</Typography>
                   </Box>
                   <Popover
-                    id="mouse-over-popover"
+                    id={`sankey-node-text-${node.index}`}
                     sx={{
                       pointerEvents: 'none',
                     }}
@@ -230,11 +245,10 @@ export default function Sankey(props) {
                     }}
                     onClose={handlePopoverClose}
                     >
-                    {node.information}
+                    {renderStory(node)}
                   </Popover>
                 </div>
               </foreignObject>
-            </>
         )})}
         {graph.links.map((link) => {
           return(

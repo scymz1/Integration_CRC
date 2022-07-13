@@ -4,7 +4,7 @@ import Modal from "./TableModal";
 import React, { useState } from "react";
 import { columnOptions } from "./tableVars";
 import * as labels from "../../../util/options.json";
-
+import ColSelector11 from "./ColSelector11";
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
@@ -34,7 +34,7 @@ function TableApp(props) {
           options_flat: labels,
         }}
       >
-        <ColSelector context={ColContext} />
+        <ColSelector11 context={ColContext} />
         <Table context={ColContext} />
         <Modal context={ColContext} />
       </ColContext.Provider>

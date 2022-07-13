@@ -267,8 +267,8 @@ function OptionSelector(props) {
           </Button>
           <Button color="inherit" onClick={() => {
             fileDownload(JSON.stringify(resultObject, null, 2)
-              .replace("__self", "")
-              .replace("\"type\": \"group label\"", "\"type\": \"table\""),
+              .replaceAll("__self", "")
+              .replaceAll("\"type\": \"group label\"", "\"type\": \"table\""),
               "options.json")
           }}>Export</Button>
         </Toolbar>
