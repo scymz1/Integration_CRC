@@ -1,10 +1,9 @@
-import {useContext, useEffect, useState} from "react";
-import {PASTContext} from "../PASTApp";
+import { useContext, useEffect, useState } from "react";
+import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import {Box,Button, Modal,Typography,Popover} from "@mui/material";
+import { Box,Button, Modal,Typography,Popover } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
-
 import './styles.css'
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
@@ -16,43 +15,44 @@ export default function Sankey(props) {
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 20;
-    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
+    const MIN_NODE_HEIGHT = 60;
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const popopen = Boolean(anchorEl);
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 400,
-      bgcolor: 'background.paper',
-      border: '2px solid #000',
-      boxShadow: 24,
-      p: 4,
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
     };
-    
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const popopen = Boolean(anchorEl);
+        const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
     useEffect(()=>{
-      let new_CANVAS_WIDTH = 0.8*windowRef.current.offsetWidth;
-      let new_CANVAS_HEIGHT = data.length * 100;
+      let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
+      let new_CANVAS_HEIGHT = 0;
+      let transLength = 0;
+      let enslaverLength = 0;
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
         nodes.push({id: data[i].id, name: data[i].documented_name}); 
-    
+        transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
             if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) === -1) {
                 nodes.push({id: data[i].transactions[j].transaction.id, 
@@ -67,6 +67,7 @@ export default function Sankey(props) {
                             info: "",
                             value:5})
             }
+            enslaverLength = enslaverLength + data[i].transactions[j].transaction.enslavers.length;
               for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
                 if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) === -1) {
                   nodes.push({id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
@@ -128,6 +129,8 @@ export default function Sankey(props) {
         node.information = result;
         // console.log(node.id,node.information)
       })
+      
+      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
       setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
       setCANVAS_WIDTH(new_CANVAS_WIDTH);
