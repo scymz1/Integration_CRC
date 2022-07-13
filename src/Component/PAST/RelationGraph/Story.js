@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import {useQuery} from "react-query";
-import {Button, CircularProgress, Box, Grid, unstable_getUnit} from "@mui/material";
+import { Card, CardHeader, CardContent } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import * as React from "react";
 import _ from 'lodash';
@@ -22,25 +22,17 @@ export default function Story (props) {
   const isMale = _.get(target, "gender", "1") != 0;
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <h1>Story of {_.get(target, ["documented_name"], "* name NA *")}</h1>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
-        <img src="https://media.gettyimages.com/illustrations/black-slaves-loaded-on-ship-1881-illustration-id157479463?s=612x612"></img>
-        </Grid>
-        <Grid item xs={4}>
+    <Card 
+      sx={{ flexGrow: 1,  width: 400}}>
+      <CardHeader
+        title={`Story of ${_.get(target, ["documented_name"], "* name NA *")}`}
+      />
+      <CardContent>
         <Div>{_.get(target, ["documented_name"], "* name NA *")} was <b>{_.get(target, ["captive_fate", "name"], "* captive fate NA *")}</b> at beginning, transported on voyage <b>{_.get(target, ["voyage", "id"], "* target NA *")}</b></Div>
         <Div>The voyage took {isMale ? "him" : "her"} from <b>{_.get((target, ["voyage", "voyage_itinerary", "imp_port_voyage_begin", "geo_location", "name"], "* start port NA *") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_region_voyage_begin", "geo_location", "name"], "* start region NA *")) + ")"}</b> to <b>{_.get(target, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "* des port NA *") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_principal_region_slave_dis", "geo_location", "name"], "* des region NA *") + ") "}</b> in <b>{_.get(target, ["voyage", "voyage_dates", "date_departed_africa_yyyy"])}</b></Div>
 	      <Div>The ship, <b>{_.get(target, ["voyage", "voyage_ship", "ship_name"], "* ship name NA *")}</b>, was owned by <b>{_.get(target, ["voyage", "voyage_captainconnection", 0, "captain", "name"], "* captain name NA *")}</b></Div>
 	      <Div>{isMale ? "He" : "She"} was consigned by CONSIGNOR, and sold by SELLER to BUYER in <b>{_.get(target, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "location_type", "name"], "* purchase location type *")}:</b> <b>{_.get(target, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "* purchase location name NA *")}</b> on TRANSACTION DATE.</Div>
-        <br/>
-        <br/>
-        <Button onClick={()=>{
-        console.log("props/target:", target);
-      }}>print data</Button>
-        </Grid>
-
-      </Grid>
-    </Box>
+      </CardContent>
+    </Card>
   )
 }
