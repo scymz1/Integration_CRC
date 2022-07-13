@@ -33,7 +33,8 @@ function reducer(state, { type, index }) {
 }
 
 function TableModal(props) {
-  const { endpoint, open, setOpen, id, info } = useContext(props.context);
+  const endpoint = props.endpoint
+  const {open, setOpen, id, info } = useContext(props.context);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -58,8 +59,14 @@ function TableModal(props) {
     if (id !== 0) {
       var data = new FormData();
       data.append("hierarchical", "False");
-      data.append("voyage_id", id);
-      data.append("voyage_id", id);
+      if (endpoint === "voyage/"){
+        data.append("voyage_id", id);
+        data.append("voyage_id", id);
+      }
+      // if (endpoint === "past/enslaved/"){
+      //   data.append("transactions__transaction__voyage__id", id);
+      //   data.append("transactions__transaction__voyage__id", id);
+      // }
       axios
         .post("/" + endpoint, data)
         .then(function (response) {
@@ -105,7 +112,7 @@ function TableModal(props) {
             component="h2"
           >
             <div>
-              Full detail: {info.id}
+              Full detail: {id}
               <IconButton
                 sx={{ float: "right" }}
                 onClick={() => setOpen(false)}

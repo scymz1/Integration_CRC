@@ -9,14 +9,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { VoyageContext } from "../../VoyageApp";
+//import { VoyageContext } from "../../VoyageApp";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
-import * as options_flat from "../../../util/options.json";
+//import * as options_flat from "../../../util/options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -25,10 +25,11 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Table(props) {
   const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
-  const { search_object } = useContext(VoyageContext);
+  //const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal } =
+  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat, queryData, setQueryData,
+  search_object } =
     useContext(props.context);
 
   // Pagination
@@ -120,6 +121,16 @@ function Table(props) {
     }
   };
 
+  const isSelected = (name) => {
+    if (checkbox) {
+      console.log(queryData["targets"]);
+      return queryData["targets"].indexOf(name) !== -1;
+    }
+    return false;
+  };
+
+
+
   return (
     <div>
       <div>
@@ -163,23 +174,28 @@ function Table(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {value.map((row) => (
+                  {value.map((row) => {
+                    const isItemSelected = isSelected(row.id);
+                    return (
+
                     // <TableRow>
                     <StyledTableRow
                       key={row.name}
                       onClick={(event) => handleOpen(event, row)}
+                      //selected={isItemSelected}
                     >
                       {checkbox && (
                         <TableCell padding="checkbox">
-                          <Checkbox color="primary" />
+                          <Checkbox color="primary" checked={isItemSelected}/>
                         </TableCell>
                       )}
                       {cols.map((k) => (
                         <TableCell>{row[k]}</TableCell>
                       ))}
                       {/* </TableRow> */}
-                    </StyledTableRow>
-                  ))}
+                    </StyledTableRow>)
+}
+                  )}
                 </TableBody>
               </Tables>
             </TableContainer>

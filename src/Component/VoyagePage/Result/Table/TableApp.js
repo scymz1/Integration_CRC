@@ -1,7 +1,11 @@
 import ColSelector from "./ColSelector";
 import Table from "./Table";
 import Modal from "./TableModal";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { columnOptions } from "./tableVars";
+import * as labels from "../../../util/options.json";
+import { VoyageContext } from "../../VoyageApp";
+
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
@@ -10,6 +14,7 @@ function TableApp(props) {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
+  const { search_object } = useContext(VoyageContext);
 
   return (
     <div>
@@ -27,6 +32,9 @@ function TableApp(props) {
           setOpen,
           info,
           setInfo,
+          columnOptions,
+          options_flat: labels,
+          search_object,
         }}
       >
         <ColSelector context={ColContext} />
