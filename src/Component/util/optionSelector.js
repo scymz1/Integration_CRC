@@ -166,7 +166,15 @@ function OptionSelector(props) {
     reader.onload = (e) => {
       const text = e.target.result;
       // console.log(text.replace(/[\r\n\t\s]+/g, ""))
-      setResultObject(JSON.parse(text.replace(/[\r\n\t\s]+/g, "")))
+      const tmp = JSON.parse(text.replace(/[\r\n\t\s]+/g, ""));
+      _.forIn(tmp, (value, key) =>{
+        console.log(value)
+        if(value.type === "table"){
+          tmp[key+"__self"] = {...value, type:"group label"}
+          delete tmp[key]
+        }
+      })
+      setResultObject(tmp)
     };
     reader.readAsText(e.target.files[0]);
   };
