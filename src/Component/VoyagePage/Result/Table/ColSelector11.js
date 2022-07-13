@@ -110,7 +110,7 @@ export default function ColSelector11(props) {
                         : <NestedMenuItem
                             key={nameConcat(name,key)}
                             // label={options_flat[nameConcat(name,key)].label}
-                            label = {nameConcat(name,key)}
+                            label = {options_flat[nameConcat(name,key)].label}
                             parentMenuOpen={open}
                             onClick={handleClose}
                             > 
@@ -140,7 +140,7 @@ export default function ColSelector11(props) {
                         <ListItem key={data.key}>
                             <Chip
                             label={data.label}
-                            onDelete={data.label === 'id' ? undefined : handleDelete(data)}
+                            onDelete={data.key === 'id' ? undefined : handleDelete(data)}
                             />
                         </ListItem>
                     );
