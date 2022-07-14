@@ -1,63 +1,79 @@
-import {useContext, useEffect, useState} from "react";
-import {PASTContext} from "../PASTApp";
+import { useContext, useEffect, useState } from "react";
+import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import {Box,Button, Modal,Typography,Popover} from "@mui/material";
+import { Box, Button, Typography, Popover } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
-
 import './styles.css'
+import { MODALContext } from "../PAST";
+
+import Story from "./Story";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {data,windowRef} = useContext(PASTContext);
+    const {data,windowRef,setOpen, setInfo, setId, modal} = useContext(PASTContext);
     const [graph, setGraph] = useState(null);
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 20;
-    const MIN_SPACE_BETWEEN_NODES_VERTICAL = 20;
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const MIN_NODE_HEIGHT = 60;
 
+    // const [open, setOpen] = React.useState(false);
+    const handleOpen = (event,info,modal) => {
+      if (modal) {
+        // console.log("voyage id",info)
+      setOpen(true);
+      setId(info);
+      // setId(info.id);
+    }
+  };
+    // const handleClose = () => setOpen(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [popOpen, setPopOpen] = React.useState(null);
 
-  const handlePopoverOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const popopen = Boolean(anchorEl);
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 400,
-      bgcolor: 'background.paper',
-      border: '2px solid #000',
-      boxShadow: 24,
-      p: 4,
+    const handlePopoverOpen = (event, node) => {
+        setAnchorEl(event.currentTarget);
+        setPopOpen(node.id);
+        // console.log("Hover Success on", node.id);
     };
-    
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+        setPopOpen(null);
+        // console.log("Hover Leave from node")
+    };
+
+    // const popOpen = Boolean(anchorEl);
+        const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
+
     useEffect(()=>{
-      let new_CANVAS_WIDTH = 0.8*windowRef.current.offsetWidth;
-      let new_CANVAS_HEIGHT = data.length * 100;
+      let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
+      let new_CANVAS_HEIGHT = 0;
+      let transLength = 0;
+      let enslaverLength = 0;
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
-        nodes.push({id: data[i].id, name: data[i].documented_name}); 
-    
+        nodes.push({id: data[i].id, name: data[i].documented_name, type: "enslaved"}); 
+        transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
             if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) === -1) {
                 nodes.push({id: data[i].transactions[j].transaction.id, 
                             name: data[i].transactions[j].transaction.relation_type.relation_type,
-                            voyage_id: data[i].transactions[j].transaction.voyage.id});
+                            voyage_id: data[i].transactions[j].transaction.voyage.id,
+                            type: "transaction"});
             }
             if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].id) &&
                                     x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id)) === -1) {
@@ -67,10 +83,13 @@ export default function Sankey(props) {
                             info: "",
                             value:5})
             }
+            enslaverLength = enslaverLength + data[i].transactions[j].transaction.enslavers.length;
               for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
                 if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) === -1) {
                   nodes.push({id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
-                                name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias});
+                              name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias,
+                              type: "enslaver"
+                            });
                 }
                 
                 if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) &&
@@ -114,9 +133,9 @@ export default function Sankey(props) {
         const result = [];
         for (var i = 0; i < Object.keys(node).length; i++) {
           if(Object.keys(node)[i]==="voyage_id"){
-            // console.log(Object.values(node)[i])
-            node.voyage_id = <Button onClick={handleOpen}>{Object.values(node)[i]}</Button>
-            // console.log(Object.values(node)[i]) 
+            // console.log(node.voyage_id)
+            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,true)}>Voyage id:{node.voyage_id}</Button>
+            // console.log(node.voyage_id) 
           }
           result.push(
             <tr key = {Object.keys(node)[i]}>
@@ -128,6 +147,10 @@ export default function Sankey(props) {
         node.information = result;
         // console.log(node.id,node.information)
       })
+      
+      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
+      
+      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
       setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
       setCANVAS_WIDTH(new_CANVAS_WIDTH);
@@ -143,12 +166,22 @@ export default function Sankey(props) {
       setGraph(tmpGraph)  
     }, [data]);
 
+  function renderStory(node) {
+    // if(node.type === "enslaved")
+    // console.log("hover node", data.find((slave)=> slave.id === node.id))
+    // console.log("renderStory")
+    switch(node.type) {
+      case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
+      case "transaction": return "transaction"
+      case "enslaver": return "enslaver story"
+      default: return ""
+    }
     
-    
+  }
 
   return (
     <div>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -160,10 +193,10 @@ export default function Sankey(props) {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          </Typography>s
         </Box>
-      </Modal>
-      {/* <h1>Sankey</h1> */}
+      </Modal> */}
+      <h1>Sankey</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
@@ -177,7 +210,6 @@ export default function Sankey(props) {
         >
         {graph.nodes.map((node) => {
           return(
-            <>
               <foreignObject
                 key={`sankey-node-text-${node.index}`}
                 className="node"
@@ -185,44 +217,38 @@ export default function Sankey(props) {
                 y={node.y0}
                 width={node.x1 - node.x0}
                 height={node.y1 - node.y0}>
-                <div className="node-heading">
-                <Popover
-                  id="mouse-over-popover"
-                  sx={{
-                    pointerEvents: 'none',
-                  }}
-                  open={popopen}
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  onClose={handlePopoverClose}
-                  disableRestoreFocus
-                >
-                  {node.information}
-                </Popover>
-                <Typography
-                  aria-owns={popopen ? 'mouse-over-popover' : undefined}
-                  aria-haspopup="true"
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
-                >
-                
-                  <tbody>
-                    {/* {node.information} */}
-                    {node.name}
-                    {node.id}
-                    {node.voyage_id}
-                  </tbody>
-                  </Typography>
+                <div className="node-name">
+                  <Box
+                    onClick={(e)=>{handlePopoverOpen(e, node)}}
+                    // onMouseEnter={()=>{console.log("hover enter", node)}}
+                    onMouseLeave={handlePopoverClose}
+                    >
+                    
+                    <Typography align="center">{node.name}</Typography>
+                    {/* <Typography align="center">{node.id}</Typography> */}
+                    <Typography align="center">{node.voyagebutton}</Typography>
+                  </Box>
+                  <Popover
+                    id={`sankey-node-text-${node.index}`}
+                    sx={{
+                      pointerEvents: 'none',
+                    }}
+                    open={popOpen === node.id}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    onClose={handlePopoverClose}
+                    >
+                    {renderStory(node)}
+                  </Popover>
                 </div>
               </foreignObject>
-            </>
         )})}
         {graph.links.map((link) => {
           return(
