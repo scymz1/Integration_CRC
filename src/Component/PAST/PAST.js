@@ -33,7 +33,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = React.useState(0);
   const [dialogopen, setdialogOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef} = useContext(PASTContext)
+  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
   const [scroll, setScroll] = React.useState('body');
   //console.log(endpoint);
   // const Transition = React.forwardRef(function Transition(props, ref) {
@@ -55,7 +55,7 @@ export default function PAST() {
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
       <Filter context={PASTContext}/>
-      <Button onClick={handleClickOpen('body')}>Open modal</Button><br/>
+      <Button disabled={queryData["targets"].length === 0} onClick={handleClickOpen('body')}>Open modal</Button><br/>
       <PASTTable context={PASTContext}/>
       <Dialog
         fullScreen
