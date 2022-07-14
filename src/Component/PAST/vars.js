@@ -15,7 +15,7 @@ export const enslaved_default_list = [
   // "last_known_year_yyyy",
   // "transactions__transaction__place__geo_location__name",
   "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias",
-  "transactions__transaction__enslavers__role__role",
+  //"transactions__transaction__enslavers__role__role",
   // "transactions__transaction__source__full_ref",
 ];
 
