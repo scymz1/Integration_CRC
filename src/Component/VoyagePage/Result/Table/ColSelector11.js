@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
-import { MenuItem } from '@mui/material';
+import { CardHeader, MenuItem } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
@@ -102,19 +102,19 @@ export default function ColSelector11(props) {
             Object.keys(nodes).map((key) =>
                 isChildren(key)
                     ? isLast(nodes[key])
-                        ? isInColList(nameConcat(name,key))
-                            ? <MenuItem value={nameConcat(name,key)} key={key} onClick={() => {handleOptionClick(nameConcat(name,key))}}>
-                                {options_flat[nameConcat(name,key)].label}
+                        // ? isInColList(key)
+                            ? <MenuItem value={key} key={key} onClick={() => {handleOptionClick(key)}}>
+                                {options_flat[key].flatlabel}
                             </MenuItem>
-                            :null
+                            // :null
                         : <NestedMenuItem
-                            key={nameConcat(name,key)}
+                            key={key}
                             // label={options_flat[nameConcat(name,key)].label}
-                            label = {options_flat[nameConcat(name,key)].label}
+                            label = {options_flat[key].label}
                             parentMenuOpen={open}
                             onClick={handleClose}
                             > 
-                            {renderTree(nodes[key], nameConcat(name,key))}
+                            {renderTree(nodes[key],key)}
                         </NestedMenuItem>
                     : null
                 )   
@@ -124,27 +124,19 @@ export default function ColSelector11(props) {
 
     return (
         <div>
-            <Paper
+            {/* <Paper
                 sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'left',
                 flexWrap: 'wrap',
                 listStyle: 'none',
                 p: 0.5,
                 m: 0,
                 }}
                 component="ul"
-            >
-                {chipData.map((data) => {
-                    return (
-                        <ListItem key={data.key}>
-                            <Chip
-                            label={data.label}
-                            onDelete={data.key === 'id' ? undefined : handleDelete(data)}
-                            />
-                        </ListItem>
-                    );
-                 })}
+            > */}
+            <Grid container spacing={1}>
+                <Grid item xs={2}>
                     <TreeView
                         aria-label="option menu"
                         defaultCollapseIcon={<ExpandMoreIcon/>}
@@ -157,10 +149,27 @@ export default function ColSelector11(props) {
                                     {"Column Selector"}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {renderTree(hierFalse2True(columnOptions),"")}
+                            {/* {renderTree(hierFalse2True(columnOptions),"")} */}
+                            {renderTree(columnOptions,"")}
                         </Menu>
                     </TreeView>
-                </Paper>
+                </Grid>
+            {/* </Grid>
+            <Grid container spacing = {2}> */}
+                <Grid container item xs={9}>
+                    {chipData.map((data) => {
+                    return (
+                        <ListItem key={data.key}>
+                            <Chip
+                            label={data.label}
+                            onDelete={data.key === 'id' ? undefined : handleDelete(data)}
+                            />
+                        </ListItem>
+                    );
+                 })}
+                </Grid>
+            </Grid>
+                {/* </Paper> */}
         </div>
     );
 }
