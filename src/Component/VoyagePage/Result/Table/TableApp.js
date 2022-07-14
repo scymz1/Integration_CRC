@@ -1,4 +1,5 @@
 import ColSelector from "./ColSelector";
+import ColSelector11 from "./ColSelector11"
 import Table from "./Table";
 import Modal from "./TableModal";
 import React, { useState, useContext } from "react";
@@ -37,7 +38,7 @@ function TableApp(props) {
           search_object,
         }}
       >
-        <ColSelector context={ColContext} />
+        <ColSelector11 context={ColContext} />
         <Table context={ColContext} />
         <Modal context={ColContext} endpoint = "voyage/"/>
       </ColContext.Provider>
