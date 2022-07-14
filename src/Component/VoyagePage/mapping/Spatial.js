@@ -36,6 +36,7 @@ export const PivotContext = React.createContext({});
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
   const [isLoading, setIsLoading] = useState(false);
+  //console.log("readfeature---------",props.search_object.dataset[0])
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
@@ -152,15 +153,16 @@ export function ReadFeature(props) {
                                 {layer.feature.properties.name +
                   " " +
                   layer.feature.geometry.coordinates}
-              {/* TODO: if props.search_object.dataset[0] ==0, then hidden */}
-              <div >
-              <IntraTabs/>
-              </div>
+              
+              
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
                     <PivotContext.Provider
-                      value={{ complete_object, set_complete_object }}
+                      value={{ complete_object, set_complete_object , }}
                     >
+                      {/* only show if intraamerican, otherwise hidden */}
+                        {props.search_object.dataset[0] == 1?<IntraTabs context={PivotContext}/>: ""}
+
                       <Pivot context={PivotContext} />
                     </PivotContext.Provider>
                   </div>

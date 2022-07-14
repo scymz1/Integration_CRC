@@ -59,7 +59,9 @@ export default function MapBoundingBox(props){
 
     
     const {search_object, endpoint} = React.useContext(props.context);
+    
     const [map_search_object, set_map_search_object] = useState(search_object);
+    console.log("🚀 ~ file: Map.js ~ line 62 ~ MapBoundingBox ~ search_object", map_search_object)
     
     const handle = useFullScreenHandle();
 
@@ -122,7 +124,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={map_search_object} radio = {radioOptions}/>
+                <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
                 {
