@@ -44,7 +44,7 @@ function Table(props) {
   } = useContext(props.context);
 
   // Pagination
-  const [totalResultsCount, setTotalResultsCount] = useState([]);
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
