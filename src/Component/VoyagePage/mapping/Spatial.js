@@ -40,6 +40,8 @@ export function ReadFeature(props) {
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
+  const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
+  console.log("🚀 ~ file: Spatial.js ~ line 44 ~ ReadFeature ~ disembark", disembark)
 
   // const {search_object} = React.useContext(PastContext);
   const map = useMap();
@@ -134,8 +136,7 @@ export function ReadFeature(props) {
         
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
-            console.log("current id = ", layer.feature.id);
-            console.log("🚀 ~ file: Spatial.js ~ line 137 ~ useEffect ~ layer", layer)
+
             let tmp =
               complete_object[
                 "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
@@ -147,6 +148,46 @@ export function ReadFeature(props) {
               voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id:
                 tmp,
             });
+
+          //   let tmp =
+          //   complete_object[
+          //     [disembark]
+          //   ];
+          // tmp[0] = layer.feature.id;
+          // tmp[1] = layer.feature.id;
+          //   set_complete_object({
+          //     ...complete_object,
+          //     [disembark]:
+          //       tmp,
+          //   });
+
+            
+            // if (disembark === "emb"){
+            //   let tmp =
+            //   complete_object[
+            //     "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+            //   ];
+            // tmp[0] = layer.feature.id;
+            // tmp[1] = layer.feature.id;
+            //   set_complete_object({
+            //     ...complete_object,
+            //     voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id:
+            //       tmp,
+            //   });
+            // }else{
+            //   let tmp =
+            //   complete_object[
+            //     "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id"
+            //   ];
+            // tmp[0] = layer.feature.id;
+            // tmp[1] = layer.feature.id;
+            //   set_complete_object({
+            //     ...complete_object,
+            //     voyage_itinerary__imp_principal_port_slave_dis__geo_location__id:
+            //       tmp,
+            //   });
+            // }
+            
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <Grid>
@@ -158,10 +199,10 @@ export function ReadFeature(props) {
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
                     <PivotContext.Provider
-                      value={{ complete_object, set_complete_object , }}
+                      value={{ complete_object, set_complete_object , disembark, setDisembark}}
                     >
                       {/* only show if intraamerican, otherwise hidden */}
-                        {props.search_object.dataset[0] == 1?<IntraTabs context={PivotContext}/>: ""}
+                        {props.search_object.dataset[0] === 1?<IntraTabs context={PivotContext}/>: ""}
 
                       <Pivot context={PivotContext} />
                     </PivotContext.Provider>
@@ -190,6 +231,8 @@ export function ReadFeature(props) {
       DrawLink(map, csv);
     }
   }, [nodes, csv]);
+  console.log("🚀 ~ file: Spatial.js ~ line 148 ~ disembark", disembark)
+  console.log("🚀 ~ file: Spatial.js ~ line 173 ~ complete_object", complete_object)
 
   if (isLoading == false) {
     return "isLoading";

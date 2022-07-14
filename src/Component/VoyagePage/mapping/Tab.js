@@ -4,20 +4,19 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 export default function IntraTabs(props) {
-    const { complete_object,set_complete_object } = useContext(props.context);
-  const [value, setValue] = React.useState('emb');
+  const { disembark, setDisembark} = useContext(props.context);
+  const [value, setValue] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
 
-  const handleChange = (event, newValue) => {
+
+  const handleChange = (event,newValue) => {
+  console.log("🚀 ~ file: Tab.js ~ line 12 ~ handleChange ~ newValue", newValue)
+
     setValue(newValue);
-    console.log("🚀 ~ file: Tab.js ~ line 12 ~ handleChange ~ newValue", newValue)
-    console.log("tabbb",complete_object)
-    //TODO: update search object based on embarkation/disembarkation selection (but how??)
-   // set_complete_object(...)
-        //    cachename: ['voyage_pivot_tables']
-        // groupby_fields: (2) ['voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name', 'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name']
-        // value_field_tuple: (2) ['voyage_slaves_numbers__imp_total_num_slaves_disembarked', 'sum']
-        // voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id: (2) [20828, 20828]
+    setDisembark(newValue)
   };
+
+      console.log("🚀 ~ file: Tab.js ~ line 12 ~ IntraTabs handleChange ~ newValue", value)
+    console.log("🚀 ~ file: Tab.js ~ line 8 ~ IntraTabs ~ disembark", disembark)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -26,10 +25,10 @@ export default function IntraTabs(props) {
         onChange={handleChange}
       >
         <Tab
-          value="emb"
+          value="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
           label="Port of embarkation"
         />
-        <Tab value="disemb" label="Port of disembarkation" />
+        <Tab value="voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" label="Port of disembarkation" />
       </Tabs>
     </Box>
   );
