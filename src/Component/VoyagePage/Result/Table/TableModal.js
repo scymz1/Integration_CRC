@@ -121,14 +121,14 @@ function TableModal(props) {
               </IconButton>
             </div>
           </Typography>
-          <Typography>
+          <Typography component={'span'}>
             <div>
               Here are the currently available details for this voyage.
               <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
               to see/hide all.
             </div>
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }} component={'span'}>
             {Object.keys(skeleton).map((title) => (
               <div>
                 <Accordion
@@ -143,7 +143,7 @@ function TableModal(props) {
                     <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography>
+                    <Typography component={'span'}>
                       {skeleton[title].map((obj) => (
                         <Grid container spacing={2} columns={16}>
                           <Grid sx={{ fontWeight: "bold" }} item xs={8}>
