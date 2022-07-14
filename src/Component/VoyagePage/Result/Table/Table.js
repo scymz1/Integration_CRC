@@ -28,12 +28,23 @@ function Table(props) {
   //const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat, queryData, setQueryData,
-  search_object } =
-    useContext(props.context);
+  const {
+    cols,
+    endpoint,
+    checkbox,
+    setOpen,
+    setInfo,
+    setId,
+    modal,
+    options_flat,
+    queryData,
+    setQueryData,
+    search_object,
+    chipData,
+  } = useContext(props.context);
 
   // Pagination
-  const [totalResultsCount, setTotalResultsCount] = useState([]);
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -41,6 +52,9 @@ function Table(props) {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Checkbox
+  //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
     var data = new FormData();
@@ -118,18 +132,39 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.transactions.length !== 0) {
+      //console.log(info.documented_name);
+      //let selected = queryData["targets"];
+      const selectedIndex = queryData["targets"].indexOf(info.id);
+      if (selectedIndex === -1) {
+        if (!checkedMax(info.id)) {
+          chipData[info.id] = info.documented_name;
+        }
+      } else {
+        delete chipData[info.id];
+      }
+      setQueryData({
+        ...queryData,
+        targets: Object.keys(chipData).map(Number),
+      });
+      //console.log(queryData);
     }
   };
 
   const isSelected = (name) => {
     if (checkbox) {
-      console.log(queryData["targets"]);
+      //console.log(queryData["targets"]);
       return queryData["targets"].indexOf(name) !== -1;
     }
     return false;
   };
 
-
+  const checkedMax = (value) => {
+    const maxAllowed = 10;
+    //console.log(value);
+    const checked = queryData["targets"];
+    return checked.length >= maxAllowed && checked.indexOf(value) === -1;
+  };
 
   return (
     <div>
@@ -177,25 +212,33 @@ function Table(props) {
                   {value.map((row) => {
                     const isItemSelected = isSelected(row.id);
                     return (
-
-                    // <TableRow>
-                    <StyledTableRow
-                      key={row.name}
-                      onClick={(event) => handleOpen(event, row)}
-                      //selected={isItemSelected}
-                    >
-                      {checkbox && (
-                        <TableCell padding="checkbox">
-                          <Checkbox color="primary" checked={isItemSelected}/>
-                        </TableCell>
-                      )}
-                      {cols.map((k) => (
-                        <TableCell>{row[k]}</TableCell>
-                      ))}
-                      {/* </TableRow> */}
-                    </StyledTableRow>)
-}
-                  )}
+                      // <TableRow>
+                      <StyledTableRow
+                        key={row.name}
+                        onClick={(event) => handleOpen(event, row)}
+                        //selected={isItemSelected}
+                      >
+                        {checkbox && row.transactions.length !== 0 && (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                              disabled={checkedMax(row.id)}
+                            />
+                          </TableCell>
+                        )}
+                        {checkbox && row.transactions.length === 0 && (
+                          <TableCell padding="checkbox"></TableCell>
+                        )}
+                        {cols.map((k) => (
+                          <TableCell>
+                            <div dangerouslySetInnerHTML={{ __html: row[k] }} />
+                          </TableCell>
+                        ))}
+                        {/* </TableRow> */}
+                      </StyledTableRow>
+                    );
+                  })}
                 </TableBody>
               </Tables>
             </TableContainer>

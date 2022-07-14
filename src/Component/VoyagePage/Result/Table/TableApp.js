@@ -40,7 +40,7 @@ function TableApp(props) {
       >
         <ColSelector11 context={ColContext} />
         <Table context={ColContext} />
-        <Modal context={ColContext} />
+        <Modal context={ColContext} endpoint = "voyage/"/>
       </ColContext.Provider>
     </div>
   );
