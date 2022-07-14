@@ -28,9 +28,20 @@ function Table(props) {
   //const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat, queryData, setQueryData,
-  search_object, chipData, setChipData } =
-    useContext(props.context);
+  const {
+    cols,
+    endpoint,
+    checkbox,
+    setOpen,
+    setInfo,
+    setId,
+    modal,
+    options_flat,
+    queryData,
+    setQueryData,
+    search_object,
+    chipData,
+  } = useContext(props.context);
 
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState([]);
@@ -118,25 +129,20 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
-    } else {
+    } else if (info.transactions.length !== 0) {
       //console.log(info.documented_name);
-      let selected = queryData["targets"];
-      const selectedIndex = selected.indexOf(info.id);
-      let newSelected = [];
-      let newChipData = [];
+      //let selected = queryData["targets"];
+      const selectedIndex = queryData["targets"].indexOf(info.id);
       if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, info.id);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1),
-        );
+        chipData[info.id] = info.documented_name;
+      } else {
+        delete chipData[info.id];
       }
-      setQueryData({...queryData, targets: newSelected});
+      setQueryData({
+        ...queryData,
+        targets: Object.keys(chipData).map(Number),
+      });
+      //console.log(queryData);
     }
   };
 
@@ -147,8 +153,6 @@ function Table(props) {
     }
     return false;
   };
-
-
 
   return (
     <div>
@@ -196,25 +200,30 @@ function Table(props) {
                   {value.map((row) => {
                     const isItemSelected = isSelected(row.id);
                     return (
-
-                    // <TableRow>
-                    <StyledTableRow
-                      key={row.name}
-                      onClick={(event) => handleOpen(event, row)}
-                      //selected={isItemSelected}
-                    >
-                      {checkbox && (
-                        <TableCell padding="checkbox">
-                          <Checkbox color="primary" checked={isItemSelected}/>
-                        </TableCell>
-                      )}
-                      {cols.map((k) => (
-                        <TableCell>{row[k]}</TableCell>
-                      ))}
-                      {/* </TableRow> */}
-                    </StyledTableRow>)
-}
-                  )}
+                      // <TableRow>
+                      <StyledTableRow
+                        key={row.name}
+                        onClick={(event) => handleOpen(event, row)}
+                        //selected={isItemSelected}
+                      >
+                        {checkbox && row.transactions.length !== 0 && (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                            />
+                          </TableCell>
+                        )}
+                        {checkbox && row.transactions.length === 0 && (
+                          <TableCell padding="checkbox"></TableCell>
+                        )}
+                        {cols.map((k) => (
+                          <TableCell>{row[k]}</TableCell>
+                        ))}
+                        {/* </TableRow> */}
+                      </StyledTableRow>
+                    );
+                  })}
                 </TableBody>
               </Tables>
             </TableContainer>
