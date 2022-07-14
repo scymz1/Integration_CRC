@@ -72,23 +72,31 @@ export default function Sankey(props) {
         transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
             var transaction_id;
+            var voyage_id;
             switch (data[i].transactions[j].transaction.voyage) {
               case null:
                 transaction_id = data[i].transactions[j].transaction.id;
+                voyage_id = null;
                 break;
               default:
                 transaction_id = data[i].transactions[j].transaction.voyage.id;
+                voyage_id = transaction_id;
                 break;
             }
             if (nodes.findIndex(x =>  
                   x.id === transaction_id &&
                   x.name === data[i].transactions[j].transaction.relation_type.relation_type &&
-                  x.amount === data[i].transactions[j].transaction.amount
+                  x.amount === data[i].transactions[j].transaction.amount &&
+                  x.voyage_id === voyage_id
                 ) === -1) {
                 nodes.push({
                             id: transaction_id,
                             name: data[i].transactions[j].transaction.relation_type.relation_type,
                             amount: data[i].transactions[j].transaction.amount,
+                            voyage_id: voyage_id,
+                            full_ref: data[i].transactions[j].transaction.source.full_ref,
+                            place:data[i].transactions[j].transaction.place.geo_location.name,
+                            date: data[i].transactions[j].transaction.date,
                             type: "transaction",
                           });
             }
@@ -161,6 +169,57 @@ export default function Sankey(props) {
             }
           }
       };
+
+      nodes.forEach((node)=>{
+        const result = [];
+        var voyagemodal = true;
+        if(node.type==="transaction"){
+          if(node.voyage_id===null){
+            voyagemodal = false;
+            result.push(
+              <tr key = {node.id}>
+                <th>Type: </th>
+                <td>{node.name}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Source: </th>
+                <td>{node.full_ref}</td>
+              </tr>,
+                <tr key = {node.id}>
+                <th>Place: </th>
+                <td>{node.place}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Date: </th>
+                <td>{node.date}</td>
+              </tr>
+            );
+          }
+          else{
+            // console.log(node.voyage_id)
+            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,voyagemodal)}>Voyage id:{node.voyage_id}</Button>
+            // console.log(node.voyage_id) 
+            result.push(
+              <tr key = {node.id}>
+                <th>Type: </th>
+                <td>{node.name}</td>
+              </tr>,
+                <tr key = {node.id}>
+                <th>Place: </th>
+                <td>{node.place}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Date: </th>
+                <td>{node.date}</td>
+              </tr>
+            );
+          }
+          }
+        
+        
+        node.information = result;
+        // console.log(node.id,node.information)
+      })
       
       new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
@@ -184,7 +243,7 @@ export default function Sankey(props) {
     // console.log("renderStory")
     switch(node.type) {
       case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
-      case "transaction": return "transaction"
+      case "transaction": return node.information
       case "enslaver": return "enslaver story"
       default: return ""
     }
