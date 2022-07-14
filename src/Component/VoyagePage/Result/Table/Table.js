@@ -17,6 +17,8 @@ import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 //import * as options_flat from "../../../util/options.json";
+import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -166,6 +168,24 @@ function Table(props) {
     return checked.length >= maxAllowed && checked.indexOf(value) === -1;
   };
 
+  const createPopover = (row) => {
+    const people =
+      row[
+        "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+      ];
+    const roles = row["transactions__transaction__enslavers__role__role"];
+    //console.log(people, roles);
+    const output = {};
+    for (let i = 0; i < people.length; i++) {
+      if (people[i] in output === false) {
+        output[people[i]] = [];
+      }
+      output[people[i]].push(roles[i][0]);
+    }
+    //console.log(output);
+    return output;
+  };
+
   return (
     <div>
       <div>
@@ -230,11 +250,53 @@ function Table(props) {
                         {checkbox && row.transactions.length === 0 && (
                           <TableCell padding="checkbox"></TableCell>
                         )}
-                        {cols.map((k) => (
-                          <TableCell>
-                            <div dangerouslySetInnerHTML={{ __html: row[k] }} />
-                          </TableCell>
-                        ))}
+                        {cols.map(
+                          (k) => {
+                            if (k === "gender") {
+                              return (
+                                <TableCell>
+                                  {row[k] === 1 ? "Male" : "Female"}
+                                </TableCell>
+                              );
+                            } else if (
+                              k ===
+                              "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+                            ) {
+                              const popover = createPopover(row);
+                              //console.log(popover);
+                              return (
+                                <Stack direction="row" spacing={1}>
+                                  {Object.keys(popover).map((name) => (
+                                    <Tooltip
+                                      arrow
+                                      title={popover[name].join(", ")}
+                                      placement="top"
+                                    >
+                                      <Chip label={name} />
+                                    </Tooltip>
+                                  ))}
+                                </Stack>
+                              );
+
+                              //return <TableCell>{row[k]}</TableCell>;
+                              // } else if (typeof row[k] === 	"object") {
+                              //   return (<TableCell>
+                              //       {[...new Set(row[k])]}
+                              //     </TableCell>)
+                            } else {
+                              return (
+                                <TableCell>
+                                  <div // [...new Set(row[k])]
+                                    dangerouslySetInnerHTML={{ __html: row[k] }}
+                                  />
+                                </TableCell>
+                              );
+                            }
+                          }
+                          // <TableCell>
+                          //   <div dangerouslySetInnerHTML={{ __html: row[k] }} />
+                          // </TableCell>
+                        )}
                         {/* </TableRow> */}
                       </StyledTableRow>
                     );
