@@ -12,10 +12,13 @@ import {Button} from "@mui/material";
 import { forEach, isError } from "lodash";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import {voyage_pivot_tables, voyage_maps} from "./vars"
+import {voyage_pivot_tables_source,voyage_pivot_tables_target, voyage_maps} from "./vars"
 import FormControl from '@mui/material/FormControl';
 import { FormControlLabel, RadioGroup } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
+import _ from 'lodash';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 // import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
@@ -147,14 +150,19 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
     highlightLinkIndexes: [],
     nodePadding: 10,
     component: "Sankey",
+    nodeData:{},
+    linkData:{}
   });
 
-  const [optionSet, setOptionSet] = useState([...voyage_pivot_tables])
+  const [optionSource, setOptionSource] = useState([...voyage_pivot_tables_source])
+  const [optionTarget, setOptionTarget] = useState([...voyage_pivot_tables_target])
   // const [optionSet2, setOptionSet2] = useState([...voyage_pivot_tables])
   const [option, setOption] = useState({
-    fieldSource: voyage_pivot_tables[0],
-    fieldTarget: voyage_pivot_tables[5]
+    fieldSource: voyage_pivot_tables_source[2],
+    fieldTarget: voyage_pivot_tables_target[1]
 })
+
+const {search_object, set_search_object, endpoint} = React.useContext(props.context);
 
 const handleChange = (event, name, type) => {
   console.log(name, event.target.value)
@@ -164,11 +172,6 @@ const handleChange = (event, name, type) => {
 
   })
 
-  // if(type === 1){
-  //   setOptionSet2(optionSet2.filter((item)=>item !== event.target.value))
-  // }else if(type === 2){
-  //   setOptionSet(optionSet.filter((item)=>item !== event.target.value))
-  // }
   
   refetch()
 }
@@ -207,7 +210,7 @@ const handleChange = (event, name, type) => {
                             onChange={(event) => {handleChange(event, "fieldSource")}}
                             name="source"
                         >
-                            {optionSet.map((option) => (
+                            {optionSource.map((option) => (
                                 <MenuItem key={option} value={option}>
                                     {option}
                                 </MenuItem>
@@ -226,7 +229,7 @@ const handleChange = (event, name, type) => {
                             onChange={(event) => {handleChange(event, "fieldTarget")}}
                             name="target"
                         >
-                            {optionSet.map((option) => (
+                            {optionTarget.map((option) => (
                                 <MenuItem key={option} value={option}>
                                     {option}
                                 </MenuItem>
@@ -251,6 +254,8 @@ const handleChange = (event, name, type) => {
             [width - 1, height - 6],
           ]}
         >
+
+          {/* nodes */}
           {({ data }) => (
             <Group>
               {data.nodes.map((node, i) => (
@@ -271,13 +276,32 @@ const handleChange = (event, name, type) => {
                           ...node.sourceLinks.map((l) => l.index),
                           ...node.targetLinks.map((l) => l.index),
                         ],
-                      }
+                      },
+                     
                       );
                     }}
 
                     onMouseOut={(e) => {
                       setState({ ...state,highlightLinkIndexes: [] });
                     }}
+
+                    onClick={() =>  {
+                      setState({
+                      ...state,
+                      nodeData: {
+                         "name": node.name,
+                      },
+                      
+                      },
+                      // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                      console.log("🫧", state.nodeData)
+                      )
+
+                      set_search_object({
+                        ...search_object,
+                        [option.fieldSource]: [state.nodeData.name]
+                      });
+                  }}
                   />
 
                   <Text
@@ -293,6 +317,7 @@ const handleChange = (event, name, type) => {
                 </Group>
               ))}
 
+              {/* Edges */}
               <Group>
                 {data.links.map((link, i) => (
                   <path
@@ -309,11 +334,23 @@ const handleChange = (event, name, type) => {
                     }
                     fill="none"
                     onMouseOver={(e) => {
-                      setState({...state, highlightLinkIndexes: [i] });
+                      setState({...state, highlightLinkIndexes: [i] },
+                      )
                     }}
                     onMouseOut={(e) => {
                       setState({ ...state,highlightLinkIndexes: [] });
                     }}
+
+                    onClick={() =>  setState({
+                      ...state,
+                      linkData: {
+                          "source":link.source,
+                          "target":link.target
+                      },
+                    },
+                    // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                    console.log("🚀", state.linkData)
+                    )}
                   />
                 ))}
               </Group>
@@ -321,6 +358,19 @@ const handleChange = (event, name, type) => {
           )}
         </Sankey>
       </svg>
+      <Card sx={{ maxWidth: 345 }}>
+      <Typography>
+            {`Node is ${state.nodeData.name}`}
+      </Typography>
+
+      <Typography>
+      {`This path is from
+      ${_.get(state, ["linkData", "source", "name"])}
+       to
+      ${_.get(state, ["linkData", "target", "name"])}
+      `}
+      </Typography>
+      </Card>
     </div>
   );
 }

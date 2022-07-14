@@ -18,14 +18,14 @@ export default function Sankey(props) {
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 60;
+    const MIN_NODE_HEIGHT = 40;
 
     // const [open, setOpen] = React.useState(false);
-    const handleOpen = (event,info,modal) => {
+    const handleOpen = (event, info, modal) => {
       if (modal) {
         // console.log("voyage id",info)
-      setOpen(true);
-      setId(info);
+          setOpen(true);
+          setId(info);
       // setId(info.id);
     }
   };
@@ -58,6 +58,8 @@ export default function Sankey(props) {
         p: 4,
     };
 
+    
+
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
       let new_CANVAS_HEIGHT = 0;
@@ -69,86 +71,155 @@ export default function Sankey(props) {
         nodes.push({id: data[i].id, name: data[i].documented_name, type: "enslaved"}); 
         transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
-            if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) === -1) {
-                nodes.push({id: data[i].transactions[j].transaction.id, 
-                            name: data[i].transactions[j].transaction.relation_type.relation_type,
-                            voyage_id: data[i].transactions[j].transaction.voyage.id,
-                            type: "transaction"});
+            var transaction_id;
+            var voyage_id;
+            switch (data[i].transactions[j].transaction.voyage) {
+              case null:
+                transaction_id = data[i].transactions[j].transaction.id;
+                voyage_id = null;
+                break;
+              default:
+                transaction_id = data[i].transactions[j].transaction.voyage.id;
+                voyage_id = transaction_id;
+                break;
             }
-            if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].id) &&
-                                    x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id)) === -1) {
-                links.push({source: nodes.findIndex(x => x.id === data[i].id),
-                            target: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id),
+            if (nodes.findIndex(x =>  
+                  x.id === transaction_id &&
+                  x.name === data[i].transactions[j].transaction.relation_type.relation_type &&
+                  x.amount === data[i].transactions[j].transaction.amount &&
+                  x.voyage_id === voyage_id
+                ) === -1) {
+                nodes.push({
+                            id: transaction_id,
+                            name: data[i].transactions[j].transaction.relation_type.relation_type,
+                            amount: data[i].transactions[j].transaction.amount,
+                            voyage_id: voyage_id,
+                            full_ref: data[i].transactions[j].transaction.source.full_ref,
+                            place:data[i].transactions[j].transaction.place.geo_location.name,
+                            date: data[i].transactions[j].transaction.date,
+                            type: "transaction",
+                          });
+            }
+            if (links.findIndex(x =>  
+                x.source === nodes.findIndex(x => x.id === data[i].id) &&
+                x.target === nodes.findIndex(x => x.id === transaction_id &&
+                                                  x.name === data[i].transactions[j].transaction.relation_type.relation_type
+                )) === -1) {
+                links.push({
+                            source: nodes.findIndex(x => x.id === data[i].id),
+                            target: nodes.findIndex(x => x.id === transaction_id &&
+                                                         x.name === data[i].transactions[j].transaction.relation_type.relation_type),
                             color: "#1e3162",
                             info: "",
-                            value:5})
+                            value:5
+                          })
             }
             enslaverLength = enslaverLength + data[i].transactions[j].transaction.enslavers.length;
-              for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
-                if (nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) === -1) {
-                  nodes.push({id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
+            for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
+              if (nodes.findIndex(x => 
+                  x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id
+                  ) === -1) {
+                  nodes.push({
+                              id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
                               name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias,
                               type: "enslaver"
                             });
-                }
-                
-                if (links.findIndex(x => x.source === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id) &&
-                                        x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id)) === -1) {
-                    var link_color;
-                    switch (data[i].transactions[j].transaction.enslavers[z].role.id) {
-                      case 1:
-                        link_color = "#53d4b6";
-                        break;
-                      case 2:
-                        link_color = "#e89a4d";
-                        break;
-                      case 3:
-                        link_color = "#7a8fa1";
-                        break;
-                      case 4:
-                        link_color = "#d188c2";
-                        break;
-                      case 5:
-                        link_color = "#a2e66e";
-                        break;
-                      case 6:
-                        link_color = "#1aa6d9";
-                        break;
-                      case 7:
+                  }     
+              if (links.findIndex(x => 
+                  x.source === nodes.findIndex(x => x.id === transaction_id &&
+                                                    x.name === data[i].transactions[j].transaction.relation_type.relation_type) &&
+                  x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) &&
+                  x.info === data[i].transactions[j].transaction.enslavers[z].role.role
+                  ) === -1) 
+              {
+                  var link_color;
+                  switch (data[i].transactions[j].transaction.enslavers[z].role.id) {
+                    case 1:
+                      link_color = "#53d4b6";
+                      break;
+                    case 2:
+                      link_color = "#e89a4d";
+                      break;
+                    case 3:
+                      link_color = "#7a8fa1";
+                      break;
+                    case 4:
+                      link_color = "#d188c2";
+                      break;
+                    case 5:
+                      link_color = "#a2e66e";
+                      break;
+                    case 6:
+                      link_color = "#1aa6d9";
+                      break;
+                    case 7:
                       link_color = "#fcda14";
                       break;
-                    }
-                    links.push({source: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.id),
-                                target: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
-                                color: link_color,
-                                info: data[i].transactions[j].transaction.enslavers[z].role.role,
-                                value:5})
-                }
+                    default:
+                      link_color = "#1e3162";
+                      break;
+                  }
+                  links.push({source: nodes.findIndex(x => x.id === transaction_id &&
+                                                            x.name === data[i].transactions[j].transaction.relation_type.relation_type),
+                              target: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
+                              color: link_color,
+                              info: data[i].transactions[j].transaction.enslavers[z].role.role,
+                              value:5})
               }
+            }
           }
       };
 
       nodes.forEach((node)=>{
-        // console.log(node)
         const result = [];
-        for (var i = 0; i < Object.keys(node).length; i++) {
-          if(Object.keys(node)[i]==="voyage_id"){
-            // console.log(node.voyage_id)
-            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,true)}>Voyage id:{node.voyage_id}</Button>
-            // console.log(node.voyage_id) 
+        var voyagemodal = true;
+        if(node.type==="transaction"){
+          if(node.voyage_id===null){
+            voyagemodal = false;
+            result.push(
+              <tr key = {node.id}>
+                <th>Type: </th>
+                <td>{node.name}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Source: </th>
+                <td>{node.full_ref}</td>
+              </tr>,
+                <tr key = {node.id}>
+                <th>Place: </th>
+                <td>{node.place}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Date: </th>
+                <td>{node.date}</td>
+              </tr>
+            );
           }
-          result.push(
-            <tr key = {Object.keys(node)[i]}>
-              <th>{Object.keys(node)[i]}</th>
-              <td>{Object.values(node)[i]}</td>
-            </tr>
-          );
-        }
+          else{
+            // console.log(node.voyage_id)
+            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,voyagemodal)}>Voyage id:{node.voyage_id}</Button>
+            // console.log(node.voyage_id) 
+            result.push(
+              <tr key = {node.id}>
+                <th>Type: </th>
+                <td>{node.name}</td>
+              </tr>,
+                <tr key = {node.id}>
+                <th>Place: </th>
+                <td>{node.place}</td>
+              </tr>,
+              <tr key = {node.id}>
+                <th>Date: </th>
+                <td>{node.date}</td>
+              </tr>
+            );
+          }
+          }
+        
+        
         node.information = result;
         // console.log(node.id,node.information)
       })
-      
-      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
       new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
       
@@ -172,7 +243,7 @@ export default function Sankey(props) {
     // console.log("renderStory")
     switch(node.type) {
       case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
-      case "transaction": return "transaction"
+      case "transaction": return node.information
       case "enslaver": return "enslaver story"
       default: return ""
     }
@@ -181,21 +252,6 @@ export default function Sankey(props) {
 
   return (
     <div>
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>s
-        </Box>
-      </Modal> */}
       <h1>Sankey</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
