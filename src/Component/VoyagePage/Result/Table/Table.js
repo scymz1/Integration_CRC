@@ -231,7 +231,9 @@ function Table(props) {
                           <TableCell padding="checkbox"></TableCell>
                         )}
                         {cols.map((k) => (
-                          <TableCell>{row[k]}</TableCell>
+                          <TableCell>
+                            <div dangerouslySetInnerHTML={{ __html: row[k] }} />
+                          </TableCell>
                         ))}
                         {/* </TableRow> */}
                       </StyledTableRow>
