@@ -10,6 +10,7 @@ import TableApp from "./Result/Table/TableApp";
 import PivotApp from "./Result/Pivot/PivotApp";
 import Map from "./Result/Map";
 import {VoyageContext} from "./VoyageApp";
+import SankeyExample from "./Sankey/CircularExample";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -93,6 +94,7 @@ export default function Voyage() {
         </TabPanel>
         <TabPanel value={value} index={5}>
           <Map context={VoyageContext}/>
+          <SankeyExample width={960} height={500} context={VoyageContext}/>
         </TabPanel>
       </Box>
     </div>
