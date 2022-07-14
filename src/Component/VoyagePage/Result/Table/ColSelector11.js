@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
-import { MenuItem } from '@mui/material';
+import { CardHeader, MenuItem } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
@@ -31,40 +31,40 @@ import nameConcat from '../../../util/nameConcat';
 
 
 export default function ColSelector11(props) {
-    const {cols, setCols, columnOptions, options_flat} = useContext(props.context)
+    const { cols, setCols, columnOptions, options_flat } = useContext(props.context)
     const [chipData, setChipData] = React.useState([]);
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (cols.length > 0) {
-            cols.forEach((v) => {setChipData([...chipData, {key:v, label:options_flat[v].flatlabel}]) })
+            cols.forEach((v) => { setChipData([...chipData, { key: v, label: options_flat[v].flatlabel }]) })
         }
-        console.log("chipdata", chipData)
-    },[])   
+        // console.log("chipdata", chipData)
+    }, [])
     const ListItem = styled('li')(({ theme }) => ({
         margin: theme.spacing(0.5),
     }));
-    const handleClick = (e) => { console.log("Handle Option Click"); setAnchorEl(e.currentTarget); console.log(open)}
+    const handleClick = (e) => { setAnchorEl(e.currentTarget) }
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
     const handleChange = (event) => {
         const {
-        target: { value },
+            target: { value },
         } = event;
         setCols(
-      // On autofill we get a stringified value.
-        typeof value === 'string' ? value.split(',') : value,
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
         );
     };
 
     function isChildren(key) {
-        console.log("ischildren", key)
+        // console.log("ischildren", key)
         if (key) return true;
         else return false
     }
 
     function isLast(node) {
-        console.log("islast", node)
+        // console.log("islast", node)
         // return Object.keys(node).length <= 3 
         return node === null
     }
@@ -72,17 +72,17 @@ export default function ColSelector11(props) {
     function isInColList(name) {
         // console.log("collist", name)
         // if (name === "__id") name = "id"
-        console.log("collist", name)
+        // console.log("collist", name)
         return columnOptions.includes(name)
     }
 
     const handleOptionClick = (option) => {
-        console.log("optionclick", option)
+        // console.log("optionclick", option)
         // if (option === "__id") option = "id"
         // setMenuPosition(null);
         if (cols.includes(option) === false) {
             setCols([...cols, option])
-            setChipData([...chipData, {key: option, label: options_flat[option].flatlabel}])
+            setChipData([...chipData, { key: option, label: options_flat[option].flatlabel }])
 
         }
         // console.log(chipData)
@@ -95,72 +95,81 @@ export default function ColSelector11(props) {
         setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
         // add delete target
         setCols((cols) => cols.filter((col) => col !== chipToDelete.key))
-      };
+    };
 
     const renderTree = (nodes, name) => {
         return (
             Object.keys(nodes).map((key) =>
                 isChildren(key)
                     ? isLast(nodes[key])
-                        ? isInColList(nameConcat(name,key))
-                            ? <MenuItem value={nameConcat(name,key)} key={key} onClick={() => {handleOptionClick(nameConcat(name,key))}}>
-                                {options_flat[nameConcat(name,key)].label}
-                            </MenuItem>
-                            :null
+                        // ? isInColList(key)
+                        ? <MenuItem value={key} key={key} onClick={() => { handleOptionClick(key) }}>
+                            {options_flat[key].flatlabel}
+                        </MenuItem>
+                        // :null
                         : <NestedMenuItem
-                            key={nameConcat(name,key)}
+                            key={key}
                             // label={options_flat[nameConcat(name,key)].label}
-                            label = {options_flat[nameConcat(name,key)].label}
+                            label={options_flat[key].label}
                             parentMenuOpen={open}
                             onClick={handleClose}
-                            > 
-                            {renderTree(nodes[key], nameConcat(name,key))}
+                        >
+                            {renderTree(nodes[key], key)}
                         </NestedMenuItem>
                     : null
-                )   
             )
+        )
     };
 
 
     return (
         <div>
-            <Paper
+            {/* <Paper
                 sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'left',
                 flexWrap: 'wrap',
                 listStyle: 'none',
                 p: 0.5,
                 m: 0,
                 }}
                 component="ul"
-            >
-                {chipData.map((data) => {
-                    return (
-                        <ListItem key={data.key}>
-                            <Chip
-                            label={data.label}
-                            onDelete={data.key === 'id' ? undefined : handleDelete(data)}
-                            />
-                        </ListItem>
-                    );
-                 })}
+            > */}
+            <Grid container spacing={1}>
+                <Grid item xs={2}>
                     <TreeView
                         aria-label="option menu"
-                        defaultCollapseIcon={<ExpandMoreIcon/>}
-                        defaultExpandIcon={<ChevronRightIcon/>}
+                        defaultCollapseIcon={<ExpandMoreIcon />}
+                        defaultExpandIcon={<ChevronRightIcon />}
                     >
-                        <Button 
-                                variant="text"
-                                onClick={handleClick}
-                                >
-                                    {"Column Selector"}
+                        <Button
+                            variant="text"
+                            onClick={handleClick}
+                        >
+                            {"Column Selector"}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {renderTree(hierFalse2True(columnOptions),"")}
+                            {/* {renderTree(hierFalse2True(columnOptions),"")} */}
+                            {renderTree(columnOptions, "")}
                         </Menu>
                     </TreeView>
-                </Paper>
+                </Grid>
+                {/* </Grid>
+            <Grid container spacing = {2}> */}
+                <Grid container item xs={9}>
+                    {chipData.map((data) => {
+                        return (
+                            <ListItem key={data.key}>
+                                <Chip
+                                    label={data.label}
+                                    onDelete={data.key === 'id' ? undefined : handleDelete(data)}
+                                />
+                            </ListItem>
+                        );
+                    })}
+                </Grid>
+            </Grid>
+            {/* </Paper> */}
         </div>
     );
 }

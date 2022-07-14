@@ -53,6 +53,9 @@ function Table(props) {
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
 
+  // Checkbox
+  //const [checkedMax, setCheckedMax] = useState(false);
+
   useEffect(() => {
     var data = new FormData();
     data.append("hierarchical", "False");
@@ -134,7 +137,9 @@ function Table(props) {
       //let selected = queryData["targets"];
       const selectedIndex = queryData["targets"].indexOf(info.id);
       if (selectedIndex === -1) {
-        chipData[info.id] = info.documented_name;
+        if (!checkedMax(info.id)) {
+          chipData[info.id] = info.documented_name;
+        }
       } else {
         delete chipData[info.id];
       }
@@ -152,6 +157,13 @@ function Table(props) {
       return queryData["targets"].indexOf(name) !== -1;
     }
     return false;
+  };
+
+  const checkedMax = (value) => {
+    const maxAllowed = 10;
+    //console.log(value);
+    const checked = queryData["targets"];
+    return checked.length >= maxAllowed && checked.indexOf(value) === -1;
   };
 
   return (
@@ -211,6 +223,7 @@ function Table(props) {
                             <Checkbox
                               color="primary"
                               checked={isItemSelected}
+                              disabled={checkedMax(row.id)}
                             />
                           </TableCell>
                         )}
@@ -218,7 +231,9 @@ function Table(props) {
                           <TableCell padding="checkbox"></TableCell>
                         )}
                         {cols.map((k) => (
-                          <TableCell>{row[k]}</TableCell>
+                          <TableCell>
+                            <div dangerouslySetInnerHTML={{ __html: row[k] }} />
+                          </TableCell>
                         ))}
                         {/* </TableRow> */}
                       </StyledTableRow>
