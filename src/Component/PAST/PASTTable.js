@@ -6,42 +6,24 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-
-import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+//import Button from "@mui/material/Button";
+//import { Typography } from "@mui/material";
+//import { styled } from "@mui/material/styles";
 import { enslaved_default_list, enslaved_var_list } from "./vars";
 import * as labels from "../util/enslaved_options.json";
-
-const ListItem = styled("li")(({ theme }) => ({
-  margin: theme.spacing(0.5),
-  minHeight: 32,
-}));
 
 export const ColContext = React.createContext({});
 
 export default function PASTTable(props) {
   const [cols, setCols] = React.useState(enslaved_default_list);
-  const { options_tree, endpoint, queryData, setQueryData, search_object } = React.useContext(props.context);
-  const [chipData, setChipData] = React.useState([
-    // { id: 1, documented_name: "jQuery" },
-    // { id: 2, documented_name: "Polymer" },
-    // { id: 3, documented_name: "Vue.js" },
-    // { id: 5, documented_name: "jQuery" },
-    // { id: 6, documented_name: "Polymer" },
-    // { id: 7, documented_name: "React" },
-    // { id: 8, documented_name: "Vue.js" },
-    // { id: 11, documented_name: "jQuery" },
-    // { id: 12, documented_name: "Polymer" },
-    // { id: 13, documented_name: "Vue.js" },
-    // { id: 15, documented_name: "jQuery" },
-    // { id: 16, documented_name: "Polymer" },
-    // { id: 17, documented_name: "React" },
-    // { id: 18, documented_name: "Vue.js" },
-  ]);
+  const { options_tree, endpoint, queryData, setQueryData, search_object } =
+    React.useContext(props.context);
+  const [chipData, setChipData] = React.useState({});
 
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
+    //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
+    delete chipData[chipToDelete];
+    setQueryData({ ...queryData, targets: Object.keys(chipData).map(Number) });
   };
 
   return (
@@ -56,8 +38,11 @@ export default function PASTTable(props) {
           modal: false,
           columnOptions: enslaved_var_list,
           options_flat: labels,
-          queryData, setQueryData,
-          search_object, chipData, setChipData,
+          queryData,
+          setQueryData,
+          search_object,
+          chipData,
+          setChipData,
         }}
       >
         <ColSelector context={ColContext} />
@@ -81,11 +66,11 @@ export default function PASTTable(props) {
           />
           <CardContent>
             <Grid container spacing={1}>
-              {chipData.map((data) => {
+              {Object.keys(chipData).map((data) => {
                 return (
-                  <Grid item key={data.id}>
+                  <Grid item key={data}>
                     <Chip
-                      label={data.documented_name}
+                      label={chipData[data] + " (" + data + ")"}
                       onDelete={handleDelete(data)}
                     />
                   </Grid>

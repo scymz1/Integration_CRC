@@ -15,7 +15,7 @@ export default function PASTApp(props) {
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
   const [queryData, setQueryData] = React.useState({
-    targets: [500001,500002,500003],
+    targets: [],
     type: "slave",
   })
 
