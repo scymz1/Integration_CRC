@@ -18,7 +18,7 @@ export default function Sankey(props) {
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 60;
+    const MIN_NODE_HEIGHT = 80;
 
     // const [open, setOpen] = React.useState(false);
     const handleOpen = (event, info, modal) => {

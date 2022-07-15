@@ -68,7 +68,9 @@ export default function Filter(props) {
 
     }}
   >
-    <Accordion
+    <Accordion>
+          <AccordionSummary
+            expandIcon={<FilterAlt sx={{ color: "white" }}/>}
             aria-controls="filter-content"
             id="filter-header"
             sx={{
@@ -78,7 +80,7 @@ export default function Filter(props) {
           </AccordionSummary>
           <AccordionDetails>
 
-          <AppBar position="center">
+          <AppBar position="static">
             {/* <Toolbar disableGutters> */}
               <Grid container direction="row" spacing={1}>
                   {
