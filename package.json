@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@elfalem/leaflet-curve": "^0.9.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@material/image-list": "^14.0.0",
     "@mui/icons-material": "^5.8.3",
     "@mui/lab": "^5.0.0-alpha.85",
     "@mui/material": "^5.8.2",
+    "@turf/turf": "^6.5.0",
     "@visx/group": "^2.10.0",
     "@visx/hierarchy": "^2.10.0",
     "@visx/text": "^2.10.0",
@@ -21,6 +23,7 @@
     "dotenv": "^16.0.1",
     "js-file-download": "^0.4.12",
     "leaflet": "^1.8.0",
+    "leaflet-arc": "^1.0.2",
     "leaflet-area-select": "^1.0.5",
     "leaflet-easybutton": "^2.4.0",
     "leaflet.fullscreen": "^2.4.0",
@@ -45,7 +48,6 @@
     "react-sankey-chart": "^1.0.8",
     "react-scripts": "^5.0.1",
     "react-use-pagination": "^2.0.1",
-    "source-map-loader": "^4.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

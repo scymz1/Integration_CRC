@@ -23,10 +23,10 @@ root.render(
           <Route path="home2" element={<Home2/>}/>
           <Route path="past" element={<PASTApp/>}/>
           <Route path="/geo/routes" element={<>
-          {/* <div><Map/> 
-          </div> */}
+          <div><Map/> 
+          </div>
           <div>
-          <SankeyExample width={960} height={500}/>
+          {/* <SankeyExample width={960} height={500}/> */}
           </div></>}/> 
           <Route path="optionSelector" element={<OptionSelector/>}/>
         </Routes>
