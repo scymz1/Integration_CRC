@@ -32,13 +32,15 @@ import nameConcat from '../../../util/nameConcat';
 
 export default function ColSelector11(props) {
     const { cols, setCols, columnOptions, options_flat } = useContext(props.context)
-    const [chipData, setChipData] = React.useState([]);
-    React.useEffect(() => {
-        if (cols.length > 0) {
-            cols.forEach((v) => { setChipData([...chipData, { key: v, label: options_flat[v].flatlabel }]) })
-        }
-        // console.log("chipdata", chipData)
-    }, [])
+    // const [chipData, setChipData] = React.useState([]);
+    // React.useEffect(() => {
+    //     // console.log(cols)
+    //     if (cols.length > 0) {
+    //         cols.forEach((v) => {console.log(v); setChipData([...chipData, { key: v, label: options_flat[v].flatlabel }]);
+    //         console.log("chipdata", chipData)})
+    //     }
+    //     console.log("chipdata", chipData)
+    // }, [])
     const ListItem = styled('li')(({ theme }) => ({
         margin: theme.spacing(0.5),
     }));
@@ -47,15 +49,15 @@ export default function ColSelector11(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setCols(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+    // const handleChange = (event) => {
+    //     const {
+    //         target: { value },
+    //     } = event;
+    //     setCols(
+    //         // On autofill we get a stringified value.
+    //         typeof value === 'string' ? value.split(',') : value,
+    //     );
+    // };
 
     function isChildren(key) {
         // console.log("ischildren", key)
@@ -82,7 +84,7 @@ export default function ColSelector11(props) {
         // setMenuPosition(null);
         if (cols.includes(option) === false) {
             setCols([...cols, option])
-            setChipData([...chipData, { key: option, label: options_flat[option].flatlabel }])
+            // setChipData([...chipData, { key: option, label: options_flat[option].flatlabel }])
 
         }
         // console.log(chipData)
@@ -92,12 +94,13 @@ export default function ColSelector11(props) {
     }
 
     const handleDelete = (chipToDelete) => () => {
-        setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+        // setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
         // add delete target
-        setCols((cols) => cols.filter((col) => col !== chipToDelete.key))
+        setCols((cols) => cols.filter((col) => col !== chipToDelete))
     };
 
     const renderTree = (nodes, name) => {
+        // console.log(chipData)
         return (
             Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -157,12 +160,15 @@ export default function ColSelector11(props) {
                 {/* </Grid>
             <Grid container spacing = {2}> */}
                 <Grid container item xs={9}>
-                    {chipData.map((data) => {
+                    {/* {cols.map((col) => {
+                        setChipData([...chipData, { key: col, label: options_flat[col].flatlabel }])
+                    })} */}
+                    {cols.map((data) => {
                         return (
-                            <ListItem key={data.key}>
+                            <ListItem key={data}>
                                 <Chip
-                                    label={data.label}
-                                    onDelete={data.key === 'id' ? undefined : handleDelete(data)}
+                                    label={options_flat[data].flatlabel}
+                                    onDelete={data === 'id' ? undefined : handleDelete(data)}
                                 />
                             </ListItem>
                         );
