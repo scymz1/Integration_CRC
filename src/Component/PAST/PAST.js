@@ -76,7 +76,7 @@ export default function PAST() {
 
       {/*for fading/growing effect, you have to wrap all things in an div*/}
       {!checked && 
-      <Box sx={{ display: 'flex' }} >
+      <Box>
         <Grow
         in={!checked}
         style={{ transformOrigin: '0 0 0' }}
@@ -86,13 +86,13 @@ export default function PAST() {
         </Grow>
       </Box>}
 
-      <Box sx={{ display: 'flex' }}>
+      {checked &&<Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
           <Gallery />
           </div>
         </Grow>
-      </Box>
+      </Box>}
 
       
       <Dialog
