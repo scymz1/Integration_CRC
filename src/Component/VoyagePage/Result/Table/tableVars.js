@@ -56,15 +56,14 @@ export const skeleton = {
 export const columnOptions = {
   "id": null,
   "voyage_id": null,
-  "voyage_shipownerconnection": {
-    'voyage_shipownerconnection__owner__name': null,
-  },
-  "voyage_captainconnection": {
-    'voyage_captainconnection__captain__name': null,
-  },
-  "voyage_sourceconnection": {
-    'voyage_sourceconnection__source__full_ref': null,
-  },
+
+  'voyage_shipownerconnection__owner__name': null,
+
+  'voyage_captainconnection__captain__name': null,
+
+
+  'voyage_sourceconnection__source__full_ref': null,
+
   "voyage_crew": {
     'voyage_crew__crew_died_complete_voyage': null,
     'voyage_crew__crew_first_landing': null,
