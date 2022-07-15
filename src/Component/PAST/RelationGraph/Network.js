@@ -3,8 +3,11 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import {Button, CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
+import _ from 'lodash';
+
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
+
 
 export default function Network(props) {
   //data: 根据queryData请求到的data，是一个list. 点击print data按钮可以在console中打印出data
@@ -107,21 +110,28 @@ export default function Network(props) {
       item.transactions.forEach((transaction)=>{
         const transactionData = transaction.transaction
         tmp.addNode(transactionData, `transportation: ${transactionData.id}`, "transportation", "orange")
-        tmp.link(item, transactionData, `from ${transactionData.voyage.voyage_itinerary.imp_principal_place_of_slave_purchase.geo_location.name} to ${transactionData.voyage.voyage_itinerary.imp_principal_port_slave_dis.geo_location.name} at ${transactionData.voyage.voyage_dates.imp_arrival_at_port_of_dis}`)
+        tmp.link(item, transactionData, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
+        to ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "No Data")} 
+        at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
 
         //caption
-        transactionData.voyage.voyage_captainconnection.forEach((captainData)=>{
-          const captain = captainData.captain
-          tmp.addNode(captain, captain.name, "caption", "lightblue")
-          tmp.link(captain, transactionData, "captain")
-        })
-
+        const captainconnection = _.get(transactionData, ["voyage", "voyage_captainconnection"])
+        if(captainconnection) {
+          captainconnection.forEach((captainData)=>{
+            const captain = captainData.captain
+            tmp.addNode(captain, captain.name, "caption", "lightblue")
+            tmp.link(captain, transactionData, "captain")
+          })
+        }
         //enslaver
-        transactionData.enslavers.forEach((enslaver) => {
-          // console.log("enslaver", enslaver.enslaver_alias.id)
-          tmp.addNode(enslaver.enslaver_alias, enslaver.enslaver_alias.alias, "enslaver", "green")
-          tmp.link(transactionData, enslaver.enslaver_alias, enslaver.role.role)
-        })
+        const enslavers = _.get(transactionData, ["enslavers"])
+        if(enslavers) {
+          enslavers.forEach((enslaver) => {
+            // console.log("enslaver", enslaver.enslaver_alias.id)
+            tmp.addNode(enslaver.enslaver_alias, enslaver.enslaver_alias.alias, "enslaver", "green")
+            tmp.link(transactionData, enslaver.enslaver_alias, enslaver.role.role)
+          })
+        }
       })
     })
     const fetchData = async () => {
