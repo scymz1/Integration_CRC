@@ -1,5 +1,5 @@
 import ColSelector from "./ColSelector";
-import ColSelector11 from "./ColSelector11"
+import ColSelector11 from "./ColSelector11";
 import Table from "./Table";
 import Modal from "./TableModal";
 import React, { useState, useContext } from "react";
@@ -10,7 +10,10 @@ import { VoyageContext } from "../../VoyageApp";
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
-  const [cols, setCols] = React.useState(["id","voyage_slaves_numbers__imp_total_num_slaves_embarked"]);
+  const [cols, setCols] = React.useState([
+    "id",
+    "voyage_slaves_numbers__imp_total_num_slaves_embarked",
+  ]);
   const { endpoint } = React.useContext(props.context);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
@@ -40,7 +43,7 @@ function TableApp(props) {
       >
         <ColSelector11 context={ColContext} />
         <Table context={ColContext} />
-        <Modal context={ColContext} endpoint = "voyage/"/>
+        <Modal context={ColContext} endpoint="voyage/" />
       </ColContext.Provider>
     </div>
   );
