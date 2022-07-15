@@ -1,12 +1,12 @@
 import * as React from "react";
-import ColSelector from "../VoyagePage/Result/Table/ColSelector";
+//import ColSelector from "../VoyagePage/Result/Table/ColSelector";
 import Table from "../VoyagePage/Result/Table/Table";
 import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-//import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
 import * as labels from "../util/enslaved_options.json";
@@ -47,48 +47,49 @@ export default function PASTTable(props) {
         }}
       >
         <ColSelector11 context={ColContext} />
-        <Card
-          sx={{
-            width: 800,
-            //display: "flex",
-            //justifyContent: "center",
-            //flexWrap: "wrap",
-            //listStyle: "none",
-            // gap: 0.5,
-            m: 1,
-          }}
-        >
-          <CardHeader
-            titleTypographyProps={{
-              fontSize: 18,
-              height: 5,
-            }}
-            title="Select items (MAX = 10)"
-          />
-          <CardContent>
-            <Grid container spacing={1}>
-              {Object.keys(chipData).map((data) => {
-                return (
-                  <Grid item key={data}>
-                    <Chip
-                      label={chipData[data] + " (" + data + ")"}
-                      onDelete={handleDelete(data)}
-                    />
-                  </Grid>
-                );
-              })}
-            </Grid>
-          </CardContent>
-          {/* <Button
-            variant="outlined"
+        {queryData["targets"].length !== 0 && (
+          <Card
             sx={{
+              width: 800,
+              //display: "flex",
+              //justifyContent: "center",
+              //flexWrap: "wrap",
+              //listStyle: "none",
+              // gap: 0.5,
               m: 1,
-              height: 32,
             }}
           >
-            SHOW NETWORKS
-          </Button> */}
-        </Card>
+            <CardHeader
+              titleTypographyProps={{
+                fontSize: 18,
+                height: 5,
+              }}
+              title="Select items (MAX = 10)"
+              action={
+                <Button
+                  disabled={queryData["targets"].length === 0}
+                  onClick={props.handleClickOpen("body")}
+                >
+                  VIEW CONNECTIONS
+                </Button>
+              }
+            />
+            <CardContent>
+              <Grid container spacing={1}>
+                {Object.keys(chipData).map((data) => {
+                  return (
+                    <Grid item key={data}>
+                      <Chip
+                        label={chipData[data] + " (" + data + ")"}
+                        onDelete={handleDelete(data)}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </CardContent>
+          </Card>
+        )}
         <Table context={ColContext} />
       </ColContext.Provider>
     </div>
