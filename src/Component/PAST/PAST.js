@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = React.useState(0);
   const [dialogopen, setdialogOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef} = useContext(PASTContext)
+  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
   const [scroll, setScroll] = React.useState('body');
   const [checked, setChecked] = React.useState(false);
 
@@ -76,6 +76,7 @@ export default function PAST() {
       Stories
       </Button>
 
+      {/*for fading/growing effect, you have to wrap all things in an div*/}
       {!checked && 
       <Box sx={{ display: 'flex' }} >
         <Grow
@@ -83,7 +84,7 @@ export default function PAST() {
         style={{ transformOrigin: '0 0 0' }}
         {...(checked ? { timeout: 500 } : {})}
         >
-          <div><PASTTable context={PASTContext}/></div>
+          <div><PASTTable context={PASTContext} handleClickOpen={handleClickOpen}/></div>
         </Grow>
       </Box>}
 
