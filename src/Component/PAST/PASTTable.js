@@ -7,7 +7,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import HubIcon from '@mui/icons-material/Hub';
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
 import * as labels from "../util/enslaved_options.json";
@@ -71,14 +72,14 @@ export default function PASTTable(props) {
                 fontSize: 18,
                 height: 5,
               }}
-              title="Select items (MAX = 10)"
+              title="Select Person(s) (MAX = 10)"
               action={
-                <Button
+                <IconButton
                   disabled={queryData["targets"].length === 0}
                   onClick={props.handleClickOpen("body")}
                 >
-                  VIEW CONNECTIONS
-                </Button>
+                  <HubIcon color="primary"/>
+                </IconButton>
               }
             />
             <CardContent>
