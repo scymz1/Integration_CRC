@@ -13,7 +13,6 @@ import Modal from "../VoyagePage/Result/Table/TableModal";
 
 function TabPanel(props) {
   const {children, value, index} = props;
-
   return (
     <div
       role="tabpanel"
@@ -32,21 +31,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 export default function PAST() {
   const [value, setValue] = React.useState(0);
-  const [dialogopen, setdialogOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
-  const [scroll, setScroll] = React.useState('body');
+
+  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData, dialogopen, setdialogOpen} = useContext(PASTContext)
   //console.log(endpoint);
   // const Transition = React.forwardRef(function Transition(props, ref) {
   //   return <Slide direction="up" ref={ref} {...props} />;
   // });
-  const handleClickOpen = (scrollType) => () => {
-    setdialogOpen(true);
-    setScroll(scrollType);
-  };
 
-  const handleClose = () => {
-    setdialogOpen(false);
-  };
 
   return (
     <div>
@@ -55,13 +46,13 @@ export default function PAST() {
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
       <Filter context={PASTContext}/>
-      <Button disabled={queryData["targets"].length === 0} onClick={handleClickOpen('body')}>Open modal</Button><br/>
+      <Button disabled={queryData["targets"].length === 0} onClick={() => setdialogOpen(true)}>Open modal</Button><br/>
       <PASTTable context={PASTContext}/>
       <Dialog
         fullScreen
         open={dialogopen}
-        onClose={handleClose}
-        scroll={scroll}
+        onClose={() => setdialogOpen(false)}
+        // scroll={scroll}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
@@ -72,7 +63,7 @@ export default function PAST() {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={handleClose}
+              onClick={() => setdialogOpen(false)}
               aria-label="close"
             >
               <CloseIcon color="action"/>

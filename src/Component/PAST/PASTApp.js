@@ -19,6 +19,8 @@ export default function PASTApp(props) {
     type: "slave",
   })
 
+  const [dialogopen, setdialogOpen] = React.useState(false);
+
   const windowRef = useRef(null);
 
   const [data, setData] = useState([]);
@@ -87,14 +89,20 @@ export default function PASTApp(props) {
   if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
   return (
-    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label, endpoint, windowRef
-    ,modal: false,
-    id,
-    setId,
-    open,
-    setOpen,
-    info,
-    setInfo}}>
+    <PASTContext.Provider value={{queryData, setQueryData,
+      data, options_tree, options_flat,
+      search_object, set_search_object,
+      menu_label,
+      endpoint,
+      windowRef,
+      dialogopen, setdialogOpen,
+      modal: false,
+      id,
+      setId,
+      open,
+      setOpen,
+      info,
+      setInfo}}>
       <PAST/>
     </PASTContext.Provider>
   )

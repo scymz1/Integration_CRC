@@ -18,9 +18,11 @@ export default function Network(props) {
   //   type: "newType",
   //   targets: [...queryData.targets, "newTarget"]
   // })
-  const {queryData, setQueryData, data, windowRef} = useContext(PASTContext);
+  const {queryData, setQueryData, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState({...queryData})
 
   function updateQueryData(path, id) {
     let formdata = new FormData();
@@ -38,12 +40,31 @@ export default function Network(props) {
           targets.push(slave.id)
       }))
       console.log("targets", targets)
-      setQueryData({
+      setSelected({
         type: "slave",
         targets: targets
       })
     })
   }
+
+  useEffect(() => {
+    const endpoint = "past/enslaved/"
+    const fetchData = async ()=> {
+      const promises = selected.targets.map(target => {
+        let selected = new FormData();
+        selected.append("id", target.toString());
+        selected.append("id", target.toString());
+        return fetch(base_url + endpoint, {
+          method: "POST",
+          body: selected,
+          headers: {'Authorization': auth_token}
+        }).then(res => res.json()).then(res => res[0])
+      })
+      const response = await Promise.all(promises)
+      setData(response)
+    }
+    fetchData().catch(console.error);
+  }, [selected])
 
   useEffect(()=> {
     setHeight((0.7 * windowRef.current.offsetHeight).toString())
@@ -144,7 +165,7 @@ export default function Network(props) {
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node.type) {
         case "slave":
-          setQueryData({
+          setSelected({
             type: "slave",
             targets: nodeId
           })
@@ -174,7 +195,7 @@ export default function Network(props) {
       <h1>Relation between: {data.map((item, index) => index === data.length-1 ? item.documented_name : item.documented_name + " & ")}</h1>
       {/*<Button onClick={()=>console.log("data:", data)}>print data</Button>*/}
       {/*<Button onClick={()=>console.log("graph:", graph)}>print graph</Button>*/}
-      {/*<Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>*/}
+      {/*<Button onClick={()=>console.log("graph:", selected)}>print selected</Button>*/}
       {!graph ?
         <CircularProgress/> :
         <Graph
