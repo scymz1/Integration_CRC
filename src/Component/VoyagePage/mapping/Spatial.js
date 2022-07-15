@@ -20,8 +20,11 @@ var nodeLayers = {};
 var linkLayers = {};
 
 var groupby_fields = [
-  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
-  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id",
+  "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
+	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
+
+  // "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
+  // "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id",
 ];
 var value_field_tuple = [
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
@@ -77,9 +80,13 @@ export function ReadFeature(props) {
     data.append("output_format", output_format);
 
     axios.post("/voyage/aggroutes", data).then(function (response) {
-      setCsv(response.data.links);
-      setNodes(response.data.nodes);
+      // setCsv(response.data.links);
+      // setNodes(response.data.nodes);
       setIsLoading(true);
+      setCsv(response.data.routes);
+      setNodes(response.data.points);
+
+      console.log("Repsonse:", response.data)
     });
   }, [props.search_object]);
 
@@ -119,7 +126,6 @@ export function ReadFeature(props) {
       L.geoJSON(nodes.features, {
         //filter: filterNodes,
         onEachFeature: function (feature, layer) {
-          console.log('112')
           nodeLayers[feature.id] = {
             layer: layer,
           };
@@ -187,7 +193,9 @@ export function ReadFeature(props) {
       });
 
       map.addLayer(markers);
-      DrawLink(map, csv);
+      // DrawLink(map, csv);
+      DrawRoutes(map, csv)
+      
     }
   }, [nodes, csv]);
 
@@ -198,8 +206,47 @@ export function ReadFeature(props) {
   return null;
 }
 
-// Function to draw the edges
-function DrawLink(map, links, layers, setLayers) {
+// Function to draw the curve routes
+function DrawRoutes(map, links) {
+  var valueMin = d3.min(links, function (l) {
+    return l[0];
+  });
+  var valueMax = d3.max(links, function (l) {
+    return l[0];
+  });
+
+  console.log(valueMax)
+
+  var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
+  
+  links.map(array=> {
+    // console.log(array)
+    draw(map, array, valueScale)
+  })
+}
+
+function draw(map, link, valueScale) {
+
+  var weight = link[0]
+  var route = link[1]
+
+  var commands = []
+  commands = ["M", route[0]]
+
+  commands.push("Q", route[1][0], route[1][1])
+
+  for(var i = 2; i < route.length; i++) {
+    commands.push("C", route[i][0], route[i][1], route[i][2])
+  }
+
+  // console.log("Commands: ", commands)
+
+  L.curve(commands, {color:'blue', weight: valueScale(weight)}).addTo(map);
+}
+
+
+// Function to draw the edges (line segments)
+function DrawLink(map, links) {
   var valueMin = d3.min(links, function (l) {
     return l[0] != l[1] ? parseInt(l[2]) : null;
   });
@@ -223,24 +270,9 @@ function DrawLink(map, links, layers, setLayers) {
         .getBounds()
         .getCenter();
 
-      // Having the link to be drawed with a curve where the link has flows in both directions
-      var lineBreakLatLng = null;
-      if (linkLayers[pathReverse]) {
-        lineBreakLatLng = L.latLng(
-          lineCenterLatLng.lat * 0.001 + lineCenterLatLng.lat,
-          lineCenterLatLng.lng * 0.001 + lineCenterLatLng.lng
-        );
-      } else {
-        lineBreakLatLng = L.latLng(
-          lineCenterLatLng.lat - lineCenterLatLng.lat * 0.001,
-          lineCenterLatLng.lng - lineCenterLatLng.lng * 0.001
-        );
-      }
-
       var line = L.polyline(
         [
           nodeLayers[link[0]].layer._latlng,
-          lineBreakLatLng,
           nodeLayers[link[1]].layer._latlng,
         ],
         {
