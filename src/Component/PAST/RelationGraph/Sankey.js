@@ -18,7 +18,7 @@ export default function Sankey(props) {
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 40;
+    const MIN_NODE_HEIGHT = 60;
 
     // const [open, setOpen] = React.useState(false);
     const handleOpen = (event, info, modal) => {
@@ -32,19 +32,29 @@ export default function Sankey(props) {
     // const handleClose = () => setOpen(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [popOpen, setPopOpen] = React.useState(null);
-
     const handlePopoverOpen = (event, node) => {
         setAnchorEl(event.currentTarget);
         setPopOpen(node.id);
         // console.log("Hover Success on", node.id);
     };
-
     const handlePopoverClose = () => {
         setAnchorEl(null);
         setPopOpen(null);
         // console.log("Hover Leave from node")
     };
 
+    
+    const [anchorElclick, setAnchorElclick] = React.useState(null);
+    const [popOpenclick, setPopOpenclick] = React.useState(null);
+    const handleClick = (event,node) => {
+      setAnchorElclick(event.currentTarget);
+      setPopOpenclick(node.id)
+    };
+    const handleClose = () => {
+      setAnchorElclick(null);
+      setPopOpenclick(null)
+    };
+    // const openclick = Boolean(anchorElclick);
     // const popOpen = Boolean(anchorEl);
         const style = {
         position: 'absolute',
@@ -58,8 +68,6 @@ export default function Sankey(props) {
         p: 4,
     };
 
-    
-
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
       let new_CANVAS_HEIGHT = 0;
@@ -68,19 +76,25 @@ export default function Sankey(props) {
       let nodes = [];
       let links = [];
       for (var i = 0; i < data.length; i++) {
-        nodes.push({id: data[i].id, name: data[i].documented_name, type: "enslaved"}); 
+        nodes.push({id: data[i].id, name: data[i].documented_name, age:data[i].age,height:data[i].height,type: "enslaved"}); 
         transLength = transLength + data[i].transactions.length;
           for (var j = 0; j < data[i].transactions.length; j++) {
             var transaction_id;
             var voyage_id;
+            var voyage_dis;
+            var voyage_year;
             switch (data[i].transactions[j].transaction.voyage) {
               case null:
                 transaction_id = data[i].transactions[j].transaction.id;
                 voyage_id = null;
+                voyage_dis = null;
+                voyage_year = null;
                 break;
               default:
                 transaction_id = data[i].transactions[j].transaction.voyage.id;
                 voyage_id = transaction_id;
+                voyage_dis = data[i].transactions[j].transaction.voyage.voyage_itinerary.imp_principal_port_slave_dis.geo_location.name;
+                voyage_year = data[i].transactions[j].transaction.voyage.voyage_dates.imp_arrival_at_port_of_dis_yyyy;
                 break;
             }
             if (nodes.findIndex(x =>  
@@ -95,8 +109,11 @@ export default function Sankey(props) {
                             amount: data[i].transactions[j].transaction.amount,
                             voyage_id: voyage_id,
                             full_ref: data[i].transactions[j].transaction.source.full_ref,
-                            place:data[i].transactions[j].transaction.place.geo_location.name,
+                            place_purchase:data[i].transactions[j].transaction.place.geo_location.name,
+                            place_dis: voyage_dis,
                             date: data[i].transactions[j].transaction.date,
+                            year: voyage_year,
+                            amount: data[i].transactions[j].transaction.amount,
                             type: "transaction",
                           });
             }
@@ -173,24 +190,39 @@ export default function Sankey(props) {
       nodes.forEach((node)=>{
         const result = [];
         var voyagemodal = true;
+        if(node.type==="enslaved"){
+          result.push(
+            <tr key = {node.id}>
+              <th>Age: </th>
+              <td>{node.age}</td>
+            </tr>,
+            <tr key = {node.id}>
+              <th>Height: </th>
+              <td>{node.height}</td>
+            </tr>)
+        }
         if(node.type==="transaction"){
           if(node.voyage_id===null){
             voyagemodal = false;
             result.push(
               <tr key = {node.id}>
-                <th>Type: </th>
-                <td>{node.name}</td>
+                {/* <th>Type: </th> */}
+                <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
               </tr>,
               <tr key = {node.id}>
-                <th>Source: </th>
+                {/* <th>Date: </th> */}
+                <td>{node.amount}</td>
+              </tr>,
+              <tr key = {node.id}>
+                {/* <th>Source: </th> */}
                 <td>{node.full_ref}</td>
               </tr>,
                 <tr key = {node.id}>
-                <th>Place: </th>
+                {/* <th>Place: </th> */}
                 <td>{node.place}</td>
               </tr>,
               <tr key = {node.id}>
-                <th>Date: </th>
+                {/* <th>Date: </th> */}
                 <td>{node.date}</td>
               </tr>
             );
@@ -201,16 +233,16 @@ export default function Sankey(props) {
             // console.log(node.voyage_id) 
             result.push(
               <tr key = {node.id}>
-                <th>Type: </th>
-                <td>{node.name}</td>
+                {/* <th>Type: </th> */}
+                <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
               </tr>,
                 <tr key = {node.id}>
-                <th>Place: </th>
-                <td>{node.place}</td>
+                {/* <th>Place: </th> */}
+                <td>{node.place_purchase} to {node.place_dis}</td>
               </tr>,
               <tr key = {node.id}>
-                <th>Date: </th>
-                <td>{node.date}</td>
+                {/* <th>Date: </th> */}
+                <td>{node.year}</td>
               </tr>
             );
           }
@@ -243,16 +275,20 @@ export default function Sankey(props) {
     // console.log("renderStory")
     switch(node.type) {
       case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
-      case "transaction": return node.information
-      case "enslaver": return "enslaver story"
+      case "transaction": return "TRANSACTION"
+      case "enslaver": return "ENSLAVER"
       default: return ""
     }
     
   }
 
+  var enslaved = []
+  data.forEach((each)=>{
+    enslaved.push(each.documented_name+" ")
+  } )
   return (
     <div>
-      <h1>Sankey</h1>
+      <h1>Connections for {enslaved}</h1>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
@@ -275,21 +311,34 @@ export default function Sankey(props) {
                 height={node.y1 - node.y0}>
                 <div className="node-name">
                   <Box
-                    onClick={(e)=>{handlePopoverOpen(e, node)}}
+                    onClick={(e)=>{handleClick(e, node)}}
                     // onMouseEnter={()=>{console.log("hover enter", node)}}
+                    onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
                     onMouseLeave={handlePopoverClose}
                     >
                     
-                    <Typography align="center">{node.name}</Typography>
+                    <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
                     {/* <Typography align="center">{node.id}</Typography> */}
                     <Typography align="center">{node.voyagebutton}</Typography>
                   </Box>
+                  <Popover
+                    // id={`sankey-node-text-${node.index}`}
+                    open={popOpenclick === node.id && node.type==="enslaved" }
+                    anchorEl={anchorElclick}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left"
+                    }}
+                    onClose={handleClose}
+                    >
+                    {renderStory(node)}
+                  </Popover>
                   <Popover
                     id={`sankey-node-text-${node.index}`}
                     sx={{
                       pointerEvents: 'none',
                     }}
-                    open={popOpen === node.id}
+                    open={popOpen === node.id && node.type!="enslaver" }
                     anchorEl={anchorEl}
                     anchorOrigin={{
                       vertical: 'bottom',
@@ -301,8 +350,8 @@ export default function Sankey(props) {
                     }}
                     onClose={handlePopoverClose}
                     >
-                    {renderStory(node)}
-                  </Popover>
+                      {node.information}               
+                    </Popover>
                 </div>
               </foreignObject>
         )})}

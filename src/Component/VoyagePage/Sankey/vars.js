@@ -1,8 +1,18 @@
 export var voyage_pivot_tables_source = [
+    // 'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name':{
+    //     "flatlabel":"Itinerary : Imputed broad region of slave disembarkation (MJSELIMP1) : Location : Location name"
+    // },
+    // 'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name' :{
+    //     "flatlabel":"Itinerary : Imputed principal place of slave purchase (MJBYPTIMP) : Location : Location name"
+    // },
+    // 'voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name':{
+    //     "flatlabel":"Itinerary : Imputed principal broad region of slave purchase (MAJBYIMP1) : Location : Location name"
+    // }
+
     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name',
     'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name',
-    'voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name',
-];
+    'voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name'
+]
 
 export var voyage_pivot_tables_target =[
     'voyage_itinerary__imp_principal_region_slave_dis__geo_location__name',

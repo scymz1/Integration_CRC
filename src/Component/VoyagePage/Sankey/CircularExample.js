@@ -159,20 +159,19 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   // const [optionSet2, setOptionSet2] = useState([...voyage_pivot_tables])
   const [option, setOption] = useState({
     fieldSource: voyage_pivot_tables_source[2],
-    fieldTarget: voyage_pivot_tables_target[1]
+    fieldTarget: voyage_pivot_tables_target[1],
 })
 
 const {search_object, set_search_object, endpoint} = React.useContext(props.context);
+
+
 
 const handleChange = (event, name, type) => {
   console.log(name, event.target.value)
   setOption({
       ...option,
       [name]: event.target.value,
-
-  })
-
-  
+  })  
   refetch()
 }
 
@@ -294,12 +293,12 @@ const handleChange = (event, name, type) => {
                       
                       },
                       // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                      console.log("🫧", state.nodeData)
+                      console.log("🫧", node.name)
                       )
 
                       set_search_object({
                         ...search_object,
-                        [option.fieldSource]: [state.nodeData.name]
+                        [option.fieldSource]: [node.name]
                       });
                   }}
                   />
@@ -349,7 +348,7 @@ const handleChange = (event, name, type) => {
                       },
                     },
                     // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                    console.log("🚀", state.linkData)
+                    console.log("🐷", state.linkData)
                     )}
                   />
                 ))}

@@ -19,6 +19,7 @@ import Checkbox from "@mui/material/Checkbox";
 //import * as options_flat from "../../../util/options.json";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
+//import Button from "@mui/material/Button";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -250,21 +251,23 @@ function Table(props) {
                         {checkbox && row.transactions.length === 0 && (
                           <TableCell padding="checkbox"></TableCell>
                         )}
-                        {cols.map(
-                          (k) => {
-                            if (k === "gender") {
-                              return (
-                                <TableCell>
-                                  {row[k] === 1 ? "Male" : "Female"}
-                                </TableCell>
-                              );
-                            } else if (
-                              k ===
-                              "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-                            ) {
-                              const popover = createPopover(row);
-                              //console.log(popover);
-                              return (
+                        {cols.map((k) => {
+                          if (k === "gender") {
+                            if (row[k] === 1) {
+                              return <TableCell>Male</TableCell>;
+                            } else if (row[k] === 2) {
+                              return <TableCell>Female</TableCell>;
+                            } else {
+                              return <TableCell>{row[k]}</TableCell>;
+                            }
+                          } else if (
+                            k ===
+                            "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+                          ) {
+                            const popover = createPopover(row);
+                            //console.log(popover);
+                            return (
+                              <TableCell>
                                 <Stack direction="row" spacing={1}>
                                   {Object.keys(popover).map((name) => (
                                     <Tooltip
@@ -276,28 +279,24 @@ function Table(props) {
                                     </Tooltip>
                                   ))}
                                 </Stack>
-                              );
-
-                              //return <TableCell>{row[k]}</TableCell>;
-                              // } else if (typeof row[k] === 	"object") {
-                              //   return (<TableCell>
-                              //       {[...new Set(row[k])]}
-                              //     </TableCell>)
-                            } else {
-                              return (
-                                <TableCell>
-                                  <div // [...new Set(row[k])]
-                                    dangerouslySetInnerHTML={{ __html: row[k] }}
-                                  />
-                                </TableCell>
-                              );
-                            }
+                              </TableCell>
+                            );
+                          } else if (typeof row[k] === "object") {
+                            return (
+                              <TableCell>
+                                {[...new Set(row[k])].join(", ")}
+                              </TableCell>
+                            );
+                          } else {
+                            return (
+                              <TableCell>
+                                <div // [...new Set(row[k])]
+                                  dangerouslySetInnerHTML={{ __html: row[k] }}
+                                />
+                              </TableCell>
+                            );
                           }
-                          // <TableCell>
-                          //   <div dangerouslySetInnerHTML={{ __html: row[k] }} />
-                          // </TableCell>
-                        )}
-                        {/* </TableRow> */}
+                        })}
                       </StyledTableRow>
                     );
                   })}

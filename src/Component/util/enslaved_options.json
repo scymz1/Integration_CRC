@@ -21468,5 +21468,11 @@
     "type": "<class 'rest_framework.relations.ManyRelatedField'>",
     "label": "Sources",
     "flatlabel": "Sources"
+  },
+
+  "personal_information": {
+    "type": "table",
+    "label": "Personal Information",
+    "flatlabel": "Personal Information"
   }
 }
