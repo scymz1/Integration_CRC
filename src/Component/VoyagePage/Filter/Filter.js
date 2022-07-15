@@ -1,4 +1,4 @@
-import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar, Popover} from "@mui/material";
+import {Grid, IconButton, AppBar, Popover} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -68,7 +68,7 @@ export default function Filter(props) {
 
     }}
   >
-      <IconButton
+      {/* <IconButton
           aria-describedby={id}
           variant="contained" 
           onClick={handleClick}>
@@ -87,21 +87,21 @@ export default function Filter(props) {
               vertical: 'top',
               horizontal: 'center',
             }}
-          >
-        {/* <Accordion>
+          > */}
+        <Accordion>
           <AccordionSummary
-            expandIcon={<FilterAlt />}
+            expandIcon={<FilterAlt sx={{ color: "white" }}/>}
             aria-controls="filter-content"
             id="filter-header"
             sx={{
               backgroundColor: "#1D76D2"
             }}
           >
-            <Typography>Filter</Typography>
+            {/* <Typography>Filter</Typography> */}
           </AccordionSummary>
-          <AccordionDetails> */}
+          <AccordionDetails>
 
-          <AppBar position="static">
+          <AppBar position="center">
             {/* <Toolbar disableGutters> */}
               <Grid container direction="row" spacing={1}>
                   {
@@ -151,9 +151,9 @@ export default function Filter(props) {
                 }
               </Grid>
             </Grid>
-            {/* </AccordionDetails>
-        </Accordion> */}
-      </Popover>
+            </AccordionDetails>
+        </Accordion>
+      {/* </Popover> */}
     </AppContext.Provider>
   );
 }
