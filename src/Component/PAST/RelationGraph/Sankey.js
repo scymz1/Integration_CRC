@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Typography, Popover } from "@mui/material";
+import { Box, Button, Typography, Popover, Card } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 import './styles.css'
@@ -279,7 +279,7 @@ export default function Sankey(props) {
     // console.log("hover node", data.find((slave)=> slave.id === node.id))
     // console.log("renderStory")
     switch(node.type) {
-      case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
+      case "enslaved": return <Card sx={{ flexGrow: 1,  width: 400}}><Story target={data.find((slave)=> slave.id === node.id)}/></Card>
       case "transaction": return "TRANSACTION"
       case "enslaver": return "ENSLAVER"
       default: return ""
