@@ -79,7 +79,6 @@ export default function Filter(props) {
           >
           </AccordionSummary>
           <AccordionDetails>
-
           <AppBar position="static">
             {/* <Toolbar disableGutters> */}
               <Grid container direction="row" spacing={1}>
