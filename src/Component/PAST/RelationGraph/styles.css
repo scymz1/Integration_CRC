@@ -109,4 +109,17 @@
     overflow: hidden;
     border: 2px solid;
   }
+
+  @media (min-width: 800px){
+    .story{
+        /* min-height: 52vh;
+        max-height: 68vh; */
+        height: 70vh;
+    }
+}
+
+.storybackground{
+  background-color: #ececea	;
+}
+
   

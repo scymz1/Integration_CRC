@@ -92,27 +92,27 @@ export function ReadFeature(props) {
 
   //for updating search object
 
-  // useEffect(() =>{
-  //   //selected disembark
-  //   if (disembark === diskey ){
-  //     //if currently search_object is embark
-  //     if(complete_object[embkey]){
-  //       console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
-  //       delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-  //     }
-  //     }
-  //   else{
-  //     if(complete_object[diskey]){
-  //       console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-  //       delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-  //     }
+  useEffect(() =>{
+    //selected disembark
+    if (disembark === diskey ){
+      //if currently search_object is embark
+      if(complete_object[embkey]){
+        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
+        delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
+      }
+      }
+    else{
+      if(complete_object[diskey]){
+        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+        delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+      }
       
-  //    }
+     }
 
-  //   console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
-  // },[disembark])
+  },[disembark])
 
 
   useEffect(() => {

@@ -11,6 +11,11 @@ import {PASTContext} from "./PASTApp";
 import {useContext} from "react";
 import Modal from "../VoyagePage/Result/Table/TableModal";
 
+import Grow from '@mui/material/Grow';
+import Gallery from "./Gallery.js"
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import TocIcon from '@mui/icons-material/Toc';
+
 function TabPanel(props) {
   const {children, value, index} = props;
 
@@ -35,6 +40,12 @@ export default function PAST() {
   const [dialogopen, setdialogOpen] = React.useState(false);
   const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
   const [scroll, setScroll] = React.useState('body');
+  const [checked, setChecked] = React.useState(false);
+
+  function handleChange(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
+
   //console.log(endpoint);
   // const Transition = React.forwardRef(function Transition(props, ref) {
   //   return <Slide direction="up" ref={ref} {...props} />;
@@ -51,12 +62,41 @@ export default function PAST() {
   return (
     <div>
       <ResponsiveAppBar/>
-      <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
+
+      {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
-      <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
+      <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button> */}
+
       <Filter context={PASTContext}/>
-      {/* <Button disabled={queryData["targets"].length === 0} onClick={handleClickOpen('body')}>Open modal</Button><br/> */}
-      <PASTTable context={PASTContext} handleClickOpen={handleClickOpen}/>
+      <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
+        Table
+      </Button>
+      <a> </a>
+      <Button variant="contained" endIcon={<DashboardCustomizeIcon />} size="large" color="grey" onClick={() => handleChange("story")} sx={{ mt:3, mb:5}}>
+      Stories
+      </Button>
+
+      {/*for fading/growing effect, you have to wrap all things in an div*/}
+      {!checked && 
+      <Box>
+        <Grow
+        in={!checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 500 } : {})}
+        >
+          <div><PASTTable context={PASTContext} handleClickOpen={handleClickOpen}/></div>
+        </Grow>
+      </Box>}
+
+      {checked &&<Box sx={{ display: 'flex' }}>
+        <Grow in={checked}>
+          <div>
+          <Gallery />
+          </div>
+        </Grow>
+      </Box>}
+
+      
       <Dialog
         fullScreen
         open={dialogopen}

@@ -113,7 +113,7 @@ export default function ColSelector11(props) {
                         : <NestedMenuItem
                             key={key}
                             // label={options_flat[nameConcat(name,key)].label}
-                            label={options_flat[key].label}
+                            label={options_flat[key].flatlabel}
                             parentMenuOpen={open}
                             onClick={handleClose}
                         >
@@ -146,7 +146,9 @@ export default function ColSelector11(props) {
                         defaultExpandIcon={<ChevronRightIcon />}
                     >
                         <Button
-                            variant="text"
+                            variant="contained"
+                            size="large"
+                            color="grey"
                             onClick={handleClick}
                         >
                             {"Column Selector"}

@@ -6,6 +6,7 @@ import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import { truncate } from "lodash";
 import './styles.css'
 import { MODALContext } from "../PAST";
+import _ from 'lodash';
 
 import Story from "./Story";
 
@@ -18,7 +19,7 @@ export default function Sankey(props) {
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 60;
+    const MIN_NODE_HEIGHT = 80;
 
     // const [open, setOpen] = React.useState(false);
     const handleOpen = (event, info, modal) => {
@@ -81,20 +82,17 @@ export default function Sankey(props) {
           for (var j = 0; j < data[i].transactions.length; j++) {
             var transaction_id;
             var voyage_id;
-            var voyage_dis;
-            var voyage_year;
             switch (data[i].transactions[j].transaction.voyage) {
               case null:
                 transaction_id = data[i].transactions[j].transaction.id;
+                // place_name = data[i].transactions[j].transaction.place.geo_location.name;
                 voyage_id = null;
-                voyage_dis = null;
-                voyage_year = null;
+
                 break;
               default:
                 transaction_id = data[i].transactions[j].transaction.voyage.id;
                 voyage_id = transaction_id;
-                voyage_dis = data[i].transactions[j].transaction.voyage.voyage_itinerary.imp_principal_port_slave_dis.geo_location.name;
-                voyage_year = data[i].transactions[j].transaction.voyage.voyage_dates.imp_arrival_at_port_of_dis_yyyy;
+               
                 break;
             }
             if (nodes.findIndex(x =>  
@@ -103,17 +101,18 @@ export default function Sankey(props) {
                   x.amount === data[i].transactions[j].transaction.amount &&
                   x.voyage_id === voyage_id
                 ) === -1) {
+                 
                 nodes.push({
-                            id: transaction_id,
-                            name: data[i].transactions[j].transaction.relation_type.relation_type,
-                            amount: data[i].transactions[j].transaction.amount,
-                            voyage_id: voyage_id,
-                            full_ref: data[i].transactions[j].transaction.source.full_ref,
-                            place_purchase:data[i].transactions[j].transaction.place.geo_location.name,
-                            place_dis: voyage_dis,
-                            date: data[i].transactions[j].transaction.date,
-                            year: voyage_year,
-                            amount: data[i].transactions[j].transaction.amount,
+                            id: transaction_id,      
+                            voyage_id: voyage_id,      
+                            name: _.get(data[i].transactions[j],["transaction","relation_type","relation_type"],null),
+                            amount: _.get(data[i].transactions[j],["transaction","amount"],null),
+                            place: _.get(data[i].transactions[j],["transaction","place","geo_location","name"],null),
+                            full_ref: _.get(data[i].transactions[j],["transaction","source","full_ref"],null),
+                            place_purchase:  _.get(data[i].transactions[j],["transaction","voyage","voyage_itinerary","imp_principal_place_of_slave_purchase","geo_location","name"],null),
+                            place_dis: _.get(data[i].transactions[j],["transaction","voyage","voyage_itinerary","imp_principal_port_slave_dis","geo_location","name"],null),
+                            date: _.get(data[i].transactions[j],["transaction","date"],null),
+                            year: _.get(data[i].transactions[j],["transaction","voyage","voyage_dates","imp_arrival_at_port_of_dis_yyyy"],null),
                             type: "transaction",
                           });
             }
@@ -192,39 +191,43 @@ export default function Sankey(props) {
         var voyagemodal = true;
         if(node.type==="enslaved"){
           result.push(
-            <tr key = {node.id}>
+            <tbody>
+            <tr>
               <th>Age: </th>
               <td>{node.age}</td>
-            </tr>,
-            <tr key = {node.id}>
+            </tr>
+            <tr>
               <th>Height: </th>
               <td>{node.height}</td>
-            </tr>)
+            </tr>
+            </tbody>)
         }
         if(node.type==="transaction"){
           if(node.voyage_id===null){
             voyagemodal = false;
             result.push(
-              <tr key = {node.id}>
-                {/* <th>Type: </th> */}
+              <tbody>
+              <tr>
+                <th>Type: </th>
                 <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-              </tr>,
-              <tr key = {node.id}>
-                {/* <th>Date: </th> */}
+              </tr>
+              <tr>
+                <th>Amount: </th>
                 <td>{node.amount}</td>
-              </tr>,
-              <tr key = {node.id}>
-                {/* <th>Source: </th> */}
+              </tr>
+              <tr>
+                <th>Source: </th>
                 <td>{node.full_ref}</td>
-              </tr>,
-                <tr key = {node.id}>
-                {/* <th>Place: </th> */}
+              </tr>
+              <tr>
+                <th>Place: </th>
                 <td>{node.place}</td>
-              </tr>,
-              <tr key = {node.id}>
-                {/* <th>Date: </th> */}
+              </tr>
+              <tr>
+                <th>Date: </th>
                 <td>{node.date}</td>
               </tr>
+              </tbody>
             );
           }
           else{
@@ -232,18 +235,20 @@ export default function Sankey(props) {
             node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,voyagemodal)}>Voyage id:{node.voyage_id}</Button>
             // console.log(node.voyage_id) 
             result.push(
-              <tr key = {node.id}>
-                {/* <th>Type: </th> */}
+              <tbody>
+              <tr>
+                <th>Type: </th>
                 <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-              </tr>,
-                <tr key = {node.id}>
-                {/* <th>Place: </th> */}
+              </tr>
+                <tr>
+                <th>Place: </th>
                 <td>{node.place_purchase} to {node.place_dis}</td>
-              </tr>,
-              <tr key = {node.id}>
-                {/* <th>Date: </th> */}
+              </tr>
+              <tr>
+                <th>Year: </th>
                 <td>{node.year}</td>
               </tr>
+              </tbody>
             );
           }
           }
@@ -289,10 +294,10 @@ export default function Sankey(props) {
   return (
     <div>
       <h1>Connections for {enslaved}</h1>
-      <Button onClick={()=>console.log("data:", data)}>print data</Button>
+      {/* <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
-      <Button onClick={()=>console.log("graph:", graph)}>print graph</Button>
+      <Button onClick={()=>console.log("graph:", graph)}>print graph</Button> */}
       <br/>
       {graph?
         <svg 
@@ -316,7 +321,7 @@ export default function Sankey(props) {
                     onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
                     onMouseLeave={handlePopoverClose}
                     >
-                    
+                    {/* {console.log(node.name,typeof(node.name))} */}
                     <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
                     {/* <Typography align="center">{node.id}</Typography> */}
                     <Typography align="center">{node.voyagebutton}</Typography>
