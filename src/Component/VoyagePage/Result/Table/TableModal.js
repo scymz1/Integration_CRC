@@ -113,7 +113,7 @@ function TableModal(props) {
             component="h2"
           >
             <div>
-              Full detail: {id}
+              Voyage detail: {id}
               <IconButton
                 sx={{ float: "right" }}
                 onClick={() => setOpen(false)}
