@@ -77,6 +77,7 @@ export default function Filter(props) {
               backgroundColor: "#1D76D2"
             }}
           >
+              <Typography color="white">Filter</Typography>
           </AccordionSummary>
           <AccordionDetails>
           <AppBar position="static">
