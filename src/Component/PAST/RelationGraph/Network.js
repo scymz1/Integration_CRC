@@ -3,8 +3,11 @@ import {useContext, useEffect, useRef, useState} from "react";
 import {PASTContext} from "../PASTApp";
 import {Button, CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
+import _ from 'lodash';
+
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
+
 
 export default function Network(props) {
   //data: 根据queryData请求到的data，是一个list. 点击print data按钮可以在console中打印出data
@@ -18,9 +21,11 @@ export default function Network(props) {
   //   type: "newType",
   //   targets: [...queryData.targets, "newTarget"]
   // })
-  const {queryData, setQueryData, data, windowRef} = useContext(PASTContext);
+  const {queryData, setQueryData, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
+  const [data, setData] = useState([]);
+  const [selected, setSelected] = useState({...queryData})
 
   function updateQueryData(path, id) {
     let formdata = new FormData();
@@ -38,12 +43,31 @@ export default function Network(props) {
           targets.push(slave.id)
       }))
       console.log("targets", targets)
-      setQueryData({
+      setSelected({
         type: "slave",
         targets: targets
       })
     })
   }
+
+  useEffect(() => {
+    const endpoint = "past/enslaved/"
+    const fetchData = async ()=> {
+      const promises = selected.targets.map(target => {
+        let selected = new FormData();
+        selected.append("id", target.toString());
+        selected.append("id", target.toString());
+        return fetch(base_url + endpoint, {
+          method: "POST",
+          body: selected,
+          headers: {'Authorization': auth_token}
+        }).then(res => res.json()).then(res => res[0])
+      })
+      const response = await Promise.all(promises)
+      setData(response)
+    }
+    fetchData().catch(console.error);
+  }, [selected])
 
   useEffect(()=> {
     setHeight((0.7 * windowRef.current.offsetHeight).toString())
@@ -86,21 +110,28 @@ export default function Network(props) {
       item.transactions.forEach((transaction)=>{
         const transactionData = transaction.transaction
         tmp.addNode(transactionData, `transportation: ${transactionData.id}`, "transportation", "orange")
-        tmp.link(item, transactionData, `from ${transactionData.voyage.voyage_itinerary.imp_principal_place_of_slave_purchase.geo_location.name} to ${transactionData.voyage.voyage_itinerary.imp_principal_port_slave_dis.geo_location.name} at ${transactionData.voyage.voyage_dates.imp_arrival_at_port_of_dis}`)
+        tmp.link(item, transactionData, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
+        to ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "No Data")} 
+        at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
 
         //caption
-        transactionData.voyage.voyage_captainconnection.forEach((captainData)=>{
-          const captain = captainData.captain
-          tmp.addNode(captain, captain.name, "caption", "lightblue")
-          tmp.link(captain, transactionData, "captain")
-        })
-
+        const captainconnection = _.get(transactionData, ["voyage", "voyage_captainconnection"])
+        if(captainconnection) {
+          captainconnection.forEach((captainData)=>{
+            const captain = captainData.captain
+            tmp.addNode(captain, captain.name, "caption", "lightblue")
+            tmp.link(captain, transactionData, "captain")
+          })
+        }
         //enslaver
-        transactionData.enslavers.forEach((enslaver) => {
-          // console.log("enslaver", enslaver.enslaver_alias.id)
-          tmp.addNode(enslaver.enslaver_alias, enslaver.enslaver_alias.alias, "enslaver", "green")
-          tmp.link(transactionData, enslaver.enslaver_alias, enslaver.role.role)
-        })
+        const enslavers = _.get(transactionData, ["enslavers"])
+        if(enslavers) {
+          enslavers.forEach((enslaver) => {
+            // console.log("enslaver", enslaver.enslaver_alias.id)
+            tmp.addNode(enslaver.enslaver_alias, enslaver.enslaver_alias.alias, "enslaver", "green")
+            tmp.link(transactionData, enslaver.enslaver_alias, enslaver.role.role)
+          })
+        }
       })
     })
     const fetchData = async () => {
@@ -144,7 +175,7 @@ export default function Network(props) {
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node.type) {
         case "slave":
-          setQueryData({
+          setSelected({
             type: "slave",
             targets: nodeId
           })
@@ -174,7 +205,7 @@ export default function Network(props) {
       <h1>Relation between: {data.map((item, index) => index === data.length-1 ? item.documented_name : item.documented_name + " & ")}</h1>
       {/*<Button onClick={()=>console.log("data:", data)}>print data</Button>*/}
       {/*<Button onClick={()=>console.log("graph:", graph)}>print graph</Button>*/}
-      {/*<Button onClick={()=>console.log("graph:", queryData)}>print queryData</Button>*/}
+      {/*<Button onClick={()=>console.log("graph:", selected)}>print selected</Button>*/}
       {!graph ?
         <CircularProgress/> :
         <Graph
