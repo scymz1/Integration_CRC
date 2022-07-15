@@ -12,7 +12,8 @@ export const ColContext = React.createContext({});
 function TableApp(props) {
   const [cols, setCols] = React.useState([
     "id",
-    "voyage_slaves_numbers__imp_total_num_slaves_embarked",
+    "voyage_shipownerconnection__owner__name",
+    "voyage_sourceconnection__source__full_ref"
   ]);
   const { endpoint } = React.useContext(props.context);
   const [open, setOpen] = useState(false);
