@@ -11,6 +11,9 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 
+import { curve, Curve } from 'leaflet';
+import '@elfalem/leaflet-curve';
+
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -96,6 +99,26 @@ export function ReadFeature(props) {
       }
     }
 
+    // var a=[50.54136296522163,28.520507812500004];
+    // var b=[46.680797145321655,33.83789062500001];
+    // var c=[52.214338608258224,39.564453125000004];
+    // var d=[48.214338608258224,40.564453125000004];
+    // var control0=controlPoint(0.2, map, a, a, b, false);
+    // var control1=controlPoint(0.2, map, b, a, c, false);
+    // var control2=controlPoint(0.2, map, c, b, d, false);
+
+    // var path = L.curve(['M',[50.54136296522163,28.520507812500004],
+    // 'Q', control0, b,
+    // 'Q', control1, c,
+    // 'Q', control2, d,
+    // 'V',[48.40003249610685],
+    // 'L',[47.45839225859763,31.201171875],
+    //   [48.40003249610685,28.564453125000004],
+    // 'Z'],
+    // {color:'red',fill:true}).addTo(map);
+
+
+
     // Function for distinguish if the feature is a waypoint
     // const featureWayPt = (feature) => {
     //   return !feature.properties.name.includes("ocean waypt");
@@ -135,17 +158,17 @@ export function ReadFeature(props) {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
         
-          console.log('124')
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             console.log("current id = ", layer.feature.id);
             console.log("🚀 ~ file: Spatial.js ~ line 137 ~ useEffect ~ layer", layer)
-            let tmp =
-              complete_object[
-                "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
-              ];
-            tmp[0] = layer.feature.id;
-            tmp[1] = layer.feature.id;
+            let tmp =[layer.feature.id, layer.feature.id];
+            //   complete_object[
+            //     "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+            //   ];
+            // tmp[0] = layer.feature.id;
+            // tmp[1] = layer.feature.id;
+            console.log(tmp);
             set_complete_object({
               ...complete_object,
               voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id:
@@ -186,7 +209,8 @@ export function ReadFeature(props) {
       });
 
       map.addLayer(markers);
-      DrawLink(map, csv);
+      //DrawLink(map, csv);
+      DrawLink2(map);
     }
   }, [nodes, csv]);
 
@@ -198,7 +222,8 @@ export function ReadFeature(props) {
 }
 
 // Function to draw the edges
-function DrawLink(map, links, layers, setLayers) {
+function DrawLink(map, links) {
+  
   var valueMin = d3.min(links, function (l) {
     return l[0] != l[1] ? parseInt(l[2]) : null;
   });
@@ -277,5 +302,65 @@ function DrawLink(map, links, layers, setLayers) {
     }
   });
 
+  return null;
+}
+
+function DrawLink2(map){
+
+  const line = (coord1, coord2) => {
+    const lengthX = coord2.x - coord1.x;
+    const lengthY = coord2.y - coord1.y;
+  
+    return {
+      length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+      angle: Math.atan2(lengthY, lengthX),
+    };
+  };
+
+  const controlPoint = (smoothing, map, current, previous, next, reverse) => {
+    /**
+     * When current is the first or last point of the array, prev and next
+     * dont exist.  Replace with current
+     */
+    const p = previous || current;
+    const n = next || current;
+  
+    const currPoint = map.latLngToLayerPoint(L.latLng(current));
+    const prevPoint = map.latLngToLayerPoint(L.latLng(p));
+    const nextPoint = map.latLngToLayerPoint(L.latLng(n));
+  
+    let { length, angle } = line(prevPoint, nextPoint);
+  
+    angle = angle + (reverse ? Math.PI : 0);
+    length = length * smoothing;
+  
+    const x = currPoint.x + Math.cos(angle) * length;
+    const y = currPoint.y + Math.sin(angle) * length;
+  
+    const { lat, lng } = map.layerPointToLatLng([x, y]);
+    return [lat, lng];
+  };
+
+  
+  var routes=require("./transatlantic.json").routes;
+  routes.map(
+    (route)=>{
+      var input = ['M', [route[0][1], route[0][0]]];
+      for (var i = 1; i < route.length; i++) { 
+        input.push('S'); input.push([route[i][1], route[i][0]]);
+        if(i==route.length-1){
+          var control = controlPoint(0.2, map, [route[i][1], route[i][0]], [route[i-1][1], route[i-1][0]], [route[i][1], route[i][0]], false);
+          input.push(control);
+        }
+        else{
+          var control = controlPoint(0.2, map, [route[i][1], route[i][0]], [route[i-1][1], route[i-1][0]], [route[i+1][1], route[i+1][0]], false);
+          input.push(control);
+        }
+      }
+      var path = L.curve(input,
+      {color:'red',fill:false}).addTo(map);
+      return null;
+    }
+  );
   return null;
 }
