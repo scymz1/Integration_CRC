@@ -263,7 +263,7 @@ export function ReadFeature(props) {
 
       map.addLayer(markers);
       // DrawLink(map, csv);
-      DrawRoutes(map, csv)
+      drawUpdate(map, csv)
       
     }
   }, [nodes, csv]);
@@ -275,6 +275,35 @@ export function ReadFeature(props) {
 
   return null;
 }
+
+function drawUpdate(map, routes) {
+
+  console.log(routes)
+
+  var valueMin = d3.min(routes, function (l) {
+    return l[2];
+  });
+  var valueMax = d3.max(routes, function (l) {
+    return l[2];
+  });
+  
+  var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
+
+
+  routes.map(route => {
+    var commands = [];
+
+    console.log("weight: ", route[2])
+
+    commands.push('M', route[0][0])
+    commands.push('C', route[1][0], route[1][1], route[0][1])
+
+    L.curve(commands, {color: 'blue', weight: valueScale(route[2])}).bindPopup("Sum of slaves: " + route[2]).addTo(map)
+  })
+
+}
+
+
 
 // Function to draw the curve routes
 function DrawRoutes(map, links) {
