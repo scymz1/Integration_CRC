@@ -56,15 +56,15 @@ import * as options_flat from "./vars.json"
 
 
 export default function SankeyExample(props) {
-console.log("🤕️", options_flat)
 
   const {isLoading, error, data, refetch} = useQuery('',() => {
     var myHeaders = new Headers();
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", option.fieldSource);
 formdata.append("groupby_fields", option.fieldTarget);
+formdata.append("groupby_fields", option.fieldSource);
+
 formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
 formdata.append("cachename", "voyage_pivot_tables");
@@ -272,7 +272,7 @@ const handleChange = (event, name, type) => {
                     fill={color(node.depth)}
                     opacity={0.5}
                     stroke="white"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     onMouseOver={(e) => {
                       setState({
                         ...state,
@@ -353,7 +353,9 @@ const handleChange = (event, name, type) => {
                       },
                     },
                     // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                    console.log("🐷", state.linkData)
+                    // console.log("🐷", state.linkData)
+                    console.log("🐔", link.source.name + " to " + link.target.name)
+
                     )}
                   />
                 ))}
