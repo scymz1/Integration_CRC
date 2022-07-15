@@ -9,14 +9,12 @@ export default function IntraTabs(props) {
 
 
   const handleChange = (event,newValue) => {
-  console.log("🚀 ~ file: Tab.js ~ line 12 ~ handleChange ~ newValue", newValue)
 
     setValue(newValue);
     setDisembark(newValue)
   };
 
-      console.log("🚀 ~ file: Tab.js ~ line 12 ~ IntraTabs handleChange ~ newValue", value)
-    console.log("🚀 ~ file: Tab.js ~ line 8 ~ IntraTabs ~ disembark", disembark)
+
 
   return (
     <Box sx={{ width: '100%' }}>

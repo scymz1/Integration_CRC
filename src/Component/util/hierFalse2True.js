@@ -44,6 +44,5 @@ export default function hierFalse2True(props) {
         return (hierTrue);
     }
 
-    
     return buildHier(props)
 }
