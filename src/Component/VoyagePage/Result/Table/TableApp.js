@@ -1,4 +1,5 @@
 import ColSelector from "./ColSelector";
+import ColSelector11 from "./ColSelector11";
 import Table from "./Table";
 import Modal from "./TableModal";
 import React, { useState, useContext } from "react";
@@ -9,7 +10,11 @@ import { VoyageContext } from "../../VoyageApp";
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
-  const [cols, setCols] = React.useState(["id"]);
+  const [cols, setCols] = React.useState([
+    "id",
+    "voyage_shipownerconnection__owner__name",
+    "voyage_sourceconnection__source__full_ref"
+  ]);
   const { endpoint } = React.useContext(props.context);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
@@ -37,9 +42,9 @@ function TableApp(props) {
           search_object,
         }}
       >
-        <ColSelector context={ColContext} />
+        <ColSelector11 context={ColContext} />
         <Table context={ColContext} />
-        <Modal context={ColContext} />
+        <Modal context={ColContext} endpoint="voyage/" />
       </ColContext.Provider>
     </div>
   );

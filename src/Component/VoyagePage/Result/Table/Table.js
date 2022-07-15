@@ -17,6 +17,10 @@ import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 //import * as options_flat from "../../../util/options.json";
+import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
+//import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -28,12 +32,23 @@ function Table(props) {
   //const { search_object } = useContext(VoyageContext);
 
   // Menu
-  const { cols, endpoint, checkbox, setOpen, setInfo, setId, modal, options_flat, queryData, setQueryData,
-  search_object } =
-    useContext(props.context);
+  const {
+    cols,
+    endpoint,
+    checkbox,
+    setOpen,
+    setInfo,
+    setId,
+    modal,
+    options_flat,
+    queryData,
+    setQueryData,
+    search_object,
+    chipData,
+  } = useContext(props.context);
 
   // Pagination
-  const [totalResultsCount, setTotalResultsCount] = useState([]);
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -41,6 +56,9 @@ function Table(props) {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Checkbox
+  //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
     var data = new FormData();
@@ -118,18 +136,66 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.transactions.length !== 0) {
+      //setOpen(true);
+      // setInfo(info);
+      //console.log(info.transactions__transaction__voyage__id[0]);
+      //setId(info.transactions__transaction__voyage__id[0]);
+      //console.log(info.documented_name);
+      //let selected = queryData["targets"];
+      const selectedIndex = queryData["targets"].indexOf(info.id);
+      if (selectedIndex === -1) {
+        if (!checkedMax(info.id)) {
+          chipData[info.id] = info.documented_name;
+        }
+      } else {
+        delete chipData[info.id];
+      }
+      setQueryData({
+        ...queryData,
+        targets: Object.keys(chipData).map(Number),
+      });
+      //console.log(queryData);
     }
+  };
+
+  const handleCellOpen = (event, info) => {
+    setOpen(true);
+    setId(info.transactions__transaction__voyage__id[0]);
   };
 
   const isSelected = (name) => {
     if (checkbox) {
-      console.log(queryData["targets"]);
+      //console.log(queryData["targets"]);
       return queryData["targets"].indexOf(name) !== -1;
     }
     return false;
   };
 
+  const checkedMax = (value) => {
+    const maxAllowed = 10;
+    //console.log(value);
+    const checked = queryData["targets"];
+    return checked.length >= maxAllowed && checked.indexOf(value) === -1;
+  };
 
+  const createPopover = (row) => {
+    const people =
+      row[
+        "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+      ];
+    const roles = row["transactions__transaction__enslavers__role__role"];
+    //console.log(people, roles);
+    const output = {};
+    for (let i = 0; i < people.length; i++) {
+      if (people[i] in output === false) {
+        output[people[i]] = [];
+      }
+      output[people[i]].push(roles[i][0]);
+    }
+    //console.log(output);
+    return output;
+  };
 
   return (
     <div>
@@ -177,25 +243,100 @@ function Table(props) {
                   {value.map((row) => {
                     const isItemSelected = isSelected(row.id);
                     return (
-
-                    // <TableRow>
-                    <StyledTableRow
-                      key={row.name}
-                      onClick={(event) => handleOpen(event, row)}
-                      //selected={isItemSelected}
-                    >
-                      {checkbox && (
-                        <TableCell padding="checkbox">
-                          <Checkbox color="primary" checked={isItemSelected}/>
-                        </TableCell>
-                      )}
-                      {cols.map((k) => (
-                        <TableCell>{row[k]}</TableCell>
-                      ))}
-                      {/* </TableRow> */}
-                    </StyledTableRow>)
-}
-                  )}
+                      // <TableRow>
+                      <StyledTableRow
+                        key={row.name}
+                        onClick={(event) => handleOpen(event, row)}
+                        //selected={isItemSelected}
+                      >
+                        {checkbox && row.transactions.length !== 0 && (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                              disabled={checkedMax(row.id)}
+                            />
+                          </TableCell>
+                        )}
+                        {checkbox && row.transactions.length === 0 && (
+                          <TableCell padding="checkbox"></TableCell>
+                        )}
+                        {cols.map((k) => {
+                          if (k === "gender") {
+                            if (row[k] === 1) {
+                              return <TableCell>Male</TableCell>;
+                            } else if (row[k] === 2) {
+                              return <TableCell>Female</TableCell>;
+                            } else {
+                              return <TableCell>{row[k]}</TableCell>;
+                            }
+                          } else if (
+                            k ===
+                            "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+                          ) {
+                            const popover = createPopover(row);
+                            //console.log(popover);
+                            return (
+                              <TableCell>
+                                <Stack direction="row" spacing={1}>
+                                  {Object.keys(popover).map((name) => (
+                                    <Tooltip
+                                      arrow
+                                      title={popover[name].join(", ")}
+                                      placement="top"
+                                    >
+                                      <Chip label={name} />
+                                    </Tooltip>
+                                  ))}
+                                </Stack>
+                              </TableCell>
+                            );
+                          } else if (
+                            k === "transactions__transaction__voyage__id"
+                          ) {
+                            return (
+                              <TableCell>
+                                <Link
+                                  component="button"
+                                  variant="body2"
+                                  onClick={(e) => {
+                                    handleCellOpen(e, row);
+                                    // e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                >
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: [...new Set(row[k])].join(", "),
+                                    }}
+                                  />
+                                </Link>
+                              </TableCell>
+                            );
+                          } else if (typeof row[k] === "object") {
+                            return (
+                              <TableCell>
+                                <div // [...new Set(row[k])]
+                                  dangerouslySetInnerHTML={{
+                                    __html: [...new Set(row[k])].join(", "),
+                                  }}
+                                />
+                                {/* {[...new Set(row[k])].join(", ")} */}
+                              </TableCell>
+                            );
+                          } else {
+                            return (
+                              <TableCell>
+                                <div // [...new Set(row[k])]
+                                  dangerouslySetInnerHTML={{ __html: row[k] }}
+                                />
+                              </TableCell>
+                            );
+                          }
+                        })}
+                      </StyledTableRow>
+                    );
+                  })}
                 </TableBody>
               </Tables>
             </TableContainer>

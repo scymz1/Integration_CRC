@@ -33,8 +33,9 @@ function reducer(state, { type, index }) {
 }
 
 function TableModal(props) {
-  const endpoint = props.endpoint
-  const {open, setOpen, id, info } = useContext(props.context);
+  const endpoint = props.endpoint;
+  const { open, setOpen, id, info } = useContext(props.context);
+  //console.log("here= ", id);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -59,7 +60,7 @@ function TableModal(props) {
     if (id !== 0) {
       var data = new FormData();
       data.append("hierarchical", "False");
-      if (endpoint === "voyage/"){
+      if (endpoint === "voyage/") {
         data.append("voyage_id", id);
         data.append("voyage_id", id);
       }
@@ -112,7 +113,7 @@ function TableModal(props) {
             component="h2"
           >
             <div>
-              Full detail: {id}
+              Voyage detail: {id}
               <IconButton
                 sx={{ float: "right" }}
                 onClick={() => setOpen(false)}
@@ -121,14 +122,18 @@ function TableModal(props) {
               </IconButton>
             </div>
           </Typography>
-          <Typography>
+          <Typography component={"span"}>
             <div>
               Here are the currently available details for this voyage.
               <Button onClick={handleAllExpansion}>Expand/Collapse</Button>
               to see/hide all.
             </div>
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+            component={"span"}
+          >
             {Object.keys(skeleton).map((title) => (
               <div>
                 <Accordion
@@ -143,14 +148,16 @@ function TableModal(props) {
                     <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography>
+                    <Typography component={"span"}>
                       {skeleton[title].map((obj) => (
                         <Grid container spacing={2} columns={16}>
                           <Grid sx={{ fontWeight: "bold" }} item xs={8}>
                             {options_flat[obj].flatlabel}
                           </Grid>
                           <Grid item xs={8}>
-                            {content[obj]}
+                            <div
+                              dangerouslySetInnerHTML={{ __html: content[obj] }}
+                            />
                           </Grid>
                         </Grid>
                       ))}

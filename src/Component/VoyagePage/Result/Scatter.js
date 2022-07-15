@@ -88,7 +88,7 @@ function Scatter (props) {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]);
+    }, [option.field, option.value, aggregation, search_object]);
 
     // useEffect(() => {
     //         axios.options(option_url)
@@ -121,11 +121,13 @@ function Scatter (props) {
                             onChange={(event) => {handleChange(event, "field")}}
                             name="field"
                         >
-                            {scatter_plot_x_vars.map((option) => (
+                            {scatter_plot_x_vars.map((option) => {
+                                return (
                                 <MenuItem key={option} value={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
-                            ))}
+                            )}
+                            )}
 
                         </Select>
                     </FormControl>
