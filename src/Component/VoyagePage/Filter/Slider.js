@@ -126,7 +126,7 @@ export default function GetSlider(props) {
   return (
         <>
         {/* <Typography gutterBottom>{varDisplay}</Typography> */}
-        <div class = "sliderInputs">
+        <div className = "sliderInputs">
           <Input 
             color = "secondary"
             name ="start"

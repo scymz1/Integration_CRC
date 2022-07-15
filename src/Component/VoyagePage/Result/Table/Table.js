@@ -19,6 +19,7 @@ import Checkbox from "@mui/material/Checkbox";
 //import * as options_flat from "../../../util/options.json";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
+//import Button from "@mui/material/Button";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -265,24 +266,20 @@ function Table(props) {
                               const popover = createPopover(row);
                               //console.log(popover);
                               return (
-                                <Stack direction="row" spacing={1}>
-                                  {Object.keys(popover).map((name) => (
-                                    <Tooltip
-                                      arrow
-                                      title={popover[name].join(", ")}
-                                      placement="top"
-                                    >
-                                      <Chip label={name} />
-                                    </Tooltip>
-                                  ))}
-                                </Stack>
+                                <TableCell>
+                                  <Stack direction="row" spacing={1}>
+                                    {Object.keys(popover).map((name) => (
+                                      <Tooltip
+                                        arrow
+                                        title={popover[name].join(", ")}
+                                        placement="top"
+                                      >
+                                        <Chip label={name} />
+                                      </Tooltip>
+                                    ))}
+                                  </Stack>
+                                </TableCell>
                               );
-
-                              //return <TableCell>{row[k]}</TableCell>;
-                              // } else if (typeof row[k] === 	"object") {
-                              //   return (<TableCell>
-                              //       {[...new Set(row[k])]}
-                              //     </TableCell>)
                             } else {
                               return (
                                 <TableCell>
