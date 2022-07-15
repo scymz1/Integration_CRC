@@ -46,8 +46,8 @@ export default function PAST() {
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button>
       <Filter context={PASTContext}/>
-      <Button disabled={queryData["targets"].length === 0} onClick={() => setdialogOpen(true)}>Open modal</Button><br/>
-      <PASTTable context={PASTContext}/>
+      {/* <Button disabled={queryData["targets"].length === 0} onClick={handleClickOpen('body')}>Open modal</Button><br/> */}
+      <PASTTable context={PASTContext} handleClickOpen={handleClickOpen}/>
       <Dialog
         fullScreen
         open={dialogopen}
