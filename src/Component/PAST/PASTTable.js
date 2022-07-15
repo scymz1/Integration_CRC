@@ -9,13 +9,24 @@ import Grid from "@mui/material/Grid";
 //import Button from "@mui/material/Button";
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
-import { enslaved_default_list, enslaved_var_list } from "./vars";
+// import { enslaved_default_list, enslaved_var_list } from "./vars";
 import * as labels from "../util/enslaved_options.json";
-
+import ColSelector11 from "../VoyagePage/Result/Table/ColSelector11";
+import { enslaved_var_list } from "./vars_cascading";
 export const ColContext = React.createContext({});
-
 export default function PASTTable(props) {
-  const [cols, setCols] = React.useState(enslaved_default_list);
+
+  // const [cols, setCols] = React.useState(enslaved_default_list);
+  const [cols, setCols] = React.useState(["id",
+  "documented_name",
+  "age",
+  "gender",
+  "height",
+  "post_disembark_location__geo_location__name",
+  "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+  "voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
+  "voyage__voyage_ship__ship_name",
+]);
   const { options_tree, endpoint, queryData, setQueryData, search_object } =
     React.useContext(props.context);
   const [chipData, setChipData] = React.useState({});
@@ -45,7 +56,7 @@ export default function PASTTable(props) {
           setChipData,
         }}
       >
-        <ColSelector context={ColContext} />
+        <ColSelector11 context={ColContext} />
         <Card
           sx={{
             width: 800,
