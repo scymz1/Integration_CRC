@@ -10,6 +10,15 @@ import Sankey from "./CircularSankey";
 import { useState } from "react";
 import {Button} from "@mui/material";
 import { forEach, isError } from "lodash";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import {voyage_pivot_tables_source,voyage_pivot_tables_target, voyage_maps} from "./vars"
+import FormControl from '@mui/material/FormControl';
+import { FormControlLabel, RadioGroup } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import _ from 'lodash';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 // import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
@@ -43,15 +52,17 @@ import { forEach, isError } from "lodash";
 //   console.log(error);
 // });
 
+
 export default function SankeyExample(props) {
-  
-  const {isLoading, error, data} = useQuery('',() => {
+
+
+  const {isLoading, error, data, refetch} = useQuery('',() => {
     var myHeaders = new Headers();
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name");
-formdata.append("groupby_fields", "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name");
+formdata.append("groupby_fields", option.fieldSource);
+formdata.append("groupby_fields", option.fieldTarget);
 formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
 formdata.append("cachename", "voyage_pivot_tables");
@@ -66,6 +77,9 @@ var requestOptions = {
 return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOptions)
   .then(response => response.json())
   .then(result => {
+
+    // console.log(result)
+    // return result
     let allNodes= new Set()
     let nodes = []
     let links = []
@@ -122,6 +136,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
       nodes: nodes,
       links:links
     }
+// return
 
   })
   .catch(error => console.log('error', error));
@@ -135,7 +150,31 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
     highlightLinkIndexes: [],
     nodePadding: 10,
     component: "Sankey",
+    nodeData:{},
+    linkData:{}
   });
+
+  const [optionSource, setOptionSource] = useState([...voyage_pivot_tables_source])
+  const [optionTarget, setOptionTarget] = useState([...voyage_pivot_tables_target])
+  // const [optionSet2, setOptionSet2] = useState([...voyage_pivot_tables])
+  const [option, setOption] = useState({
+    fieldSource: voyage_pivot_tables_source[2],
+    fieldTarget: voyage_pivot_tables_target[1]
+})
+
+const {search_object, set_search_object, endpoint} = React.useContext(props.context);
+
+const handleChange = (event, name, type) => {
+  console.log(name, event.target.value)
+  setOption({
+      ...option,
+      [name]: event.target.value,
+
+  })
+
+  
+  refetch()
+}
 
   const path = linkHorizontal()
     .source((d) => [d.source.x1, d.y0])
@@ -161,6 +200,44 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   return (
     <div>
       <Button onClick={()=>console.log("data:", data)}>print data</Button>
+      <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Source Field</InputLabel>
+      <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={option.fieldSource}
+                            label="Source Field"
+                            onChange={(event) => {handleChange(event, "fieldSource")}}
+                            name="source"
+                        >
+                            {optionSource.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+
+      </Select>
+      </FormControl>
+
+      <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Target Field</InputLabel>
+      <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={option.fieldTarget}
+                            label="Target Field"
+                            onChange={(event) => {handleChange(event, "fieldTarget")}}
+                            name="target"
+                        >
+                            {optionTarget.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+
+      </Select>
+      </FormControl>
+
       <svg
         width={width + margin.left + margin.right}
         height={height + margin.top + margin.bottom}
@@ -177,6 +254,8 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
             [width - 1, height - 6],
           ]}
         >
+
+          {/* nodes */}
           {({ data }) => (
             <Group>
               {data.nodes.map((node, i) => (
@@ -197,13 +276,32 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
                           ...node.sourceLinks.map((l) => l.index),
                           ...node.targetLinks.map((l) => l.index),
                         ],
-                      }
+                      },
+                     
                       );
                     }}
 
                     onMouseOut={(e) => {
                       setState({ ...state,highlightLinkIndexes: [] });
                     }}
+
+                    onClick={() =>  {
+                      setState({
+                      ...state,
+                      nodeData: {
+                         "name": node.name,
+                      },
+                      
+                      },
+                      // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                      console.log("🫧", state.nodeData)
+                      )
+
+                      set_search_object({
+                        ...search_object,
+                        [option.fieldSource]: [state.nodeData.name]
+                      });
+                  }}
                   />
 
                   <Text
@@ -219,6 +317,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
                 </Group>
               ))}
 
+              {/* Edges */}
               <Group>
                 {data.links.map((link, i) => (
                   <path
@@ -235,11 +334,23 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
                     }
                     fill="none"
                     onMouseOver={(e) => {
-                      setState({...state, highlightLinkIndexes: [i] });
+                      setState({...state, highlightLinkIndexes: [i] },
+                      )
                     }}
                     onMouseOut={(e) => {
                       setState({ ...state,highlightLinkIndexes: [] });
                     }}
+
+                    onClick={() =>  setState({
+                      ...state,
+                      linkData: {
+                          "source":link.source,
+                          "target":link.target
+                      },
+                    },
+                    // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                    console.log("🚀", state.linkData)
+                    )}
                   />
                 ))}
               </Group>
@@ -247,6 +358,19 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
           )}
         </Sankey>
       </svg>
+      <Card sx={{ maxWidth: 345 }}>
+      <Typography>
+            {`Node is ${state.nodeData.name}`}
+      </Typography>
+
+      <Typography>
+      {`This path is from
+      ${_.get(state, ["linkData", "source", "name"])}
+       to
+      ${_.get(state, ["linkData", "target", "name"])}
+      `}
+      </Typography>
+      </Card>
     </div>
   );
 }

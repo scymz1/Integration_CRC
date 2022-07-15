@@ -9,8 +9,8 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { useContext } from 'react';
 import { ColContext } from './TableApp';
-import { columnOptions } from './tableVars';
-import * as options_flat from "../../../util/options.json"
+//import { columnOptions } from './tableVars';
+//import * as options_flat from "../../../util/options.json"
 import Cascading from '../../Filter/Cascading';
 import {menu_label} from '../../Filter/var'
 
@@ -42,10 +42,10 @@ export default function ColSelector(props) {
   // const [cols, setCols] = React.useState(["id"]);
   // const {cols, setCols} = useContext(ColContext)
   const {
-    cols, setCols 
+    cols, setCols, columnOptions, options_flat 
 } = React.useContext(props.context)
 
-  console.log()
+  //console.log(options_flat);
   const handleChange = (event) => {
     const {
       target: { value },
