@@ -41,7 +41,7 @@ export function ReadFeature(props) {
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
   const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
-  console.log("🚀 ~ file: Spatial.js ~ line 44 ~ ReadFeature ~ disembark", disembark)
+  //console.log("🚀 ~ file: Spatial.js ~ line 44 ~ ReadFeature ~ disembark", disembark)
 
   // const {search_object} = React.useContext(PastContext);
   const map = useMap();
@@ -79,6 +79,7 @@ export function ReadFeature(props) {
     data.append("output_format", output_format);
 
     axios.post("/voyage/aggroutes", data).then(function (response) {
+      //console.log("🚀 ~ file: Spatial.js ~ line 82 ~ response", response)
       setCsv(response.data.links);
       setNodes(response.data.nodes);
       setIsLoading(true);
@@ -231,8 +232,8 @@ export function ReadFeature(props) {
       DrawLink(map, csv);
     }
   }, [nodes, csv]);
-  console.log("🚀 ~ file: Spatial.js ~ line 148 ~ disembark", disembark)
-  console.log("🚀 ~ file: Spatial.js ~ line 173 ~ complete_object", complete_object)
+  // console.log("🚀 ~ file: Spatial.js ~ line 148 ~ disembark", disembark)
+  // console.log("🚀 ~ file: Spatial.js ~ line 173 ~ complete_object", complete_object)
 
   if (isLoading == false) {
     return "isLoading";
