@@ -62,9 +62,11 @@ export default function PAST() {
   return (
     <div>
       <ResponsiveAppBar/>
+
       {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button> */}
+
       <Filter context={PASTContext}/>
       <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
         Table
