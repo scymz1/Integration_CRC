@@ -299,7 +299,7 @@ const Map = () => {
       commands.push('M', route[0][0])
       commands.push('C', route[1][0], route[1][1], route[0][1])
 
-      L.curve(commands, {color: 'blue', weight: valueScale(route[2])}).addTo(map)
+      L.curve(commands, {color: 'blue', weight: valueScale(route[2])}).bindPopup("Sum of slaves: " + route[2]).addTo(map)
     })
 
   }
