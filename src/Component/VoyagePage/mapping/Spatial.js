@@ -117,8 +117,6 @@ export function ReadFeature(props) {
       }
       
     };
-
-
     
 
     if (nodes) {
@@ -241,7 +239,7 @@ function draw(map, link, valueScale) {
 
   // console.log("Commands: ", commands)
 
-  L.curve(commands, {color:'blue', weight: valueScale(weight)}).addTo(map);
+  L.curve(commands, {color:'blue', weight: valueScale(weight)}).bindPopup("Sum of slaves: " + weight).addTo(map);
 }
 
 

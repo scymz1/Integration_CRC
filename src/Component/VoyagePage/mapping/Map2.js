@@ -18,7 +18,7 @@ import "@elfalem/leaflet-curve";
 
 import * as d3 from "d3"
 
-import * as turf from "@turf/turf"
+// import * as turf from "@turf/turf"
 
 // import * as file from "./example_routes.json";
 
