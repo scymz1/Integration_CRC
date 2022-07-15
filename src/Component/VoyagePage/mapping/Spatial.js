@@ -10,6 +10,7 @@ import * as d3 from "d3";
 import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
+import IntraTabs from "./Tab";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -19,8 +20,11 @@ var nodeLayers = {};
 var linkLayers = {};
 
 var groupby_fields = [
-  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
-  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id",
+  "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
+	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
+
+  // "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
+  // "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id",
 ];
 var value_field_tuple = [
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
@@ -35,6 +39,7 @@ export const PivotContext = React.createContext({});
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
   const [isLoading, setIsLoading] = useState(false);
+  //console.log("readfeature---------",props.search_object.dataset[0])
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
@@ -75,15 +80,17 @@ export function ReadFeature(props) {
     data.append("output_format", output_format);
 
     axios.post("/voyage/aggroutes", data).then(function (response) {
-      setCsv(response.data.links);
-      setNodes(response.data.nodes);
+      // setCsv(response.data.links);
+      // setNodes(response.data.nodes);
       setIsLoading(true);
-      // setCsv(response.data.routes);
-      // setNodes(response.data.points);
+      setCsv(response.data.routes);
+      setNodes(response.data.points);
 
       console.log("Repsonse:", response.data)
     });
   }, [props.search_object]);
+
+
 
 
   useEffect(() => {
@@ -100,14 +107,8 @@ export function ReadFeature(props) {
       }
     }
 
-    // Function for distinguish if the feature is a waypoint
-    // const featureWayPt = (feature) => {
-    //   return !feature.properties.name.includes("ocean waypt");
-    // };
-
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     const filterNodes = (feature) => {
-      console.log("🚀 ~ file: Spatial.js ~ line 110 ~ filterNodes ~ props.radio", props.radio)
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -118,15 +119,13 @@ export function ReadFeature(props) {
     };
 
 
-
-
+    
 
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
         //filter: filterNodes,
         onEachFeature: function (feature, layer) {
-          console.log('112')
           nodeLayers[feature.id] = {
             layer: layer,
           };
@@ -139,7 +138,6 @@ export function ReadFeature(props) {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
         
-          console.log('124')
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             console.log("current id = ", layer.feature.id);
@@ -158,14 +156,19 @@ export function ReadFeature(props) {
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <Grid>
-                {layer.feature.properties.name +
+                                {layer.feature.properties.name +
                   " " +
                   layer.feature.geometry.coordinates}
+              
+              
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
                     <PivotContext.Provider
-                      value={{ complete_object, set_complete_object }}
+                      value={{ complete_object, set_complete_object , }}
                     >
+                      {/* only show if intraamerican, otherwise hidden */}
+                        {props.search_object.dataset[0] == 1?<IntraTabs context={PivotContext}/>: ""}
+
                       <Pivot context={PivotContext} />
                     </PivotContext.Provider>
                   </div>
@@ -190,10 +193,9 @@ export function ReadFeature(props) {
       });
 
       map.addLayer(markers);
-      DrawLink(map, csv);
-
-      L.marker([-71.4133, 41.8239]).addTo(map)
-      // DrawLink2(map, csv)
+      // DrawLink(map, csv);
+      DrawRoutes(map, csv)
+      
     }
   }, [nodes, csv]);
 
@@ -204,7 +206,46 @@ export function ReadFeature(props) {
   return null;
 }
 
-// Function to draw the edges
+// Function to draw the curve routes
+function DrawRoutes(map, links) {
+  var valueMin = d3.min(links, function (l) {
+    return l[0];
+  });
+  var valueMax = d3.max(links, function (l) {
+    return l[0];
+  });
+
+  console.log(valueMax)
+
+  var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
+  
+  links.map(array=> {
+    // console.log(array)
+    draw(map, array, valueScale)
+  })
+}
+
+function draw(map, link, valueScale) {
+
+  var weight = link[0]
+  var route = link[1]
+
+  var commands = []
+  commands = ["M", route[0]]
+
+  commands.push("Q", route[1][0], route[1][1])
+
+  for(var i = 2; i < route.length; i++) {
+    commands.push("C", route[i][0], route[i][1], route[i][2])
+  }
+
+  // console.log("Commands: ", commands)
+
+  L.curve(commands, {color:'blue', weight: valueScale(weight)}).addTo(map);
+}
+
+
+// Function to draw the edges (line segments)
 function DrawLink(map, links) {
   var valueMin = d3.min(links, function (l) {
     return l[0] != l[1] ? parseInt(l[2]) : null;

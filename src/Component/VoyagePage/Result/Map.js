@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import 'leaflet'
 import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
+import 'leaflet/dist/leaflet.css';
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import {useContext} from "react";
 
+
+import Control from 'react-leaflet-custom-control';
+import { Button } from '@mui/material';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
@@ -24,18 +28,42 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
+function FullscreenButton(props){
+    // const context = useLeafletContext();
+    // const control = new Control({position: 'topright'});
+    // control.onAdd = function (map) {
+    //     let div = DomUtil.create('button');
+    //     div.innerHtml = `Enter fullscreen`  //`<button onClick={props.fullscreen}>Enter fullscreen</button>`
+    //     return div;
+    // }
+    // useEffect(()=>{
+        
+    //     const container = context.layerContainer || context.map;
+    //     container.addControl(control);
+    // }, []);
+    // var map = useMap();
+    // L.easyButton('fa-globe', function(btn, map){
+    // }).addTo( map );
+
+    // return null;
+}
+
 export default function MapBoundingBox(props){
 
     const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
     
-    const [longitude1, onChangelongitude1] = React.useState(0);
+    const [longitude1, onChangelongitude1] = React.useState(-200);
     const [longitude2, onChangelongitude2] = React.useState(359.99);
     const [latitude1, onChangelatitude1] = React.useState(-90);
     const [latitude2, onChangelatitude2] = React.useState(90);
 
     
     const {search_object, endpoint} = React.useContext(props.context);
+    
     const [map_search_object, set_map_search_object] = useState(search_object);
+    console.log("🚀 ~ file: Map.js ~ line 62 ~ MapBoundingBox ~ search_object", map_search_object)
+    
+    const handle = useFullScreenHandle();
 
     useEffect(() => {
 
@@ -80,7 +108,7 @@ export default function MapBoundingBox(props){
                 <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
             </RadioGroup>
             </FormControl>
-
+            <FullScreen handle={handle}>
             <MapContainer center={position} zoom={5} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
@@ -96,10 +124,26 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={map_search_object} radio = {radioOptions}/>
+                <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
+                {
+                    handle.active?
+                        <Control prepend position='topleft' >
+                            <Button style={{background:"white", width: "100%"}} onClick={handle.exit}> 
+                            <FullscreenExitIcon style={{width:"100%"}} />
+                            </Button>
+                        </Control>
+                        :
+                        <Control prepend position='topleft' >
+                            <Button style={{background:"white", width: "100%"}} onClick={handle.enter}> 
+                            <FullscreenIcon style={{width:"100%"}} />
+                            </Button>
+                        </Control>
+                }
+
             </MapContainer>
+            </FullScreen>
             <p>longitude1: {longitude1}</p>
             <p>longitude2: {longitude2}</p>
             <p>latitude1: {latitude1}</p>
