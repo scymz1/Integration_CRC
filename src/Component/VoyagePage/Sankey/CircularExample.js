@@ -19,6 +19,7 @@ import InputLabel from '@mui/material/InputLabel';
 import _ from 'lodash';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
+import * as options_flat from "./vars.json"
 // import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
 // console.log("🐢this is the myJson" + myJson);
@@ -33,6 +34,7 @@ import Typography from '@mui/material/Typography';
 // data.append('value_field_tuple', 'voyage_slaves_numbers__imp_total_num_slaves_disembarked');
 // data.append('value_field_tuple', 'sum');
 // data.append('cachename', 'voyage_export');
+
 
 // var config = {
 //   method: 'post',
@@ -55,14 +57,14 @@ import Typography from '@mui/material/Typography';
 
 export default function SankeyExample(props) {
 
-
   const {isLoading, error, data, refetch} = useQuery('',() => {
     var myHeaders = new Headers();
 myHeaders.append("Authorization", "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23");
 
 var formdata = new FormData();
-formdata.append("groupby_fields", option.fieldSource);
 formdata.append("groupby_fields", option.fieldTarget);
+formdata.append("groupby_fields", option.fieldSource);
+
 formdata.append("value_field_tuple", "voyage_slaves_numbers__imp_total_num_slaves_embarked");
 formdata.append("value_field_tuple", "sum");
 formdata.append("cachename", "voyage_pivot_tables");
@@ -209,11 +211,14 @@ const handleChange = (event, name, type) => {
                             onChange={(event) => {handleChange(event, "fieldSource")}}
                             name="source"
                         >
-                            {optionSource.map((option) => (
+                            {optionSource.map((option) => 
+                              // console.log("op_voyage", options_flat)
+                            (
                                 <MenuItem key={option} value={option}>
-                                    {option}
+                                     {options_flat[option].flatlabel}
                                 </MenuItem>
-                            ))}
+                            )
+                            )}
 
       </Select>
       </FormControl>
@@ -230,7 +235,7 @@ const handleChange = (event, name, type) => {
                         >
                             {optionTarget.map((option) => (
                                 <MenuItem key={option} value={option}>
-                                    {option}
+                                        {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
 
@@ -267,7 +272,7 @@ const handleChange = (event, name, type) => {
                     fill={color(node.depth)}
                     opacity={0.5}
                     stroke="white"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     onMouseOver={(e) => {
                       setState({
                         ...state,
@@ -348,7 +353,9 @@ const handleChange = (event, name, type) => {
                       },
                     },
                     // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                    console.log("🐷", state.linkData)
+                    // console.log("🐷", state.linkData)
+                    console.log("🐔", link.source.name + " to " + link.target.name)
+
                     )}
                   />
                 ))}
