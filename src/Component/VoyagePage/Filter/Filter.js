@@ -68,15 +68,15 @@ export default function Filter(props) {
 
     }}
   >
-    <Accordion
-            aria-controls="filter-content"
-            id="filter-header"
-            sx={{
-              backgroundColor: "#1D76D2"
-            }}
-          >
-          </AccordionSummary>
-          <AccordionDetails>
+         <Accordion>
+        <AccordionSummary
+          expandIcon={<FilterAlt />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Filter</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
 
           <AppBar position="center">
             {/* <Toolbar disableGutters> */}
