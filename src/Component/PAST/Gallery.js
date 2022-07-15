@@ -23,19 +23,19 @@ export default function Gallery(){
 
     function handleChangePage(event, newPage){
         if(newPage < 0 || newPage > parseInt(total / resPerPage, 10)) return;
-        console.log("newPage: ", newPage)
+        //console.log("newPage: ", newPage)
         setPage(parseInt(newPage, 10));
       };
     
     function handleChangeRowsPerPage(event){
-        console.log("newPer: ", event.target.value)
+        //console.log("newPer: ", event.target.value)
         setResPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
 
     useEffect(() => {
-        console.log("data update!")
+        //console.log("data update!")
         fetch(base_url + "past/enslaved/", {
             method: "POST",
             headers: {'Authorization': auth_token}
@@ -44,7 +44,7 @@ export default function Gallery(){
     
 
     useEffect(() => {
-        console.log("data update!")
+        //console.log("data update!")
         let queryData = new FormData();
         queryData.append("results_page", page + 1);
         queryData.append("results_per_page", resPerPage);
@@ -53,7 +53,7 @@ export default function Gallery(){
             body: queryData,
             headers: {'Authorization': auth_token}
           }).then(res => res.json()).then(res => {
-              console.log("fetch res: ", res)
+              //console.log("fetch res: ", res)
               setGData(res);
           })
 
@@ -61,7 +61,7 @@ export default function Gallery(){
 
     useEffect(() => {
         const oldGallery = [];
-        console.log("gData", gData)
+        //console.log("gData", gData)
         gData.forEach(item => {
             oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item}/></Grid>)
         })
