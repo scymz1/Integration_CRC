@@ -78,6 +78,10 @@ export function ReadFeature(props) {
       setCsv(response.data.links);
       setNodes(response.data.nodes);
       setIsLoading(true);
+      // setCsv(response.data.routes);
+      // setNodes(response.data.points);
+
+      console.log("Repsonse:", response.data)
     });
   }, [props.search_object]);
 
@@ -187,6 +191,9 @@ export function ReadFeature(props) {
 
       map.addLayer(markers);
       DrawLink(map, csv);
+
+      L.marker([-71.4133, 41.8239]).addTo(map)
+      // DrawLink2(map, csv)
     }
   }, [nodes, csv]);
 
@@ -198,7 +205,7 @@ export function ReadFeature(props) {
 }
 
 // Function to draw the edges
-function DrawLink(map, links, layers, setLayers) {
+function DrawLink(map, links) {
   var valueMin = d3.min(links, function (l) {
     return l[0] != l[1] ? parseInt(l[2]) : null;
   });
@@ -222,24 +229,9 @@ function DrawLink(map, links, layers, setLayers) {
         .getBounds()
         .getCenter();
 
-      // Having the link to be drawed with a curve where the link has flows in both directions
-      var lineBreakLatLng = null;
-      if (linkLayers[pathReverse]) {
-        lineBreakLatLng = L.latLng(
-          lineCenterLatLng.lat * 0.001 + lineCenterLatLng.lat,
-          lineCenterLatLng.lng * 0.001 + lineCenterLatLng.lng
-        );
-      } else {
-        lineBreakLatLng = L.latLng(
-          lineCenterLatLng.lat - lineCenterLatLng.lat * 0.001,
-          lineCenterLatLng.lng - lineCenterLatLng.lng * 0.001
-        );
-      }
-
       var line = L.polyline(
         [
           nodeLayers[link[0]].layer._latlng,
-          lineBreakLatLng,
           nodeLayers[link[1]].layer._latlng,
         ],
         {
