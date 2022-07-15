@@ -88,7 +88,7 @@ function Scatter (props) {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation]);
+    }, [option.field, option.value, aggregation, search_object]);
 
     // useEffect(() => {
     //         axios.options(option_url)
