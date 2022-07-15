@@ -19,6 +19,7 @@ export const enslaved_default_list = [
     "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias",
     //"transactions__transaction__enslavers__role__role",
     // "transactions__transaction__source__full_ref",
+    "transactions__transaction__voyage__id"
   ];
   
 export const enslaved_var_list = {
@@ -70,6 +71,7 @@ export const enslaved_var_list = {
 
     "transactions": {
         "transactions__transaction__voyage": {
+            "transactions__transaction__voyage__id":null,
             "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name":null,
             "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name":null,
             "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name":null,
