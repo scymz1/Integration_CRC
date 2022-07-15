@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import * as React from "react";
 import _ from 'lodash';
-
+import "./styles.css"
 
 const Div = styled('div')(({ theme }) => ({
   ...theme.typography.overline,
@@ -17,13 +17,15 @@ export default function Story (props) {
   //targets是目标们的id，type是目标的种类，目前有slave， enslaver这两种.
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
-  //target: the character of the popover ßstory
+  //target: the character of the popover story
   const {target, type} = props;
   const isMale = _.get(target, "gender", "1") != 0;
 
   return (
     <Card 
-      sx={{ flexGrow: 1,  width: 400}}>
+    // sx={{ flexGrow: 1,  width: 400}}
+    className="story"
+    >
       <CardHeader
         title={`Story of ${_.get(target, ["documented_name"], "* name NA *")}`}
       />

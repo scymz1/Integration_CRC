@@ -6,25 +6,42 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-//import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
 import { enslaved_default_list, enslaved_var_list } from "./vars";
 import * as labels from "../util/enslaved_options.json";
 
+import Box from '@mui/material/Box';
+import Switch from '@mui/material/Switch';
+import Grow from '@mui/material/Grow';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Gallery from "./Gallery.js"
+import IconButton from '@mui/material/IconButton';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import TocIcon from '@mui/icons-material/Toc';
+
 export const ColContext = React.createContext({});
 
 export default function PASTTable(props) {
   const [cols, setCols] = React.useState(enslaved_default_list);
-  const { options_tree, endpoint, queryData, setQueryData, search_object } =
+  const { options_tree, endpoint, queryData, setQueryData, search_object, data } =
     React.useContext(props.context);
   const [chipData, setChipData] = React.useState({});
+  const stories = [<div>test</div>];
 
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
     delete chipData[chipToDelete];
     setQueryData({ ...queryData, targets: Object.keys(chipData).map(Number) });
   };
+
+  const [checked, setChecked] = React.useState(false);
+
+  function handleChange(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
+  
 
   return (
     <div>
@@ -88,7 +105,38 @@ export default function PASTTable(props) {
             SHOW NETWORKS
           </Button> */}
         </Card>
-        <Table context={ColContext} />
+
+    <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
+      Table
+    </Button>
+    <a> </a>
+    <Button variant="contained" endIcon={<DashboardCustomizeIcon />} size="large" color="grey" onClick={() => handleChange("story")} sx={{ mt:3, mb:5}}>
+      Stories
+    </Button>
+
+    {!checked && <Box sx={{ height: 180 }}>
+      <Box sx={{ display: 'flex' }} >
+        {/* Conditionally applies the timeout prop to change the entry speed. */}
+        <Grow
+          in={!checked}
+          style={{ transformOrigin: '0 0 0' }}
+          {...(checked ? { timeout: 500 } : {})}
+        >
+          <div>
+            <Table context={ColContext} />
+          </div>
+        </Grow>
+      </Box>
+      </Box>}
+
+      <Box sx={{ display: 'flex' }}>
+        <Grow in={checked}>
+          <div>
+          <Gallery />
+          </div>
+        </Grow>
+      </Box>
+        
       </ColContext.Provider>
     </div>
   );
