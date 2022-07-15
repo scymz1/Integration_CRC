@@ -61,7 +61,6 @@ export default function MapBoundingBox(props){
     const {search_object, endpoint} = React.useContext(props.context);
     
     const [map_search_object, set_map_search_object] = useState(search_object);
-    console.log("🚀 ~ file: Map.js ~ line 62 ~ MapBoundingBox ~ search_object", map_search_object)
     
     const handle = useFullScreenHandle();
 
