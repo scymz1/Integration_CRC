@@ -68,36 +68,13 @@ export default function Filter(props) {
 
     }}
   >
-      {/* <IconButton
-          aria-describedby={id}
-          variant="contained" 
-          onClick={handleClick}>
-          <FilterAlt color="primary"/>
-      </IconButton>
-      <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'center',
-            }}
-          > */}
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<FilterAlt sx={{ color: "white" }}/>}
+    <Accordion
             aria-controls="filter-content"
             id="filter-header"
             sx={{
               backgroundColor: "#1D76D2"
             }}
           >
-            {/* <Typography>Filter</Typography> */}
           </AccordionSummary>
           <AccordionDetails>
 
@@ -153,7 +130,6 @@ export default function Filter(props) {
             </Grid>
             </AccordionDetails>
         </Accordion>
-      {/* </Popover> */}
     </AppContext.Provider>
   );
 }
