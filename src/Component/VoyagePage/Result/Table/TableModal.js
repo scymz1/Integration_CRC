@@ -35,6 +35,7 @@ function reducer(state, { type, index }) {
 function TableModal(props) {
   const endpoint = props.endpoint;
   const { open, setOpen, id, info } = useContext(props.context);
+  //console.log("here= ", id);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
