@@ -146,7 +146,9 @@ export default function ColSelector11(props) {
                         defaultExpandIcon={<ChevronRightIcon />}
                     >
                         <Button
-                            variant="text"
+                            variant="contained"
+                            size="large"
+                            color="grey"
                             onClick={handleClick}
                         >
                             {"Column Selector"}
