@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import HubIcon from '@mui/icons-material/Hub';
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
@@ -72,14 +72,17 @@ export default function PASTTable(props) {
                 fontSize: 18,
                 height: 5,
               }}
-              title="Select Person(s) (MAX = 10)"
+              title="Selected People (MAX = 10)"
               action={
-                <IconButton
-                  disabled={queryData["targets"].length === 0}
-                  onClick={props.handleClickOpen("body")}
-                >
-                  <HubIcon color="primary"/>
-                </IconButton>
+                <Button 
+                    variant="contained" 
+                    startIcon={<HubIcon/>} 
+                    size="large" 
+                    color="grey" 
+                    disabled={queryData["targets"].length === 0}
+                    onClick={props.handleClickOpen("body")}>
+                    View Connections
+                </Button>
               }
             />
             <CardContent>

@@ -37,7 +37,7 @@
   "voyage_sourceconnection__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Full reference",
-    "flatlabel": "Documentary sources"
+    "flatlabel": "Documentary Sources"
   },
   "voyage_sourceconnection__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
