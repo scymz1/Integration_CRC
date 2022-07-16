@@ -104,7 +104,7 @@ function Bar (props) {
                             name="field"
                         >
                             {bar_x_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
@@ -124,7 +124,7 @@ function Bar (props) {
                             onChange={(event) => {handleChange(event, "value")}}
                         >
                             {bar_y_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}

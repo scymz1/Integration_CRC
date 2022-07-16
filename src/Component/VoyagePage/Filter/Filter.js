@@ -86,7 +86,7 @@ export default function Filter(props) {
                   {
                     Object.keys(menu_label).map((key) => {
                       return(
-                        <Cascading menuName={key} button={menu_label[key]} context={props.context}/>
+                        <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
                       )
                     })
                   }
@@ -109,7 +109,7 @@ export default function Filter(props) {
               <Grid item xs={10}>
                 {output.map((item, index) => {
                   return(
-                    <Grid container direction="row" spacing={0} sx ={{m:'10px'}}>
+                    <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
                       <Grid item xs={10} align="center" >
                         <Accordion>
                           <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
