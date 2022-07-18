@@ -145,7 +145,7 @@ export default function PAST() {
           <Network/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Story target={500001} type="slave"/>
+          <Story target={500001} type="slaves"/>
         </TabPanel>
       </Dialog>
 

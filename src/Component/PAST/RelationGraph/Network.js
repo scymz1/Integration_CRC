@@ -10,17 +10,6 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 export default function Network(props) {
-  //data: 根据queryData请求到的data，是一个list. 点击print data按钮可以在console中打印出data
-  //queryData & setQueryData: queryData有两个field: targets和type,
-  //targets是目标们的id，type是目标的种类，目前有slave， enslaver这两种.
-  //把targets和type包起来是为了保证targets和type同步更新，以免出现target和type不匹配而产生error.
-  //使用setQueryData()来更新queryData，queryData改变后会自动重新fetch来更新data.
-  //queryData更新方法示例：
-  // setQueryData({
-  //   ...queryData,
-  //   type: "newType",
-  //   slaves: [...queryData.slaves, "newTarget"]
-  // })
   const {queryData, setQueryData, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
@@ -30,14 +19,14 @@ export default function Network(props) {
   useEffect(() => {
     const endpoint = (() => {
       switch (myQueryData.type) {
-        case "slave": return "past/enslaved/"
-        case "enslaver": return "past/enslavers/"
+        case "slaves": return "past/enslaved/"
+        case "enslavers": return "past/enslavers/"
       }
     })()
     const targets = (() => {
       switch (myQueryData.type) {
-        case "slave": return myQueryData.slaves
-        case "enslaver": return myQueryData.enslavers
+        case "slaves": return myQueryData.slaves
+        case "enslavers": return myQueryData.enslavers
       }
     })()
     const fetchData = async ()=> {
@@ -92,7 +81,7 @@ export default function Network(props) {
     setGraph(null)
     data.forEach((item, index) => {
       //self
-      const self = tmp.addNode(item, item.documented_name, "slave", "red")
+      const self = tmp.addNode(item, item.documented_name, "slaves", "red")
       self.font = {size: windowRef.current.offsetHeight*0.03}
       //transaction
       item.transactions.forEach((transaction)=>{
@@ -162,8 +151,8 @@ export default function Network(props) {
     formdata.append(path,id);
     const endpoint = (() => {
       switch (myQueryData.type) {
-        case "slave": return "past/enslaved/"
-        case "enslaver": return "past/enslavers/"
+        case "slaves": return "past/enslaved/"
+        case "enslavers": return "past/enslavers/"
       }
     })()
     fetch(base_url + endpoint, {
@@ -178,7 +167,7 @@ export default function Network(props) {
       }))
       console.log("targets", targets)
       setMyQueryData({
-        type: "slave",
+        type: "slaves",
         slaves: targets
       })
     })
@@ -190,9 +179,9 @@ export default function Network(props) {
       // console.log("nodeId" ,nodeId)
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node.type) {
-        case "slave":
+        case "slaves":
           setMyQueryData({
-            type: "slave",
+            type: "slaves",
             targets: nodeId
           })
           break;

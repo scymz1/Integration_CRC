@@ -14,10 +14,10 @@ export default function PASTApp(props) {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
-  const [typeForTable, setTypeForTable] = useState("slave");
+  const [typeForTable, setTypeForTable] = useState("slaves");
   const [queryData, setQueryData] = React.useState({
     slaves: [],
-    type: "slave",
+    type: "slaves",
     enslavers:[]
   })
 
@@ -27,8 +27,8 @@ export default function PASTApp(props) {
 
   const [endpoint, setEndpoint] = useState((() => {
     switch (queryData.type) {
-      case "slave": return "past/enslaved/"
-      case "enslaver": return "past/enslavers/"
+      case "slaves": return "past/enslaved/"
+      case "enslavers": return "past/enslavers/"
     }
   })())
 
@@ -48,14 +48,14 @@ export default function PASTApp(props) {
   useEffect(() => {
     setEndpoint((() => {
       switch (queryData.type) {
-        case "slave": return "past/enslaved/"
-        case "enslaver": return "past/enslavers/"
+        case "slaves": return "past/enslaved/"
+        case "enslavers": return "past/enslavers/"
       }
     })())
     const targets = (() => {
       switch (queryData.type) {
-        case "slave": return queryData.slaves
-        case "enslaver": return queryData.enslavers
+        case "slaves": return queryData.slaves
+        case "enslavers": return queryData.enslavers
       }
     })()
     const fetchData = async ()=> {
@@ -101,7 +101,7 @@ export default function PASTApp(props) {
       queryData, setQueryData, data,
       options_tree, options_flat, search_object, set_search_object,
       menu_label, endpoint, windowRef, typeForTable, setTypeForTable,
-      modal: false, id, setId, open, setOpen, info, setInfo
+      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData
     }}>
       <PAST/>
     </PASTContext.Provider>

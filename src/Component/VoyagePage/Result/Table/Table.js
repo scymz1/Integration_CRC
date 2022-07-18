@@ -147,6 +147,7 @@ function Table(props) {
       const selectedIndex = queryData.slaves.indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
+          // console.log("chipData", chipData)
           chipData[info.id] = info.documented_name;
         }
       } else {
@@ -166,7 +167,7 @@ function Table(props) {
 
   const isSelected = (name) => {
     if (checkbox) {
-      //console.log(queryData.slaves);
+      // console.log(queryData.slaves.indexOf(name));
       return queryData.slaves.indexOf(name) !== -1;
     }
     return false;
