@@ -83,7 +83,6 @@ function Table(props) {
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
-        console.log(response.data);
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));

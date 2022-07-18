@@ -38,7 +38,6 @@ export default function Auto(props) {
         fetch(base_url+endpoint+"autocomplete", requestOptions)
         .then(response => response.json())
         .then(result => {
-        console.log("🚀 ~ file: Autocomplete.js ~ line 41 ~ fetchData ~ result", result)
             var newOptions = result[labels.option]
             setautocompleteOptions(newOptions) })
       }
@@ -47,13 +46,10 @@ export default function Auto(props) {
     },[search_object])
 
     React.useEffect(()=>{
-      console.log("🚀 ~ file: Autocomplete.js ~ line 21 ~ Auto ~ textInput", [textInput])
-      console.log("🚀 ~ file: Autocomplete.js ~ line 54 ~ React.useEffect ~ value", typeof(value))
       set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
         ...search_object,
         [searchLabel.option]: [textInput]
       }));
-      console.log("🚀 ~ file: Autocomplete.js ~ line 54 ~ React.useEffect ~ search_object", search_object)
     },[textInput])
 
 
@@ -67,7 +63,6 @@ export default function Auto(props) {
       value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
-        console.log("🚀 ~ file: Autocomplete.js ~ line 69 ~ Auto ~ [newValue][0]", [newValue][0])
       }}
       sx={{ width: 300 }}
       renderInput={(params) => {
