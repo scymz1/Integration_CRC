@@ -144,10 +144,22 @@ export default function MapBoundingBox(props){
                     </BaseLayer>
                 </LayersControl>
                 <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
-                <Control prepend position='topleft' >
+                <Control prepend position='bottomright' >
                     <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
         e.preventDefault();SetselectMode(true);}}> 
                     Select Bounding Box
+                        <FormControl>
+                            <RadioGroup
+                                row
+                                aria-labelledby="boundingBoxFilter"
+                                defaultValue="embarkation"
+                                name="radio-buttons-group"
+                                onChange={getRadioValue}
+                            >
+                                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+                                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+                            </RadioGroup>
+                        </FormControl>
                     </Button>
                 </Control>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}

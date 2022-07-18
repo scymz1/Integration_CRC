@@ -7,7 +7,6 @@ export default function AreaSelect(props) {
   const map = useMap();
 
   useEffect(()=>{
-    console.log("aaaaaaaaaaaaaaaaaaaaa");
     if(props.selectMode){
       map.selectArea.setControlKey();
     }
