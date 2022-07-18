@@ -28,7 +28,7 @@ export default function PASTTable(props) {
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
     delete chipData[chipToDelete];
-    setQueryData({ ...queryData, targets: Object.keys(chipData).map(Number) });
+    setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
 
   return (
@@ -55,7 +55,7 @@ export default function PASTTable(props) {
         }}
       >
         <ColSelector11 context={ColContext} />
-        {queryData["targets"].length !== 0 && (
+        {queryData.slaves.length !== 0 && (
           <Card
             sx={{
               width: 800,
@@ -79,7 +79,7 @@ export default function PASTTable(props) {
                     startIcon={<HubIcon/>} 
                     size="large" 
                     color="grey" 
-                    disabled={queryData["targets"].length === 0}
+                    disabled={queryData.slaves.length === 0}
                     onClick={props.handleClickOpen("body")}>
                     View Connections
                 </Button>

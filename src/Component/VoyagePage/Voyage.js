@@ -32,7 +32,7 @@ function TabPanel(props) {
 
 export default function Voyage() {
   const [value, setValue] = React.useState(0);
-
+  const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
   const {id} = useParams();
 
   React.useEffect(() => {
@@ -60,7 +60,12 @@ export default function Voyage() {
 
   return (
     <div>
-      <ResponsiveAppBar/>
+      <ResponsiveAppBar
+        search_object={search_object}
+        set_search_object={set_search_object}
+        typeForTable={typeForTable}
+        setTypeForTable={setTypeForTable}
+      />
       <Filter context={VoyageContext}/>
       <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
         <Tabs

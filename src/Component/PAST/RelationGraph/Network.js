@@ -19,41 +19,29 @@ export default function Network(props) {
   // setQueryData({
   //   ...queryData,
   //   type: "newType",
-  //   targets: [...queryData.targets, "newTarget"]
+  //   slaves: [...queryData.slaves, "newTarget"]
   // })
   const {queryData, setQueryData, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
   const [data, setData] = useState([]);
-  const [selected, setSelected] = useState({...queryData})
-
-  function updateQueryData(path, id) {
-    let formdata = new FormData();
-    formdata.append(path, id);
-    formdata.append(path,id);
-    const endpoint = "past/enslaved/"
-    fetch(base_url + endpoint, {
-      method: 'POST',
-      headers: {'Authorization': auth_token},
-      body: formdata,
-    }).then(response => response.json()).then(res => {
-      const targets = []
-      res.forEach((slave => {
-        if(!targets.find(e => e === slave.id))
-          targets.push(slave.id)
-      }))
-      console.log("targets", targets)
-      setSelected({
-        type: "slave",
-        targets: targets
-      })
-    })
-  }
+  const [myQueryData, setMyQueryData] = useState({...queryData})
 
   useEffect(() => {
-    const endpoint = "past/enslaved/"
+    const endpoint = (() => {
+      switch (myQueryData.type) {
+        case "slave": return "past/enslaved/"
+        case "enslaver": return "past/enslavers/"
+      }
+    })()
+    const targets = (() => {
+      switch (myQueryData.type) {
+        case "slave": return myQueryData.slaves
+        case "enslaver": return myQueryData.enslavers
+      }
+    })()
     const fetchData = async ()=> {
-      const promises = selected.targets.map(target => {
+      const promises = targets.map(target => {
         let selected = new FormData();
         selected.append("id", target.toString());
         selected.append("id", target.toString());
@@ -67,7 +55,7 @@ export default function Network(props) {
       setData(response)
     }
     fetchData().catch(console.error);
-  }, [selected])
+  }, [myQueryData])
 
   useEffect(()=> {
     setHeight((0.7 * windowRef.current.offsetHeight).toString())
@@ -168,6 +156,34 @@ export default function Network(props) {
     fetchData().catch(console.error);
   }, [data])
 
+  function updateQueryData(path, id) {
+    let formdata = new FormData();
+    formdata.append(path, id);
+    formdata.append(path,id);
+    const endpoint = (() => {
+      switch (myQueryData.type) {
+        case "slave": return "past/enslaved/"
+        case "enslaver": return "past/enslavers/"
+      }
+    })()
+    fetch(base_url + endpoint, {
+      method: 'POST',
+      headers: {'Authorization': auth_token},
+      body: formdata,
+    }).then(response => response.json()).then(res => {
+      const targets = []
+      res.forEach((slave => {
+        if(!targets.find(e => e === slave.id))
+          targets.push(slave.id)
+      }))
+      console.log("targets", targets)
+      setMyQueryData({
+        type: "slave",
+        slaves: targets
+      })
+    })
+  }
+
   const events = {
     doubleClick: function(event) {
       const { nodes: nodeId } = event;
@@ -175,7 +191,7 @@ export default function Network(props) {
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node.type) {
         case "slave":
-          setSelected({
+          setMyQueryData({
             type: "slave",
             targets: nodeId
           })
@@ -205,7 +221,9 @@ export default function Network(props) {
       <h1>Relation between: {data.map((item, index) => index === data.length-1 ? item.documented_name : item.documented_name + " & ")}</h1>
       {/*<Button onClick={()=>console.log("data:", data)}>print data</Button>*/}
       {/*<Button onClick={()=>console.log("graph:", graph)}>print graph</Button>*/}
-      {/*<Button onClick={()=>console.log("graph:", selected)}>print selected</Button>*/}
+      {/*<Button onClick={()=>console.log("graph:", myQueryData)}>print myQueryData</Button>*/}
+      {/*<Button onClick={()=>console.log("dataSet:", props.dataSet)}>print dataSet</Button>*/}
+      {/*<Button onClick={()=>props.setDataSet(1)}>change dataSet</Button>*/}
       {!graph ?
         <CircularProgress/> :
         <Graph

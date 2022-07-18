@@ -9,7 +9,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 export const VoyageContext = React.createContext({});
 
-export default function VoyageApp() {
+export default function VoyageApp(props) {
   const endpoint = "voyage/"
 
   const menu_label = {
@@ -38,6 +38,7 @@ export default function VoyageApp() {
   )
 
   const [search_object, set_search_object] = useState({
+    'dataset':["0", "0"]
   })
 
   if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
