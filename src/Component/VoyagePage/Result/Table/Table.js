@@ -45,6 +45,7 @@ function Table(props) {
     setQueryData,
     search_object,
     chipData,
+    typeForTable,
   } = useContext(props.context);
 
 
@@ -143,8 +144,8 @@ function Table(props) {
       //console.log(info.transactions__transaction__voyage__id[0]);
       //setId(info.transactions__transaction__voyage__id[0]);
       //console.log(info.documented_name);
-      //let selected = queryData.slaves;
-      const selectedIndex = queryData.slaves.indexOf(info.id);
+      //let selected = queryData[typeForTable];
+      const selectedIndex = queryData[typeForTable].indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
           // console.log("chipData", chipData)
@@ -167,8 +168,8 @@ function Table(props) {
 
   const isSelected = (name) => {
     if (checkbox) {
-      // console.log(queryData.slaves.indexOf(name));
-      return queryData.slaves.indexOf(name) !== -1;
+      // console.log(queryData[typeForTable].indexOf(name));
+      return queryData[typeForTable].indexOf(name) !== -1;
     }
     return false;
   };
@@ -176,7 +177,7 @@ function Table(props) {
   const checkedMax = (value) => {
     const maxAllowed = 10;
     //console.log(value);
-    const checked = queryData.slaves;
+    const checked = queryData[typeForTable];
     return checked.length >= maxAllowed && checked.indexOf(value) === -1;
   };
 

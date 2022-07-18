@@ -139,8 +139,8 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => setTypeForTable(event.target.value)}
                 >
-                  <ToggleButton value="slave">Slaves</ToggleButton>
-                  <ToggleButton value="enslaver">Enslavers</ToggleButton>
+                  <ToggleButton value="slaves">Slaves</ToggleButton>
+                  <ToggleButton value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
             </Stack>

@@ -21,7 +21,7 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
 
-  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData} =
+  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData, typeForTable} =
     React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
 
@@ -58,6 +58,7 @@ export default function PASTTable(props) {
           search_object,
           chipData,
           setChipData,
+          typeForTable,
         }}
       >
         <ColSelector11 context={ColContext} />
