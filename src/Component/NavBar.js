@@ -136,7 +136,7 @@ const ResponsiveAppBar = () => {
                 Past
               </Button>
             </Link>
-            <Link to={"/Blog"} style={{ textDecoration: "none" }}>
+            {/* <Link to={"/Blog"} style={{ textDecoration: "none" }}>
               <Button
                 sx={{
                   my: 2,
@@ -147,8 +147,8 @@ const ResponsiveAppBar = () => {
               >
                 Blog
               </Button>
-            </Link>
-            <Link to={"/Documents"} style={{ textDecoration: "none" }}>
+            </Link> */}
+            {/* <Link to={"/Documents"} style={{ textDecoration: "none" }}>
               <Button
                 sx={{
                   my: 2,
@@ -159,7 +159,7 @@ const ResponsiveAppBar = () => {
               >
                 Documents
               </Button>
-            </Link>
+            </Link> */}
           </Box>
         </Toolbar>
       </Container>
