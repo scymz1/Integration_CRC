@@ -92,6 +92,7 @@ export default function PASTApp(props) {
     'dataset':["1", "1"]
   })
 
+  const [chipData, setChipData] = React.useState({});
   if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>

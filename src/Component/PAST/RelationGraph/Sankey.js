@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Typography, Popover } from "@mui/material";
+import { Box, Button, Typography, Popover, Card, Grid } from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
-import { truncate } from "lodash";
+import EastIcon from '@mui/icons-material/East';
 import './styles.css'
 import { MODALContext } from "../PAST";
 import _ from 'lodash';
@@ -242,7 +242,7 @@ export default function Sankey(props) {
               </tr>
                 <tr>
                 <th>Place: </th>
-                <td>{node.place_purchase} to {node.place_dis}</td>
+                <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon fontSize="small"/>{node.place_dis}</Grid></td>
               </tr>
               <tr>
                 <th>Year: </th>
@@ -279,7 +279,7 @@ export default function Sankey(props) {
     // console.log("hover node", data.find((slave)=> slave.id === node.id))
     // console.log("renderStory")
     switch(node.type) {
-      case "enslaved": return <Story target={data.find((slave)=> slave.id === node.id)}/>
+      case "enslaved": return <Card sx={{ flexGrow: 1,  width: 400}}><Story target={data.find((slave)=> slave.id === node.id)}/></Card>
       case "transaction": return "TRANSACTION"
       case "enslaver": return "ENSLAVER"
       default: return ""

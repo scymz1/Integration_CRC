@@ -4,7 +4,9 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import Menu from '@mui/material/Menu';
 import MenuIcon from "@mui/icons-material/Menu";
+import MenuItem from '@mui/material/MenuItem';
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
@@ -15,6 +17,13 @@ import {useContext} from "react";
 
 export default function ResponsiveAppBar(props) {
   const {typeForTable, setTypeForTable, search_object, set_search_object} = props
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -46,16 +55,46 @@ export default function ResponsiveAppBar(props) {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
+              onClick={handleOpenNavMenu}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+                <MenuItem onClick={handleCloseNavMenu}>
+                   <Link to={"/voyage/Scatter"} style={{ textDecoration: "none" }}>
+                    Voyages
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={"/past"} style={{ textDecoration: "none" }}>
+                    Past
+                </Link>
+                </MenuItem>
+            </Menu>
           </Box>
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -137,30 +176,30 @@ export default function ResponsiveAppBar(props) {
                 Past
               </Button>
             </Link>
-            {/*<Link to={"/Blog"} style={{ textDecoration: "none" }}>*/}
-            {/*  <Button*/}
-            {/*    sx={{*/}
-            {/*      my: 2,*/}
-            {/*      color: "white",*/}
-            {/*      display: "block",*/}
-            {/*      position: "right",*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    Blog*/}
-            {/*  </Button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/Documents"} style={{ textDecoration: "none" }}>*/}
-            {/*  <Button*/}
-            {/*    sx={{*/}
-            {/*      my: 2,*/}
-            {/*      color: "white",*/}
-            {/*      display: "block",*/}
-            {/*      position: "right",*/}
-            {/*    }}*/}
-            {/*  >*/}
-            {/*    Documents*/}
-            {/*  </Button>*/}
-            {/*</Link>*/}
+            {/* <Link to={"/Blog"} style={{ textDecoration: "none" }}>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  position: "right",
+                }}
+              >
+                Blog
+              </Button>
+            </Link> */}
+            {/* <Link to={"/Documents"} style={{ textDecoration: "none" }}>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  position: "right",
+                }}
+              >
+                Documents
+              </Button>
+            </Link> */}
           </Box>
         </Toolbar>
       </Container>

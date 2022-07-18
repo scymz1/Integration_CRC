@@ -21,15 +21,21 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
 
-  const { options_tree, endpoint, queryData, setQueryData, search_object } =
+  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData} =
     React.useContext(props.context);
-  const [chipData, setChipData] = React.useState({});
+  // const [chipData, setChipData] = React.useState({});
 
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
     delete chipData[chipToDelete];
     setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
+
+// React.useEffect(()=>{
+//   queryData.targets.forEach(()=>{
+
+//   })
+// },[queryData])
 
   return (
     <div>

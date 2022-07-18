@@ -135,7 +135,7 @@ function TableModal(props) {
             component={"span"}
           >
             {Object.keys(skeleton).map((title) => (
-              <div>
+              <div key={title}>
                 <Accordion
                   expanded={state[idxRelation[title]]}
                   // onClick={(event) => handleSingleExpansion(event, title)}
@@ -149,8 +149,8 @@ function TableModal(props) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography component={"span"}>
-                      {skeleton[title].map((obj) => (
-                        <Grid container spacing={2} columns={16}>
+                      {skeleton[title].map((obj, key) => (
+                        <Grid container spacing={2} columns={16} key={key}>
                           <Grid sx={{ fontWeight: "bold" }} item xs={8}>
                             {options_flat[obj].flatlabel}
                           </Grid>
