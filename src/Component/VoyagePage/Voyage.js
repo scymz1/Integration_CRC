@@ -11,7 +11,6 @@ import PivotApp from "./Result/Pivot/PivotApp";
 import Map from "./Result/Map";
 import { VoyageContext } from "./VoyageApp";
 import SankeyExample from "./Sankey/CircularExample";
-import { Container } from "@mui/system";
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -29,8 +28,8 @@ function TabPanel(props) {
 
 export default function Voyage() {
   const [value, setValue] = React.useState(0);
-
-  const { id } = useParams();
+  const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
+  const {id} = useParams();
 
   React.useEffect(() => {
     switch (id) {
@@ -57,9 +56,14 @@ export default function Voyage() {
 
   return (
     <div>
-      <ResponsiveAppBar />
-      <Filter context={VoyageContext} />
-      <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
+      <ResponsiveAppBar
+        search_object={search_object}
+        set_search_object={set_search_object}
+        typeForTable={typeForTable}
+        setTypeForTable={setTypeForTable}
+      />
+      <Filter context={VoyageContext}/>
+      <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
         <Tabs
           orientation="vertical"
           variant="scrollable"

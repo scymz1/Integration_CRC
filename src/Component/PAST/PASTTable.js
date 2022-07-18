@@ -21,14 +21,14 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
 
-  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData} =
+  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData, typeForTable} =
     React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
 
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
     delete chipData[chipToDelete];
-    setQueryData({ ...queryData, targets: Object.keys(chipData).map(Number) });
+    setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
 
 // React.useEffect(()=>{
@@ -58,10 +58,11 @@ export default function PASTTable(props) {
           search_object,
           chipData,
           setChipData,
+          typeForTable,
         }}
       >
         <ColSelector11 context={ColContext} />
-        {queryData["targets"].length !== 0 && (
+        {queryData.slaves.length !== 0 && (
           <Card
             sx={{
               width: 800,
@@ -85,7 +86,7 @@ export default function PASTTable(props) {
                     startIcon={<HubIcon/>} 
                     size="large" 
                     color="grey" 
-                    disabled={queryData["targets"].length === 0}
+                    disabled={queryData.slaves.length === 0}
                     onClick={props.handleClickOpen("body")}>
                     View Connections
                 </Button>
