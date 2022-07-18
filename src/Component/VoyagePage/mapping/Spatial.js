@@ -87,7 +87,7 @@ export function ReadFeature(props) {
     
     console.log("Zoom: ", map.getZoom())
     
-    if(map.getZoom() < 5) {
+    if(map.getZoom() < 8) {
       console.log("Set Region")
       setGroupBy(groupby_fields_region)
     }
@@ -282,7 +282,7 @@ export function ReadFeature(props) {
             // if we use bindPopup, then we have to use mouseover,
             // otherwise, only the second click can show the popup
             L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-              maxWidth: "auto",
+              maxWidth: "500",
             });
             // if we use click & popup.setContent, we will find the location of marker is incorrect.
             // L.popup({
