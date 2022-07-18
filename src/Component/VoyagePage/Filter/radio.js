@@ -25,7 +25,7 @@ export default function RadioButton(props) {
 
   return (
     <FormControl>
-      <FormLabel id="radio-button">Radio button</FormLabel>
+      {/* <FormLabel id="radio-button">Radio button</FormLabel> */}
       <RadioGroup
         defaultValue="Trans-Atlantic"
         onChange={handleChange}

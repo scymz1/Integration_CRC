@@ -12,7 +12,7 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {donut_value_vars, donut_name_vars} from './vars';
-import { VoyageContext } from '../VoyageApp';
+//import { VoyageContext } from '../VoyageApp';
 import { Grid, Paper} from '@mui/material';
 import * as options_flat from "../../util/options.json"
 
@@ -114,7 +114,7 @@ function Pie (props) {
                             name="field"
                         >
                             {donut_name_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                     {/* {option} */}
                                 </MenuItem>
@@ -135,7 +135,7 @@ function Pie (props) {
                             onChange={(event) => {handleChange(event, "value")}}
                         >
                             {donut_value_vars.map((option) => (
-                                <MenuItem value={option} >
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}

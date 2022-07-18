@@ -35,6 +35,7 @@ function reducer(state, { type, index }) {
 function TableModal(props) {
   const endpoint = props.endpoint;
   const { open, setOpen, id, info } = useContext(props.context);
+  //console.log("here= ", id);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -112,7 +113,7 @@ function TableModal(props) {
             component="h2"
           >
             <div>
-              Full detail: {id}
+              Voyage detail: {id}
               <IconButton
                 sx={{ float: "right" }}
                 onClick={() => setOpen(false)}
@@ -134,7 +135,7 @@ function TableModal(props) {
             component={"span"}
           >
             {Object.keys(skeleton).map((title) => (
-              <div>
+              <div key={title}>
                 <Accordion
                   expanded={state[idxRelation[title]]}
                   // onClick={(event) => handleSingleExpansion(event, title)}
@@ -148,8 +149,8 @@ function TableModal(props) {
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography component={"span"}>
-                      {skeleton[title].map((obj) => (
-                        <Grid container spacing={2} columns={16}>
+                      {skeleton[title].map((obj, key) => (
+                        <Grid container spacing={2} columns={16} key={key}>
                           <Grid sx={{ fontWeight: "bold" }} item xs={8}>
                             {options_flat[obj].flatlabel}
                           </Grid>

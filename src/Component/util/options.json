@@ -37,7 +37,7 @@
   "voyage_sourceconnection__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Full reference",
-    "flatlabel": "voyage sources connection : Source : Full reference"
+    "flatlabel": "Documentary Sources"
   },
   "voyage_sourceconnection__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -77,7 +77,7 @@
   "voyage_outcome__vessel_captured_outcome__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Outcome label",
-    "flatlabel": "voyage outcome : Vessel Captured Outcome : Outcome label"
+    "flatlabel": "Vessel Captured Outcome"
   },
   "voyage_outcome__vessel_captured_outcome__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -97,7 +97,7 @@
   "voyage_outcome__resistance__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Resistance label",
-    "flatlabel": "voyage outcome : Resistance : Resistance label"
+    "flatlabel": "Resistance"
   },
   "voyage_outcome__resistance__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -117,7 +117,7 @@
   "voyage_outcome__particular_outcome__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Outcome label",
-    "flatlabel": "voyage outcome : Particular Outcome : Outcome label"
+    "flatlabel": "Voyage Outcome"
   },
   "voyage_outcome__particular_outcome__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -137,7 +137,7 @@
   "voyage_outcome__outcome_slaves__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Outcome label",
-    "flatlabel": "voyage outcome : Slaves Outcome : Outcome label"
+    "flatlabel": "Outcome for Captives"
   },
   "voyage_outcome__outcome_slaves__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -157,7 +157,7 @@
   "voyage_outcome__outcome_owner__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Outcome label",
-    "flatlabel": "voyage outcome : Owner Outcome : Outcome label"
+    "flatlabel": "Outcome for Owner"
   },
   "voyage_outcome__outcome_owner__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -177,7 +177,7 @@
   "voyage_outcome": {
     "type": "table",
     "label": "voyage outcome",
-    "flatlabel": "voyage outcome"
+    "flatlabel": "Outcomes"
   },
   "voyage_slaves_numbers__voyage": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -187,7 +187,7 @@
   "voyage_slaves_numbers__imp_mortality_ratio": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Imputed mortality ratio (VYMRTRAT)",
-    "flatlabel": "voyage slaves numbers : Imputed mortality ratio (VYMRTRAT)"
+    "flatlabel": "Imputed mortality ratio * (VYMRTRAT)"
   },
   "voyage_slaves_numbers__percentage_female": {
     "type": "<class 'rest_framework.fields.FloatField'>",
@@ -262,32 +262,32 @@
   "voyage_slaves_numbers__percentage_women_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Percentage of women among embarked slaves (WOMRAT1)",
-    "flatlabel": "voyage slaves numbers : Percentage of women among embarked slaves (WOMRAT1)"
+    "flatlabel": "Percentage of women among embarked captives (WOMRAT1)"
   },
   "voyage_slaves_numbers__percentage_men_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Percentage of men among embarked slaves (MENRAT1)",
-    "flatlabel": "voyage slaves numbers : Percentage of men among embarked slaves (MENRAT1)"
+    "flatlabel": "Percentage of men among embarked captives (MENRAT1)"
   },
   "voyage_slaves_numbers__male_ratio_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Male ratio among embarked slaves (MALRAT1)",
-    "flatlabel": "voyage slaves numbers : Male ratio among embarked slaves (MALRAT1)"
+    "flatlabel": "Male ratio among embarked captives (MALRAT1)"
   },
   "voyage_slaves_numbers__percentage_girls_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Percentage of girls among embarked slaves (GIRLRAT1)",
-    "flatlabel": "voyage slaves numbers : Percentage of girls among embarked slaves (GIRLRAT1)"
+    "flatlabel": "Percentage of girls among embarked captives (GIRLRAT1)"
   },
   "voyage_slaves_numbers__child_ratio_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Child ratio among embarked slaves (CHILRAT1)",
-    "flatlabel": "voyage slaves numbers : Child ratio among embarked slaves (CHILRAT1)"
+    "flatlabel": "Child ratio among embarked captives (CHILRAT1)"
   },
   "voyage_slaves_numbers__percentage_boys_among_embarked_slaves": {
     "type": "<class 'rest_framework.fields.FloatField'>",
     "label": "Percentage of boys among embarked slaves (BOYRAT1)",
-    "flatlabel": "voyage slaves numbers : Percentage of boys among embarked slaves (BOYRAT1)"
+    "flatlabel": "Percentage of boys among embarked captives (BOYRAT1)"
   },
   "voyage_slaves_numbers__total_slaves_by_age_gender_identified_departure_or_arrival": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -712,42 +712,42 @@
   "voyage_slaves_numbers__imp_mortality_during_voyage": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Imputed number of slave deaths during Middle Passage (VYMRTIMP)",
-    "flatlabel": "voyage slaves numbers : Imputed number of slave deaths during Middle Passage (VYMRTIMP)"
+    "flatlabel": "Imputed number of captive deaths during Middle Passage * (VYMRTIMP)"
   },
   "voyage_slaves_numbers__imp_jamaican_cash_price": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
     "label": "Sterling cash price in Jamaica* (imputed)",
-    "flatlabel": "voyage slaves numbers : Sterling cash price in Jamaica* (imputed)"
+    "flatlabel": "Sterling cash price in Jamaica * (imputed)"
   },
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Total slaves disembarked imputed * (SLAMIMP)",
-    "flatlabel": "voyage slaves numbers : Total slaves disembarked imputed * (SLAMIMP)"
+    "flatlabel": "Total captives disembarked imputed * (SLAMIMP)"
   },
   "voyage_slaves_numbers__imp_total_num_slaves_embarked": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Total slaves embarked imputed * (slaximp)",
-    "flatlabel": "voyage slaves numbers : Total slaves embarked imputed * (slaximp)"
+    "flatlabel": "Imputed Total number of captives embarked * (slaximp)"
   },
   "voyage_slaves_numbers__num_slaves_disembark_third_place": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves disembarked at third place (SLAS39)",
-    "flatlabel": "voyage slaves numbers : Number of slaves disembarked at third place (SLAS39)"
+    "flatlabel": "Number of captives disembarked at third place (SLAS39)"
   },
   "voyage_slaves_numbers__num_slaves_disembark_second_place": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves disembarked at second place (SLAS36)",
-    "flatlabel": "voyage slaves numbers : Number of slaves disembarked at second place (SLAS36)"
+    "flatlabel": "Number of captives disembarked at second place (SLAS36)"
   },
   "voyage_slaves_numbers__num_slaves_disembark_first_place": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves disembarked at first place (SLAS32)",
-    "flatlabel": "voyage slaves numbers : Number of slaves disembarked at first place (SLAS32)"
+    "flatlabel": "Number of captives disembarked at first place (SLAS32)"
   },
   "voyage_slaves_numbers__total_num_slaves_arr_first_port_embark": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Total slaves arrived at first port of disembarkation (SLAARRIV)",
-    "flatlabel": "voyage slaves numbers : Total slaves arrived at first port of disembarkation (SLAARRIV)"
+    "flatlabel": "Total captives arrived at first port of disembarkation (SLAARRIV)"
   },
   "voyage_slaves_numbers__total_num_slaves_dep_last_slaving_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -762,17 +762,17 @@
   "voyage_slaves_numbers__num_slaves_carried_third_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves carried from third port of purchase (NCAR17)",
-    "flatlabel": "voyage slaves numbers : Number of slaves carried from third port of purchase (NCAR17)"
+    "flatlabel": "Number of captives carried from third port of purchase (NCAR17)"
   },
   "voyage_slaves_numbers__num_slaves_carried_second_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves carried from second port of purchase (NCAR15)",
-    "flatlabel": "voyage slaves numbers : Number of slaves carried from second port of purchase (NCAR15)"
+    "flatlabel": "Number of captives carried from second port of purchase (NCAR15)"
   },
   "voyage_slaves_numbers__num_slaves_carried_first_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves carried from first port of purchase (NCAR13)",
-    "flatlabel": "voyage slaves numbers : Number of slaves carried from first port of purchase (NCAR13)"
+    "flatlabel": "Number of captives carried from first port of purchase (NCAR13)"
   },
   "voyage_slaves_numbers__num_slaves_intended_second_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -782,7 +782,7 @@
   "voyage_slaves_numbers__num_slaves_intended_first_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number of slaves intended from first port of purchase (SLINTEND)",
-    "flatlabel": "voyage slaves numbers : Number of slaves intended from first port of purchase (SLINTEND)"
+    "flatlabel": "Number of captives intended from first port of purchase (SLINTEND)"
   },
   "voyage_slaves_numbers__slave_deaths_between_arrival_and_sale": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -807,7 +807,7 @@
   "voyage_slaves_numbers": {
     "type": "table",
     "label": "voyage slaves numbers",
-    "flatlabel": "voyage slaves numbers"
+    "flatlabel": "Captives' Numbers"
   },
   "voyage_shipownerconnection__voyage": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -822,7 +822,7 @@
   "voyage_shipownerconnection__owner__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Name",
-    "flatlabel": "voyage ship owner connection : Ship Owner : Name"
+    "flatlabel": "Ship Owner Name"
   },
   "voyage_shipownerconnection__owner__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -857,7 +857,7 @@
   "voyage_captainconnection__captain__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Captain's name",
-    "flatlabel": "Voyage captain information : Captain : Captain's name"
+    "flatlabel": "Captain's name"
   },
   "voyage_captainconnection__captain__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -887,37 +887,37 @@
   "voyage_ship__nationality_ship": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
     "label": "Ship Nationality",
-    "flatlabel": "Ship : Ship Nationality"
+    "flatlabel": "Ship Nationality"
   },
   "voyage_ship__tonnage_mod": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
     "label": "Tonnage standardized on British measured tons 1773-1870",
-    "flatlabel": "Ship : Tonnage standardized on British measured tons 1773-1870"
+    "flatlabel": "Tonnage standardized on British measured tons 1773-1870"
   },
   "voyage_ship__registered_year": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of vessel's registration",
-    "flatlabel": "Ship : Year of vessel's registration"
+    "flatlabel": "Year of vessel's registration"
   },
   "voyage_ship__year_of_construction": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of vessel's construction",
-    "flatlabel": "Ship : Year of vessel's construction"
+    "flatlabel": "Year of vessel's construction"
   },
   "voyage_ship__guns_mounted": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Guns mounted",
-    "flatlabel": "Ship : Guns mounted"
+    "flatlabel": "Guns mounted"
   },
   "voyage_ship__tonnage": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Tonnage of vessel",
-    "flatlabel": "Ship : Tonnage of vessel"
+    "flatlabel": "Tonnage"
   },
   "voyage_ship__ship_name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Name of vessel",
-    "flatlabel": "Ship : Name of vessel"
+    "flatlabel": "Vessel Name"
   },
   "voyage_ship__registered_region__geo_location__child_of": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -1057,7 +1057,7 @@
   "voyage_ship__registered_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Ship : Place where vessel registered : Location : Location name"
+    "flatlabel": "Place where vessel registered"
   },
   "voyage_ship__registered_place__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -1247,7 +1247,7 @@
   "voyage_ship__vessel_construction_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Ship : Place where vessel constructed : Location : Location name"
+    "flatlabel": "Place where vessel constructed"
   },
   "voyage_ship__vessel_construction_place__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -1327,7 +1327,7 @@
   "voyage_ship__imputed_nationality__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Name",
-    "flatlabel": "Ship : Imputed Ship Nationality : Name"
+    "flatlabel": "Ship Nationality * (imputed)"
   },
   "voyage_ship__imputed_nationality__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1347,7 +1347,7 @@
   "voyage_ship__rig_of_vessel__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Name",
-    "flatlabel": "Ship : Rig of Vessel : Name"
+    "flatlabel": "Rig"
   },
   "voyage_ship__rig_of_vessel__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1382,7 +1382,7 @@
   "voyage_crew__crew_died_complete_voyage": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Crew died during complete voyage",
-    "flatlabel": "Crew : Crew died during complete voyage"
+    "flatlabel": "Crew died during complete voyage"
   },
   "voyage_crew__crew_died_on_return_voyage": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1427,7 +1427,7 @@
   "voyage_crew__crew_first_landing": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Crew at first landing of slaves",
-    "flatlabel": "Crew : Crew at first landing of slaves"
+    "flatlabel": "Crew at first landing of slaves"
   },
   "voyage_crew__crew_departure_last_port": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1437,7 +1437,7 @@
   "voyage_crew__crew_voyage_outset": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Crew at voyage outset",
-    "flatlabel": "Crew : Crew at voyage outset"
+    "flatlabel": "Crew at voyage outset"
   },
   "voyage_crew__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1482,17 +1482,17 @@
   "voyage_dates__imp_length_home_to_disembark": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Voyage length from home port to disembarkation (days) (VOY1IMP)",
-    "flatlabel": "Dates : Voyage length from home port to disembarkation (days) (VOY1IMP)"
+    "flatlabel": "Voyage length from home port to disembarkation (days) (VOY1IMP)"
   },
   "voyage_dates__imp_arrival_at_port_of_dis_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of arrival at port of disembarkation (YEARAM)",
-    "flatlabel": "Dates : Year of arrival at port of disembarkation (YEARAM)"
+    "flatlabel": "Year of arrival at port of disembarkation (YEARAM)"
   },
   "voyage_dates__imp_arrival_at_port_of_dis": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Year of arrival at port of disembarkation (YEARAM)",
-    "flatlabel": "Dates : Year of arrival at port of disembarkation (YEARAM)"
+    "flatlabel": "Year of arrival at port of disembarkation (YEARAM)"
   },
   "voyage_dates__imp_departed_africa_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1517,7 +1517,7 @@
   "voyage_dates__length_middle_passage_days": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Length of Middle Passage in (days) (VOYAGE)",
-    "flatlabel": "Dates : Length of Middle Passage in (days) (VOYAGE)"
+    "flatlabel": "Length of Middle Passage in (days) (VOYAGE)"
   },
   "voyage_dates__voyage_completed_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1537,7 +1537,7 @@
   "voyage_dates__voyage_completed": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date on which slave voyage completed (DATARR44,43,45)",
-    "flatlabel": "Dates : Date on which slave voyage completed (DATARR44,43,45)"
+    "flatlabel": "Date on which captive voyage completed (DATARR44,43,45)"
   },
   "voyage_dates__departure_last_place_of_landing_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1557,7 +1557,7 @@
   "voyage_dates__departure_last_place_of_landing": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date of departure from last place of landing (DDEPAMB,*,C)",
-    "flatlabel": "Dates : Date of departure from last place of landing (DDEPAMB,*,C)"
+    "flatlabel": "Date of departure from last place of landing (DDEPAMB,*,C)"
   },
   "voyage_dates__third_dis_of_slaves_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1617,7 +1617,7 @@
   "voyage_dates__date_departed_africa": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date vessel departed Africa (DATELEFTAFR)",
-    "flatlabel": "Dates : Date vessel departed Africa (DATELEFTAFR)"
+    "flatlabel": "Date vessel departed Africa (DATELEFTAFR)"
   },
   "voyage_dates__first_dis_of_slaves_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1637,7 +1637,7 @@
   "voyage_dates__first_dis_of_slaves": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date of first disembarkation of slaves (DATARR33,32,34)",
-    "flatlabel": "Dates : Date of first disembarkation of slaves (DATARR33,32,34)"
+    "flatlabel": "Date of first disembarkation of captives (DATARR33,32,34)"
   },
   "voyage_dates__vessel_left_port_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1677,7 +1677,7 @@
   "voyage_dates__slave_purchase_began": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date that slave purchase began (D1SLATRB,A,C)",
-    "flatlabel": "Dates : Date that slave purchase began (D1SLATRB,A,C)"
+    "flatlabel": "Date that captive purchase began (D1SLATRB,A,C)"
   },
   "voyage_dates__voyage_began_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1697,7 +1697,7 @@
   "voyage_dates__voyage_began": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Date that voyage began (DATEDEPB,A,C)",
-    "flatlabel": "Dates : Date that voyage began (DATEDEPB,A,C)"
+    "flatlabel": "Date that voyage began (DATEDEPB,A,C)"
   },
   "voyage_dates__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1862,7 +1862,7 @@
   "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed principal port of slave disembarkation (MJSLPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal port of captive disembarkation * (MJSLPTIMP)"
   },
   "voyage_itinerary__imp_principal_port_slave_dis__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -1957,7 +1957,7 @@
   "voyage_itinerary__principal_port_of_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Principal port of slave disembarkation (MAJSELPT) : Location : Location name"
+    "flatlabel": "Principal port of captive disembarkation (MAJSELPT)"
   },
   "voyage_itinerary__principal_port_of_slave_dis__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2242,7 +2242,7 @@
   "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed principal place of slave purchase (MJBYPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal place of captive purchase * (MJBYPTIMP)"
   },
   "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2337,7 +2337,7 @@
   "voyage_itinerary__principal_place_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Principal place of slave purchase (MAJBUYPT) : Location : Location name"
+    "flatlabel": "Principal place of captive purchase (MAJBUYPT)"
   },
   "voyage_itinerary__principal_place_of_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2432,7 +2432,7 @@
   "voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed broad region where voyage began (DEPTREGIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region where voyage began * (DEPTREGIMP1)"
   },
   "voyage_itinerary__imp_broad_region_voyage_begin__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2527,7 +2527,7 @@
   "voyage_itinerary__imp_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed region where voyage began (DEPTREGIMP) : Location : Location name"
+    "flatlabel": "Imputed region where voyage began * (DEPTREGIMP)"
   },
   "voyage_itinerary__imp_region_voyage_begin__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2622,7 +2622,7 @@
   "voyage_itinerary__imp_port_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed port where voyage began (PTDEPIMP) : Location : Location name"
+    "flatlabel": "Imputed port where voyage began * (PTDEPIMP)"
   },
   "voyage_itinerary__imp_port_voyage_begin__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2907,7 +2907,7 @@
   "voyage_itinerary__place_voyage_ended__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Place at which voyage ended (PORTRET) : Location : Location name"
+    "flatlabel": "Place at which voyage ended (PORTRET)"
   },
   "voyage_itinerary__place_voyage_ended__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3287,7 +3287,7 @@
   "voyage_itinerary__third_landing_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Third place of slave landing (ADPSALE2) : Location : Location name"
+    "flatlabel": "Third place of captive landing (ADPSALE2)"
   },
   "voyage_itinerary__third_landing_place__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3382,7 +3382,7 @@
   "voyage_itinerary__second_landing_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Second place of slave landing (ADPSALE1) : Location : Location name"
+    "flatlabel": "Second place of captive landing (ADPSALE1)"
   },
   "voyage_itinerary__second_landing_place__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3477,7 +3477,7 @@
   "voyage_itinerary__first_landing_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : First place of slave landing (SLA1PORT) : Location : Location name"
+    "flatlabel": "First place of captive landing (SLA1PORT)"
   },
   "voyage_itinerary__first_landing_place__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3572,7 +3572,7 @@
   "voyage_itinerary__port_of_call_before_atl_crossing__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Port of call before Atlantic crossing (NPAFTTRA) : Location : Location name"
+    "flatlabel": "Port of call before Atlantic crossing (NPAFTTRA)"
   },
   "voyage_itinerary__port_of_call_before_atl_crossing__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3952,7 +3952,7 @@
   "voyage_itinerary__third_place_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Third place of slave purchase (PLAC3TRA) : Location : Location name"
+    "flatlabel": "Third place of captive purchase (PLAC3TRA)"
   },
   "voyage_itinerary__third_place_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -4047,7 +4047,7 @@
   "voyage_itinerary__second_place_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Second place of slave purchase (PLAC2TRA) : Location : Location name"
+    "flatlabel": "Second place of captive purchase (PLAC2TRA)"
   },
   "voyage_itinerary__second_place_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -4142,7 +4142,7 @@
   "voyage_itinerary__first_place_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : First place of slave purchase (PLAC1TRA) : Location : Location name"
+    "flatlabel": "First place of captive purchase (PLAC1TRA)"
   },
   "voyage_itinerary__first_place_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -5092,7 +5092,7 @@
   "voyage_itinerary__port_of_departure__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Port of departure (PORTDEP) : Location : Location name"
+    "flatlabel": "Port of departure (PORTDEP)"
   },
   "voyage_itinerary__port_of_departure__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",

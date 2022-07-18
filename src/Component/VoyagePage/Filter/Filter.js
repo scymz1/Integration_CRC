@@ -1,8 +1,8 @@
-import {Button, Container, Grid, Card, CardHeader, CardContent, CardActions, IconButton, AppBar, Toolbar} from "@mui/material";
+import {Grid, IconButton, AppBar, Popover} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
-import React from 'react';
+import * as React from 'react';
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -30,7 +30,18 @@ export default function Filter(props) {
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
-    
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    // Handle Button Click
+    const handleClick = (event) => { 
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
     // Handle delete by removing the specified key
     const handleDelete = (item) => { 
         var raw = item.split("***")
@@ -57,70 +68,70 @@ export default function Filter(props) {
 
     }}
   >
+    <Accordion>
+          <AccordionSummary
+            expandIcon={<FilterAlt sx={{ color: "white" }}/>}
+            aria-controls="filter-content"
+            id="filter-header"
+            sx={{
+              backgroundColor: "#1D76D2"
+            }}
+          >
+              <Typography color="white">Filter</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <AppBar position="static">
+            {/* <Toolbar disableGutters> */}
+              <Grid container direction="row" spacing={1}>
+                  {
+                    Object.keys(menu_label).map((key) => {
+                      return(
+                        <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
+                      )
+                    })
+                  }
+              </Grid>
+            {/* </Toolbar>   */}
+          </AppBar>
 
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<FilterAlt />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Filter</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
+            <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={2}>
 
-        <AppBar position="static">
-          {/* <Toolbar disableGutters> */}
-            <Grid container direction="row" spacing={1}>
-                {
-                  Object.keys(menu_label).map((key) => {
-                    return(
-                      <Cascading menuName={key} button={menu_label[key]} context={props.context}/>
-                    )
-                  })
+              {/* {
+                Object.keys(menu_label).map((key) => {
+                  return(
+                    <Cascading menuName={key} button={menu_label[key]}/>
+                  )
+                })
+              } */}
+              <Grid item xs={2}>
+                <RadioButton context={props.context}/>
+              </Grid>
+              <Grid item xs={10}>
+                {output.map((item, index) => {
+                  return(
+                    <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
+                      <Grid item xs={10} align="center" >
+                        <Accordion>
+                          <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                            <Typography>{item.split("***")[2]}</Typography>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            <ComponentFac params={item} index={index} context={props.context}/>
+                          </AccordionDetails>
+                        </Accordion>
+                      </Grid>
+                      <Grid item xs={2} align="center">
+                        <IconButton onClick={()=>{handleDelete(item)}}>
+                            <RemoveCircleOutlineIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  )})
                 }
+              </Grid>
             </Grid>
-          {/* </Toolbar>   */}
-        </AppBar>
-
-
-          <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={10}>
-
-            {/* {
-              Object.keys(menu_label).map((key) => {
-                return(
-                  <Cascading menuName={key} button={menu_label[key]}/>
-                )
-              })
-            } */}
-            <Grid item >
-              <RadioButton context={props.context}/>
-            </Grid>
-            <Grid item>
-              {output.map((item, index) => {
-                return(
-                  <Grid container direction="row" spacing={2} sx ={{m:'10px'}}>
-                    <Grid item xs={11} align="center" >
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                          <Typography>{item.split("***")[2]}</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <ComponentFac params={item} index={index} context={props.context}/>
-                        </AccordionDetails>
-                      </Accordion>
-                    </Grid>
-                    <Grid item xs={1} align="center">
-                      <IconButton onClick={()=>{handleDelete(item)}}>
-                          <RemoveCircleOutlineIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                )})
-              }
-            </Grid>
-          </Grid>
-          </AccordionDetails>
-      </Accordion>
+            </AccordionDetails>
+        </Accordion>
     </AppContext.Provider>
   );
 }

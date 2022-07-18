@@ -82,7 +82,7 @@ export default function MapBoundingBox(props){
         }
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
   
-    const position = [23.486678, -88.59375];
+    const position = [0, 0];
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -108,7 +108,7 @@ export default function MapBoundingBox(props){
             </RadioGroup>
             </FormControl>
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={5} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={3} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -143,10 +143,10 @@ export default function MapBoundingBox(props){
 
             </MapContainer>
             </FullScreen>
-            <p>longitude1: {longitude1}</p>
+            {/* <p>longitude1: {longitude1}</p>
             <p>longitude2: {longitude2}</p>
             <p>latitude1: {latitude1}</p>
-            <p>latitude2: {latitude2}</p>
+            <p>latitude2: {latitude2}</p> */}
         </div>
       
     );

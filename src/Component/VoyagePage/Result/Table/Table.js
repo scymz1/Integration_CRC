@@ -20,6 +20,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -136,6 +137,10 @@ function Table(props) {
       setInfo(info);
       setId(info.id);
     } else if (info.transactions.length !== 0) {
+      //setOpen(true);
+      // setInfo(info);
+      //console.log(info.transactions__transaction__voyage__id[0]);
+      //setId(info.transactions__transaction__voyage__id[0]);
       //console.log(info.documented_name);
       //let selected = queryData["targets"];
       const selectedIndex = queryData["targets"].indexOf(info.id);
@@ -152,6 +157,11 @@ function Table(props) {
       });
       //console.log(queryData);
     }
+  };
+
+  const handleCellOpen = (event, info) => {
+    setOpen(true);
+    setId(info.transactions__transaction__voyage__id[0]);
   };
 
   const isSelected = (name) => {
@@ -211,10 +221,11 @@ function Table(props) {
                       /> */}
                       </TableCell>
                     )}
-                    {cols.map((v) => (
+                    {cols.map((v, key) => (
                       <TableCell
                         style={{ color: "#389c90" }}
                         onClick={(event) => handleSorting(event, v)}
+                        key={'title-' + key}
                       >
                         <div>{options_flat[v].flatlabel}</div>
                         <div style={{ float: "right" }}>
@@ -235,7 +246,7 @@ function Table(props) {
                     return (
                       // <TableRow>
                       <StyledTableRow
-                        key={row.name}
+                        key={row.id}
                         onClick={(event) => handleOpen(event, row)}
                         //selected={isItemSelected}
                       >
@@ -251,14 +262,14 @@ function Table(props) {
                         {checkbox && row.transactions.length === 0 && (
                           <TableCell padding="checkbox"></TableCell>
                         )}
-                        {cols.map((k) => {
+                        {cols.map((k, key) => {
                           if (k === "gender") {
                             if (row[k] === 1) {
-                              return <TableCell>Male</TableCell>;
+                              return <TableCell key={'content-' + key}>Male</TableCell>;
                             } else if (row[k] === 2) {
-                              return <TableCell>Female</TableCell>;
+                              return <TableCell key={'content-' + key}>Female</TableCell>;
                             } else {
-                              return <TableCell>{row[k]}</TableCell>;
+                              return <TableCell key={'content-' + key}>{row[k]}</TableCell>;
                             }
                           } else if (
                             k ===
@@ -267,10 +278,11 @@ function Table(props) {
                             const popover = createPopover(row);
                             //console.log(popover);
                             return (
-                              <TableCell>
+                              <TableCell key={'content-' + key}>
                                 <Stack direction="row" spacing={1}>
-                                  {Object.keys(popover).map((name) => (
+                                  {Object.keys(popover).map((name, key) => (
                                     <Tooltip
+                                      key={'tooltip-' + key}
                                       arrow
                                       title={popover[name].join(", ")}
                                       placement="top"
@@ -281,15 +293,42 @@ function Table(props) {
                                 </Stack>
                               </TableCell>
                             );
+                          } else if (
+                            k === "transactions__transaction__voyage__id"
+                          ) {
+                            return (
+                              <TableCell key={'content-' + key}>
+                                <Link
+                                  component="button"
+                                  variant="body2"
+                                  onClick={(e) => {
+                                    handleCellOpen(e, row);
+                                    // e.preventDefault();
+                                    e.stopPropagation();
+                                  }}
+                                >
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: [...new Set(row[k])].join(", "),
+                                    }}
+                                  />
+                                </Link>
+                              </TableCell>
+                            );
                           } else if (typeof row[k] === "object") {
                             return (
-                              <TableCell>
-                                {[...new Set(row[k])].join(", ")}
+                              <TableCell key={'content-' + key}>
+                                <div // [...new Set(row[k])]
+                                  dangerouslySetInnerHTML={{
+                                    __html: [...new Set(row[k])].join(", "),
+                                  }}
+                                />
+                                {/* {[...new Set(row[k])].join(", ")} */}
                               </TableCell>
                             );
                           } else {
                             return (
-                              <TableCell>
+                              <TableCell key={'content-' + key}>
                                 <div // [...new Set(row[k])]
                                   dangerouslySetInnerHTML={{ __html: row[k] }}
                                 />
