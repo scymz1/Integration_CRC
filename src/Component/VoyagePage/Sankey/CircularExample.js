@@ -345,7 +345,8 @@ const handleChange = (event, name, type) => {
                       setState({ ...state,highlightLinkIndexes: [] });
                     }}
 
-                    onClick={() =>  setState({
+                    onClick={() =>  {
+                      setState({
                       ...state,
                       linkData: {
                           "source":link.source,
@@ -355,8 +356,15 @@ const handleChange = (event, name, type) => {
                     // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
                     // console.log("🐷", state.linkData)
                     console.log("🐔", link.source.name + " to " + link.target.name)
+                    )
 
-                    )}
+                    set_search_object({
+                      ...search_object,
+                      [option.fieldSource]: [link.source.name],
+                      [option.fieldTarget]: [link.target.name]
+                    });
+                  
+                  }}
                   />
                 ))}
               </Group>
