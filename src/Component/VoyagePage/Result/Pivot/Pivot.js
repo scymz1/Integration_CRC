@@ -134,22 +134,22 @@ function Pivot(props) {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
-                {cols.map((col) => (
-                  <TableCell>{col}</TableCell>
+                {cols.map((col, key) => (
+                  <TableCell key={'title-' + key}>{col}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.map((row, key) => (
                 <TableRow
-                  key={row.name}
+                  key={'row-' + key}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {cols.map((s) => {
+                  {cols.map((s, key) => {
                     if (typeof row[s] === "number") {
-                      return <TableCell>{Math.round(row[s])}</TableCell>;
+                      return <TableCell key={'content-' + key}>{Math.round(row[s])}</TableCell>;
                     } else {
-                      return <TableCell>{row[s] || 0}</TableCell>;
+                      return <TableCell key={'content-' + key}>{row[s] || 0}</TableCell>;
                     }
                   })}
                 </TableRow>
