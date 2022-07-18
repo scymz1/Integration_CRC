@@ -85,7 +85,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      console.log("Repsonse:", response.data)
+      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object]);
 
@@ -109,7 +109,7 @@ export function ReadFeature(props) {
       
      }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
   },[disembark])
@@ -278,7 +278,7 @@ export function ReadFeature(props) {
 
 function drawUpdate(map, routes) {
 
-  console.log(routes)
+  //console.log(routes)
 
   var valueMin = d3.min(routes, function (l) {
     return l[2];
@@ -293,7 +293,7 @@ function drawUpdate(map, routes) {
   routes.map(route => {
     var commands = [];
 
-    console.log("weight: ", route[2])
+    //console.log("weight: ", route[2])
 
     commands.push('M', route[0][0])
     commands.push('C', route[1][0], route[1][1], route[0][1])
