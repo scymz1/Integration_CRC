@@ -19,6 +19,7 @@ export default function Auto(props) {
   const [value, setValue] = React.useState([]);
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
+  
 
     React.useEffect(()=>{
       const fetchData = async (labels,textInput) => {
@@ -32,6 +33,8 @@ export default function Auto(props) {
             body: formdata,
             redirect: 'follow'
         };
+        
+
         fetch(base_url+endpoint+"autocomplete", requestOptions)
         .then(response => response.json())
         .then(result => {
@@ -40,14 +43,14 @@ export default function Auto(props) {
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
-    },[])
+    },[search_object])
 
     React.useEffect(()=>{
       set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
         ...search_object,
-        [searchLabel.option]: value
+        [searchLabel.option]: [textInput]
       }));
-    },[value])
+    },[textInput])
 
 
   return (

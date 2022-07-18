@@ -110,7 +110,7 @@ export default function MapBoundingBox(props){
             </RadioGroup>
             </FormControl>
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={2.5} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer

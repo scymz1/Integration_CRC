@@ -11,6 +11,7 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
+import { set } from "lodash";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -19,11 +20,17 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 var nodeLayers = {};
 var linkLayers = {};
 
-var groupby_fields = [
+var groupby_fields_region = [
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
 	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
 
 ];
+
+var groupby_fields_port = [
+  'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id',
+	'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id'
+];
+
 var value_field_tuple = [
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
   "sum",
@@ -35,21 +42,22 @@ const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id
 const embkey = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id" 
 
 export const PivotContext = React.createContext({});
+var customIcon = L.divIcon({className: 'leaflet-div-icon2'})
 
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
   const [isLoading, setIsLoading] = useState(false);
-  //console.log("readfeature---------",props.search_object.dataset[0])
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
   const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
 
-  // const {search_object} = React.useContext(PastContext);
+  const [groupby_fields, setGroupBy] = useState(groupby_fields_port);
+
   const map = useMap();
 
   const [complete_object, set_complete_object] = useState({
-    voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id: [
+    voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id: [
       20931, 20931,
     ],
     groupby_fields: [
@@ -63,7 +71,33 @@ export function ReadFeature(props) {
     cachename: ["voyage_pivot_tables"],
   });
 
-  var markers = L.markerClusterGroup();
+  var markers = L.markerClusterGroup({
+    iconCreateFunction: function(cluster) {
+      return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>' , 
+                          className: ' leaflet-div-icon2', 
+                          });
+	}
+  });
+
+  L.Marker.prototype.options.icon = customIcon;
+
+  // var markers = L.markerClusterGroup();
+
+  map.on('zoomend', function() {
+    
+    console.log("Zoom: ", map.getZoom())
+    
+    if(map.getZoom() < 5) {
+      console.log("Set Region")
+      setGroupBy(groupby_fields_region)
+    }
+    else {
+      console.log("Set Port")
+      setGroupBy(groupby_fields_port)
+    }
+
+  })
+
 
   useEffect(() => {
     var data = new FormData();
@@ -73,6 +107,7 @@ export function ReadFeature(props) {
         data.append(property, v);
       });
     }
+
     data.append("groupby_fields", groupby_fields[0]);
     data.append("groupby_fields", groupby_fields[1]);
     data.append("value_field_tuple", value_field_tuple[0]);
@@ -87,7 +122,7 @@ export function ReadFeature(props) {
 
       //console.log("Repsonse:", response.data)
     });
-  }, [props.search_object]);
+  }, [props.search_object, groupby_fields]);
 
 
   //for updating search object
@@ -163,13 +198,14 @@ export function ReadFeature(props) {
 
             let tmp =
               complete_object[
-                "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+                "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id"
               ];
+            console.log("ID: ", layer.feature.id)
             tmp[0] = layer.feature.id;
             tmp[1] = layer.feature.id;
             set_complete_object({
               ...complete_object,
-              voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id:
+              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
                 tmp,
             });
 
@@ -177,14 +213,14 @@ export function ReadFeature(props) {
               console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ DISEMBARK")  
                 let tmp =
             complete_object[
-              'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id'
+              'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
             ];
     
           tmp[0] = layer.feature.id;
           tmp[1] = layer.feature.id;
             set_complete_object({
               ...complete_object,
-              voyage_itinerary__imp_principal_port_slave_dis__geo_location__id:
+              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
                 tmp,
             });
              }
@@ -192,14 +228,14 @@ export function ReadFeature(props) {
               console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ EMBARK")
             let tmp =
             complete_object[
-              'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id'
+              'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
             ];
             console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
           tmp[0] = layer.feature.id;
           tmp[1] = layer.feature.id;
             set_complete_object({
               ...complete_object,
-              voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id:
+              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
                 tmp,
             });
 
@@ -257,7 +293,13 @@ export function ReadFeature(props) {
             //    .openOn(map);
           };
         })
-          markers.addLayer(layer);
+          // markers.addLayer(L.marker(layer["_latlng"], {icon: customIcon}));
+          markers.addLayer(layer)
+        //   markers.addLayer(layer, {
+        //     pointToLayer: function (feature, latlng) {
+        //         return L.marker(latlng, {icon: customIcon});
+        //     }
+        // })
         },
       });
 
@@ -278,7 +320,7 @@ export function ReadFeature(props) {
 
 function drawUpdate(map, routes) {
 
-  //console.log(routes)
+  // console.log(routes)
 
   var valueMin = d3.min(routes, function (l) {
     return l[2];
@@ -292,8 +334,6 @@ function drawUpdate(map, routes) {
 
   routes.map(route => {
     var commands = [];
-
-    //console.log("weight: ", route[2])
 
     commands.push('M', route[0][0])
     commands.push('C', route[1][0], route[1][1], route[0][1])
@@ -314,7 +354,7 @@ function DrawRoutes(map, links) {
     return l[0];
   });
 
-  console.log(valueMax)
+  // console.log(valueMax)
 
   var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
   
