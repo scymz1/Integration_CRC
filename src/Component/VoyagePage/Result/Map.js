@@ -61,6 +61,8 @@ export default function MapBoundingBox(props){
     const {search_object, endpoint} = React.useContext(props.context);
     
     const [map_search_object, set_map_search_object] = useState(search_object);
+
+    const [selectMode, SetselectMode] = useState(false);
     
     const handle = useFullScreenHandle();
 
@@ -82,7 +84,7 @@ export default function MapBoundingBox(props){
         }
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
   
-    const position = [0, 0];
+    const position = [0, -20];
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -126,7 +128,7 @@ export default function MapBoundingBox(props){
 
              
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={3} minZoom={2.2} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -142,8 +144,26 @@ export default function MapBoundingBox(props){
                     </BaseLayer>
                 </LayersControl>
                 <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
+                <Control prepend position='bottomright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
+        e.preventDefault();SetselectMode(true);}}> 
+                    Select Bounding Box
+                        <FormControl>
+                            <RadioGroup
+                                row
+                                aria-labelledby="boundingBoxFilter"
+                                defaultValue="embarkation"
+                                name="radio-buttons-group"
+                                onChange={getRadioValue}
+                            >
+                                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+                                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Button>
+                </Control>
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
+                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
                     handle.active?
                         <Control prepend position='topleft' >
