@@ -109,6 +109,24 @@ export default function MapBoundingBox(props){
                 <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
             </RadioGroup>
             </FormControl>
+
+        <br/>
+
+        <FormControl>
+        <FormLabel id="optionFilter">Component Option Choice </FormLabel>
+        <RadioGroup
+            row
+            aria-labelledby="optionFilter"
+            defaultValue= "Both"
+            name="radio-buttons-group"
+        >
+            <FormControlLabel value="Map" control={<Radio />} label="Map" />
+            <FormControlLabel value="Sankey" control={<Radio />} label="Sankey" />
+            <FormControlLabel value="Both" control={<Radio />} label="Both" />
+        </RadioGroup>
+        </FormControl>
+
+             
             <FullScreen handle={handle}>
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
