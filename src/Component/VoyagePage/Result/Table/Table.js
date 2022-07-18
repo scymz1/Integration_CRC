@@ -47,6 +47,7 @@ function Table(props) {
     chipData,
   } = useContext(props.context);
 
+
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -78,10 +79,11 @@ function Table(props) {
       });
     }
 
+
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
-        //console.log(response.data);
+        console.log(response.data);
         setValue(Object.values(response.data));
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
@@ -155,7 +157,6 @@ function Table(props) {
         ...queryData,
         targets: Object.keys(chipData).map(Number),
       });
-      //console.log(queryData);
     }
   };
 
