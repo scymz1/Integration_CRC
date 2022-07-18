@@ -17,8 +17,9 @@ import FormControl from '@mui/material/FormControl';
 import { FormControlLabel, RadioGroup } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import _ from 'lodash';
-import Card from '@mui/material/Card';
+import {Card, Grid} from '@mui/material';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import * as options_flat from "./vars.json"
 // import { type } from "@testing-library/user-event/dist/type";
 // import myJson from './sample.json';
@@ -112,7 +113,7 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
   })})
   
 
-  // use Object to deal with Json 
+  // use Object to deal with Json [Use too much memeory, might lead website cursh]
 
     // Object.keys(result).forEach(source =>{
     //   // console.log("🔥",source)
@@ -200,8 +201,11 @@ const handleChange = (event, name, type) => {
 
   return (
     <div>
-      <Button onClick={()=>console.log("data:", data)}>print data</Button>
-      <FormControl fullWidth>
+      {/* The button allows me to check what I have got right now - testing useage, not necessary */}
+      {/* <Button onClick={()=>console.log("data:", data)}>print data</Button> */}
+
+      {/* Dropdown meun which allows users to choose the groupby field. However, some of them are not prefect drawing since the huge density of data. So during developing just comments it but you might want to use it and check it.  */}
+      {/* <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Source Field</InputLabel>
       <Select
                             labelId="demo-simple-select-label"
@@ -240,7 +244,7 @@ const handleChange = (event, name, type) => {
                             ))}
 
       </Select>
-      </FormControl>
+      </FormControl> */}
 
       <svg
         width={width + margin.left + margin.right}
@@ -301,10 +305,10 @@ const handleChange = (event, name, type) => {
                       console.log("🫧", node.name)
                       )
 
-                      set_search_object({
-                        ...search_object,
-                        [option.fieldSource]: [node.name]
-                      });
+                      // set_search_object({
+                      //   ...search_object,
+                      //   [option.fieldSource]: [node.name]
+                      // });
                   }}
                   />
 
@@ -312,6 +316,7 @@ const handleChange = (event, name, type) => {
                     x={18}
                     y={(node.y1 - node.y0) / 2}
                     verticalAnchor="middle"
+
                     style={{
                       font: "10px sans-serif",
                     }}
@@ -372,7 +377,9 @@ const handleChange = (event, name, type) => {
           )}
         </Sankey>
       </svg>
-      <Card sx={{ maxWidth: 345 }}>
+
+
+      <Card sx={{ maxWidth: 345 }} >
       <Typography>
             {`Node is ${state.nodeData.name}`}
       </Typography>
