@@ -120,7 +120,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      console.log("Repsonse:", response.data)
+      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 
@@ -144,7 +144,7 @@ export function ReadFeature(props) {
       
      }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
   },[disembark])
