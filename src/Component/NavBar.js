@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import Icon from '@mui/material/Icon';
 import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
-import {useContext} from "react";
 
 export default function ResponsiveAppBar(props) {
   const {typeForTable, setTypeForTable, search_object, set_search_object} = props
@@ -117,7 +116,7 @@ export default function ResponsiveAppBar(props) {
             <Stack spacing={4} direction={"row"}>
               {search_object?
                 <ToggleButtonGroup
-                  color="success"
+                  color="dataSetTheme"
                   value={search_object.dataset[0]}
                   exclusive
                   onChange={(event) =>

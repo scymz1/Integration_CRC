@@ -1,5 +1,133 @@
 //"transactions__transaction__enslavers__enslaver_alias__identity__principal_location__name", // invalid
 
+
+export const enslaver_default_list = [
+    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
+    "alias__transactions__transaction__voyage__id",
+    "enslaver_sources__source__full_ref",
+    "enslaver_sources__text_ref",
+    "alias__transactions__transaction__date_yyyy",
+    "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
+    "alias__transactions__transaction__place__geo_location__name",
+    "principal_location__geo_location__name",
+    "first_active_year",
+    "last_active_year",
+    "number_enslaved",
+]
+
+export const enslaver_var_list = {
+    "id": {
+        "id": null,
+    },
+    "personal_information": {
+        "principal_alias": null,
+        "birth_year": null,
+        "birth_month": null,
+        "birth_day": null,
+        "birth_place": null,
+        "death_year": null,
+        "death_month": null,
+        "death_day": null,
+        "death_place": null,
+        "father_name": null,
+        "father_occupation": null,
+        "mother_name": null,
+        "first_spouse_name": null,
+        "first_marriage_date": null,
+        "second_spouse_name": null,
+        "second_marriage_date": null,
+        "probate_date": null,
+        "will_value_pounds": null,
+        "will_value_dollars": null,
+        "will_court": null,
+        "text_id": null,
+    },
+    "enslaver_sources": {
+        "enslaver_sources__source__short_ref": null,
+        "enslaver_sources__source__full_ref": null,
+        "enslaver_sources__source__source_type": null,
+        "enslaver_sources__text_ref": null
+    },
+    "principal_location": {
+        "principal_location__geo_location__name": null,
+        "principal_location__geo_location__name": null,
+    },
+    "alias__transactions__transaction": {
+        "alias__transactions__transaction__id": null,
+        "alias__transactions__transaction__relation_type__relation_type": null,
+        "alias__transactions__transaction__place__geo_location__name": null,
+        "alias__transactions__transaction__date_yyyy": null,
+        "alias__transactions__transaction__source": {
+            "alias__transactions__transaction__source": null,
+            "alias__transactions__transaction__source__id": null,
+            "alias__transactions__transaction__source__short_ref": null,
+            "alias__transactions__transaction__source__full_ref": null,
+            "alias__transactions__transaction__source__source_type": null,
+        },
+        "alias__transactions__transaction__voyage": {
+            "alias__transactions__transaction__voyage__voyage_itinerary": {
+                "alias__transactions__transaction__voyage__voyage_itinerary__port_of_departure__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_first_port_emb__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_second_port_emb__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_first_region_purchase_slaves__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_second_region_purchase_slaves__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_first_port_dis__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_second_port_dis__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_first_region_slave_landing__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__int_second_place_region_slave_landing__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__first_place_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__second_place_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__third_place_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__first_region_slave_emb__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__second_region_slave_emb__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__third_region_slave_emb__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__port_of_call_before_atl_crossing__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__first_landing_place__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__second_landing_place__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__third_landing_place__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__first_landing_region__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__second_landing_region__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__third_landing_region__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__place_voyage_ended__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__region_of_return__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__broad_region_of_return__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__principal_place_of_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__principal_port_of_slave_dis__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
+            },
+            "alias__transactions__transaction__voyage__voyage_ship": {
+                "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_place__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_region__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_ship__registered_place__geo_location__name": null,
+                "alias__transactions__transaction__voyage__voyage_ship__registered_region__geo_location__name": null
+            },
+            "alias__transactions__transaction__voyage__voyage_dates": {
+                "alias__transactions__transaction__voyage__voyage_dates__voyage_began_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__slave_purchase_began_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__vessel_left_port_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__first_dis_of_slaves_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__date_departed_africa_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__arrival_at_second_place_landing_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__third_dis_of_slaves_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__departure_last_place_of_landing_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__voyage_completed_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__imp_voyage_began_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__imp_departed_africa_yyyy": null,
+                "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy": null,
+            }
+        }
+    }
+}
+
 export const enslaved_default_list = [
     "id",
     "documented_name",

@@ -21,6 +21,8 @@ export default function Gallery(){
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
 
+    const { search_object } = React.useContext(PASTContext);
+
     function handleChangePage(event, newPage){
         if(newPage < 0 || newPage > parseInt(total / resPerPage, 10)) return;
         //console.log("newPage: ", newPage)
@@ -35,19 +37,31 @@ export default function Gallery(){
 
 
     useEffect(() => {
-        //console.log("data update!")
+        console.log("page number data update!");
+        let queryData = new FormData();
+        for (var property in search_object) {
+          search_object[property].forEach((v) => {
+            queryData.append(property, v);
+          });
+        }
+        console.log("form: ", queryData);
         fetch(base_url + "past/enslaved/", {
             method: "POST",
+            body: queryData,
             headers: {'Authorization': auth_token}
           }).then(res => setTotal(res.headers.get("total_results_count")));
-    }, [])
+    }, [search_object])
     
 
     useEffect(() => {
-        //console.log("data update!")
         let queryData = new FormData();
         queryData.append("results_page", page + 1);
         queryData.append("results_per_page", resPerPage);
+        for (var property in search_object) {
+          search_object[property].forEach((v) => {
+            queryData.append(property, v);
+          });
+        }
         fetch(base_url + "past/enslaved/", {
             method: "POST",
             body: queryData,
@@ -57,13 +71,13 @@ export default function Gallery(){
               setGData(res);
           })
 
-    }, [page, resPerPage])
+    }, [page, resPerPage, search_object])
 
     useEffect(() => {
         const oldGallery = [];
         //console.log("gData", gData)
         gData.forEach(item => {
-            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item}/></Grid>)
+            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>)
         })
         setGallery(oldGallery);
     }, [gData])

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect, useContext } from "react";
 //import ColSelector from "../VoyagePage/Result/Table/ColSelector";
 import Table from "../VoyagePage/Result/Table/Table";
 import Modal from "../VoyagePage/Result/Table/TableModal";
@@ -8,22 +8,54 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import HubIcon from '@mui/icons-material/Hub';
+import HubIcon from "@mui/icons-material/Hub";
 //import { Typography } from "@mui/material";
 //import { styled } from "@mui/material/styles";
-import * as labels from "../util/enslaved_options.json";
+import * as enslaved_labels from "../util/enslaved_options.json";
+import * as enslaver_labels from "../util/enslaver_options.json";
 import ColSelector11 from "../VoyagePage/Result/Table/ColSelector11";
-import { enslaved_default_list, enslaved_var_list } from "./vars";
+import {
+  enslaved_default_list,
+  enslaved_var_list,
+  enslaver_default_list,
+  enslaver_var_list,
+} from "./vars";
 
 export const ColContext = React.createContext({});
 export default function PASTTable(props) {
   const [cols, setCols] = React.useState(enslaved_default_list);
+  const [labels, setLabels] = React.useState(enslaved_labels);
+  const [all_options, setAll_options] = React.useState(enslaved_var_list);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
 
-  const { options_tree, endpoint, queryData, setQueryData, search_object, data , chipData, setChipData, typeForTable} =
-    React.useContext(props.context);
+  const {
+    options_tree,
+    endpoint,
+    setEndpoint,
+    queryData,
+    setQueryData,
+    search_object,
+    data,
+    chipData,
+    setChipData,
+    typeForTable,
+  } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
+
+  useEffect(() =>{
+    if (typeForTable == "slaves") {
+      setCols(enslaved_default_list);
+      setLabels(enslaved_labels);
+      setAll_options(enslaved_var_list);
+      setEndpoint("past/enslaved/");
+    } else if (typeForTable == "enslavers") {
+      setCols(enslaver_default_list);
+      setLabels(enslaver_labels);
+      setAll_options(enslaver_var_list);
+      setEndpoint("past/enslavers/");
+    }
+  },[typeForTable])
 
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
@@ -31,15 +63,8 @@ export default function PASTTable(props) {
     setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
 
-// React.useEffect(()=>{
-//   queryData.targets.forEach(()=>{
-
-//   })
-// },[queryData])
-
   return (
     <div>
-      {/* <Button onClick={()=>console.log("options_tree:", cols)}>print options_tree</Button> */}
       <ColContext.Provider
         value={{
           cols,
@@ -51,7 +76,7 @@ export default function PASTTable(props) {
           setOpen,
           checkbox: true,
           modal: false,
-          columnOptions: enslaved_var_list,
+          columnOptions: all_options,
           options_flat: labels,
           queryData,
           setQueryData,
@@ -81,14 +106,15 @@ export default function PASTTable(props) {
               }}
               title="Selected People (MAX = 10)"
               action={
-                <Button 
-                    variant="contained" 
-                    startIcon={<HubIcon/>} 
-                    size="large" 
-                    color="grey" 
-                    disabled={queryData.slaves.length === 0}
-                    onClick={props.handleClickOpen("body")}>
-                    View Connections
+                <Button
+                  variant="contained"
+                  startIcon={<HubIcon />}
+                  size="large"
+                  color="grey"
+                  disabled={queryData.slaves.length === 0}
+                  onClick={props.handleClickOpen("body")}
+                >
+                  View Connections
                 </Button>
               }
             />
