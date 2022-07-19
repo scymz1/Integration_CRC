@@ -20,19 +20,19 @@ import Cascading from './Cascading'
 // import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
-import {VoyageContext} from "../VoyageApp";
+import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
+const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
+    const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
 
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
-    const [drawerOpen, setDrawerOpen] = React.useState(true);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     // Handle Drawer Open and Close
     const handleDrawerOpen = () => {
@@ -55,20 +55,21 @@ export default function Filter(props) {
     };
 
     //console.log('Current SEARCH OBJECT: ', search_object)
-    console.log('Current output: ', output)
+    // console.log('Current output: ', output)
 
     return (
     <AppContext.Provider
         value={{
-          options_tree,
-          menuPosition, 
+          options_flat,
+          menuPosition,
           setMenuPosition,
           setOutput,
           output,
           labels,
-          setLabels
-    }}
-  >
+          setLabels,
+          nested_tree
+      }}
+    >
     <AppBar position="sticky">
       <Toolbar>
         <IconButton
@@ -79,13 +80,13 @@ export default function Filter(props) {
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
         <Grid container direction="row" spacing={1}>
-                            {
-                              Object.keys(menu_label).map((key) => {
-                                return(
-                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
-                                )
-                              })
-                            }
+            {
+              Object.keys(nested_tree).map((key) => {
+                return(
+                  <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                )
+              })
+            }
         </Grid>
       </Toolbar>
     </AppBar>
@@ -110,28 +111,28 @@ export default function Filter(props) {
                     <Grid container item sx={{m:'10px'}} justifyContent="center" >
                         <Typography>No Filter</Typography>
                     </Grid>
-                  :
-                  output.map((item, index) => {
-                  return(
-                    <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
-                        <Grid item xs={10} >
-                          <Accordion>
-                            {/* <AccordionSummary expandIcon={<ExpandMoreIcon/>}> */}
-                            <AccordionSummary>
-                              <Typography>{item.split("***")[2]}</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                              <ComponentFac params={item} index={index} context={props.context}/>
-                            </AccordionDetails>
-                          </Accordion>
-                        </Grid>
-                        <Grid item xs={2} display="flex">
-                          <IconButton onClick={()=>{handleDelete(item)}}>
-                              <RemoveCircleOutlineIcon />
-                          </IconButton>
-                        </Grid>
-                    </Grid>
-                )})}
+                :
+                    output.map((item, index) => {
+                    return(
+                      <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
+                          <Grid item xs={10} >
+                              <Accordion>
+                                  <AccordionSummary>
+                                      <Typography>{item.split("***")[2]}</Typography>
+                                  </AccordionSummary>
+                                  <AccordionDetails>
+                                      <ComponentFac params={item} index={index} context={props.context}/>
+                                  </AccordionDetails>
+                              </Accordion>
+                          </Grid>
+                          <Grid item xs={2} display="flex">
+                              <IconButton onClick={()=>{handleDelete(item)}}>
+                                  <RemoveCircleOutlineIcon />
+                              </IconButton>
+                          </Grid>
+                      </Grid>
+                    )})
+                }
             </Grid>
             <Grid container item sx={2} justifyContent="flex-end">
                 <IconButton onClick={handleDrawerClose}>
@@ -139,7 +140,7 @@ export default function Filter(props) {
                 </IconButton>
             </Grid>
         </Grid>
-    </Drawer>
-  </AppContext.Provider>
+      </Drawer>
+    </AppContext.Provider>
   );
 }

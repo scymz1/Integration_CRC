@@ -26,6 +26,7 @@ import {autocomplete_text_fields} from './var'
 
 import {useContext} from "react";
 import {VoyageContext} from "../VoyageApp";
+import { columnOptions } from '../Result/Table/tableVars';
 
 export const MenuContext = React.createContext();
 
@@ -34,7 +35,8 @@ function Cascading(props) {
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {options_tree, search_object} = useContext(props.context);     // <--------- CONTEXT
+    //add end point
+    const {options_flat, search_object, nested_tree} = useContext(props.context);     // <--------- CONTEXT
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -42,23 +44,30 @@ function Cascading(props) {
     const open = Boolean(anchorEl);
 
     const menuName = props.menuName;
-    const buttonName = props.button;
+    // const buttonName = props.button;
     //console.log("Menuname: ", menuName)
-    //console.log("options_tree: ", options_tree)
-    var render = menuName === "" ? options_tree : options_tree[menuName];
+    // console.log("options_tree: ", options_tree)
+    // var render = menuName === "" ? options_tree : options_tree[menuName];
     
 
 
     function isChildren(key) {
-        return key !== "type" && key !== "label" && key !== "flatlabel"
+        if (key) return true
+        else return false
     }
 
     function isLast(node) {
-        return Object.keys(node).length <= 3
+        return node === null
     }
-  
+    
+    function containsOnly(node) {
+        if (Object.keys(node).length === 1)
+            return true;
+        return false;
+    }
+
     const handleOptionClick = (option, type, flatlabel) => {
-        if (option === "__id") option = "id"
+        // if (option === "__id") option = "id"
         // setMenuPosition(null);
         handleClose();
         setOption(option);
@@ -73,38 +82,36 @@ function Cascading(props) {
     }
 
     const renderTree = (nodes, name) => {
-
-        if(isLast(nodes)) {
-            //console.log("Name: ", name)
-            return(
-                <MenuItem value={nodes.flatlabel} onClick={() => {handleOptionClick(name.slice(2), nodes.type, nodes.flatlabel) }}>
-                    {nodes.label}  
-                </MenuItem>
-            )
-        }
-
+        // console.log(chipData)
         return (
-             Object.keys(nodes).map((key) =>
+            Object.keys(nodes).map((key) =>
                 isChildren(key)
                     ? isLast(nodes[key])
-                        // ? autocomplete_text_fields.includes(name.slice(2)+"__"+key) ? 
-                        ? <MenuItem value={nodes[key].flatlabel} key={key} onClick={() => {handleOptionClick(name.slice(2)+"__"+key, nodes[key].type, nodes[key].flatlabel) }}>
-                            {nodes[key].label}  
+                        // ? containsOnly(nodes[key])
+                        ? <MenuItem value={key} key={key} onClick={() => { handleOptionClick(key, options_flat[key].type, options_flat[key].flatlabel) }}>
+                            {options_flat[key].flatlabel}
                         </MenuItem>
-                            // : null
-                        : <NestedMenuItem
-                            key={nodes[key].label}
-                            label={nodes[key].label}
-                            parentMenuOpen={open}
-                            onClick={handleClose}
-                            > 
-                            {renderTree(nodes[key], name+"__"+key)}
-                        </NestedMenuItem>
+                        // : null
+                        : containsOnly(nodes[key])
+                            ?  renderTree(nodes[key], key) 
+                            : <NestedMenuItem
+                                key={key}
+                                // label={options_flat[nameConcat(name,key)].label}
+                                label={options_flat[key].flatlabel}
+                                parentMenuOpen={open}
+                                onClick={handleClose}
+                            >
+                                {renderTree(nodes[key], key)}
+                            </NestedMenuItem>
                     : null
             )
         )
     };
 
+
+    // const renderButton = (nodes) => {
+    //     nodes.map((node) => )
+    // }
     return (
         // <Container>
             // <Grid container >
@@ -121,20 +128,20 @@ function Cascading(props) {
                             >
                             <AddCircleOutlineIcon />
                         </IconButton> */}
-
+                        
                         <Button 
                          variant="text"
                          onClick={handleClick}
                          style={{maxWidth: '280px', maxHeight: '30px', color: "#fff"}}
                          >
-                             {buttonName}
+                             {options_flat[menuName].flatlabel}
                             {/*<Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>*/}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
-                            {renderTree(render, "__"+menuName)}
+                            {renderTree(nested_tree[menuName], "")}
                         </Menu>
-                        
+                        {/* </Button> */}
                     </TreeView>
 
                 </Grid>
@@ -147,4 +154,3 @@ function Cascading(props) {
 }
 
 export default Cascading;
-
