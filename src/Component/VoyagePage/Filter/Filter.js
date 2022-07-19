@@ -29,6 +29,7 @@ const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 export default function Filter(props) {
   // const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
   const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
+  console.log("options_flat",options_flat)
   const [labels, setLabels] = React.useState([]);
   const [output, setOutput] = React.useState([]);
   const [menuPosition, setMenuPosition] = React.useState(null);
@@ -123,6 +124,7 @@ export default function Filter(props) {
           <Grid container direction="row" spacing={1}>
             {
               Object.keys(nested_tree).map((key) => {
+                console.log("nested_tree", key )
                 return (
                   <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context} />
                 )
