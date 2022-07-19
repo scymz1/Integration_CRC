@@ -397,12 +397,14 @@ const Map = () => {
             <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
         </RadioGroup>
         </FormControl>
+
+        
       <MapContainer
         id="mapId"
         center={center}
         zoom={5}
         scrollWheelZoom={false}
-        style={{ height: "100vh" }}
+        style={{ height: '100vh' }}
       >
         {/* <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

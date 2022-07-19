@@ -17,7 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
-import RadioButton from "./radio";
+// import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 import {VoyageContext} from "../VoyageApp";
@@ -140,7 +140,7 @@ export default function Filter(props) {
       >
         <br/><br/><br/><br/><br/><br/><br/><br/>
         <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item sx={11} align="center">
+            <Grid item sx={10} align="center">
               {output.map((item, index) => {
                 return(
                   <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
@@ -162,7 +162,7 @@ export default function Filter(props) {
                   </Grid>
               )})}
             </Grid>
-            <Grid item sx={1} align="center">
+            <Grid item sx={2} align="center">
               <IconButton onClick={handleDrawerClose}>
                   <ChevronLeftIcon />
               </IconButton>

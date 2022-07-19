@@ -8,7 +8,7 @@ import Story from './RelationGraph/Story'
 import PASTTable from './PASTTable'
 import Filter from "../VoyagePage/Filter/Filter";
 import {PASTContext} from "./PASTApp";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import Modal from "../VoyagePage/Result/Table/TableModal";
 
 import Grow from '@mui/material/Grow';
@@ -36,11 +36,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function PAST() {
-  const [value, setValue] = React.useState(0);
-  const [dialogopen, setdialogOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
-  const [scroll, setScroll] = React.useState('body');
-  const [checked, setChecked] = React.useState(false);
+  const [value, setValue] = useState(0);
+  const [dialogopen, setdialogOpen] = useState(false);
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object,} = useContext(PASTContext)
+  const [scroll, setScroll] = useState('body');
+  const [checked, setChecked] = useState(false);
+
 
   function handleChange(e) {
     if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
@@ -61,7 +62,12 @@ export default function PAST() {
 
   return (
     <div>
-      <ResponsiveAppBar/>
+      <ResponsiveAppBar
+        search_object={search_object}
+        set_search_object={set_search_object}
+        typeForTable={typeForTable}
+        setTypeForTable={setTypeForTable}
+      />
 
       {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
@@ -139,7 +145,7 @@ export default function PAST() {
           <Network/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Story target={500001} type="slave"/>
+          <Story target={500001} type="slaves"/>
         </TabPanel>
       </Dialog>
 
