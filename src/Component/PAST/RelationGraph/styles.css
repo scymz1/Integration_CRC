@@ -122,4 +122,8 @@
   background-color: #ececea	;
 }
 
+.MuiCardHeader-title::last-letter{
+  font-size: 200%;
+}
+
   
