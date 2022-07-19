@@ -8,18 +8,16 @@ import Home2 from "./Component/HomePage-darkmode/home";
 import OptionSelector from "./Component/util/optionSelector";
 import PASTApp from "./Component/PAST/PASTApp";
 import Map from './Component/VoyagePage/mapping/Map2';
-import {Provider} from 'react-redux'
-import {createStore} from 'redux';
-import {Reducer} from "./reducers";
+import { ThemeProvider } from '@mui/material/styles';
+import {theme} from "./Theme";
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const store = createStore(Reducer);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>}/>
@@ -35,8 +33,8 @@ root.render(
             <Route path="optionSelector" element={<OptionSelector/>}/>
           </Routes>
         </BrowserRouter>
-      </QueryClientProvider>
-    </Provider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
