@@ -134,7 +134,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      //console.log("Repsonse:", response.data)
+      console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 

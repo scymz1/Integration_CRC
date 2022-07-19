@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
+import ReactDOM from 'react-dom';
+import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
 import Radio from '@mui/material/Radio';
@@ -68,6 +69,8 @@ export default function MapBoundingBox(props){
 
     useEffect(() => {
 
+        console.log("Request: ", radioOptions)
+
         if(radioOptions=="embarkation"){
             set_map_search_object({
             ...search_object,
@@ -76,6 +79,7 @@ export default function MapBoundingBox(props){
         });
         }
         else{
+            console.log("Disembarkation")
             set_map_search_object({
             ...search_object,
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
@@ -91,46 +95,75 @@ export default function MapBoundingBox(props){
 
     const getRadioValue = (event) => {
         onChangeRadioOption(event.target.value);
-        console.log(radioOptions);
+        SetselectMode(true)
+        console.log("Radio: ", radioOptions);
     }
 
     return (
         <div>
             <FormControl>
-            <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
-            <RadioGroup
-                row
-                aria-labelledby="boundingBoxFilter"
-                defaultValue="embarkation"
-                name="radio-buttons-group"
-                onChange={getRadioValue}
-            >
-                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
-            </RadioGroup>
+                <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="boundingBoxFilter"
+                    defaultValue="embarkation"
+                    name="radio-buttons-group"
+                    onChange={getRadioValue}
+                >
+                    <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+                    <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+                </RadioGroup>
             </FormControl>
 
         <br/>
 
-        <FormControl>
-        <FormLabel id="optionFilter">Component Option Choice </FormLabel>
-        <RadioGroup
-            row
-            aria-labelledby="optionFilter"
-            defaultValue= "Both"
-            name="radio-buttons-group"
-        >
-            <FormControlLabel value="Map" control={<Radio />} label="Map" />
-            <FormControlLabel value="Sankey" control={<Radio />} label="Sankey" />
-            <FormControlLabel value="Both" control={<Radio />} label="Both" />
-        </RadioGroup>
-        </FormControl>
+            <FormControl>
+                <FormLabel id="optionFilter">Component Option Choice </FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="optionFilter"
+                    defaultValue= "Both"
+                    name="radio-buttons-group"
+                >
+                    <FormControlLabel value="Map" control={<Radio />} label="Map" />
+                    <FormControlLabel value="Sankey" control={<Radio />} label="Sankey" />
+                    <FormControlLabel value="Both" control={<Radio />} label="Both" />
+                </RadioGroup>
+            </FormControl>
 
              
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={2.5} 
-            minZoom={1.8} 
-            maxBoundsViscosity={0.5} style={{ height: "100vh" }}>
+            
+            <MapContainer center={position} zoom={2.5} minZoom={1.8}  style={{ height: "100vh" }}>
+               
+                <LayersControl position="topright">
+                    <Button>
+                        "Testing"
+                    </Button>
+                </LayersControl>
+
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{
+                                                                                    e.stopPropagation();
+                                                                                    e.preventDefault();
+                                                                                    SetselectMode(true);
+                                                                                }}> 
+                        Select Bounding Box
+                    </Button>
+                    <FormControl>
+                        <RadioGroup
+                            row
+                            aria-labelledby="boundingBoxFilter"
+                            defaultValue="embarkation"
+                            name="radio-buttons-group"
+                            onChange={getRadioValue}
+                        >
+                            <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+                            <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+                        </RadioGroup>
+                    </FormControl>
+                </Control>
+
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -146,25 +179,10 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
+                
+
                 <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
-                <Control prepend position='bottomright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
-        e.preventDefault();SetselectMode(true);}}> 
-                    Select Bounding Box
-                        <FormControl>
-                            <RadioGroup
-                                row
-                                aria-labelledby="boundingBoxFilter"
-                                defaultValue="embarkation"
-                                name="radio-buttons-group"
-                                onChange={getRadioValue}
-                            >
-                                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Button>
-                </Control>
+            
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
@@ -184,10 +202,7 @@ export default function MapBoundingBox(props){
 
             </MapContainer>
             </FullScreen>
-            {/* <p>longitude1: {longitude1}</p>
-            <p>longitude2: {longitude2}</p>
-            <p>latitude1: {latitude1}</p>
-            <p>latitude2: {latitude2}</p> */}
+
         </div>
       
     );
