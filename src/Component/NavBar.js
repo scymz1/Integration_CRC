@@ -13,10 +13,15 @@ import { Link } from "react-router-dom";
 import Icon from '@mui/material/Icon';
 import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {switchTheme} from "../Theme";
+import {ThemeProvider} from "@mui/material/styles";
+import {useState} from "react";
+import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object} = props
+  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = props
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -24,7 +29,7 @@ export default function ResponsiveAppBar(props) {
     setAnchorElNav(null);
   };
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" color={dataSet === "0" ? "primary" : "secondary"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -107,43 +112,57 @@ export default function ResponsiveAppBar(props) {
           >
             Voyages
           </Typography>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            alignItems="flex-end"
-            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
-          >
-            <Stack spacing={4} direction={"row"}>
+          <ThemeProvider theme={switchTheme}>
+            <Stack spacing={4} direction={"row"} justifyContent="flex-end"
+                   alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {search_object?
                 <ToggleButtonGroup
-                  color="dataSetTheme"
-                  value={search_object.dataset[0]}
+                  // color="primary"
+                  value={dataSet}
                   exclusive
-                  onChange={(event) =>
+                  onChange={(event) => {
                     set_search_object({
                       ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
-                  }
+                    setDataSet(event.target.value)
+                  }}
+                  sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
+                  size={"small"}
                 >
-                  <ToggleButton value={"0"}>Trans-Atlantic</ToggleButton>
-                  <ToggleButton value={"1"}>Intra-American</ToggleButton>
+                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"}>Trans-Atlantic</ToggleButton>
+                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"}>Intra-American</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
 
               {typeForTable?
                 <ToggleButtonGroup
-                  color="secondary"
+                  // color="type"
                   value={props.typeForTable}
                   exclusive
-                  onChange={(event) => setTypeForTable(event.target.value)}
+                  onChange={(event) => {
+                    switch (event.target.value){
+                      case "slaves":
+                        set_search_object({
+                        ...search_object,
+                        dataset: [dataSet, dataSet]
+                        })
+                        break;
+                      case "enslavers":
+                        set_search_object(_.omit(search_object, "dataset"));
+                        break;
+                    }
+                    setTypeForTable(event.target.value)
+                  }}
+                  // sx={{background: "#42a5f5"}}
+                  size={"small"}
                 >
                   <ToggleButton value="slaves">Slaves</ToggleButton>
                   <ToggleButton value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
             </Stack>
-          </Box>
+          </ThemeProvider>
 
           <Box
             display="flex"

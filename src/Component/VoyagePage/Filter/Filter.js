@@ -27,8 +27,7 @@ export const AppContext = React.createContext();
 const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
-
+    const {options_tree, search_object, set_search_object, endpoint, , nested_tree, dataSet} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
@@ -70,7 +69,7 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky">
+    <AppBar position="sticky" color={dataSet === "0" ? "primary" : "secondary"}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
