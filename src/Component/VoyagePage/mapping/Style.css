@@ -15,7 +15,7 @@
     padding: 0;
   }
 
-  div.leaflet-top.leaflet-right{ display: none !important; width: 0px !important; height: 0px !important; }
+  /* div.leaflet-top.leaflet-right{ display: none !important; width: 0px !important; height: 0px !important; } */
   
   .marker-cluster-small {
     background-color: #49afa5 !important;
