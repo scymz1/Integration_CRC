@@ -27,8 +27,7 @@ export const AppContext = React.createContext();
 const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
-
+    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
@@ -70,7 +69,7 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky">
+    <AppBar position="sticky" color={dataSet === "0" ? "primary" : "secondary"}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
@@ -79,15 +78,19 @@ export default function Filter(props) {
         >
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
-        <Grid container direction="row" spacing={1}>
-            {
-              Object.keys(nested_tree).map((key) => {
-                return(
-                  <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
-                )
-              })
-            }
-        </Grid>
+        {!drawerOpen ?
+            <Typography>Filter</Typography>
+        :
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(nested_tree).map((key) => {
+                    return(
+                      <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                    )
+                  })
+                }
+            </Grid>
+        }
       </Toolbar>
     </AppBar>
     <Drawer
@@ -95,12 +98,12 @@ export default function Filter(props) {
         variant="persistent"
         anchor="left"
         open={drawerOpen}
-        docked={true}
         PaperProps={{ sx: {width: "25%"} }}
         style={{ position:'relative', zIndex:2 }}
     >
         <Toolbar />
         <Toolbar />
+        <Divider />
         <Grid 
             container 
             spacing={0} 
@@ -140,7 +143,7 @@ export default function Filter(props) {
                 </IconButton>
             </Grid>
         </Grid>
-      </Drawer>
+    </Drawer>
     </AppContext.Provider>
   );
 }

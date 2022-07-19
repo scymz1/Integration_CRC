@@ -1,8 +1,8 @@
 {
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
-    "label": "Id",
-    "flatlabel": "Id"
+    "label": "ID",
+    "flatlabel": "ID"
   },
   "post_disembark_location": {
     "type": "table",
@@ -10942,7 +10942,7 @@
   "transactions__transaction__voyage": {
     "type": "table",
     "label": "voyage",
-    "flatlabel": "Enslavement Relation (Voyage)"
+    "flatlabel": "Voyage II"
   },
   "transactions__transaction__voyage__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
