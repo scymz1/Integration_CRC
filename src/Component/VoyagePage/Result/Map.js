@@ -95,6 +95,15 @@ export default function MapBoundingBox(props){
         console.log(radioOptions);
     }
 
+    const SwitchBoundingBoxSelection = (event) => {
+        if(radioOptions=="embarkation"){
+            onChangeRadioOption("disembarkation");
+        }
+        else{
+            onChangeRadioOption("embarkation");
+        }
+    }
+
     return (
         <div>
             {/* <FormControl>
@@ -137,20 +146,24 @@ export default function MapBoundingBox(props){
                     <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
         e.preventDefault();SetselectMode(true);}}> 
                     Select Bounding Box
-                        <FormControl>
-                            <RadioGroup
-                                row
-                                aria-labelledby="boundingBoxFilter"
-                                defaultValue="embarkation"
-                                name="radio-buttons-group"
-                                onChange={getRadioValue}
-                            >
-                                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
-                            </RadioGroup>
-                        </FormControl>
                     </Button>
                 </Control>
+
+                {
+                    radioOptions=="embarkation"?
+                        <Control prepend position='bottomright' >
+                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                            Select bounding box model: Embarkation
+                            </Button>
+                        </Control>
+                        :
+                        <Control prepend position='bottomright' >
+                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                            Select bounding box model: Disembarkation
+                            </Button>
+                        </Control>
+                }
+
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
@@ -180,4 +193,16 @@ export default function MapBoundingBox(props){
 
 }
 
-
+{/* <FormControl>
+<FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
+<RadioGroup
+    row
+    aria-labelledby="boundingBoxFilter"
+    defaultValue="embarkation"
+    name="radio-buttons-group"
+    onChange={getRadioValue}
+>
+    <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+    <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+</RadioGroup>
+</FormControl> */}
