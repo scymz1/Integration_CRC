@@ -48,8 +48,11 @@ export default function Filter(props) {
         var raw = item.split("***")
         var varName = raw[0]
         let newObject = {...search_object};
+
+        console.log("New search object: ", search_object)
         delete newObject[varName];
         set_search_object(newObject); 
+        console.log("After deletion: ", search_object)
         setOutput(output.filter((e)=>e!==item))
         setLabels(labels.filter((e)=>e.option!==varName))
     };

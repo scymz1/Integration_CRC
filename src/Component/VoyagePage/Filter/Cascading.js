@@ -75,8 +75,10 @@ function Cascading(props) {
         setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
-        if(!search_object[option])
+        // if(!search_object[option]){
+        if(!output.includes(out)){
             setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        }
         else
             alert("The variable has been selected.")
         //console.log("OUTPUT STRING ARRAY: ----->",output)
