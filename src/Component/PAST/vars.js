@@ -207,23 +207,6 @@ export const enslaved_var_list = {
     },
 
     "transactions": {
-        "transactions__transaction__voyage": {
-            "transactions__transaction__voyage__id": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_ship__ship_name": null,
-        },
-
         "transactions__transaction__date_yyyy": null,
         "transactions__transaction__amount": null,
         "transactions__transaction__place__geo_location__name": null,
@@ -231,5 +214,22 @@ export const enslaved_var_list = {
         "transactions__transaction__enslavers__role__role": null,
         "transactions__transaction__text_ref": null,
         "transactions__transaction__source__full_ref": null,
-    }
+    },
+
+    "transactions__transaction__voyage": {
+        "transactions__transaction__voyage__id": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_ship__ship_name": null,
+    },
 }
