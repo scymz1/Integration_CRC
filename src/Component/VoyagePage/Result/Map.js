@@ -59,9 +59,9 @@ export default function MapBoundingBox(props){
     const [latitude2, onChangelatitude2] = React.useState(90);
 
     
-    const {search_object, endpoint} = React.useContext(props.context);
+    const {set_search_object, search_object, endpoint} = React.useContext(props.context);
     
-    const [map_search_object, set_map_search_object] = useState(search_object);
+    //const [map_search_object, set_map_search_object] = useState(search_object);
 
     const [selectMode, SetselectMode] = useState(false);
     
@@ -69,21 +69,27 @@ export default function MapBoundingBox(props){
 
     useEffect(() => {
         if(radioOptions=="embarkation"){
-            set_map_search_object({
+            let newObject = { ...search_object };
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
+            set_search_object(newObject);
+            set_search_object({
             ...search_object,
             "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
             "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
         });
         }
         else{
-            set_map_search_object({
+            let newObject = { ...search_object };
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
+            set_search_object(newObject);
+            set_search_object({
             ...search_object,
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
         });
         }
     
-    }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
+    }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
   
     const position = [0, -20];
 
@@ -106,25 +112,6 @@ export default function MapBoundingBox(props){
 
     return (
         <div>
-            {/* <FormControl>
-            <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
-            <RadioGroup
-                row
-                aria-labelledby="boundingBoxFilter"
-                defaultValue="embarkation"
-                name="radio-buttons-group"
-                onChange={getRadioValue}
-            >
-                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
-            </RadioGroup>
-            </FormControl> */}
-
-        <br/>
-
-      
-
-             
             <FullScreen handle={handle}>
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
@@ -141,7 +128,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
+                <ReadFeature search_object={search_object}  radio = {radioOptions}/>
                 <Control prepend position='bottomright' >
                     <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
         e.preventDefault();SetselectMode(true);}}> 
