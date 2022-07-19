@@ -63,7 +63,7 @@ export function ReadFeature(props) {
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
 
-  const [groupby_fields, setGroupBy] = useState(groupby_fields_port); // used for aggroutes useEffect
+  const [groupby_fields, setGroupBy] = useState(groupby_fields_region); // used for aggroutes useEffect
 
   const map = useMap();
 
