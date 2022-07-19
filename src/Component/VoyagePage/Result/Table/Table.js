@@ -92,7 +92,7 @@ function Table(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortingReq, field, direction, search_object, endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
