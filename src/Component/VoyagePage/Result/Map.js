@@ -128,10 +128,13 @@ export default function MapBoundingBox(props){
 
              
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={2.5} 
+            minZoom={1.8} 
+            maxBoundsViscosity={0.5} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
+                            noWrap={true}
                             url={normal}
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         /> 

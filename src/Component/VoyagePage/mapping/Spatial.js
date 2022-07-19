@@ -74,7 +74,7 @@ export function ReadFeature(props) {
   var markers = L.markerClusterGroup({
     iconCreateFunction: function(cluster) {
       return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>' , 
-                          className: ' leaflet-div-icon2', 
+                          className: ' cluster-small', 
                           });
 	}
   });
