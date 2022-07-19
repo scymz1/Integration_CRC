@@ -127,12 +127,12 @@ return fetch("https://voyages3-api.crc.rice.edu/voyage/crosstabs", requestOption
     //   })
     // })
 
-    console.log(
-      {
-        nodes: nodes,
-        links:links
-      }
-    )
+    // console.log(
+    //   {
+    //     nodes: nodes,
+    //     links:links
+    //   }
+    // )
 
 
     return {

@@ -51,6 +51,7 @@ function FullscreenButton(props){
 export default function MapBoundingBox(props){
 
     const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
+   
     
     const [longitude1, onChangelongitude1] = React.useState(-360);
     const [longitude2, onChangelongitude2] = React.useState(359.99);
@@ -61,11 +62,12 @@ export default function MapBoundingBox(props){
     const {search_object, endpoint} = React.useContext(props.context);
     
     const [map_search_object, set_map_search_object] = useState(search_object);
+
+    const [selectMode, SetselectMode] = useState(false);
     
     const handle = useFullScreenHandle();
 
     useEffect(() => {
-
         if(radioOptions=="embarkation"){
             set_map_search_object({
             ...search_object,
@@ -80,9 +82,10 @@ export default function MapBoundingBox(props){
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
         });
         }
+    
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
   
-    const position = [0, 0];
+    const position = [0, -20];
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
@@ -92,9 +95,18 @@ export default function MapBoundingBox(props){
         console.log(radioOptions);
     }
 
+    const SwitchBoundingBoxSelection = (event) => {
+        if(radioOptions=="embarkation"){
+            onChangeRadioOption("disembarkation");
+        }
+        else{
+            onChangeRadioOption("embarkation");
+        }
+    }
+
     return (
         <div>
-            <FormControl>
+            {/* <FormControl>
             <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
             <RadioGroup
                 row
@@ -106,27 +118,15 @@ export default function MapBoundingBox(props){
                 <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
                 <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
             </RadioGroup>
-            </FormControl>
+            </FormControl> */}
 
         <br/>
 
-        <FormControl>
-        <FormLabel id="optionFilter">Component Option Choice </FormLabel>
-        <RadioGroup
-            row
-            aria-labelledby="optionFilter"
-            defaultValue= "Both"
-            name="radio-buttons-group"
-        >
-            <FormControlLabel value="Map" control={<Radio />} label="Map" />
-            <FormControlLabel value="Sankey" control={<Radio />} label="Sankey" />
-            <FormControlLabel value="Both" control={<Radio />} label="Both" />
-        </RadioGroup>
-        </FormControl>
+      
 
              
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={3} minZoom={2.2} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -142,8 +142,30 @@ export default function MapBoundingBox(props){
                     </BaseLayer>
                 </LayersControl>
                 <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
+                <Control prepend position='bottomright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
+        e.preventDefault();SetselectMode(true);}}> 
+                    Select Bounding Box
+                    </Button>
+                </Control>
+
+                {
+                    radioOptions=="embarkation"?
+                        <Control prepend position='bottomright' >
+                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                            Select bounding box model: Embarkation
+                            </Button>
+                        </Control>
+                        :
+                        <Control prepend position='bottomright' >
+                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                            Select bounding box model: Disembarkation
+                            </Button>
+                        </Control>
+                }
+
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2}  />
+                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
                     handle.active?
                         <Control prepend position='topleft' >
@@ -171,4 +193,16 @@ export default function MapBoundingBox(props){
 
 }
 
-
+{/* <FormControl>
+<FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
+<RadioGroup
+    row
+    aria-labelledby="boundingBoxFilter"
+    defaultValue="embarkation"
+    name="radio-buttons-group"
+    onChange={getRadioValue}
+>
+    <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
+    <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+</RadioGroup>
+</FormControl> */}
