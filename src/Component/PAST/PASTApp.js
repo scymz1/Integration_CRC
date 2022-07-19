@@ -100,7 +100,7 @@ export default function PASTApp(props) {
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
       options_tree, options_flat, search_object, set_search_object,
-      menu_label, endpoint, windowRef, typeForTable, setTypeForTable,
+      menu_label, endpoint, setEndpoint, windowRef, typeForTable, setTypeForTable,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData
     }}>
       <PAST/>
