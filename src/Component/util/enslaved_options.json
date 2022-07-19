@@ -10942,7 +10942,7 @@
   "transactions__transaction__voyage": {
     "type": "table",
     "label": "voyage",
-    "flatlabel": "Enslavement Relation (Voyage)"
+    "flatlabel": "Voyage II"
   },
   "transactions__transaction__voyage__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
