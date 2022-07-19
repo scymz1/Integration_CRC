@@ -15,11 +15,11 @@ import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {switchTheme} from "../Theme";
 import {ThemeProvider} from "@mui/material/styles";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = props
+  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -29,7 +29,7 @@ export default function ResponsiveAppBar(props) {
     setAnchorElNav(null);
   };
   return (
-    <AppBar position="sticky" color={dataSet === "0" ? "primary" : "secondary"}>
+    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -135,7 +135,7 @@ export default function ResponsiveAppBar(props) {
                 </ToggleButtonGroup>:
                 null}
 
-              {typeForTable?
+              {typeForTable && dataSet === "0"?
                 <ToggleButtonGroup
                   // color="type"
                   value={props.typeForTable}
@@ -154,11 +154,11 @@ export default function ResponsiveAppBar(props) {
                     }
                     setTypeForTable(event.target.value)
                   }}
-                  // sx={{background: "#42a5f5"}}
+                  // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton value="slaves">Slaves</ToggleButton>
-                  <ToggleButton value="enslavers">Enslavers</ToggleButton>
+                  <ToggleButton sx={{background: "#42a5f5"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
             </Stack>
