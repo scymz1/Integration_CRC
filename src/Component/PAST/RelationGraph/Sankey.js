@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Typography, Popover, Card, Grid } from "@mui/material";
+import { Box, Button, Typography, Popover, Card, Grid, CircularProgress} from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import EastIcon from '@mui/icons-material/East';
 import './styles.css'
@@ -299,7 +299,8 @@ export default function Sankey(props) {
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button> */}
       <br/>
-      {graph?
+      {!graph ?
+        <CircularProgress/> :
         <svg 
         className="canvas"
         width={CANVAS_WIDTH+30}
@@ -381,7 +382,8 @@ export default function Sankey(props) {
                     fill="none"
                     stroke={link.color}
                     opacity="0.5"
-                    strokeWidth="5"/>
+                    strokeWidth="5"
+                  />
                   <text fontSize = "15" fill={link.color} fontWeight="bold" fontFamily="arial">
                     <textPath href = {`#sankey-link-${link.index}`} 
                               startOffset="50%" 
@@ -393,7 +395,7 @@ export default function Sankey(props) {
               )
               })}
         </svg>
-      :null}
+      }
     </div>
   )
 }
