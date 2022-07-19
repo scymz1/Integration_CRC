@@ -43,7 +43,7 @@ export default function PASTTable(props) {
     typeForTable,
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
-
+  console.log(endpoint)
   useEffect(() =>{
     if (typeForTable == "slaves") {
       setCols(enslaved_default_list);

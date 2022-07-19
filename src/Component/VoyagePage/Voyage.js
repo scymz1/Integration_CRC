@@ -69,14 +69,7 @@ export default function Voyage() {
 
   return (
     <div>
-      <ResponsiveAppBar
-        search_object={search_object}
-        set_search_object={set_search_object}
-        typeForTable={typeForTable}
-        setTypeForTable={setTypeForTable}
-        dataSet={dataSet}
-        setDataSet={setDataSet}
-      />
+      <ResponsiveAppBar context={VoyageContext}/>
       <Filter context={VoyageContext}/>
       <Box sx={{bgcolor: 'background.paper', display: 'flex',width:width}}>
         <Tabs

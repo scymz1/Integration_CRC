@@ -19,7 +19,7 @@ export default function PASTApp(props) {
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
   const [typeForTable, setTypeForTable] = useState("slaves");
-  const [dataSet, setDataSet] = useState("0")
+  const [dataSet, setDataSet] = useState("1")
   const [queryData, setQueryData] = React.useState({
     slaves: [],
     type: "slaves",
@@ -74,7 +74,7 @@ export default function PASTApp(props) {
         case "enslavers": return "past/enslavers/"
       }
     })())
-    // console.log("queryData.type", typeForTable)
+    console.log("typeForTable", typeForTable)
   }, [typeForTable])
 
   useEffect(() => {
