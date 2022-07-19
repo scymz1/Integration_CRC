@@ -23,7 +23,12 @@ var linkLayers = {};
 var groupby_fields_region = [
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
 	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
+];
 
+// only use for pivot table
+var groupby_fields_region_name = [
+  "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name",
+	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
 ];
 
 var groupby_fields_port = [
@@ -31,10 +36,17 @@ var groupby_fields_port = [
 	'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id'
 ];
 
+// only use for pivot table
+var groupby_fields_port_name = [
+  'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name',
+	'voyage_itinerary__imp_principal_port_slave_dis__geo_location__name'
+];
+
 var value_field_tuple = [
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
   "sum",
 ];
+
 var cachename = "voyage_maps";
 var dataset = [0, 0];
 var output_format = "geosankey";
@@ -50,24 +62,17 @@ export function ReadFeature(props) {
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
-  const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
 
-  const [groupby_fields, setGroupBy] = useState(groupby_fields_port);
+  const [groupby_fields, setGroupBy] = useState(groupby_fields_port); // used for aggroutes useEffect
 
   const map = useMap();
 
+  // Popup
+  const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
+  const [area, setArea] = useState(groupby_fields_region[0]); // port or region
   const [complete_object, set_complete_object] = useState({
-    voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id: [
-      20931, 20931,
-    ],
-    groupby_fields: [
-      "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name",
-      "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
-    ],
-    value_field_tuple: [
-      "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
-      "sum",
-    ],
+    groupby_fields: groupby_fields_region_name,
+    value_field_tuple: value_field_tuple,
     cachename: ["voyage_pivot_tables"],
   });
 
@@ -85,15 +90,24 @@ export function ReadFeature(props) {
 
   map.on('zoomend', function() {
     
-    console.log("Zoom: ", map.getZoom())
+    //console.log("Zoom: ", map.getZoom())
     
     if(map.getZoom() < 8) {
-      console.log("Set Region")
       setGroupBy(groupby_fields_region)
+      set_complete_object({
+        ...complete_object,
+        groupby_fields: groupby_fields_region_name,
+      });
+      setArea(groupby_fields_region[0]);
     }
     else {
-      console.log("Set Port")
+      //console.log("Set Port")
       setGroupBy(groupby_fields_port)
+      set_complete_object({
+        ...complete_object,
+        groupby_fields: groupby_fields_port_name,
+      });
+      setArea(groupby_fields_port[0]);
     }
 
   })
@@ -149,6 +163,15 @@ export function ReadFeature(props) {
 
   },[disembark])
 
+  useEffect(() =>{
+    let point = complete_object[area];
+    if (area === groupby_fields_region[0]){
+        delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
+      }
+    else if (area === groupby_fields_port[0]) {
+        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+     }
+  },[area])
 
   useEffect(() => {
     for (var i in map._layers) {
@@ -194,55 +217,41 @@ export function ReadFeature(props) {
         
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
-          console.log("🚀 ~ file: Spatial.js ~ line 262 ~ mouseover complete_object", complete_object)
-
-            let tmp =
-              complete_object[
-                "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id"
-              ];
-            console.log("ID: ", layer.feature.id)
-            tmp[0] = layer.feature.id;
-            tmp[1] = layer.feature.id;
-            set_complete_object({
-              ...complete_object,
-              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-                tmp,
-            });
-
+            complete_object[area] = [layer.feature.id, layer.feature.id];
             if (disembark === diskey ){
-              console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ DISEMBARK")  
-                let tmp =
-            complete_object[
-              'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-            ];
+          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ DISEMBARK")  
+          //       let tmp =
+          //   complete_object[
+          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
+          //   ];
     
-          tmp[0] = layer.feature.id;
-          tmp[1] = layer.feature.id;
-            set_complete_object({
-              ...complete_object,
-              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-                tmp,
-            });
+          // tmp[0] = layer.feature.id;
+          // tmp[1] = layer.feature.id;
+          //   set_complete_object({
+          //     ...complete_object,
+          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
+          //       tmp,
+          //   });
              }
              else{
-              console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ EMBARK")
-            let tmp =
-            complete_object[
-              'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-            ];
-            console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
-          tmp[0] = layer.feature.id;
-          tmp[1] = layer.feature.id;
-            set_complete_object({
-              ...complete_object,
-              voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-                tmp,
-            });
+          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ EMBARK")
+          //   let tmp =
+          //   complete_object[
+          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
+          //   ];
+          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
+          // tmp[0] = layer.feature.id;
+          // tmp[1] = layer.feature.id;
+          //   set_complete_object({
+          //     ...complete_object,
+          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
+          //       tmp,
+          //   });
 
-            console.log("🚀 ~ file: Spatial.js ~ line 172 ~ mouseover  tmp", tmp)
+          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ mouseover  tmp", tmp)
               
-            //  }
-            console.log("🚀 ~ file: Spatial.js ~ line 231 ~ before tmp complete_object", complete_object)
+          //   //  }
+          //   console.log("🚀 ~ file: Spatial.js ~ line 231 ~ before tmp complete_object", complete_object)
             
           //   let tmp =
           //   complete_object[
@@ -281,9 +290,11 @@ export function ReadFeature(props) {
             );
             // if we use bindPopup, then we have to use mouseover,
             // otherwise, only the second click can show the popup
-            L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-              maxWidth: "500",
-            });
+            // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
+            //   maxWidth: "500",
+            // });
+
+            markers.addLayer(layer).bindPopup(container, {maxWidth:"500"})
             // if we use click & popup.setContent, we will find the location of marker is incorrect.
             // L.popup({
             //   'maxWidth': 'auto',
@@ -293,13 +304,8 @@ export function ReadFeature(props) {
             //    .openOn(map);
           };
         })
-          // markers.addLayer(L.marker(layer["_latlng"], {icon: customIcon}));
           markers.addLayer(layer)
-        //   markers.addLayer(layer, {
-        //     pointToLayer: function (feature, latlng) {
-        //         return L.marker(latlng, {icon: customIcon});
-        //     }
-        // })
+
         },
       });
 
