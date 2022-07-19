@@ -101,12 +101,12 @@ export default function MapBoundingBox(props){
 
     return (
         <div>
-            <FormControl>
+            {/* <FormControl>
                 <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
                 <RadioGroup
                     row
                     aria-labelledby="boundingBoxFilter"
-                    defaultValue="embarkation"
+                    // defaultValue="embarkation"
                     name="radio-buttons-group"
                     onChange={getRadioValue}
                 >
@@ -115,7 +115,7 @@ export default function MapBoundingBox(props){
                 </RadioGroup>
             </FormControl>
 
-        <br/>
+        <br/> */}
 
             <FormControl>
                 <FormLabel id="optionFilter">Component Option Choice </FormLabel>
@@ -136,30 +136,26 @@ export default function MapBoundingBox(props){
             
             <MapContainer center={position} zoom={2.5} minZoom={1.8}  style={{ height: "100vh" }}>
                
-                <LayersControl position="topright">
-                    <Button>
-                        "Testing"
-                    </Button>
-                </LayersControl>
 
                 <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{
+                    {/* <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{
                                                                                     e.stopPropagation();
                                                                                     e.preventDefault();
                                                                                     SetselectMode(true);
                                                                                 }}> 
                         Select Bounding Box
-                    </Button>
-                    <FormControl>
+                    </Button> */}
+                    <FormControl variant="filled">
                         <RadioGroup
                             row
                             aria-labelledby="boundingBoxFilter"
-                            defaultValue="embarkation"
+                            // defaultValue="embarkation"
                             name="radio-buttons-group"
+                            value={radioOptions}
                             onChange={getRadioValue}
                         >
-                            <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                            <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
+                            <FormControlLabel value="embarkation" control={<Radio  size="small"/>} label="embarkation" />
+                            <FormControlLabel value="disembarkation" control={<Radio  size="small"/>} label="disembarkation" />
                         </RadioGroup>
                     </FormControl>
                 </Control>
