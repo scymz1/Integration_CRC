@@ -1,6 +1,6 @@
 import ResponsiveAppBar from "../NavBar";
 import * as React from "react";
-import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide} from "@mui/material";
+import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide, Grid} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Sankey from "./RelationGraph/Sankey"
 import Network from './RelationGraph/Network'
@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data} = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -139,7 +139,11 @@ export default function PAST() {
           <Network/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Story target={500001} type="slaves"/>
+          <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
+            {data.map((item) => {
+              return <Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
+            })}
+          </Grid>
         </TabPanel>
       </Dialog>
 

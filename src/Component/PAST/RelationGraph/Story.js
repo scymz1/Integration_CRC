@@ -80,7 +80,7 @@ export default function Story (props) {
       <CardContent sx={{pt:0}}>
         <List dense = {true} disablePadding={true}>
           <ListItem  disablePadding={true}><ListItemText primary="Slave ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
-          <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={_.get(target, ["modern_name"], "No Record") == null ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={(_.get(target, ["modern_name"], "No Record") == null) || (_.get(target, ["modern_name"], "No Record") == "") ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Sex" secondary={_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 0 ? "Female" : "No Record"}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Age" secondary={_.get(target, "age", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Fate" secondary={_.get(target, ["captive_fate", "name"], "No Record")}/></ListItem>
