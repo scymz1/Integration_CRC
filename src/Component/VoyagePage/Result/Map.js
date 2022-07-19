@@ -84,16 +84,8 @@ export default function MapBoundingBox(props){
         }
     
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
-<<<<<<< HEAD
-
- 
-
- 
-    const position = [0, 0];
-=======
   
     const position = [0, -20];
->>>>>>> e2a042392596d5e7483293c311cc53c2ed6b18ff
 
     const normal = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const noBorder = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`

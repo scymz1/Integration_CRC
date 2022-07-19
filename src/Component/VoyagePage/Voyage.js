@@ -38,7 +38,7 @@ export default function Voyage() {
   const [showSankey, setShowSankey] = React.useState(false);
   const { id } = useParams();
   const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
-  const {id} = useParams();
+
 
   React.useEffect(() => {
     switch (id) {
