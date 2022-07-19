@@ -8,8 +8,8 @@ export const theme = createTheme({
 export const switchTheme = createTheme({
   palette: {
     mode: 'dark',
-    dataSet: {
-      main:"#1b5e20"
+    blackMode: {
+      main:"#424242"
     },
     type:{
       main:"#311b92"

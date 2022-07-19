@@ -15,11 +15,11 @@ import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {switchTheme} from "../Theme";
 import {ThemeProvider} from "@mui/material/styles";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = props
+  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -29,7 +29,7 @@ export default function ResponsiveAppBar(props) {
     setAnchorElNav(null);
   };
   return (
-    <AppBar position="sticky" color={dataSet === "0" ? "primary" : "secondary"}>
+    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -117,7 +117,7 @@ export default function ResponsiveAppBar(props) {
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {search_object?
                 <ToggleButtonGroup
-                  // color="primary"
+                  color="blackMode"
                   value={dataSet}
                   exclusive
                   onChange={(event) => {
@@ -130,15 +130,15 @@ export default function ResponsiveAppBar(props) {
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"}>Trans-Atlantic</ToggleButton>
-                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"}>Intra-American</ToggleButton>
+                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
+                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"} disabled={typeForTable === "enslavers"}>Intra-American</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
 
               {typeForTable?
                 <ToggleButtonGroup
-                  // color="type"
-                  value={props.typeForTable}
+                  color="blackMode"
+                  value={typeForTable}
                   exclusive
                   onChange={(event) => {
                     switch (event.target.value){
@@ -154,11 +154,12 @@ export default function ResponsiveAppBar(props) {
                     }
                     setTypeForTable(event.target.value)
                   }}
-                  // sx={{background: "#42a5f5"}}
+                  // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
+                  disabled={dataSet==="1"}
                 >
-                  <ToggleButton value="slaves">Slaves</ToggleButton>
-                  <ToggleButton value="enslavers">Enslavers</ToggleButton>
+                  <ToggleButton sx={{background: "#42a5f5"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
             </Stack>

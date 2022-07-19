@@ -42,7 +42,6 @@ export default function PAST() {
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
-
   function handleChange(e) {
     if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
   };
@@ -62,14 +61,7 @@ export default function PAST() {
 
   return (
     <div>
-      <ResponsiveAppBar
-        search_object={search_object}
-        set_search_object={set_search_object}
-        typeForTable={typeForTable}
-        setTypeForTable={setTypeForTable}
-        dataSet={dataSet}
-        setDataSet={setDataSet}
-      />
+      <ResponsiveAppBar context={PASTContext}/>
 
       {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
@@ -109,7 +101,7 @@ export default function PAST() {
         fullScreen
         open={dialogopen}
         onClose={handleClose}
-        scroll={scroll}
+        scroll="body"
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
