@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object,} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -67,6 +67,8 @@ export default function PAST() {
         set_search_object={set_search_object}
         typeForTable={typeForTable}
         setTypeForTable={setTypeForTable}
+        dataSet={dataSet}
+        setDataSet={setDataSet}
       />
 
       {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>

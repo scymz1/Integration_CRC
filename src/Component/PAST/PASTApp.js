@@ -7,7 +7,8 @@ import * as enslaved_options_flat from "../util/enslaved_options.json"
 import * as enslaver_options_flat from "../util/enslaver_options.json"
 import { enslaver_var_list } from "./vars";
 import { enslaved_var_list } from "./vars";
-
+// import { columnOptions } from '../VoyagePage/Result/Table/tableVars';
+// import * as options_flat from '../util/options.json'
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
@@ -18,6 +19,7 @@ export default function PASTApp(props) {
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
   const [typeForTable, setTypeForTable] = useState("slaves");
+  const [dataSet, setDataSet] = useState("0")
   const [queryData, setQueryData] = React.useState({
     slaves: [],
     type: "slaves",
@@ -35,19 +37,23 @@ export default function PASTApp(props) {
     }
   })())
 
-  const options_flat = () => {
-    switch (typeForTable){
-      case "slaves": return enslaved_options_flat
-      case "enslavers": return enslaver_options_flat
-    }
-  }
+  // const options_flat = () => {
+  //   switch (typeForTable){
+  //     case "slaves": return enslaved_options_flat
+  //     case "enslavers": return enslaver_options_flat
+  //   }
+  // }
+  const options_flat = typeForTable === "slaves" ? enslaved_options_flat : enslaver_options_flat;
+  const nested_tree = typeForTable === "slaves" ? enslaved_var_list : enslaver_var_list;
 
-  const nested_tree = () => {
-    switch (typeForTable) {
-      case "slaves": return enslaved_var_list
-      case "enslavers": return enslaver_var_list
-    }
-  }
+  
+
+  // const nested_tree = () => {
+  //   switch (typeForTable) {
+  //     case "slaves": return enslaved_var_list
+  //     case "enslavers": return enslaver_var_list
+  //   }
+  // }
   // const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('past_option_tree',
   //   () => fetch(base_url + endpoint, {
   //     method: "OPTIONS",
@@ -127,7 +133,8 @@ export default function PASTApp(props) {
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
        endpoint, setEndpoint, windowRef, typeForTable, setTypeForTable,
-      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData
+      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
+      dataSet, setDataSet
     }}>
       <PAST/>
     </PASTContext.Provider>
