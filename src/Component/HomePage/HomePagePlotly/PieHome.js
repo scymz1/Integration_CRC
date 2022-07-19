@@ -2,9 +2,13 @@ import React, {useEffect, useState} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, Typography,Grid} from "@mui/material";
 import {donut_name_vars, donut_value_vars,} from "../../VoyagePage/Result/vars";
 import {Link, useNavigate} from "react-router-dom";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
+
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -18,6 +22,7 @@ const featuredPosts = {
 };
 
 function PieComponent() {
+  const [width, height] = useWindowSize()
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
@@ -53,8 +58,9 @@ function PieComponent() {
 
   return (
     <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
-      <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
-        <CardContent sx={{flex: "1 0 auto"}}>
+       <Grid container>
+        {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+        <Grid item sx={{width:"60%"}}>
           <Plot
             data={[
               {
@@ -64,14 +70,14 @@ function PieComponent() {
                 mode: "lines+markers",
               },
             ]}
-            layout={{width: 800, height: 600, title: "Pie Plot"}}
+            layout={{width: width>800 ? width*0.55: width * 1, height: width>800 ? height*0.9: height * 0.8, title: "Scatter Plot"}}
             config={{responsive: true}}
           />
-        </CardContent>
-      </Box>
-      <Box sx={{boxShadow: 4, margin: 2, padding: 2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+         </Grid>
+
+      <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+      <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
         <CardContent sx={{flex: "1 0 auto"}}>
-          <div>
             <CardContent>
               <Button
                 variant="text"
@@ -87,13 +93,14 @@ function PieComponent() {
               <Typography variant="subtitle1" paragraph>
                 {featuredPosts.description}
               </Typography>
-              <Button variant="text" type="button" onClick={GotoVoyagePage}>
+              {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
                 Continue reading...
-              </Button>
+              </Button> */}
             </CardContent>
-          </div>
         </CardContent>
       </Box>
+      </Grid>
+      </Grid>
     </Card>
   );
 }
