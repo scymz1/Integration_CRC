@@ -15,7 +15,7 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
-import RadioButton from "./radio";
+// import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 import {VoyageContext} from "../VoyageApp";
@@ -103,9 +103,9 @@ export default function Filter(props) {
                   )
                 })
               } */}
-              <Grid item xs={2}>
-                <RadioButton context={props.context}/>
-              </Grid>
+              {/*<Grid item xs={2}>*/}
+              {/*  <RadioButton context={props.context}/>*/}
+              {/*</Grid>*/}
               <Grid item xs={10}>
                 {output.map((item, index) => {
                   return(

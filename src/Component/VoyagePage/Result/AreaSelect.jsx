@@ -2,8 +2,18 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 
+
 export default function AreaSelect(props) {
   const map = useMap();
+
+  useEffect(()=>{
+    if(props.selectMode){
+      map.selectArea.setControlKey();
+    }
+    else{
+      map.selectArea.setControlKey(17);
+    }
+  },[props.selectMode]);
 
   useEffect(() => {
     if (!map.selectArea) return;
@@ -22,6 +32,7 @@ export default function AreaSelect(props) {
       drawbox.remove();
       drawbox.setBounds(e.bounds);
       drawbox.addTo(map);
+      props.SetselectMode(false);
     });
 
     // You can restrict selection area like this:
@@ -33,6 +44,7 @@ export default function AreaSelect(props) {
 
     // now switch it off
     map.selectArea.setValidate();
+    
   }, [map, props]);
 
   return null;

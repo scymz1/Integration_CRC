@@ -14,9 +14,11 @@ export default function PASTApp(props) {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
+  const [typeForTable, setTypeForTable] = useState("slaves");
   const [queryData, setQueryData] = React.useState({
-    targets: [],
-    type: "slave",
+    slaves: [],
+    type: "slaves",
+    enslavers:[]
   })
 
   const windowRef = useRef(null);
@@ -25,8 +27,8 @@ export default function PASTApp(props) {
 
   const [endpoint, setEndpoint] = useState((() => {
     switch (queryData.type) {
-      case "slave": return "past/enslaved/"
-      case "enslaver": return "past/enslavers/"
+      case "slaves": return "past/enslaved/"
+      case "enslavers": return "past/enslavers/"
     }
   })())
 
@@ -46,12 +48,18 @@ export default function PASTApp(props) {
   useEffect(() => {
     setEndpoint((() => {
       switch (queryData.type) {
-        case "slave": return "past/enslaved/"
-        case "enslaver": return "past/enslavers/"
+        case "slaves": return "past/enslaved/"
+        case "enslavers": return "past/enslavers/"
       }
     })())
+    const targets = (() => {
+      switch (queryData.type) {
+        case "slaves": return queryData.slaves
+        case "enslavers": return queryData.enslavers
+      }
+    })()
     const fetchData = async ()=> {
-      const promises = queryData.targets.map(target => {
+      const promises = targets.map(target => {
         let queryData = new FormData();
         queryData.append("id", target.toString());
         queryData.append("id", target.toString());
@@ -81,6 +89,7 @@ export default function PASTApp(props) {
 
 
   const [search_object, set_search_object] = useState({
+    'dataset':["1", "1"]
   })
 
   const [chipData, setChipData] = React.useState({});
@@ -88,16 +97,12 @@ export default function PASTApp(props) {
   if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   if (isLoading_flat || isLoading_tree) return <CircularProgress/>
   return (
-    <PASTContext.Provider value={{queryData, setQueryData, data, options_tree, options_flat, search_object, set_search_object, menu_label, endpoint, windowRef
-    ,modal: false,
-    id,
-    setId,
-    open,
-    setOpen,
-    info,
-    setInfo,
-    chipData,
-    setChipData}}>
+    <PASTContext.Provider value={{
+      queryData, setQueryData, data,
+      options_tree, options_flat, search_object, set_search_object,
+      menu_label, endpoint, windowRef, typeForTable, setTypeForTable,
+      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData
+    }}>
       <PAST/>
     </PASTContext.Provider>
   )

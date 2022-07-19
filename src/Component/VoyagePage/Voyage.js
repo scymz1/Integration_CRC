@@ -37,6 +37,8 @@ export default function Voyage() {
   const [value, setValue] = React.useState(0);
   const [showSankey, setShowSankey] = React.useState(false);
   const { id } = useParams();
+  const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
+  const {id} = useParams();
 
   React.useEffect(() => {
     switch (id) {
@@ -63,9 +65,14 @@ export default function Voyage() {
 
   return (
     <div>
-      <ResponsiveAppBar />
-      <Filter context={VoyageContext} />
-      <Box sx={{ bgcolor: "background.paper", display: "flex" }}>
+      <ResponsiveAppBar
+        search_object={search_object}
+        set_search_object={set_search_object}
+        typeForTable={typeForTable}
+        setTypeForTable={setTypeForTable}
+      />
+      <Filter context={VoyageContext}/>
+      <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
         <Tabs
           orientation="vertical"
           variant="scrollable"
