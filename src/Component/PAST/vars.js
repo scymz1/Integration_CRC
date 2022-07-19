@@ -2,18 +2,20 @@
 
 
 export const enslaver_default_list = [
-    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
-    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-    "alias__transactions__transaction__voyage__id",
-    "enslaver_sources__source__full_ref",
-    "enslaver_sources__text_ref",
-    "alias__transactions__transaction__date_yyyy",
-    "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-    "alias__transactions__transaction__place__geo_location__name",
+    "id",
+    "principal_alias",
     "principal_location__geo_location__name",
     "first_active_year",
     "last_active_year",
     "number_enslaved",
+    // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+    // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
+    "alias__transactions__transaction__voyage__id",
+    // "alias__transactions__transaction__date_yyyy",
+    // "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
+    // "alias__transactions__transaction__place__geo_location__name",
+    // "enslaver_sources__source__full_ref",
+    // "enslaver_sources__text_ref",
 ]
 
 export const enslaver_var_list = {
