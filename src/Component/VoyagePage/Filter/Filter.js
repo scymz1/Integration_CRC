@@ -1,5 +1,5 @@
-import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer} from "@mui/material";
-import {useContext} from "react";
+import { Grid, IconButton, AppBar, Toolbar, Popover, Drawer } from "@mui/material";
+import { useContext } from "react";
 // import {VoyageContext} from "../VoyageApp";
 
 import * as React from 'react';
@@ -20,75 +20,77 @@ import Cascading from './Cascading'
 // import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
-import {VoyageContext} from "../VoyageApp";
+import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
+const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
+  // const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
+  const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
+  const [labels, setLabels] = React.useState([]);
+  const [output, setOutput] = React.useState([]);
+  const [menuPosition, setMenuPosition] = React.useState(null);
 
-    const [labels, setLabels] = React.useState([]);
-    const [output, setOutput] = React.useState([]);
-    const [menuPosition, setMenuPosition] = React.useState(null);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+  // const open = Boolean(anchorEl);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-    // const [anchorEl, setAnchorEl] = React.useState(null);
-    // const open = Boolean(anchorEl);
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+  // Handle Menu Click and Close
+  //  const handleMenuClick = (event) => { 
+  //      setAnchorEl(event.currentTarget);
+  //  };
+  //  const handleMenuClose = () => {
+  //    setAnchorEl(null);
+  //  };
 
-    // Handle Menu Click and Close
-    //  const handleMenuClick = (event) => { 
-    //      setAnchorEl(event.currentTarget);
-    //  };
-    //  const handleMenuClose = () => {
-    //    setAnchorEl(null);
-    //  };
+  // Handle Drawer Open and Close
+  const handleDrawerOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
-    // Handle Drawer Open and Close
-    const handleDrawerOpen = () => {
-        setDrawerOpen(!drawerOpen);
-    };
+  const handleDrawerClose = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
-    const handleDrawerClose = () => {
-        setDrawerOpen(!drawerOpen);
-    };
+  // Handle delete by removing the specified key
+  const handleDelete = (item) => {
+    var raw = item.split("***")
+    var varName = raw[0]
+    let newObject = { ...search_object };
+    delete newObject[varName];
+    set_search_object(newObject);
+    setOutput(output.filter((e) => e !== item))
+    setLabels(labels.filter((e) => e.option !== varName))
+  };
 
-    // Handle delete by removing the specified key
-    const handleDelete = (item) => { 
-        var raw = item.split("***")
-        var varName = raw[0]
-        let newObject = {...search_object};
-        delete newObject[varName];
-        set_search_object(newObject); 
-        setOutput(output.filter((e)=>e!==item))
-        setLabels(labels.filter((e)=>e.option!==varName))
-    };
+  //console.log('Current SEARCH OBJECT: ', search_object)
 
-    //console.log('Current SEARCH OBJECT: ', search_object)
-
-    return (
+  return (
     <AppContext.Provider
-        value={{
-          options_tree,
-          menuPosition, 
-          setMenuPosition,
-          setOutput,
-          output,
-          labels,
-          setLabels
-    }}
-  >
-    <AppBar position="sticky">
-      <Toolbar>
-        <IconButton
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-        >
-          <FilterAlt sx={{ color: "white" }}/>
-        </IconButton>
-        {/* <IconButton
+      value={{
+        // options_tree,
+        options_flat,
+        menuPosition,
+        setMenuPosition,
+        setOutput,
+        output,
+        labels,
+        setLabels,
+        nested_tree
+      }}
+    >
+      <AppBar position="sticky">
+        <Toolbar>
+          <IconButton
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+          >
+            <FilterAlt sx={{ color: "white" }} />
+          </IconButton>
+          {/* <IconButton
           //  aria-describedby={id}
            variant="contained" 
            onClick={handleMenuClick}>
@@ -118,57 +120,58 @@ export default function Filter(props) {
                             }
               </Grid>
         </Popover> */}
-        <Grid container direction="row" spacing={1}>
-                            {
-                              Object.keys(menu_label).map((key) => {
-                                return(
-                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
-                                )
-                              })
-                            }
-        </Grid>
-      </Toolbar>
-    </AppBar>
-    <Drawer
+          <Grid container direction="row" spacing={1}>
+            {
+              Object.keys(nested_tree).map((key) => {
+                return (
+                  <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context} />
+                )
+              })
+            }
+          </Grid>
+        </Toolbar>
+      </AppBar>
+      <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
         anchor="left"
         open={drawerOpen}
         docked={true}
-        PaperProps={{ sx: {width: "24%"} }}
-        style={{ position:'relative', zIndex:2 }}
+        PaperProps={{ sx: { width: "24%" } }}
+        style={{ position: 'relative', zIndex: 2 }}
       >
-        <br/><br/><br/><br/><br/><br/><br/><br/>
+        <br /><br /><br /><br /><br /><br /><br /><br />
         <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item sx={10} align="center">
-              {output.map((item, index) => {
-                return(
-                  <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
-                    <Grid item xs={10} align="center" >
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                          <Typography>{item.split("***")[2]}</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <ComponentFac params={item} index={index} context={props.context}/>
-                        </AccordionDetails>
-                      </Accordion>
-                    </Grid>
-                    <Grid item xs={2} align="center">
-                      <IconButton onClick={()=>{handleDelete(item)}}>
-                          <RemoveCircleOutlineIcon />
-                      </IconButton>
-                    </Grid>
+          <Grid item sx={10} align="center">
+            {output.map((item, index) => {
+              return (
+                <Grid key={'grid-' + index} container direction="row" spacing={0} sx={{ m: '10px' }}>
+                  <Grid item xs={10} align="center" >
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>{item.split("***")[2]}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <ComponentFac params={item} index={index} context={props.context} />
+                      </AccordionDetails>
+                    </Accordion>
                   </Grid>
-              )})}
-            </Grid>
-            <Grid item sx={2} align="center">
-              <IconButton onClick={handleDrawerClose}>
-                  <ChevronLeftIcon />
-              </IconButton>
-            </Grid>
+                  <Grid item xs={2} align="center">
+                    <IconButton onClick={() => { handleDelete(item) }}>
+                      <RemoveCircleOutlineIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              )
+            })}
+          </Grid>
+          <Grid item sx={2} align="center">
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-    </Drawer>
-  </AppContext.Provider>
+      </Drawer>
+    </AppContext.Provider>
   );
 }
