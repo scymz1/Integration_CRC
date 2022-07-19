@@ -97,7 +97,7 @@ export default function MapBoundingBox(props){
 
     return (
         <div>
-            <FormControl>
+            {/* <FormControl>
             <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
             <RadioGroup
                 row
@@ -109,7 +109,7 @@ export default function MapBoundingBox(props){
                 <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
                 <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
             </RadioGroup>
-            </FormControl>
+            </FormControl> */}
 
         <br/>
 

@@ -105,13 +105,15 @@ export default function Voyage() {
           <PivotApp context={VoyageContext} />
         </TabPanel>
         <TabPanel value={value} index={5}>
-          <FormLabel id="boundingBoxFilter">Components Display</FormLabel>
+        <Grid container justifyContent="flex-end">
+          {/* <FormLabel id="boundingBoxFilter">Components Display</FormLabel> */}
           <Stack spacing={2} direction="row">
             <Button variant="contained" onClick={()=>setShowSankey(false)}>
               Map Only
             </Button>
-            <Button variant="outlined" onClick={()=>setShowSankey(true)}>Both Map and Sankey</Button>
+            <Button variant="outlined" onClick={()=>setShowSankey(true)}>Map + Aggregation </Button>
           </Stack>
+          </Grid>
 
          
               {showSankey ? (
