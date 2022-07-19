@@ -108,12 +108,14 @@ export default function MapBoundingBox(props){
         else{
             onChangeRadioOption("embarkation");
         }
+        SetselectMode(true);
     }
 
     return (
         <div>
+            <br/>
             <FullScreen handle={handle}>
-            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh" }}>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -129,27 +131,18 @@ export default function MapBoundingBox(props){
                     </BaseLayer>
                 </LayersControl>
                 <ReadFeature search_object={search_object}  radio = {radioOptions}/>
-                <Control prepend position='bottomright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
-        e.preventDefault();SetselectMode(true);}}> 
-                    Select Bounding Box
+
+
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    Select Embarkation
                     </Button>
                 </Control>
-
-                {
-                    radioOptions=="embarkation"?
-                        <Control prepend position='bottomright' >
-                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
-                            Select bounding box model: Embarkation
-                            </Button>
-                        </Control>
-                        :
-                        <Control prepend position='bottomright' >
-                            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
-                            Select bounding box model: Disembarkation
-                            </Button>
-                        </Control>
-                }
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    Select Disembarkation
+                    </Button>
+                </Control>
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
@@ -179,6 +172,16 @@ export default function MapBoundingBox(props){
     );
 
 }
+
+
+
+                {/* <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
+        e.preventDefault();SetselectMode(true);}}> 
+                    Select Bounding Box
+                    </Button>
+                </Control> */}
+
 
 {/* <FormControl>
 <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
