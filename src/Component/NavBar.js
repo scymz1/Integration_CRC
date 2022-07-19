@@ -117,7 +117,7 @@ export default function ResponsiveAppBar(props) {
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {search_object?
                 <ToggleButtonGroup
-                  // color="primary"
+                  color="blackMode"
                   value={dataSet}
                   exclusive
                   onChange={(event) => {
@@ -130,15 +130,15 @@ export default function ResponsiveAppBar(props) {
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"}>Trans-Atlantic</ToggleButton>
-                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"}>Intra-American</ToggleButton>
+                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
+                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"} disabled={typeForTable === "enslavers"}>Intra-American</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
 
-              {typeForTable && dataSet === "0"?
+              {typeForTable?
                 <ToggleButtonGroup
-                  // color="type"
-                  value={props.typeForTable}
+                  color="blackMode"
+                  value={typeForTable}
                   exclusive
                   onChange={(event) => {
                     switch (event.target.value){
@@ -156,6 +156,7 @@ export default function ResponsiveAppBar(props) {
                   }}
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
+                  disabled={dataSet==="1"}
                 >
                   <ToggleButton sx={{background: "#42a5f5"}} value="slaves">Slaves</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>

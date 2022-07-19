@@ -74,7 +74,7 @@ export default function PASTApp(props) {
         case "enslavers": return "past/enslavers/"
       }
     })())
-    // console.log("queryData.type", typeForTable)
+    console.log("typeForTable", typeForTable)
   }, [typeForTable])
 
   useEffect(() => {
