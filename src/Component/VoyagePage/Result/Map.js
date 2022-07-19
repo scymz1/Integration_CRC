@@ -51,6 +51,7 @@ function FullscreenButton(props){
 export default function MapBoundingBox(props){
 
     const [radioOptions, onChangeRadioOption] = React.useState("embarkation");
+   
     
     const [longitude1, onChangelongitude1] = React.useState(-360);
     const [longitude2, onChangelongitude2] = React.useState(359.99);
@@ -67,7 +68,6 @@ export default function MapBoundingBox(props){
     const handle = useFullScreenHandle();
 
     useEffect(() => {
-
         if(radioOptions=="embarkation"){
             set_map_search_object({
             ...search_object,
@@ -82,6 +82,7 @@ export default function MapBoundingBox(props){
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
         });
         }
+    
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
   
     const position = [0, -20];
@@ -109,19 +110,7 @@ export default function MapBoundingBox(props){
 
         <br/>
 
-        <FormControl>
-        <FormLabel id="optionFilter">Component Option Choice </FormLabel>
-        <RadioGroup
-            row
-            aria-labelledby="optionFilter"
-            defaultValue= "Both"
-            name="radio-buttons-group"
-        >
-            <FormControlLabel value="Map" control={<Radio />} label="Map" />
-            <FormControlLabel value="Sankey" control={<Radio />} label="Sankey" />
-            <FormControlLabel value="Both" control={<Radio />} label="Both" />
-        </RadioGroup>
-        </FormControl>
+      
 
              
             <FullScreen handle={handle}>

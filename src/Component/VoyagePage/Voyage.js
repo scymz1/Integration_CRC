@@ -1,5 +1,7 @@
 import { Box, Tab, Tabs, Typography, Grid } from "@mui/material";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import { useParams } from "react-router-dom";
 import ResponsiveAppBar from "../NavBar";
 import Filter from "./Filter/Filter";
@@ -11,6 +13,11 @@ import PivotApp from "./Result/Pivot/PivotApp";
 import Map from "./Result/Map";
 import { VoyageContext } from "./VoyageApp";
 import SankeyExample from "./Sankey/CircularExample";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import FormLabel from "@mui/material/FormLabel";
+
+import { Container } from "@mui/system";
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -28,8 +35,10 @@ function TabPanel(props) {
 
 export default function Voyage() {
   const [value, setValue] = React.useState(0);
+  const [showSankey, setShowSankey] = React.useState(false);
+  const { id } = useParams();
   const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
-  const {id} = useParams();
+
 
   React.useEffect(() => {
     switch (id) {
@@ -96,17 +105,48 @@ export default function Voyage() {
           <PivotApp context={VoyageContext} />
         </TabPanel>
         <TabPanel value={value} index={5}>
+          <FormLabel id="boundingBoxFilter">Components Display</FormLabel>
+          <Stack spacing={2} direction="row">
+            <Button variant="contained" onClick={()=>setShowSankey(false)}>
+              Map Only
+            </Button>
+            <Button variant="outlined" onClick={()=>setShowSankey(true)}>Both Map and Sankey</Button>
+          </Stack>
 
-
-          <Grid container spacing={2} columns={16}  alignItems="center" justify="center">
-            <Grid item xs={9}>
-              <Map context={VoyageContext} />
-            </Grid>
-
-            <Grid item xs={7}>
-              <SankeyExample width={960} height={500} context={VoyageContext} />
-            </Grid>
-          </Grid>
+         
+              {showSankey ? (
+                 <Grid
+                 container
+                 spacing={2}
+                 columns={16}
+                 alignItems="center"
+                 justify="center"
+               >
+                <Grid item xs={10}>
+                <Map context={VoyageContext} />
+              </Grid>
+                <Grid item xs={6}>
+                   <SankeyExample
+                  width={960}
+                  height={500}
+                  context={VoyageContext}
+                />
+                </Grid>
+                </Grid>
+              ):
+              <Grid
+              container
+              spacing={2}
+              columns={16}
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={16}>
+                 <Map context={VoyageContext} />
+              </Grid>
+              </Grid>
+              }
+        
         </TabPanel>
       </Box>
     </div>
