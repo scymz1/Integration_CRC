@@ -26,7 +26,7 @@ export default function PASTApp(props) {
   const [data, setData] = useState([]);
 
   const [endpoint, setEndpoint] = useState((() => {
-    switch (queryData.type) {
+    switch (typeForTable) {
       case "slaves": return "past/enslaved/"
       case "enslavers": return "past/enslavers/"
     }
@@ -47,11 +47,12 @@ export default function PASTApp(props) {
 
   useEffect(()=>{
     setEndpoint((() => {
-      switch (queryData.type) {
+      switch (typeForTable) {
         case "slaves": return "past/enslaved/"
         case "enslavers": return "past/enslavers/"
       }
     })())
+    // console.log("queryData.type", typeForTable)
   }, [typeForTable])
 
   useEffect(() => {

@@ -65,7 +65,6 @@ export default function PASTTable(props) {
 
   return (
     <div>
-      {console.log(endpoint)}
       <ColContext.Provider
         value={{
           cols,
