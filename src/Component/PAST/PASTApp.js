@@ -45,13 +45,22 @@ export default function PASTApp(props) {
     }).then(res => res.json()), {refetchOnMount: "always"}
   )
 
-  useEffect(() => {
+  useEffect(()=>{
     setEndpoint((() => {
       switch (queryData.type) {
         case "slaves": return "past/enslaved/"
         case "enslavers": return "past/enslavers/"
       }
     })())
+  }, [typeForTable])
+
+  useEffect(() => {
+    const endpoint = (() => {
+      switch (queryData.type) {
+        case "slaves": return "past/enslaved/"
+        case "enslavers": return "past/enslavers/"
+      }
+    })()
     const targets = (() => {
       switch (queryData.type) {
         case "slaves": return queryData.slaves
