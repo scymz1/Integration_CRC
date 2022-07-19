@@ -12,6 +12,9 @@ import Radio from "@mui/material/Radio";
 import { pivot_row_vars, pivot_col_vars, pivot_cell_vars } from "../vars";
 // import { VoyageContext } from "../VoyageApp";
 import * as options_flat from "../../../util/options.json";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 export const PivotContext = React.createContext({});
 
@@ -27,6 +30,7 @@ const default_object = {
 };
 
 function PivotApp(props) {
+  const [width, height] = useWindowSize()
   const { search_object } = useContext(props.context);
   //console.log(search_object);
   const [complete_object, set_complete_object] = useState(default_object);
@@ -98,7 +102,7 @@ function PivotApp(props) {
   return (
     <div>
       <div>
-        <Box sx={{ minWidth: 120 }}>
+        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7}}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Rows</InputLabel>
             <Select
@@ -119,7 +123,7 @@ function PivotApp(props) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ minWidth: 120, my: 2 }}>
+        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7, my: 2 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Columns</InputLabel>
             <Select
@@ -140,7 +144,7 @@ function PivotApp(props) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ minWidth: 120, my: 2 }}>
+        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7, my: 2 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Cells</InputLabel>
             <Select

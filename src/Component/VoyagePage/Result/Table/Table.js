@@ -21,12 +21,17 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import {Grid} from "@mui/material";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Table(props) {
+  const [width, height] = useWindowSize()
   const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
   //const { search_object } = useContext(VoyageContext);
@@ -212,6 +217,7 @@ function Table(props) {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
             <TableContainer component={Paper}>
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -344,6 +350,7 @@ function Table(props) {
                 </TableBody>
               </Tables>
             </TableContainer>
+            </Grid>
             <Stack
               spacing={2}
               margin={2}
