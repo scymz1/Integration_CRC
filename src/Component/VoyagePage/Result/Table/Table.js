@@ -45,6 +45,7 @@ function Table(props) {
     setInfo,
     setId,
     modal,
+    enslaver,
     options_flat,
     queryData,
     setQueryData,
@@ -258,7 +259,8 @@ function Table(props) {
                         onClick={(event) => handleOpen(event, row)}
                         //selected={isItemSelected}
                       >
-                        {checkbox && row.transactions.length !== 0 && (
+                        {/* {console.log(row)} */}
+                        {checkbox && (row.transactions != null && row.transactions.length !== 0) && (
                           <TableCell padding="checkbox">
                             <Checkbox
                               color="primary"
@@ -267,7 +269,7 @@ function Table(props) {
                             />
                           </TableCell>
                         )}
-                        {checkbox && row.transactions.length === 0 && (
+                        {checkbox && (row.transactions == null || row.transactions.length === 0) && (
                           <TableCell padding="checkbox"></TableCell>
                         )}
                         {cols.map((k, key) => {
