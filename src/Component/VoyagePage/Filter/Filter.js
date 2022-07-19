@@ -1,4 +1,4 @@
-import {Grid, IconButton, AppBar, Popover} from "@mui/material";
+import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import FilterAlt from '@mui/icons-material/FilterAlt';
+import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
@@ -26,20 +28,30 @@ const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
 
 export default function Filter(props) {
     const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
-  
+
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
 
-    // Handle Button Click
-    const handleClick = (event) => { 
-        setAnchorEl(event.currentTarget);
+    // const [anchorEl, setAnchorEl] = React.useState(null);
+    // const open = Boolean(anchorEl);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+    // Handle Menu Click and Close
+    //  const handleMenuClick = (event) => { 
+    //      setAnchorEl(event.currentTarget);
+    //  };
+    //  const handleMenuClose = () => {
+    //    setAnchorEl(null);
+    //  };
+
+    // Handle Drawer Open and Close
+    const handleDrawerOpen = () => {
+        setDrawerOpen(!drawerOpen);
     };
-    const handleClose = () => {
-      setAnchorEl(null);
+
+    const handleDrawerClose = () => {
+        setDrawerOpen(!drawerOpen);
     };
 
     // Handle delete by removing the specified key
@@ -57,81 +69,106 @@ export default function Filter(props) {
 
     return (
     <AppContext.Provider
-    value={{
-      options_tree,
-      menuPosition, 
-      setMenuPosition,
-      setOutput,
-      output,
-      labels,
-      setLabels
-
+        value={{
+          options_tree,
+          menuPosition, 
+          setMenuPosition,
+          setOutput,
+          output,
+          labels,
+          setLabels
     }}
   >
-    <Accordion>
-          <AccordionSummary
-            expandIcon={<FilterAlt sx={{ color: "white" }}/>}
-            aria-controls="filter-content"
-            id="filter-header"
-            sx={{
-              backgroundColor: "#1D76D2"
-            }}
-          >
-              <Typography color="white">Filter</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-          <AppBar position="static">
-            {/* <Toolbar disableGutters> */}
+    <AppBar position="sticky">
+      <Toolbar>
+        <IconButton
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+        >
+          <FilterAlt sx={{ color: "white" }}/>
+        </IconButton>
+        {/* <IconButton
+          //  aria-describedby={id}
+           variant="contained" 
+           onClick={handleMenuClick}>
+           <AutoAwesomeMotionIcon sx={{ color: "white" }}/>
+        </IconButton>
+        <Popover
+              //  id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+            >
               <Grid container direction="row" spacing={1}>
-                  {
-                    Object.keys(menu_label).map((key) => {
-                      return(
-                        <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
-                      )
-                    })
-                  }
+                            {
+                              Object.keys(menu_label).map((key) => {
+                                return(
+                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
+                                )
+                              })
+                            }
               </Grid>
-            {/* </Toolbar>   */}
-          </AppBar>
-
-            <Grid container direction="row" sx ={{ gridTemplateColumns: 'repeat(3, 1fr)'}} spacing={2}>
-
-              {/* {
-                Object.keys(menu_label).map((key) => {
-                  return(
-                    <Cascading menuName={key} button={menu_label[key]}/>
-                  )
-                })
-              } */}
-              <Grid item xs={2}>
-                <RadioButton context={props.context}/>
-              </Grid>
-              <Grid item xs={10}>
-                {output.map((item, index) => {
-                  return(
-                    <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
-                      <Grid item xs={10} align="center" >
-                        <Accordion>
-                          <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                            <Typography>{item.split("***")[2]}</Typography>
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <ComponentFac params={item} index={index} context={props.context}/>
-                          </AccordionDetails>
-                        </Accordion>
-                      </Grid>
-                      <Grid item xs={2} align="center">
-                        <IconButton onClick={()=>{handleDelete(item)}}>
-                            <RemoveCircleOutlineIcon />
-                        </IconButton>
-                      </Grid>
+        </Popover> */}
+        <Grid container direction="row" spacing={1}>
+                            {
+                              Object.keys(menu_label).map((key) => {
+                                return(
+                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
+                                )
+                              })
+                            }
+        </Grid>
+      </Toolbar>
+    </AppBar>
+    <Drawer
+        className={"Selected Fields Drawer"}
+        variant="persistent"
+        anchor="left"
+        open={drawerOpen}
+        docked={true}
+        PaperProps={{ sx: {width: "24%"} }}
+        style={{ position:'relative', zIndex:2 }}
+      >
+        <br/><br/><br/><br/><br/><br/><br/><br/>
+        <Grid container direction="row" spacing={2} alignItems="center">
+            <Grid item sx={11} align="center">
+              {output.map((item, index) => {
+                return(
+                  <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
+                    <Grid item xs={10} align="center" >
+                      <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
+                          <Typography>{item.split("***")[2]}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <ComponentFac params={item} index={index} context={props.context}/>
+                        </AccordionDetails>
+                      </Accordion>
                     </Grid>
-                  )})
-                }
-              </Grid>
+                    <Grid item xs={2} align="center">
+                      <IconButton onClick={()=>{handleDelete(item)}}>
+                          <RemoveCircleOutlineIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+              )})}
             </Grid>
-            </AccordionDetails>
-        </Accordion>
-    </AppContext.Provider>
+            <Grid item sx={1} align="center">
+              <IconButton onClick={handleDrawerClose}>
+                  <ChevronLeftIcon />
+              </IconButton>
+            </Grid>
+        </Grid>
+    </Drawer>
+  </AppContext.Provider>
   );
 }
