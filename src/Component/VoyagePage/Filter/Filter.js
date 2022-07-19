@@ -79,15 +79,19 @@ export default function Filter(props) {
         >
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
-        <Grid container direction="row" spacing={1}>
-            {
-              Object.keys(nested_tree).map((key) => {
-                return(
-                  <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
-                )
-              })
-            }
-        </Grid>
+        {!drawerOpen ?
+            <Typography>Filter</Typography>
+        :
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(nested_tree).map((key) => {
+                    return(
+                      <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                    )
+                  })
+                }
+            </Grid>
+        }
       </Toolbar>
     </AppBar>
     <Drawer
@@ -95,12 +99,12 @@ export default function Filter(props) {
         variant="persistent"
         anchor="left"
         open={drawerOpen}
-        docked={true}
         PaperProps={{ sx: {width: "25%"} }}
         style={{ position:'relative', zIndex:2 }}
     >
         <Toolbar />
         <Toolbar />
+        <Divider />
         <Grid 
             container 
             spacing={0} 
@@ -140,7 +144,7 @@ export default function Filter(props) {
                 </IconButton>
             </Grid>
         </Grid>
-      </Drawer>
+    </Drawer>
     </AppContext.Provider>
   );
 }
