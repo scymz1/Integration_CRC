@@ -2,9 +2,12 @@ import React, {useEffect, useState} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, Typography,Grid} from "@mui/material";
 import {bar_x_vars, bar_y_vars} from "../../VoyagePage/Result/vars";
 import {Link, useNavigate} from "react-router-dom";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -18,6 +21,7 @@ const featuredPosts = {
 };
 
 function BarComponent() {
+  const [width, height] = useWindowSize()
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
@@ -55,7 +59,10 @@ function BarComponent() {
   return (
     <div>
       <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
-        <Box sx={{boxShadow: 4, margin: 2, padding: 2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+      <Grid container>
+        {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+        <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+        <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
           <CardContent sx={{flex: "1 0 auto"}}>
             <Button
               variant="text"
@@ -73,15 +80,16 @@ function BarComponent() {
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
                   Continue reading...
-                </Button>
+                </Button> */}
               </CardContent>
             </div>
           </CardContent>
         </Box>
-
-        <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}>
+        </Grid>
+        <Grid item sx={{width:"60%"}}>
+        {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
           <CardContent sx={{flex: "1 0 auto"}}>
             <Plot
               data={[
@@ -93,11 +101,14 @@ function BarComponent() {
                 },
                 {type: "bar"},
               ]}
-              layout={{width: 800, height: 600, title: "Bar Plot"}}
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
               config={{responsive: true}}
             />
           </CardContent>
-        </Box>
+        {/* </Box>
+         */}
+         </Grid>
+         </Grid>
       </Card>
       {/* <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
