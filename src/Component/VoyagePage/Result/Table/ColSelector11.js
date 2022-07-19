@@ -76,6 +76,11 @@ export default function ColSelector11(props) {
     //     // console.log("collist", name)
     //     return columnOptions.includes(name)
     // }
+    function containsOnly(node) {
+        if (Object.keys(node).length === 1)
+            return true;
+        return false;
+    }
 
     const handleOptionClick = (option) => {
         // console.log("optionclick", option)
@@ -104,20 +109,22 @@ export default function ColSelector11(props) {
             Object.keys(nodes).map((key) =>
                 isChildren(key)
                     ? isLast(nodes[key])
-                        // ? isInColList(key)
+                        // ? containsOnly(nodes[key])
                         ? <MenuItem value={key} key={key} onClick={() => { handleOptionClick(key) }}>
                             {options_flat[key].flatlabel}
                         </MenuItem>
-                        // :null
-                        : <NestedMenuItem
-                            key={key}
-                            // label={options_flat[nameConcat(name,key)].label}
-                            label={options_flat[key].flatlabel}
-                            parentMenuOpen={open}
-                            onClick={handleClose}
-                        >
-                            {renderTree(nodes[key], key)}
-                        </NestedMenuItem>
+                        // : null
+                        : containsOnly(nodes[key])
+                            ?  renderTree(nodes[key], key) 
+                            : <NestedMenuItem
+                                key={key}
+                                // label={options_flat[nameConcat(name,key)].label}
+                                label={options_flat[key].flatlabel}
+                                parentMenuOpen={open}
+                                onClick={handleClose}
+                            >
+                                {renderTree(nodes[key], key)}
+                            </NestedMenuItem>
                     : null
             )
         )
@@ -144,6 +151,7 @@ export default function ColSelector11(props) {
                         defaultCollapseIcon={<ExpandMoreIcon />}
                         defaultExpandIcon={<ChevronRightIcon />}
                     >
+                        
                         <Button
                             variant="contained"
                             size="large"
@@ -151,6 +159,7 @@ export default function ColSelector11(props) {
                             onClick={handleClick}
                         >
                             {"Column Selector"}
+
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {/* {renderTree(hierFalse2True(columnOptions),"")} */}
