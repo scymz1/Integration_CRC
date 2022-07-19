@@ -219,54 +219,6 @@ export function ReadFeature(props) {
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             complete_object[area] = [layer.feature.id, layer.feature.id];
-            if (disembark === diskey ){
-          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ DISEMBARK")  
-          //       let tmp =
-          //   complete_object[
-          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-          //   ];
-    
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-          //       tmp,
-          //   });
-             }
-             else{
-          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ EMBARK")
-          //   let tmp =
-          //   complete_object[
-          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-          //   ];
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-          //       tmp,
-          //   });
-
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ mouseover  tmp", tmp)
-              
-          //   //  }
-          //   console.log("🚀 ~ file: Spatial.js ~ line 231 ~ before tmp complete_object", complete_object)
-            
-          //   let tmp =
-          //   complete_object[
-          //     [disembark]
-          //   ];
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     [disembark]:
-          //       tmp,
-          //   });
-            
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <Grid>
@@ -280,8 +232,9 @@ export function ReadFeature(props) {
                     <PivotContext.Provider
                       value={{ complete_object, set_complete_object , disembark, setDisembark}}
                     >
-                      {/* only show if intraamerican, otherwise hidden */}
-                        {props.search_object.dataset[0] === 1?<IntraTabs context={PivotContext}/>: ""}
+                      {/* only show if intraamerican, otherwise hidden */
+                      }
+                        {props.search_object.dataset[0]?<IntraTabs context={PivotContext}/>: ""}
 
                       <Pivot context={PivotContext} />
                     </PivotContext.Provider>
@@ -289,27 +242,12 @@ export function ReadFeature(props) {
                 </div>
               </Grid>
             );
-            // if we use bindPopup, then we have to use mouseover,
-            // otherwise, only the second click can show the popup
+
             L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
               maxWidth: "auto",
             });
-            // if we use click & popup.setContent, we will find the location of marker is incorrect.
-            // L.popup({
-            //   'maxWidth': 'auto',
-            // })
-            //    .setContent(container)
-            //    .setLatLng(layer["_latlng"])
-            //    .openOn(map);
-          };
         })
-          // markers.addLayer(L.marker(layer["_latlng"], {icon: customIcon}));
           markers.addLayer(layer)
-        //   markers.addLayer(layer, {
-        //     pointToLayer: function (feature, latlng) {
-        //         return L.marker(latlng, {icon: customIcon});
-        //     }
-        // })
         },
       });
 
