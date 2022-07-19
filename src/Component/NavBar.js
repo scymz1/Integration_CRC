@@ -12,9 +12,11 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import Icon from '@mui/material/Icon';
 import logo from "../images/sv-logo.png";
+import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {useContext} from "react";
 
-const pages = ['Voyages', 'Past'];
-const ResponsiveAppBar = () => {
+export default function ResponsiveAppBar(props) {
+  const {typeForTable, setTypeForTable, search_object, set_search_object} = props
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -112,6 +114,44 @@ const ResponsiveAppBar = () => {
             alignItems="flex-end"
             sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
           >
+            <Stack spacing={4} direction={"row"}>
+              {search_object?
+                <ToggleButtonGroup
+                  color="success"
+                  value={search_object.dataset[0]}
+                  exclusive
+                  onChange={(event) =>
+                    set_search_object({
+                      ...search_object,
+                      dataset: [event.target.value, event.target.value]
+                    })
+                  }
+                >
+                  <ToggleButton value={"0"}>Trans-Atlantic</ToggleButton>
+                  <ToggleButton value={"1"}>Intra-American</ToggleButton>
+                </ToggleButtonGroup>:
+                null}
+
+              {typeForTable?
+                <ToggleButtonGroup
+                  color="secondary"
+                  value={props.typeForTable}
+                  exclusive
+                  onChange={(event) => setTypeForTable(event.target.value)}
+                >
+                  <ToggleButton value="slaves">Slaves</ToggleButton>
+                  <ToggleButton value="enslavers">Enslavers</ToggleButton>
+                </ToggleButtonGroup>:
+                null}
+            </Stack>
+          </Box>
+
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+            sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}
+          >
             <Link to={"/voyage/Scatter"} style={{ textDecoration: "none" }}>
               <Button
                 sx={{
@@ -166,4 +206,3 @@ const ResponsiveAppBar = () => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
