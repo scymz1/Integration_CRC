@@ -2,18 +2,20 @@
 
 
 export const enslaver_default_list = [
-    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
-    "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-    "alias__transactions__transaction__voyage__id",
-    "enslaver_sources__source__full_ref",
-    "enslaver_sources__text_ref",
-    "alias__transactions__transaction__date_yyyy",
-    "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-    "alias__transactions__transaction__place__geo_location__name",
+    "id",
+    "principal_alias",
     "principal_location__geo_location__name",
     "first_active_year",
     "last_active_year",
     "number_enslaved",
+    // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+    // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
+    "alias__transactions__transaction__voyage__id",
+    // "alias__transactions__transaction__date_yyyy",
+    // "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
+    // "alias__transactions__transaction__place__geo_location__name",
+    // "enslaver_sources__source__full_ref",
+    // "enslaver_sources__text_ref",
 ]
 
 export const enslaver_var_list = {
@@ -58,6 +60,7 @@ export const enslaver_var_list = {
         "alias__transactions__transaction__relation_type__relation_type": null,
         "alias__transactions__transaction__place__geo_location__name": null,
         "alias__transactions__transaction__date_yyyy": null,
+
         "alias__transactions__transaction__source": {
             "alias__transactions__transaction__source": null,
             "alias__transactions__transaction__source__id": null,
@@ -65,6 +68,7 @@ export const enslaver_var_list = {
             "alias__transactions__transaction__source__full_ref": null,
             "alias__transactions__transaction__source__source_type": null,
         },
+
         "alias__transactions__transaction__voyage": {
             "alias__transactions__transaction__voyage__voyage_itinerary": {
                 "alias__transactions__transaction__voyage__voyage_itinerary__port_of_departure__geo_location__name": null,
@@ -104,12 +108,14 @@ export const enslaver_var_list = {
                 "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
                 "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
             },
+
             "alias__transactions__transaction__voyage__voyage_ship": {
                 "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_place__geo_location__name": null,
                 "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_region__geo_location__name": null,
                 "alias__transactions__transaction__voyage__voyage_ship__registered_place__geo_location__name": null,
                 "alias__transactions__transaction__voyage__voyage_ship__registered_region__geo_location__name": null
             },
+
             "alias__transactions__transaction__voyage__voyage_dates": {
                 "alias__transactions__transaction__voyage__voyage_dates__voyage_began_yyyy": null,
                 "alias__transactions__transaction__voyage__voyage_dates__slave_purchase_began_yyyy": null,
@@ -151,6 +157,9 @@ export const enslaved_default_list = [
 ];
 
 export const enslaved_var_list = {
+    "id": {
+        "id":null,
+    },
     "personal_information": {
         "documented_name": null,
         "name_first": null,
@@ -171,8 +180,14 @@ export const enslaved_var_list = {
         "language_group": null
     },
 
-    "post_disembark_location__geo_location__name": null,
-    "captive_status__name": null,
+    "post_disembark_location": {
+        "post_disembark_location__geo_location__name": null,
+    },
+    
+    "captive_status":{
+        "captive_status__name": null,
+    },
+    
     "voyage": {
         "voyage__voyage_itinerary": {
             "voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
@@ -194,23 +209,6 @@ export const enslaved_var_list = {
     },
 
     "transactions": {
-        "transactions__transaction__voyage": {
-            "transactions__transaction__voyage__id": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__location_type__name": null,
-            "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
-            "transactions__transaction__voyage__voyage_ship__ship_name": null,
-        },
-
         "transactions__transaction__date_yyyy": null,
         "transactions__transaction__amount": null,
         "transactions__transaction__place__geo_location__name": null,
@@ -218,5 +216,22 @@ export const enslaved_var_list = {
         "transactions__transaction__enslavers__role__role": null,
         "transactions__transaction__text_ref": null,
         "transactions__transaction__source__full_ref": null,
-    }
+    },
+
+    "transactions__transaction__voyage": {
+        "transactions__transaction__voyage__id": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__location_type__name": null,
+        "transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
+        "transactions__transaction__voyage__voyage_ship__ship_name": null,
+    },
 }

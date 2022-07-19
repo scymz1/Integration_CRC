@@ -13,6 +13,7 @@ export const VoyageContext = React.createContext({});
 
 export default function VoyageApp(props) {
   const endpoint = "voyage/"
+  const [dataSet, setDataSet] = useState("0")
 
   // const menu_label = {
   //   "voyage_id": "ID",
@@ -49,7 +50,7 @@ export default function VoyageApp(props) {
 
   return (
     <VoyageContext.Provider value={{
-      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions}}>
+      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet}}>
       <Voyage/>
     </VoyageContext.Provider>
   );

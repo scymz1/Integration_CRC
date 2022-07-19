@@ -16,6 +16,9 @@ import SankeyExample from "./Sankey/CircularExample";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import FormLabel from "@mui/material/FormLabel";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 import { Container } from "@mui/system";
 
@@ -34,10 +37,11 @@ function TabPanel(props) {
 }
 
 export default function Voyage() {
+  const [width, height] = useWindowSize()
   const [value, setValue] = React.useState(0);
   const [showSankey, setShowSankey] = React.useState(false);
   const { id } = useParams();
-  const { typeForTable, setTypeForTable, search_object, set_search_object} = React.useContext(VoyageContext)
+  const { typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = React.useContext(VoyageContext)
 
 
   React.useEffect(() => {
@@ -70,9 +74,11 @@ export default function Voyage() {
         set_search_object={set_search_object}
         typeForTable={typeForTable}
         setTypeForTable={setTypeForTable}
+        dataSet={dataSet}
+        setDataSet={setDataSet}
       />
       <Filter context={VoyageContext}/>
-      <Box sx={{bgcolor: 'background.paper', display: 'flex'}}>
+      <Box sx={{bgcolor: 'background.paper', display: 'flex',width:width}}>
         <Tabs
           orientation="vertical"
           variant="scrollable"
@@ -81,6 +87,7 @@ export default function Voyage() {
             setValue(newValue);
           }}
           sx={{ borderRight: 1, borderColor: "divider" }}
+          style={{ minWidth:width<1100 ? "20%": "5%" }}
         >
           <Tab label="Scatter" />
           <Tab label="Bar" />
