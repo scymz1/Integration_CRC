@@ -17,7 +17,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
-// import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 import { VoyageContext } from "../VoyageApp";
@@ -29,7 +28,7 @@ export const AppContext = React.createContext();
 export default function Filter(props) {
     const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable, page} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
-    const [output, setOutput] = React.useState([]);
+    // const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -44,12 +43,14 @@ export default function Filter(props) {
 
     // Handle delete by removing the specified key
     const handleDelete = (item) => { 
-        var raw = item.split("***")
-        var varName = raw[0]
+        // var raw = item.split("***")
+        // var varName = raw[0]
+        var varName = item.option
         let newObject = {...search_object};
+
         delete newObject[varName];
         set_search_object(newObject); 
-        setOutput(output.filter((e)=>e!==item))
+        // setOutput(output.filter((e)=>e!==item))
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
@@ -82,8 +83,8 @@ export default function Filter(props) {
           options_flat,
           menuPosition,
           setMenuPosition,
-          setOutput,
-          output,
+          // setOutput,
+          // output,
           labels,
           setLabels,
           nested_tree
@@ -130,18 +131,18 @@ export default function Filter(props) {
             direction="row"
         >
             <Grid item xs={10} justifyContent="center">
-                {output.length === 0 ? 
+                {labels.length === 0 ? 
                     <Grid container item sx={{m:'10px'}} justifyContent="center" >
                         <Typography>No Filter</Typography>
                     </Grid>
                 :
-                    output.map((item, index) => {
+                    labels.map((item, index) => {
                     return(
                       <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
                           <Grid item xs={10} >
                               <Accordion>
                                   <AccordionSummary>
-                                      <Typography>{item.split("***")[2]}</Typography>
+                                      <Typography>{item.option}</Typography>
                                   </AccordionSummary>
                                   <AccordionDetails>
                                       <ComponentFac params={item} index={index} context={props.context}/>
