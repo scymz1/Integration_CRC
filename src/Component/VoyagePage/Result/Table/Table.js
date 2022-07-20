@@ -21,7 +21,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-import {Grid} from "@mui/material";
+import {CircularProgress, Grid} from "@mui/material";
 import {
   useWindowSize,
 } from '@react-hook/window-size'
@@ -92,6 +92,8 @@ function Table(props) {
           return "past/enslaved/"
         case "enslavers":
           return "past/enslavers/"
+        default:
+          return "voyage/"
       }
     })()
     // console.log("table useEffect", endpoint, typeForTable, search_object, cols)
@@ -214,7 +216,7 @@ function Table(props) {
   };
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <CircularProgress/>;
   }
   return (
     <div>

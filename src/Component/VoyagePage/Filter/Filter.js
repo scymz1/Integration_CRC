@@ -69,7 +69,7 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
+    <AppBar position="sticky" color={typeForTable === "enslavers"? "success": dataSet==="0"? "primary" : "secondary"}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
