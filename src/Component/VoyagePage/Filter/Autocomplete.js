@@ -10,7 +10,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 export default function Auto(props) {
 
  const {labels} = React.useContext(AppContext)
-  const {search_object, set_search_object, endpoint} = React.useContext(props.context)
+  const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
@@ -19,6 +19,16 @@ export default function Auto(props) {
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
   
+  const endpoint =(()=> {
+    switch (typeForTable) {
+      case "slaves":
+        return "past/enslaved/"
+      case "enslavers":
+        return "past/enslavers/"
+      default:
+        return "voyage/"
+    }
+  })()
 
     React.useEffect(()=>{
       const fetchData = async (labels,textInput) => {

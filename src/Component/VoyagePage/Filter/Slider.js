@@ -62,7 +62,6 @@ export default function GetSlider(props) {
     //"voyage_slaves_numbers__imp_total_num_slaves_disembarked"
     const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
     
-    // control.log("Types for table: ")
     const endpoint =(()=> {
       switch (typeForTable) {
         case "slaves":
