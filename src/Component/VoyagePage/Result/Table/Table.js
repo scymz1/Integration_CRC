@@ -21,12 +21,17 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import {Grid} from "@mui/material";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Table(props) {
+  const [width, height] = useWindowSize()
   const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
   //const { search_object } = useContext(VoyageContext);
@@ -40,6 +45,7 @@ function Table(props) {
     setInfo,
     setId,
     modal,
+    enslaver,
     options_flat,
     queryData,
     setQueryData,
@@ -92,7 +98,7 @@ function Table(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, sortingReq, field, direction, search_object, endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -212,6 +218,7 @@ function Table(props) {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
             <TableContainer component={Paper}>
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -252,7 +259,8 @@ function Table(props) {
                         onClick={(event) => handleOpen(event, row)}
                         //selected={isItemSelected}
                       >
-                        {checkbox && row.transactions.length !== 0 && (
+                        {/* {console.log(row)} */}
+                        {checkbox && (row.transactions != null && row.transactions.length !== 0) && (
                           <TableCell padding="checkbox">
                             <Checkbox
                               color="primary"
@@ -261,7 +269,7 @@ function Table(props) {
                             />
                           </TableCell>
                         )}
-                        {checkbox && row.transactions.length === 0 && (
+                        {checkbox && (row.transactions == null || row.transactions.length === 0) && (
                           <TableCell padding="checkbox"></TableCell>
                         )}
                         {cols.map((k, key) => {
@@ -344,6 +352,7 @@ function Table(props) {
                 </TableBody>
               </Tables>
             </TableContainer>
+            </Grid>
             <Stack
               spacing={2}
               margin={2}

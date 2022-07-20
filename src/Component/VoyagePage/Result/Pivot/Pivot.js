@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 // import { VoyageContext } from "../VoyageApp";
-import { Paper } from "@mui/material";
+import { Paper,Grid } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +9,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 // import { PivotContext } from "./PivotApp";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 // const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
 
@@ -17,6 +20,8 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Pivot(props) {
+  const [width, height] = useWindowSize()
+
   const { complete_object } = useContext(props.context);
 
   //console.log("updated_complete_object= ", complete_object);
@@ -130,6 +135,7 @@ function Pivot(props) {
             }}
           ></Paper>
         </Grid> */}
+        <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -157,6 +163,7 @@ function Pivot(props) {
             </TableBody>
           </Table>
         </TableContainer>
+        </Grid>
       </div>
     </div>
   );

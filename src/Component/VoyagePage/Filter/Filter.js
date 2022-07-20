@@ -1,4 +1,4 @@
-import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer} from "@mui/material";
+import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer, Divider} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -20,30 +20,18 @@ import Cascading from './Cascading'
 // import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
-import {VoyageContext} from "../VoyageApp";
+import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
-const header={ "Authorization": process.env.REACT_APP_AUTHTOKEN}
+const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_tree, search_object, set_search_object, endpoint, menu_label} = useContext(props.context);
-
+    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet, typeForTable} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
     const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
-
-    // const [anchorEl, setAnchorEl] = React.useState(null);
-    // const open = Boolean(anchorEl);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-    // Handle Menu Click and Close
-    //  const handleMenuClick = (event) => { 
-    //      setAnchorEl(event.currentTarget);
-    //  };
-    //  const handleMenuClose = () => {
-    //    setAnchorEl(null);
-    //  };
 
     // Handle Drawer Open and Close
     const handleDrawerOpen = () => {
@@ -66,20 +54,22 @@ export default function Filter(props) {
     };
 
     //console.log('Current SEARCH OBJECT: ', search_object)
+    // console.log('Current output: ', output)
 
     return (
     <AppContext.Provider
         value={{
-          options_tree,
-          menuPosition, 
+          options_flat,
+          menuPosition,
           setMenuPosition,
           setOutput,
           output,
           labels,
-          setLabels
-    }}
-  >
-    <AppBar position="sticky">
+          setLabels,
+          nested_tree
+      }}
+    >
+    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
@@ -88,45 +78,19 @@ export default function Filter(props) {
         >
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
-        {/* <IconButton
-          //  aria-describedby={id}
-           variant="contained" 
-           onClick={handleMenuClick}>
-           <AutoAwesomeMotionIcon sx={{ color: "white" }}/>
-        </IconButton>
-        <Popover
-              //  id={id}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-            >
-              <Grid container direction="row" spacing={1}>
-                            {
-                              Object.keys(menu_label).map((key) => {
-                                return(
-                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
-                                )
-                              })
-                            }
-              </Grid>
-        </Popover> */}
-        <Grid container direction="row" spacing={1}>
-                            {
-                              Object.keys(menu_label).map((key) => {
-                                return(
-                                  <Cascading key={'cascading-' + key} menuName={key} button={menu_label[key]} context={props.context}/>
-                                )
-                              })
-                            }
-        </Grid>
+        {!drawerOpen ?
+            <Typography>Filter</Typography>
+        :
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(nested_tree).map((key) => {
+                    return(
+                      <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                    )
+                  })
+                }
+            </Grid>
+        }
       </Toolbar>
     </AppBar>
     <Drawer
@@ -134,41 +98,52 @@ export default function Filter(props) {
         variant="persistent"
         anchor="left"
         open={drawerOpen}
-        docked={true}
-        PaperProps={{ sx: {width: "24%"} }}
+        PaperProps={{ sx: {width: "25%"} }}
         style={{ position:'relative', zIndex:2 }}
-      >
-        <br/><br/><br/><br/><br/><br/><br/><br/>
-        <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item sx={10} align="center">
-              {output.map((item, index) => {
-                return(
-                  <Grid key={'grid-' + index} container direction="row" spacing={0} sx ={{m:'10px'}}>
-                    <Grid item xs={10} align="center" >
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
-                          <Typography>{item.split("***")[2]}</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <ComponentFac params={item} index={index} context={props.context}/>
-                        </AccordionDetails>
-                      </Accordion>
+    >
+        <Toolbar />
+        <Toolbar />
+        <Divider />
+        <Grid 
+            container 
+            spacing={0} 
+            direction="row"
+        >
+            <Grid item xs={10} justifyContent="center">
+                {output.length === 0 ? 
+                    <Grid container item sx={{m:'10px'}} justifyContent="center" >
+                        <Typography>No Filter</Typography>
                     </Grid>
-                    <Grid item xs={2} align="center">
-                      <IconButton onClick={()=>{handleDelete(item)}}>
-                          <RemoveCircleOutlineIcon />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-              )})}
+                :
+                    output.map((item, index) => {
+                    return(
+                      <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
+                          <Grid item xs={10} >
+                              <Accordion>
+                                  <AccordionSummary>
+                                      <Typography>{item.split("***")[2]}</Typography>
+                                  </AccordionSummary>
+                                  <AccordionDetails>
+                                      <ComponentFac params={item} index={index} context={props.context}/>
+                                  </AccordionDetails>
+                              </Accordion>
+                          </Grid>
+                          <Grid item xs={2} display="flex">
+                              <IconButton onClick={()=>{handleDelete(item)}}>
+                                  <RemoveCircleOutlineIcon />
+                              </IconButton>
+                          </Grid>
+                      </Grid>
+                    )})
+                }
             </Grid>
-            <Grid item sx={2} align="center">
-              <IconButton onClick={handleDrawerClose}>
-                  <ChevronLeftIcon />
-              </IconButton>
+            <Grid container item sx={2} justifyContent="flex-end">
+                <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeftIcon />
+                </IconButton>
             </Grid>
         </Grid>
     </Drawer>
-  </AppContext.Provider>
+    </AppContext.Provider>
   );
 }
