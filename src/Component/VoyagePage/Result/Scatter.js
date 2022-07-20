@@ -185,7 +185,7 @@ function Scatter (props) {
                         },
                         {type: 'bar'},
                     ]}
-                    layout={{width: width>800 ? width*0.8: width * 0.8,title: 'Scatter Plot'}}
+                    layout={{width:width*0.8,title: 'Scatter Plot'}}
                     config={{responsive: true}}
                 />
             </Grid>
