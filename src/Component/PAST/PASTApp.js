@@ -115,7 +115,7 @@ export default function PASTApp(props) {
       nested_tree, options_flat, search_object, set_search_object,
       windowRef, typeForTable, setTypeForTable,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet
+      dataSet, setDataSet, page: "past"
     }}>
       <PAST/>
     </PASTContext.Provider>

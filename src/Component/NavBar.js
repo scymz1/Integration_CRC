@@ -19,7 +19,7 @@ import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, page} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -28,8 +28,29 @@ export default function ResponsiveAppBar(props) {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const color = (() =>{
+    if(page === "voyage") {
+      if(dataSet==="0") {
+        return "voyageTrans"
+      }else{
+        return "voyageIntra"
+      }
+    }
+
+    if(typeForTable === "enslavers"){
+      return "success"
+    }
+
+    if(dataSet==="0") {
+      return "primary"
+    }else{
+      return "secondary"
+    }
+  })()
+
   return (
-    <AppBar position="sticky" color={ typeForTable === "enslavers"? "success": dataSet==="0"? "primary" : "secondary" }>
+    <AppBar position="sticky" color={ color }>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -115,7 +136,7 @@ export default function ResponsiveAppBar(props) {
           <ThemeProvider theme={switchTheme}>
             <Stack spacing={4} direction={"row"} justifyContent="flex-end"
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {search_object && typeForTable === "slaves"?
+              {search_object && typeForTable === "slaves" || page === "voyage" ?
                 <ToggleButtonGroup
                   color="blackMode"
                   value={dataSet}
