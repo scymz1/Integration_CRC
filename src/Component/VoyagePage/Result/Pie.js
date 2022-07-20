@@ -180,7 +180,7 @@ function Pie (props) {
                                     mode: 'lines+markers',
                                 }
                             ]}
-                            layout={ {title: 'Pie Plot'} }
+                            layout={ {title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Pie Graph`} }
                             config={{responsive: true}}
                         />
                     </Paper>

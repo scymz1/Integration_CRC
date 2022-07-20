@@ -185,13 +185,28 @@ function Scatter (props) {
                             x: plot_field,
                             y: plot_value,
                             type: 'scatter',
-                            mode: 'lines+markers',
+                            mode: 'lines',
                             marker: {color: 'red'},
+                            line: {shape: 'spline'},
                         },
                         {type: 'bar'},
                     ]}
-                    layout={{title: 'Scatter Plot'}}
+                    
+                    layout={{title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel}  Scatter Graph`,
+                    xaxis:{
+                        title: 
+                        {text:`${options_flat[option.field].flatlabel}`},
+                        fixedrange: true
+                        },
+                    yaxis:{
+                    title: 
+                    {text:`${options_flat[option.value].flatlabel}`},
+                    fixedrange: true
+                    
+                    }}}
+
                     config={{responsive: true}}
+                    
                 />
                 </Paper>
             </Grid>
