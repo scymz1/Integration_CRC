@@ -25,6 +25,9 @@ import {CircularProgress, Grid} from "@mui/material";
 import {
   useWindowSize,
 } from '@react-hook/window-size'
+import {enslaved_default_list, enslaved_var_list, enslaver_default_list, enslaver_var_list} from "../../../PAST/vars";
+import * as enslaved_labels from "../../../util/enslaved_options.json";
+import * as enslaver_labels from "../../../util/enslaver_options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -39,6 +42,10 @@ function Table(props) {
   // Menu
   const {
     cols,
+    setCols,
+    setAll_options,
+    setLabels,
+    setEnslaver,
     checkbox,
     setOpen,
     setInfo,
@@ -101,6 +108,17 @@ function Table(props) {
       .post("/" + endpoint, data)
       .then(function (response) {
         setValue(Object.values(response.data));
+        if (typeForTable === "slaves") {
+          setCols(enslaved_default_list);
+          setLabels(enslaved_labels);
+          setAll_options(enslaved_var_list);
+          setEnslaver(false);
+        } else if (typeForTable === "enslavers") {
+          setCols(enslaver_default_list);
+          setLabels(enslaver_labels);
+          setAll_options(enslaver_var_list);
+          setEnslaver(true);
+        }
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
         setLoading(false);
