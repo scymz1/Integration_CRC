@@ -187,7 +187,7 @@ function Scatter (props) {
                         {type: 'bar'},
                     ]}
                     
-                    layout={{title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel}  Scatter Graph`,
+                    layout={{width:width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel}  Scatter Graph`,
                     xaxis:{
                         title: 
                         {text:`${options_flat[option.field].flatlabel}`},
