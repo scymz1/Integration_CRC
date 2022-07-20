@@ -46,21 +46,21 @@ export default function PASTTable(props) {
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
   // console.log(endpoint)
-  useEffect(() =>{
-    if (typeForTable === "slaves") {
-      setCols(enslaved_default_list);
-      setLabels(enslaved_labels);
-      setAll_options(enslaved_var_list);
-      // setEndpoint("past/enslaved/");
-      setEnslaver(false);
-    } else if (typeForTable === "enslavers") {
-      setCols(enslaver_default_list);
-      setLabels(enslaver_labels);
-      setAll_options(enslaver_var_list);
-      // setEndpoint("past/enslavers/");
-      setEnslaver(true);
-    }
-  },[typeForTable])
+  // useEffect(() =>{
+  //   if (typeForTable === "slaves") {
+  //     // setCols(enslaved_default_list);
+  //     setLabels(enslaved_labels);
+  //     setAll_options(enslaved_var_list);
+  //     // setEndpoint("past/enslaved/");
+  //     setEnslaver(false);
+  //   } else if (typeForTable === "enslavers") {
+  //     // setCols(enslaver_default_list);
+  //     setLabels(enslaver_labels);
+  //     setAll_options(enslaver_var_list);
+  //     // setEndpoint("past/enslavers/");
+  //     setEnslaver(true);
+  //   }
+  // },[typeForTable])
 
   const handleDelete = (chipToDelete) => () => {
     //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
@@ -74,6 +74,9 @@ export default function PASTTable(props) {
         value={{
           cols,
           setCols,
+          setAll_options,
+          setLabels,
+          setEnslaver,
           // endpoint,
           id,
           setId,
