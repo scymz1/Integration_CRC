@@ -54,8 +54,9 @@ export default function Home() {
                     <Animated
                       animationIn="slideInLeft"
                       animationOut="fadeOut"
+                      animationInDelay="600"
                       isVisible={isVisible}
-                      // animationInDuration ="2000"
+                      animationInDuration ="1600"
                     >
                       {label}
                       <Divider/>
