@@ -79,6 +79,23 @@ export default function Network(props) {
       }
     };
     setGraph(null)
+
+    //enslavers
+    if(myQueryData.type === "enslavers") {
+      console.log(data)
+      data.forEach((item, index) => {
+        //self
+        const self = tmp.addNode(item, item.principal_alias, "enslaver", "green")
+        self.font = {size: windowRef.current.offsetHeight*0.03}
+        //slaves
+        item.alias.forEach((slaveData)=>{
+
+        })
+      })
+      return
+    }
+
+    //slave
     data.forEach((item, index) => {
       //self
       const self = tmp.addNode(item, item.documented_name, "slaves", "red")
