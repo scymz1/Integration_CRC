@@ -99,7 +99,7 @@ export default function Filter(props) {
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
         {!drawerOpen ?
-            <Typography>Filter</Typography>
+            <Typography sx={{ color: "white" }}>Filter</Typography>
         :
             <Grid container direction="row" spacing={1}>
                 {

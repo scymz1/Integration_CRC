@@ -14,7 +14,7 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {data,windowRef,setOpen, setInfo, setId, modal} = useContext(PASTContext);
+    const {data,windowRef,setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
     const [graph, setGraph] = useState(null);
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
@@ -70,6 +70,11 @@ export default function Sankey(props) {
     };
 
     useEffect(()=>{
+      if(queryData.type === "enslavers") {
+        setGraph("enslavers")
+        return;
+      }
+
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
       let new_CANVAS_HEIGHT = 0;
       let transLength = 0;
@@ -270,7 +275,6 @@ export default function Sankey(props) {
           [30, 30],
           [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
         ])({nodes, links});
-      
       setGraph(tmpGraph)  
     }, [data]);
 
@@ -301,6 +305,9 @@ export default function Sankey(props) {
       <br/>
       {!graph ?
         <CircularProgress/> :
+
+        graph === "enslavers"? "this is enslavers" :
+
         <svg 
         className="canvas"
         width={CANVAS_WIDTH+30}

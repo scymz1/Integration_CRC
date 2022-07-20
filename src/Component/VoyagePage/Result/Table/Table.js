@@ -21,11 +21,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-import {CircularProgress, Grid} from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
+import { useWindowSize } from "@react-hook/window-size";
 import {
-  useWindowSize,
-} from '@react-hook/window-size'
-import {enslaved_default_list, enslaved_var_list, enslaver_default_list, enslaver_var_list} from "../../../PAST/vars";
+  enslaved_default_list,
+  enslaved_var_list,
+  enslaver_default_list,
+  enslaver_var_list,
+} from "../../../PAST/vars";
 import * as enslaved_labels from "../../../util/enslaved_options.json";
 import * as enslaver_labels from "../../../util/enslaver_options.json";
 
@@ -34,7 +37,7 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Table(props) {
-  const [width, height] = useWindowSize()
+  const [width, height] = useWindowSize();
   const [isLoading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
   //const { search_object } = useContext(VoyageContext);
@@ -60,7 +63,6 @@ function Table(props) {
     typeForTable,
   } = useContext(props.context);
 
-
   // Pagination
   const [totalResultsCount, setTotalResultsCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -75,8 +77,8 @@ function Table(props) {
   //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
-    setLoading(true)
-    setValue([])
+    setLoading(true);
+    setValue([]);
     var data = new FormData();
     data.append("hierarchical", "False");
     data.append("results_page", page + 1);
@@ -93,16 +95,16 @@ function Table(props) {
         data.append(property, v);
       });
     }
-    const endpoint =(()=> {
+    const endpoint = (() => {
       switch (typeForTable) {
         case "slaves":
-          return "past/enslaved/"
+          return "past/enslaved/";
         case "enslavers":
-          return "past/enslavers/"
+          return "past/enslavers/";
         default:
-          return "voyage/"
+          return "voyage/";
       }
-    })()
+    })();
     // console.log("table useEffect", endpoint, typeForTable, search_object, cols)
     axios
       .post("/" + endpoint, data)
@@ -126,8 +128,15 @@ function Table(props) {
       .catch(function (error) {
         console.log(error);
       });
-
-  }, [page, rowsPerPage, sortingReq, field, direction, typeForTable, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    page,
+    rowsPerPage,
+    sortingReq,
+    field,
+    direction,
+    typeForTable,
+    search_object,
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -234,7 +243,7 @@ function Table(props) {
   };
 
   if (isLoading) {
-    return <CircularProgress/>;
+    return <CircularProgress />;
   }
   return (
     <div>
@@ -256,141 +265,172 @@ function Table(props) {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            
-            <TableContainer component={Paper}>
-              <Tables sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    {checkbox && (
-                      <TableCell padding="checkbox">
-                        {/* <Checkbox
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Grid
+                item
+                sx={{ width: width > 800 ? width * 0.95 : width * 0.7 }}
+              >
+                <TableContainer component={Paper}>
+                  <Tables sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        {checkbox && (
+                          <TableCell padding="checkbox">
+                            {/* <Checkbox
                         color="primary"
                       /> */}
-                      </TableCell>
-                    )}
-                    {cols.map((v, key) => (
-                      <TableCell
-                        style={{ color: "#389c90" }}
-                        onClick={(event) => handleSorting(event, v)}
-                        key={'title-' + key}
-                      >
-                        <div>{options_flat[v].flatlabel}</div>
-                        <div style={{ float: "right" }}>
-                          {/* position: 'flex', bottom:0 */}
-                          <TableSortLabel
-                            style={{ opacity: field === v ? 1 : 0.4 }}
-                            active={true}
-                            direction={field === v ? direction : "asc"}
-                          ></TableSortLabel>
-                        </div>
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {value.map((row) => {
-                    const isItemSelected = isSelected(row.id);
-                    return (
-                      // <TableRow>
-                      <StyledTableRow
-                        key={row.id}
-                        onClick={(event) => handleOpen(event, row)}
-                        //selected={isItemSelected}
-                      >
-                        {/* {console.log(row)} */}
-                        {checkbox && (row.transactions != null && row.transactions.length !== 0) && (
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              disabled={checkedMax(row.id)}
-                            />
                           </TableCell>
                         )}
-                        {checkbox && (row.transactions == null || row.transactions.length === 0) && (
-                          <TableCell padding="checkbox"></TableCell>
-                        )}
-                        {cols.map((k, key) => {
-                          if (k === "gender") {
-                            if (row[k] === 1) {
-                              return <TableCell key={'content-' + key}>Male</TableCell>;
-                            } else if (row[k] === 2) {
-                              return <TableCell key={'content-' + key}>Female</TableCell>;
-                            } else {
-                              return <TableCell key={'content-' + key}>{row[k]}</TableCell>;
-                            }
-                          } else if (
-                            k ===
-                            "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-                          ) {
-                            const popover = createPopover(row);
-                            //console.log(popover);
-                            return (
-                              <TableCell key={'content-' + key}>
-                                <Stack direction="row" spacing={1}>
-                                  {Object.keys(popover).map((name, key) => (
-                                    <Tooltip
-                                      key={'tooltip-' + key}
-                                      arrow
-                                      title={popover[name].join(", ")}
-                                      placement="top"
-                                    >
-                                      <Chip label={name} />
-                                    </Tooltip>
-                                  ))}
-                                </Stack>
-                              </TableCell>
-                            );
-                          } else if (
-                            k === "transactions__transaction__voyage__id"
-                          ) {
-                            return (
-                              <TableCell key={'content-' + key}>
-                                <Link
-                                  component="button"
-                                  variant="body2"
-                                  onClick={(e) => {
-                                    handleCellOpen(e, row);
-                                    // e.preventDefault();
-                                    e.stopPropagation();
-                                  }}
-                                >
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html: [...new Set(row[k])].join(", "),
-                                    }}
+                        {cols.map((v, key) => (
+                          <TableCell
+                            style={{ color: "#389c90" }}
+                            onClick={(event) => handleSorting(event, v)}
+                            key={"title-" + key}
+                          >
+                            <div>{options_flat[v].flatlabel}</div>
+                            <div style={{ float: "right" }}>
+                              {/* position: 'flex', bottom:0 */}
+                              <TableSortLabel
+                                style={{ opacity: field === v ? 1 : 0.4 }}
+                                active={true}
+                                direction={field === v ? direction : "asc"}
+                              ></TableSortLabel>
+                            </div>
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {value.map((row) => {
+                        const isItemSelected = isSelected(row.id);
+                        return (
+                          // <TableRow>
+                          <StyledTableRow
+                            key={row.id}
+                            onClick={(event) => handleOpen(event, row)}
+                            //selected={isItemSelected}
+                          >
+                            {/* {console.log(row)} */}
+                            {checkbox &&
+                              row.transactions != null &&
+                              row.transactions.length !== 0 && (
+                                <TableCell padding="checkbox">
+                                  <Checkbox
+                                    color="primary"
+                                    checked={isItemSelected}
+                                    disabled={checkedMax(row.id)}
                                   />
-                                </Link>
-                              </TableCell>
-                            );
-                          } else if (typeof row[k] === "object") {
-                            return (
-                              <TableCell key={'content-' + key}>
-                                <div // [...new Set(row[k])]
-                                  dangerouslySetInnerHTML={{
-                                    __html: [...new Set(row[k])].join(", "),
-                                  }}
-                                />
-                                {/* {[...new Set(row[k])].join(", ")} */}
-                              </TableCell>
-                            );
-                          } else {
-                            return (
-                              <TableCell key={'content-' + key}>
-                                <div // [...new Set(row[k])]
-                                  dangerouslySetInnerHTML={{ __html: row[k] }}
-                                />
-                              </TableCell>
-                            );
-                          }
-                        })}
-                      </StyledTableRow>
-                    );
-                  })}
-                </TableBody>
-              </Tables>
-            </TableContainer>
-            
+                                </TableCell>
+                              )}
+                            {checkbox &&
+                              (row.transactions == null ||
+                                row.transactions.length === 0) && (
+                                <TableCell padding="checkbox"></TableCell>
+                              )}
+                            {cols.map((k, key) => {
+                              if (k === "gender") {
+                                if (row[k] === 1) {
+                                  return (
+                                    <TableCell key={"content-" + key}>
+                                      Male
+                                    </TableCell>
+                                  );
+                                } else if (row[k] === 2) {
+                                  return (
+                                    <TableCell key={"content-" + key}>
+                                      Female
+                                    </TableCell>
+                                  );
+                                } else {
+                                  return (
+                                    <TableCell key={"content-" + key}>
+                                      {row[k]}
+                                    </TableCell>
+                                  );
+                                }
+                              } else if (
+                                k ===
+                                "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+                              ) {
+                                const popover = createPopover(row);
+                                //console.log(popover);
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <Stack direction="row" spacing={1}>
+                                      {Object.keys(popover).map((name, key) => (
+                                        <Tooltip
+                                          key={"tooltip-" + key}
+                                          arrow
+                                          title={popover[name].join(", ")}
+                                          placement="top"
+                                        >
+                                          <Chip label={name} />
+                                        </Tooltip>
+                                      ))}
+                                    </Stack>
+                                  </TableCell>
+                                );
+                              } else if (
+                                k === "transactions__transaction__voyage__id"
+                              ) {
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <Link
+                                      component="button"
+                                      variant="body2"
+                                      onClick={(e) => {
+                                        handleCellOpen(e, row);
+                                        // e.preventDefault();
+                                        e.stopPropagation();
+                                      }}
+                                    >
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: [...new Set(row[k])].join(
+                                            ", "
+                                          ),
+                                        }}
+                                      />
+                                    </Link>
+                                  </TableCell>
+                                );
+                              } else if (typeof row[k] === "object") {
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <div // [...new Set(row[k])]
+                                      dangerouslySetInnerHTML={{
+                                        __html: [...new Set(row[k])].join(", "),
+                                      }}
+                                    />
+                                    {/* {[...new Set(row[k])].join(", ")} */}
+                                  </TableCell>
+                                );
+                              } else {
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <div // [...new Set(row[k])]
+                                      dangerouslySetInnerHTML={{
+                                        __html: row[k],
+                                      }}
+                                    />
+                                  </TableCell>
+                                );
+                              }
+                            })}
+                          </StyledTableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Tables>
+                </TableContainer>
+              </Grid>
+            </Grid>
             <Stack
               spacing={2}
               margin={2}

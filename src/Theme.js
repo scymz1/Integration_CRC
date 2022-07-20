@@ -2,13 +2,13 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
+    // mode: 'dark',
     voyageTrans: {
       main: "#42a5f5"
     },
     voyageIntra: {
       main: "#ab47bc"
     }
-
   },
 });
 
