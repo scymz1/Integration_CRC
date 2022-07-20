@@ -176,7 +176,6 @@ export function ReadFeature(props) {
   },[area])
 
   useEffect(() => {
-    console.log("props.search_object changed")
     for (var i in map._layers) {
       if (
         map._layers[i]._path != undefined ||
@@ -201,7 +200,6 @@ export function ReadFeature(props) {
       
     };
     
-    console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
