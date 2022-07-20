@@ -231,7 +231,13 @@ function Table(props) {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center">
+            <Grid item sx={{width:width>800 ? width*0.95: width*0.7}}>
             <TableContainer component={Paper}>
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -365,6 +371,7 @@ function Table(props) {
                 </TableBody>
               </Tables>
             </TableContainer>
+            </Grid>
             </Grid>
             <Stack
               spacing={2}
