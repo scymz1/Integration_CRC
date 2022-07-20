@@ -155,11 +155,12 @@ export function ReadFeature(props) {
       if(complete_object[diskey]){
         console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
         delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+        console.log("🚀 ~ file: Spatial.js ~ line 158 ~ useEffect ~ complete_object", complete_object)
       }
       
      }
 
-    //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
   },[disembark])
