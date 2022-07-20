@@ -29,25 +29,6 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-function FullscreenButton(props){
-    // const context = useLeafletContext();
-    // const control = new Control({position: 'topright'});
-    // control.onAdd = function (map) {
-    //     let div = DomUtil.create('button');
-    //     div.innerHtml = `Enter fullscreen`  //`<button onClick={props.fullscreen}>Enter fullscreen</button>`
-    //     return div;
-    // }
-    // useEffect(()=>{
-        
-    //     const container = context.layerContainer || context.map;
-    //     container.addControl(control);
-    // }, []);
-    // var map = useMap();
-    // L.easyButton('fa-globe', function(btn, map){
-    // }).addTo( map );
-
-    // return null;
-}
 
 export default function MapBoundingBox(props){
 
@@ -60,9 +41,9 @@ export default function MapBoundingBox(props){
     const [latitude2, onChangelatitude2] = React.useState(90);
 
     
-    const {search_object, endpoint} = React.useContext(props.context);
+    const {set_search_object, search_object, endpoint} = React.useContext(props.context);
     
-    const [map_search_object, set_map_search_object] = useState(search_object);
+    //const [map_search_object, set_map_search_object] = useState(search_object);
 
     const [selectMode, SetselectMode] = useState(false);
     
@@ -70,22 +51,27 @@ export default function MapBoundingBox(props){
 
     useEffect(() => {
         if(radioOptions=="embarkation"){
-            set_map_search_object({
+            let newObject = { ...search_object };
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
+            set_search_object(newObject);
+            set_search_object({
             ...search_object,
             "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude": [latitude1, latitude2],
             "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": [longitude1, longitude2]
         });
         }
         else{
-            console.log("Disembarkation")
-            set_map_search_object({
+            let newObject = { ...search_object };
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
+            set_search_object(newObject);
+            set_search_object({
             ...search_object,
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude": [latitude1, latitude2],
             "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
         });
         }
     
-    }, [longitude1, longitude2, latitude1, latitude2, radioOptions, search_object]);
+    }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
   
     const position = [0, -20];
 
@@ -105,65 +91,14 @@ export default function MapBoundingBox(props){
         else{
             onChangeRadioOption("embarkation");
         }
+        SetselectMode(true);
     }
 
     return (
         <div>
-            {/* <FormControl>
-            <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>
-            <RadioGroup
-                row
-                aria-labelledby="boundingBoxFilter"
-                defaultValue="embarkation"
-                name="radio-buttons-group"
-                onChange={getRadioValue}
-            >
-                <FormControlLabel value="embarkation" control={<Radio />} label="embarkation" />
-                <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
-            </RadioGroup>
-            </FormControl> */}
-
-        <br/>
-
-      
-
-             
+            <br/>
             <FullScreen handle={handle}>
-            
-            <MapContainer center={position} zoom={2.5} minZoom={1.8}  style={{ height: "100vh" }}>
-               
-
-                <Control prepend position='topright' >
-                    {/* <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{
-                                                                                    e.stopPropagation();
-                                                                                    e.preventDefault();
-                                                                                    SetselectMode(true);
-                                                                                }}> 
-                        Select Bounding Box
-                    </Button> */}
-                    <FormControl variant="filled">
-                        <RadioGroup
-                            row
-                            aria-labelledby="boundingBoxFilter"
-                            // defaultValue="embarkation"
-                            name="radio-buttons-group"
-                            value={radioOptions}
-                            onChange={getRadioValue}
-                        >
-                            <FormControlLabel value="embarkation" control={<Radio  size="small"/>} label="Select Embarkation" />
-                            <FormControlLabel value="disembarkation" control={<Radio  size="small"/>} label="Select Disembarkation" />
-                        </RadioGroup>
-                    </FormControl>
-                    <Button onClick={()=>{
-                        onChangelongitude1(-360);
-                        onChangelongitude2(360);
-                        onChangelatitude1(-90);
-                        onChangelatitude1(90);
-                    }}>
-                        Reset
-                    </Button>
-                </Control>
-
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border">
                         <TileLayer
@@ -179,9 +114,21 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                
+                <ReadFeature search_object={search_object}  radio = {radioOptions}/>
 
-                <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/>
+
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    Select Embarkation
+                    </Button>
+                </Control>
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    Select Disembarkation
+                    </Button>
+                </Control>
+
+                {/* <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/> */}
             
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
@@ -208,6 +155,16 @@ export default function MapBoundingBox(props){
     );
 
 }
+
+
+
+                {/* <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={(e, entry)=>{e.stopPropagation();
+        e.preventDefault();SetselectMode(true);}}> 
+                    Select Bounding Box
+                    </Button>
+                </Control> */}
+
 
 {/* <FormControl>
 <FormLabel id="boundingBoxFilter">Bounding box select options</FormLabel>

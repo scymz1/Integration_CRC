@@ -22,8 +22,8 @@ export default function AreaSelect(props) {
 
     let drawbox = L.rectangle([[0, 0], [0, 0]], { color: "blue", weight: 1, fillOpacity:0.0 })
     map.on("areaselected", (e) => {
-      console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
-      console.log(e.bounds);
+      //console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
+      //console.log(e.bounds);
       let box=e.bounds.toBBoxString().split(",");
       props.onChangelongitude1(parseFloat(box[0]));
       props.onChangelongitude2(parseFloat(box[2]));

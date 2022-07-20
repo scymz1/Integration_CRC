@@ -15,7 +15,9 @@ import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
 import * as options_flat from "../../util/options.json"
-
+import {
+    useWindowSize,
+  } from '@react-hook/window-size'
 const option_url = '/voyage/?hierarchical=false' // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -23,6 +25,7 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 function Scatter (props) {
+    const [width, height] = useWindowSize()
 
     const {
         search_object, endpoint
@@ -110,7 +113,7 @@ function Scatter (props) {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120}}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -132,7 +135,7 @@ function Scatter (props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7, my:2  }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
                         <Select
@@ -170,15 +173,7 @@ function Scatter (props) {
             </div>
 
             <div>
-            <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                    sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: 500,
-                    }}
-                    >
+            <Grid>
                 <Plot
                     data={[
                         {
@@ -190,10 +185,9 @@ function Scatter (props) {
                         },
                         {type: 'bar'},
                     ]}
-                    layout={{title: 'Scatter Plot'}}
+                    layout={{width: width>800 ? width*0.8: width * 0.8,title: 'Scatter Plot'}}
                     config={{responsive: true}}
                 />
-                </Paper>
             </Grid>
             </div>
         </div>

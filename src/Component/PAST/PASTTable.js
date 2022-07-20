@@ -28,6 +28,7 @@ export default function PASTTable(props) {
   const [all_options, setAll_options] = React.useState(enslaved_var_list);
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
+  const [enslaver, setEnslaver] = React.useState(true);
 
   const {
     options_tree,
@@ -42,18 +43,20 @@ export default function PASTTable(props) {
     typeForTable,
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
-
+  console.log(endpoint)
   useEffect(() =>{
     if (typeForTable == "slaves") {
       setCols(enslaved_default_list);
       setLabels(enslaved_labels);
       setAll_options(enslaved_var_list);
       setEndpoint("past/enslaved/");
+      setEnslaver(false);
     } else if (typeForTable == "enslavers") {
       setCols(enslaver_default_list);
       setLabels(enslaver_labels);
       setAll_options(enslaver_var_list);
       setEndpoint("past/enslavers/");
+      setEnslaver(true);
     }
   },[typeForTable])
 
@@ -74,6 +77,7 @@ export default function PASTTable(props) {
           setId,
           open,
           setOpen,
+          enslaver,
           checkbox: true,
           modal: false,
           columnOptions: all_options,

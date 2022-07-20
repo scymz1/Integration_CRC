@@ -17,7 +17,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
-// import RadioButton from "./radio";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 import { VoyageContext } from "../VoyageApp";
@@ -27,10 +26,9 @@ export const AppContext = React.createContext();
 const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const { options_flat, search_object, set_search_object, endpoint, nested_tree } = useContext(props.context);
-
+    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet, typeForTable} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
-    const [output, setOutput] = React.useState([]);
+    // const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -45,20 +43,17 @@ export default function Filter(props) {
 
     // Handle delete by removing the specified key
     const handleDelete = (item) => { 
-        var raw = item.split("***")
-        var varName = raw[0]
+        // var raw = item.split("***")
+        // var varName = raw[0]
+        var varName = item.option
         let newObject = {...search_object};
 
-        console.log("New search object: ", search_object)
         delete newObject[varName];
         set_search_object(newObject); 
-        console.log("After deletion: ", search_object)
-        setOutput(output.filter((e)=>e!==item))
+        // setOutput(output.filter((e)=>e!==item))
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
-    //console.log('Current SEARCH OBJECT: ', search_object)
-    // console.log('Current output: ', output)
 
     return (
     <AppContext.Provider
@@ -66,14 +61,14 @@ export default function Filter(props) {
           options_flat,
           menuPosition,
           setMenuPosition,
-          setOutput,
-          output,
+          // setOutput,
+          // output,
           labels,
           setLabels,
           nested_tree
       }}
     >
-    <AppBar position="sticky">
+    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
@@ -82,15 +77,19 @@ export default function Filter(props) {
         >
           <FilterAlt sx={{ color: "white" }}/>
         </IconButton>
-        <Grid container direction="row" spacing={1}>
-            {
-              Object.keys(nested_tree).map((key) => {
-                return(
-                  <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
-                )
-              })
-            }
-        </Grid>
+        {!drawerOpen ?
+            <Typography>Filter</Typography>
+        :
+            <Grid container direction="row" spacing={1}>
+                {
+                  Object.keys(nested_tree).map((key) => {
+                    return(
+                      <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                    )
+                  })
+                }
+            </Grid>
+        }
       </Toolbar>
     </AppBar>
     <Drawer
@@ -98,30 +97,30 @@ export default function Filter(props) {
         variant="persistent"
         anchor="left"
         open={drawerOpen}
-        docked={true}
         PaperProps={{ sx: {width: "25%"} }}
         style={{ position:'relative', zIndex:2 }}
     >
         <Toolbar />
         <Toolbar />
+        <Divider />
         <Grid 
             container 
             spacing={0} 
             direction="row"
         >
             <Grid item xs={10} justifyContent="center">
-                {output.length === 0 ? 
+                {labels.length === 0 ? 
                     <Grid container item sx={{m:'10px'}} justifyContent="center" >
                         <Typography>No Filter</Typography>
                     </Grid>
                 :
-                    output.map((item, index) => {
+                    labels.map((item, index) => {
                     return(
                       <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
                           <Grid item xs={10} >
                               <Accordion>
                                   <AccordionSummary>
-                                      <Typography>{item.split("***")[2]}</Typography>
+                                      <Typography>{item.option}</Typography>
                                   </AccordionSummary>
                                   <AccordionDetails>
                                       <ComponentFac params={item} index={index} context={props.context}/>
@@ -143,7 +142,7 @@ export default function Filter(props) {
                 </IconButton>
             </Grid>
         </Grid>
-      </Drawer>
+    </Drawer>
     </AppContext.Provider>
   );
 }

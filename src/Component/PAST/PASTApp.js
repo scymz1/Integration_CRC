@@ -19,6 +19,7 @@ export default function PASTApp(props) {
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
   const [typeForTable, setTypeForTable] = useState("slaves");
+  const [dataSet, setDataSet] = useState("1")
   const [queryData, setQueryData] = React.useState({
     slaves: [],
     type: "slaves",
@@ -73,7 +74,7 @@ export default function PASTApp(props) {
         case "enslavers": return "past/enslavers/"
       }
     })())
-    // console.log("queryData.type", typeForTable)
+    console.log("typeForTable", typeForTable)
   }, [typeForTable])
 
   useEffect(() => {
@@ -132,7 +133,8 @@ export default function PASTApp(props) {
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
        endpoint, setEndpoint, windowRef, typeForTable, setTypeForTable,
-      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData
+      modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
+      dataSet, setDataSet
     }}>
       <PAST/>
     </PASTContext.Provider>

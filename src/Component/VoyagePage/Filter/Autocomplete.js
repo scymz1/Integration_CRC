@@ -15,7 +15,6 @@ export default function Auto(props) {
 
   const searchLabel = labels[index];
 
-  
   const [value, setValue] = React.useState([]);
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
@@ -43,14 +42,16 @@ export default function Auto(props) {
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
-    },[search_object])
+    },[search_object, textInput])
 
     React.useEffect(()=>{
-      set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
-        ...search_object,
-        [searchLabel.option]: [textInput]
-      }));
-    },[textInput])
+      if(value != '')
+        set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
+          ...search_object,
+          [searchLabel.option]: [value]
+        }));
+
+    },[value])
 
 
   return (
@@ -60,15 +61,16 @@ export default function Auto(props) {
       autoHighlight
       multiple
       options={autocompleteOptions}
-      value={autocompleteOptions[0]}
+      value={search_object[searchLabel.option] ? search_object[searchLabel.option] : autocompleteOptions[0]}
+      // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
       }}
-      sx={{ width: 300 }}
+      // sx={{ width: 300 }}
       renderInput={(params) => {
 
         setTestInput(params.inputProps.value)
-
+        console.log("TestInput: ", params.inputProps.value)
         return <TextField {...params} label="field" />
          
     }}
