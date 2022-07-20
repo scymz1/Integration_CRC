@@ -29,19 +29,13 @@ function modifyName(rawName){
 
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
-  //console.log("INDEX: ", index)
 
-    //console.log("getSlider got called")
     const {labels, setLabels} = React.useContext(AppContext)
-    const {search_object, set_search_object, typeForTable, options_flat} = React.useContext(props.context)
-
-    // const curLabel = labels[labels.length - 1];
-
+    const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
     const curLabel = labels[index];
 
     const varName = curLabel["option"];
-    // const varDisplay = modifyName(curLabel["label"])
-    const varDisplay = options_flat[varName].flatlabel
+    const varDisplay = modifyName(curLabel["label"])
 
     const [range, setRange] = React.useState([0,0])
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
