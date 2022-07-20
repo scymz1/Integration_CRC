@@ -174,7 +174,7 @@ function Pie (props) {
                                     mode: 'lines+markers',
                                 }
                             ]}
-                            layout={{width: width*0.8,title: 'Pie Plot'} }
+                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Pie Graph`} }
                             config={{responsive: true}}
                         />
                 </Grid>
