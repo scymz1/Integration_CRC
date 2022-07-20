@@ -56,7 +56,7 @@ export const skeleton = {
 export const columnOptions = {
   "id": {
     "id": null,
-    "voyage_id": null,
+    // "voyage_id": null,
   },
 
 
