@@ -79,6 +79,23 @@ export default function Network(props) {
       }
     };
     setGraph(null)
+
+    //enslavers
+    if(myQueryData.type === "enslavers") {
+      console.log(data)
+      data.forEach((item, index) => {
+        //self
+        const self = tmp.addNode(item, item.principal_alias, "enslaver", "green")
+        self.font = {size: windowRef.current.offsetHeight*0.03}
+        //slaves
+        item.alias.forEach((slaveData)=>{
+
+        })
+      })
+      return
+    }
+
+    //slave
     data.forEach((item, index) => {
       //self
       const self = tmp.addNode(item, item.documented_name, "slaves", "red")
@@ -86,10 +103,16 @@ export default function Network(props) {
       //transaction
       item.transactions.forEach((transaction)=>{
         const transactionData = transaction.transaction
-        tmp.addNode(transactionData, `transportation: ${transactionData.id}`, "transportation", "orange")
-        tmp.link(item, transactionData, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
+        if(transactionData.relation_type.relation_type === "transportation") {
+          tmp.addNode(transactionData, `Voyage: ${transactionData.voyage.id}`, "transportation", "orange")
+          tmp.link(item, transactionData, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
         to ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "No Data")} 
         at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
+        }else if(transactionData.relation_type.relation_type === "transaction") {
+          tmp.addNode(transactionData, `transaction: ${transactionData.id}`, "transportation", "orange")
+          tmp.link(item, transactionData,"")
+        }
+
 
         //caption
         const captainconnection = _.get(transactionData, ["voyage", "voyage_captainconnection"])

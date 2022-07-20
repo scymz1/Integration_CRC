@@ -2,7 +2,7 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "ID"
+    "flatlabel": "Voyage ID"
   },
   "principal_location": {
     "type": "table",
@@ -57,7 +57,7 @@
   "principal_location__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "principal location : Location : Location name"
+    "flatlabel": "Principal Location"
   },
   "principal_location__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -122,7 +122,7 @@
   "alias__transactions__transaction": {
     "type": "table",
     "label": "enslavement relation",
-    "flatlabel": "identity : enslaver in relation : enslavement relation"
+    "flatlabel": "Enslavements"
   },
   "alias__transactions__transaction__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -142,7 +142,7 @@
   "alias__transactions__transaction__relation_type__relation_type": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Relation type",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : relation type : Relation type"
+    "flatlabel": "Enslavement Type"
   },
   "alias__transactions__transaction__source": {
     "type": "table",
@@ -162,7 +162,7 @@
   "alias__transactions__transaction__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Full reference",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : source : Full reference"
+    "flatlabel": "Documentary Sources on Enslavement"
   },
   "alias__transactions__transaction__source__source_type": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -172,17 +172,17 @@
   "alias__transactions__transaction__voyage": {
     "type": "table",
     "label": "voyage",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage"
+    "flatlabel": "Voyages"
   },
   "alias__transactions__transaction__voyage__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : ID"
+    "flatlabel": "Transaction Voyage ID"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary": {
     "type": "table",
     "label": "Itinerary",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary"
+    "flatlabel": "Voyage Itinerary"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1002,7 +1002,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed principal region of slave disembarkation (MJSELIMP) : Location : Location name"
+    "flatlabel": "Imputed principal region of slave disembarkation (MJSELIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -2712,7 +2712,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed port where voyage began (PTDEPIMP) : Location : Location name"
+    "flatlabel": "Imputed port where voyage began (PTDEPIMP) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -2807,7 +2807,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed region where voyage began (DEPTREGIMP) : Location : Location name"
+    "flatlabel": "Imputed region where voyage began (DEPTREGIMP) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -2902,7 +2902,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed broad region where voyage began (DEPTREGIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region where voyage began (DEPTREGIMP1) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3092,7 +3092,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed principal place of slave purchase (MJBYPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal place of slave purchase (MJBYPTIMP) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3187,7 +3187,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed principal region of slave purchase (MAJBYIMP) : Location : Location name"
+    "flatlabel": "Imputed principal region of slave purchase (MAJBYIMP) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3282,7 +3282,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed principal broad region of slave purchase (MAJBYIMP1) : Location : Location name"
+    "flatlabel": "Imputed principal broad region of slave purchase (MAJBYIMP1) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3472,7 +3472,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed principal port of slave disembarkation (MJSLPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal port of slave disembarkation (MJSLPTIMP) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3567,7 +3567,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Itinerary : Imputed broad region of slave disembarkation (MJSELIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region of slave disembarkation (MJSELIMP1) : Location : Location name"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3627,7 +3627,7 @@
   "alias__transactions__transaction__voyage__voyage_dates": {
     "type": "table",
     "label": "Dates",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Dates"
+    "flatlabel": "Voyage Dates"
   },
   "alias__transactions__transaction__voyage__voyage_dates__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -3827,7 +3827,7 @@
   "alias__transactions__transaction__voyage__voyage_dates__imp_voyage_began_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year voyage began",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Dates : Year voyage began"
+    "flatlabel": "Year Voyage Began"
   },
   "alias__transactions__transaction__voyage__voyage_dates__imp_departed_africa": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -3847,7 +3847,7 @@
   "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of arrival at port of disembarkation (YEARAM)",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Dates : Year of arrival at port of disembarkation (YEARAM)"
+    "flatlabel": "Year of arrival at port of disembarkation (YEARAM)"
   },
   "alias__transactions__transaction__voyage__voyage_dates__imp_length_home_to_disembark": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -3967,7 +3967,7 @@
   "alias__transactions__transaction__voyage__voyage_ship": {
     "type": "table",
     "label": "Ship",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship"
+    "flatlabel": "Enslaver Ships"
   },
   "alias__transactions__transaction__voyage__voyage_ship__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -4087,7 +4087,7 @@
   "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship : Place where vessel constructed : Location : Location name"
+    "flatlabel": "Vessel Construction Place"
   },
   "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_place__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -4182,7 +4182,7 @@
   "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_region__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship : Region where vessel constructed : Location : Location name"
+    "flatlabel": "Vessel Construction Region"
   },
   "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_region__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -4277,7 +4277,7 @@
   "alias__transactions__transaction__voyage__voyage_ship__registered_place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship : Place where vessel registered : Location : Location name"
+    "flatlabel": "Vessel Registration Place"
   },
   "alias__transactions__transaction__voyage__voyage_ship__registered_place__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -4372,7 +4372,7 @@
   "alias__transactions__transaction__voyage__voyage_ship__registered_region__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship : Region where vessel registered : Location : Location name"
+    "flatlabel": "Vessel Registration Region"
   },
   "alias__transactions__transaction__voyage__voyage_ship__registered_region__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -4417,7 +4417,7 @@
   "alias__transactions__transaction__voyage__voyage_ship__ship_name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Name of vessel",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : voyage : Ship : Name of vessel"
+    "flatlabel": "Vessel Name"
   },
   "alias__transactions__transaction__voyage__voyage_ship__tonnage": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -5387,7 +5387,7 @@
   "alias__transactions__transaction__place__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : place : Location : Location name"
+    "flatlabel": "Enslavement Location"
   },
   "alias__transactions__transaction__place__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -5447,7 +5447,7 @@
   "alias__transactions__transaction__date_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Date yyyy",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : Date yyyy"
+    "flatlabel": "Enslavement Year"
   },
   "alias__transactions__transaction__amount": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -5472,7 +5472,7 @@
   "alias__transactions__role__role": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Role",
-    "flatlabel": "identity : enslaver in relation : enslaver role : Role"
+    "flatlabel": "Enslaver Role"
   },
   "alias__transactions__enslaver_alias": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -5517,7 +5517,7 @@
   "enslaver_sources__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Full reference",
-    "flatlabel": "enslaver identity source connection : Source : Full reference"
+    "flatlabel": "Documentary Sources on Enslaver"
   },
   "enslaver_sources__source__source_type": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
