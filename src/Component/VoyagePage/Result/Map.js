@@ -3,12 +3,6 @@ import ReactDOM from 'react-dom';
 import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -48,8 +42,6 @@ export default function MapBoundingBox(props){
 
     
     const {set_search_object, search_object, setOutput, output} = React.useContext(props.context);
-    
-    //const [map_search_object, set_map_search_object] = useState(search_object);
 
     const [selectMode, SetselectMode] = useState(false);
     
@@ -98,12 +90,6 @@ export default function MapBoundingBox(props){
     const normal_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
-
-    const getRadioValue = (event) => {
-        onChangeRadioOption(event.target.value);
-        SetselectMode(true)
-        console.log("Radio: ", radioOptions);
-    }
 
     const SwitchBoundingBoxSelection = (event) => {
         if(radioOptions=="embarkation"){
@@ -209,9 +195,6 @@ export default function MapBoundingBox(props){
                     </Button>
                 </Control>
 
-
-                {/* <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/> */}
-            
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
