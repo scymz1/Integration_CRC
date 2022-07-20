@@ -39,7 +39,6 @@ function Table(props) {
   // Menu
   const {
     cols,
-    endpoint,
     checkbox,
     setOpen,
     setInfo,
@@ -69,6 +68,8 @@ function Table(props) {
   //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
+    setLoading(true)
+    setValue([])
     var data = new FormData();
     data.append("hierarchical", "False");
     data.append("results_page", page + 1);
@@ -85,8 +86,15 @@ function Table(props) {
         data.append(property, v);
       });
     }
-
-
+    const endpoint =(()=> {
+      switch (typeForTable) {
+        case "slaves":
+          return "past/enslaved/"
+        case "enslavers":
+          return "past/enslavers/"
+      }
+    })()
+    // console.log("table useEffect", endpoint, typeForTable, search_object, cols)
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
@@ -98,7 +106,8 @@ function Table(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, search_object, endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, [page, rowsPerPage, sortingReq, field, direction, typeForTable, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -112,10 +121,6 @@ function Table(props) {
       backgroundColor: "#389c90",
     },
   }));
-
-  if (isLoading) {
-    return <div className="spinner"></div>;
-  }
 
   const handleChangePage = (event, newPage) => {
     //console.log("newpage", newPage);
@@ -188,6 +193,7 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
+    // console.log("popover", typeForTable, endpoint)
     const people =
       row[
         "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -195,8 +201,10 @@ function Table(props) {
     const roles = row["transactions__transaction__enslavers__role__role"];
     //console.log(people, roles);
     const output = {};
+    // console.log("table endpoint", endpoint)
+    // console.log("table row", value)
     for (let i = 0; i < people.length; i++) {
-      if (people[i] in output === false) {
+      if (!(people[i] in output)) {
         output[people[i]] = [];
       }
       output[people[i]].push(roles[i][0]);
@@ -205,6 +213,9 @@ function Table(props) {
     return output;
   };
 
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
   return (
     <div>
       <div>
