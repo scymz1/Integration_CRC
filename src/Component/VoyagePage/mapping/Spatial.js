@@ -154,11 +154,12 @@ export function ReadFeature(props) {
       if(complete_object[diskey]){
         console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
         delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+        console.log("🚀 ~ file: Spatial.js ~ line 158 ~ useEffect ~ complete_object", complete_object)
       }
       
      }
 
-    //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
   },[disembark])
@@ -174,6 +175,7 @@ export function ReadFeature(props) {
   },[area])
 
   useEffect(() => {
+    console.log("props.search_object changed")
     for (var i in map._layers) {
       if (
         map._layers[i]._path != undefined ||
@@ -198,7 +200,7 @@ export function ReadFeature(props) {
       
     };
     
-
+    console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -208,66 +210,22 @@ export function ReadFeature(props) {
           };
         },
       });
-
+      map.removeLayer(markers)
       // Add only actual locations to the map with markers (with clicking events and popups)
       L.geoJSON(nodes.features, {
         //filter: featureWayPt,
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
-        
+          console.log(props.search_object.dataset[0]==0)
+          L.marker(layer["_latlng"]).unbindPopup()
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
             complete_object[area] = [layer.feature.id, layer.feature.id];
-            if (disembark === diskey ){
-          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ DISEMBARK")  
-          //       let tmp =
-          //   complete_object[
-          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-          //   ];
-    
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-          //       tmp,
-          //   });
-             }
-             else{
-          //     console.log("🚀 ~ file: Spatial.js ~ line 95 ~ mouseover ~ EMBARK")
-          //   let tmp =
-          //   complete_object[
-          //     'voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id'
-          //   ];
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id:
-          //       tmp,
-          //   });
-
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ mouseover  tmp", tmp)
-              
-          //   //  }
-          //   console.log("🚀 ~ file: Spatial.js ~ line 231 ~ before tmp complete_object", complete_object)
-            
-          //   let tmp =
-          //   complete_object[
-          //     [disembark]
-          //   ];
-          //   console.log("🚀 ~ file: Spatial.js ~ line 172 ~ tmp", tmp)
-          // tmp[0] = layer.feature.id;
-          // tmp[1] = layer.feature.id;
-          //   set_complete_object({
-          //     ...complete_object,
-          //     [disembark]:
-          //       tmp,
-          //   });
-            
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
+              <PivotContext.Provider
+              value={{ complete_object, set_complete_object , disembark, setDisembark}}
+            >
               <Grid>
                                 {layer.feature.properties.name +
                   " " +
@@ -276,36 +234,23 @@ export function ReadFeature(props) {
               
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
-                    <PivotContext.Provider
-                      value={{ complete_object, set_complete_object , disembark, setDisembark}}
-                    >
-                      {/* only show if intraamerican, otherwise hidden */}
-                        {props.search_object.dataset[0] === 1?<IntraTabs context={PivotContext}/>: ""}
-
+                   
+                      {/* only show if intraamerican, otherwise hidden */
+                      }
+                        {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
                       <Pivot context={PivotContext} />
-                    </PivotContext.Provider>
                   </div>
                 </div>
               </Grid>
+              </PivotContext.Provider>
             );
-            // if we use bindPopup, then we have to use mouseover,
-            // otherwise, only the second click can show the popup
-            // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-            //   maxWidth: "500",
-            // });
+            
 
-            markers.addLayer(layer).bindPopup(container, {maxWidth:"500"})
-            // if we use click & popup.setContent, we will find the location of marker is incorrect.
-            // L.popup({
-            //   'maxWidth': 'auto',
-            // })
-            //    .setContent(container)
-            //    .setLatLng(layer["_latlng"])
-            //    .openOn(map);
-          };
+            L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
+              maxWidth: "auto",
+            });
         })
           markers.addLayer(layer)
-
         },
       });
 
@@ -314,7 +259,7 @@ export function ReadFeature(props) {
       drawUpdate(map, csv)
       
     }
-  }, [nodes, csv]);
+  }, [nodes, csv,props.search_object.dataset]);
 
 
   if (isLoading == false) {

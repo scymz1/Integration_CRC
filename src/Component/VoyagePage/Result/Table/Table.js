@@ -21,10 +21,13 @@ import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 //import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-import {Grid} from "@mui/material";
+import {CircularProgress, Grid} from "@mui/material";
 import {
   useWindowSize,
 } from '@react-hook/window-size'
+import {enslaved_default_list, enslaved_var_list, enslaver_default_list, enslaver_var_list} from "../../../PAST/vars";
+import * as enslaved_labels from "../../../util/enslaved_options.json";
+import * as enslaver_labels from "../../../util/enslaver_options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -39,7 +42,10 @@ function Table(props) {
   // Menu
   const {
     cols,
-    endpoint,
+    setCols,
+    setAll_options,
+    setLabels,
+    setEnslaver,
     checkbox,
     setOpen,
     setInfo,
@@ -69,6 +75,8 @@ function Table(props) {
   //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
+    setLoading(true)
+    setValue([])
     var data = new FormData();
     data.append("hierarchical", "False");
     data.append("results_page", page + 1);
@@ -85,12 +93,32 @@ function Table(props) {
         data.append(property, v);
       });
     }
-
-
+    const endpoint =(()=> {
+      switch (typeForTable) {
+        case "slaves":
+          return "past/enslaved/"
+        case "enslavers":
+          return "past/enslavers/"
+        default:
+          return "voyage/"
+      }
+    })()
+    // console.log("table useEffect", endpoint, typeForTable, search_object, cols)
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
         setValue(Object.values(response.data));
+        if (typeForTable === "slaves") {
+          setCols(enslaved_default_list);
+          setLabels(enslaved_labels);
+          setAll_options(enslaved_var_list);
+          setEnslaver(false);
+        } else if (typeForTable === "enslavers") {
+          setCols(enslaver_default_list);
+          setLabels(enslaver_labels);
+          setAll_options(enslaver_var_list);
+          setEnslaver(true);
+        }
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
         setLoading(false);
@@ -98,7 +126,8 @@ function Table(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [page, rowsPerPage, sortingReq, field, direction, search_object, endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, [page, rowsPerPage, sortingReq, field, direction, typeForTable, search_object]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -112,10 +141,6 @@ function Table(props) {
       backgroundColor: "#389c90",
     },
   }));
-
-  if (isLoading) {
-    return <div className="spinner"></div>;
-  }
 
   const handleChangePage = (event, newPage) => {
     //console.log("newpage", newPage);
@@ -188,6 +213,7 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
+    // console.log("popover", typeForTable, endpoint)
     const people =
       row[
         "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -195,8 +221,10 @@ function Table(props) {
     const roles = row["transactions__transaction__enslavers__role__role"];
     //console.log(people, roles);
     const output = {};
+    // console.log("table endpoint", endpoint)
+    // console.log("table row", value)
     for (let i = 0; i < people.length; i++) {
-      if (people[i] in output === false) {
+      if (!(people[i] in output)) {
         output[people[i]] = [];
       }
       output[people[i]].push(roles[i][0]);
@@ -205,6 +233,9 @@ function Table(props) {
     return output;
   };
 
+  if (isLoading) {
+    return <CircularProgress/>;
+  }
   return (
     <div>
       <div>
@@ -218,7 +249,13 @@ function Table(props) {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center">
+            <Grid item sx={{width:width>800 ? width*0.95: width*0.7}}>
             <TableContainer component={Paper}>
               <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -352,6 +389,7 @@ function Table(props) {
                 </TableBody>
               </Tables>
             </TableContainer>
+            </Grid>
             </Grid>
             <Stack
               spacing={2}

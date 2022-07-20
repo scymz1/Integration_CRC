@@ -19,7 +19,7 @@ import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, page} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -28,8 +28,29 @@ export default function ResponsiveAppBar(props) {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const color = (() =>{
+    if(page === "voyage") {
+      if(dataSet==="0") {
+        return "voyageTrans"
+      }else{
+        return "voyageIntra"
+      }
+    }
+
+    if(typeForTable === "enslavers"){
+      return "success"
+    }
+
+    if(dataSet==="0") {
+      return "primary"
+    }else{
+      return "secondary"
+    }
+  })()
+
   return (
-    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
+    <AppBar position="sticky" color={ color }>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -115,7 +136,7 @@ export default function ResponsiveAppBar(props) {
           <ThemeProvider theme={switchTheme}>
             <Stack spacing={4} direction={"row"} justifyContent="flex-end"
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {search_object?
+              {search_object && typeForTable === "slaves" || page === "voyage" ?
                 <ToggleButtonGroup
                   color="blackMode"
                   value={dataSet}
@@ -129,9 +150,10 @@ export default function ResponsiveAppBar(props) {
                   }}
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
+
                 >
                   <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
-                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"} disabled={typeForTable === "enslavers"}>Intra-American</ToggleButton>
+                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"} >Intra-American</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
 
@@ -156,9 +178,8 @@ export default function ResponsiveAppBar(props) {
                   }}
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
-                  disabled={dataSet==="1"}
                 >
-                  <ToggleButton sx={{background: "#42a5f5"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}

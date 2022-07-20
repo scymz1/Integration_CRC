@@ -30,12 +30,12 @@ export default function PASTApp(props) {
 
   const [data, setData] = useState([]);
 
-  const [endpoint, setEndpoint] = useState((() => {
+  const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
       case "slaves": return "past/enslaved/"
       case "enslavers": return "past/enslavers/"
     }
-  })())
+  }
 
   // const options_flat = () => {
   //   switch (typeForTable){
@@ -45,9 +45,6 @@ export default function PASTApp(props) {
   // }
   const options_flat = typeForTable === "slaves" ? enslaved_options_flat : enslaver_options_flat;
   const nested_tree = typeForTable === "slaves" ? enslaved_var_list : enslaver_var_list;
-
-  
-
   // const nested_tree = () => {
   //   switch (typeForTable) {
   //     case "slaves": return enslaved_var_list
@@ -67,23 +64,8 @@ export default function PASTApp(props) {
   //   }).then(res => res.json()), {refetchOnMount: "always"}
   // )
 
-  useEffect(()=>{
-    setEndpoint((() => {
-      switch (typeForTable) {
-        case "slaves": return "past/enslaved/"
-        case "enslavers": return "past/enslavers/"
-      }
-    })())
-    console.log("typeForTable", typeForTable)
-  }, [typeForTable])
-
   useEffect(() => {
-    const endpoint = (() => {
-      switch (queryData.type) {
-        case "slaves": return "past/enslaved/"
-        case "enslavers": return "past/enslavers/"
-      }
-    })()
+    const endpoint = (getEndpoint(queryData.type))
     const targets = (() => {
       switch (queryData.type) {
         case "slaves": return queryData.slaves
@@ -119,7 +101,6 @@ export default function PASTApp(props) {
   //   "sources": "sources"
   // }
 
-
   const [search_object, set_search_object] = useState({
     'dataset':["1", "1"]
   })
@@ -132,9 +113,9 @@ export default function PASTApp(props) {
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
-       endpoint, setEndpoint, windowRef, typeForTable, setTypeForTable,
+      windowRef, typeForTable, setTypeForTable,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet
+      dataSet, setDataSet, page: "past"
     }}>
       <PAST/>
     </PASTContext.Provider>

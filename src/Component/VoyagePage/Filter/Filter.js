@@ -23,10 +23,10 @@ import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
-const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
+// const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet, typeForTable} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable, page} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
     // const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
@@ -54,6 +54,28 @@ export default function Filter(props) {
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
+  const color = (() =>{
+    if(page === "voyage") {
+      if(dataSet==="0") {
+        return "voyageTrans"
+      }else{
+        return "voyageIntra"
+      }
+    }
+
+    if(typeForTable === "enslavers"){
+      return "success"
+    }
+
+    if(dataSet==="0") {
+      return "primary"
+    }else{
+      return "secondary"
+    }
+  })()
+
+    //console.log('Current SEARCH OBJECT: ', search_object)
+    // console.log('Current output: ', output)
 
     return (
     <AppContext.Provider
@@ -68,7 +90,7 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky" color={dataSet === "0" ? typeForTable === "slaves" || !typeForTable ? "primary" : "success" : "secondary"}>
+    <AppBar position="sticky" color={color}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
