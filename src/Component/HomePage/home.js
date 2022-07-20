@@ -42,7 +42,7 @@ export default function Home() {
   const sample = [<ScatterComponent/>, <BarComponent/>, <PieComponent/>, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
-    <HomeContext.Provider value={{dataSet,}}>
+    <HomeContext.Provider value={{dataSet, page:"home"}}>
       <div>
         <ResponsiveAppBar context={HomeContext}/>
         <Container maxWidth={false}>
