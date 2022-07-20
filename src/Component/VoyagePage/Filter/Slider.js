@@ -12,6 +12,7 @@ import {
   } from '@mui/material';
 
 import {ComponentContext} from "./ComponentFac"
+import { control } from 'leaflet';
 const base_url = process.env.REACT_APP_BASEURL;
 
 const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -32,7 +33,7 @@ export default function GetSlider(props) {
 
     //console.log("getSlider got called")
     const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {search_object, set_search_object, endpoint} = React.useContext(props.context)
+    const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
 
     console.log("Labels in slider: ", labels)
 
@@ -61,6 +62,18 @@ export default function GetSlider(props) {
     //"voyage_slaves_numbers__imp_total_num_slaves_disembarked"
     const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
     
+    // control.log("Types for table: ")
+    const endpoint =(()=> {
+      switch (typeForTable) {
+        case "slaves":
+          return "past/enslaved/"
+        case "enslavers":
+          return "past/enslavers/"
+        default:
+          return "voyage/"
+      }
+    })()
+
     const config =  {
         method: 'post',
         baseURL: base_url+endpoint+'aggregations',
