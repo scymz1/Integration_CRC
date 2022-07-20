@@ -248,6 +248,13 @@ function Table(props) {
   return (
     <div>
       <div>
+      <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center">
+            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
         <Box sx={{ minWidth: 120, my: 2 }}>
           <FormControl fullWidth>
             <TablePagination
@@ -438,6 +445,8 @@ function Table(props) {
             </Stack>
           </FormControl>
         </Box>
+        </Grid>
+            </Grid>
       </div>
     </div>
   );
