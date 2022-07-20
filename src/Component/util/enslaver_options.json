@@ -5658,5 +5658,10 @@
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Number enslaved",
     "flatlabel": "Number enslaved"
+  },
+  "personal_information": {
+    "type": "table",
+    "label": "Personal Information",
+    "flatlabel": "Personal Information"
   }
 }

@@ -64,7 +64,7 @@ export default function Auto(props) {
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
       }}
-      sx={{ width: 300 }}
+      // sx={{ width: 300 }}
       renderInput={(params) => {
 
         setTestInput(params.inputProps.value)

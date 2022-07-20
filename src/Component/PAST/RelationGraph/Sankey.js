@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Typography, Popover, Card, Grid } from "@mui/material";
+import { Box, Button, Typography, Popover, Card, Grid, CircularProgress} from "@mui/material";
 import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
 import EastIcon from '@mui/icons-material/East';
 import './styles.css'
@@ -299,91 +299,103 @@ export default function Sankey(props) {
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
       <Button onClick={()=>console.log("graph:", graph)}>print graph</Button> */}
       <br/>
-      {graph?
+      {!graph ?
+        <CircularProgress/> :
         <svg 
         className="canvas"
         width={CANVAS_WIDTH+30}
         height={CANVAS_HEIGHT+30}
         >
-        {graph.nodes.map((node) => {
-          return(
-              <foreignObject
-                key={`sankey-node-text-${node.index}`}
-                className="node"
-                x={node.x0}
-                y={node.y0}
-                width={node.x1 - node.x0}
-                height={node.y1 - node.y0}>
-                <div className="node-name">
-                  <Box
-                    onClick={(e)=>{handleClick(e, node)}}
-                    // onMouseEnter={()=>{console.log("hover enter", node)}}
-                    onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
-                    onMouseLeave={handlePopoverClose}
+            {graph.nodes.map((node) => {
+              return(
+                <>
+                  <rect
+                    key={`sankey-node-${node.index}`}
+                    x={node.x0}
+                    y={node.y0}
+                    width={node.x1 - node.x0}
+                    height={node.y1 - node.y0}
+                    fill="white" />
+                  <foreignObject
+                    key={`sankey-node-text-${node.index}`}
+                    className="node"
+                    x={node.x0}
+                    y={node.y0}
+                    width={node.x1 - node.x0}
+                    height={node.y1 - node.y0}
                     >
-                    {/* {console.log(node.name,typeof(node.name))} */}
-                    <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
-                    {/* <Typography align="center">{node.id}</Typography> */}
-                    <Typography align="center">{node.voyagebutton}</Typography>
-                  </Box>
-                  <Popover
-                    // id={`sankey-node-text-${node.index}`}
-                    open={popOpenclick === node.id && node.type==="enslaved" }
-                    anchorEl={anchorElclick}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left"
-                    }}
-                    onClose={handleClose}
-                    >
-                    {renderStory(node)}
-                  </Popover>
-                  <Popover
-                    id={`sankey-node-text-${node.index}`}
-                    sx={{
-                      pointerEvents: 'none',
-                    }}
-                    open={popOpen === node.id && node.type!="enslaver" }
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    onClose={handlePopoverClose}
-                    >
-                      {node.information}               
-                    </Popover>
-                </div>
-              </foreignObject>
-        )})}
-        {graph.links.map((link) => {
-          return(
-            <g>
-              <path
-                id={`sankey-link-${link.index}`}
-                key={`sankey-link-${link.index}`}
-                className="link"
-                d={sankeyLinkHorizontal()(link)}
-                fill="none"
-                stroke={link.color}
-                opacity="0.5"
-                strokeWidth="5"/>
-              <text fontSize = "15" fill={link.color} fontWeight="bold" fontFamily="arial">
-                <textPath href = {`#sankey-link-${link.index}`} 
-                          startOffset="50%" 
-                          textAnchor="middle">
-                    {link.info}
-                </textPath>
-              </text>
-            </g>
-          )
-          })}
-      </svg>
-    :null}
+                    <div className="node-name">
+                      <Box
+                        onClick={(e)=>{handleClick(e, node)}}
+                        // onMouseEnter={()=>{console.log("hover enter", node)}}
+                        onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
+                        onMouseLeave={handlePopoverClose}
+                        >
+                        {/* {console.log(node.name,typeof(node.name))} */}
+                        <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
+                        {/* <Typography align="center">{node.id}</Typography> */}
+                        <Typography align="center">{node.voyagebutton}</Typography>
+                      </Box>
+                      <Popover
+                        // id={`sankey-node-text-${node.index}`}
+                        open={popOpenclick === node.id && node.type==="enslaved" }
+                        anchorEl={anchorElclick}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left"
+                        }}
+                        onClose={handleClose}
+                        >
+                        {renderStory(node)}
+                      </Popover>
+                      <Popover
+                        id={`sankey-node-text-${node.index}`}
+                        sx={{
+                          pointerEvents: 'none',
+                        }}
+                        open={popOpen === node.id && node.type!="enslaver" }
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'left',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'left',
+                        }}
+                        onClose={handlePopoverClose}
+                        >
+                          {node.information}               
+                        </Popover>
+                    </div>
+                  </foreignObject>
+                </>
+            )})}
+            {graph.links.map((link) => {
+              return(
+                <g>
+                  <path
+                    id={`sankey-link-${link.index}`}
+                    key={`sankey-link-${link.index}`}
+                    className="link"
+                    d={sankeyLinkHorizontal()(link)}
+                    fill="none"
+                    stroke={link.color}
+                    opacity="0.5"
+                    strokeWidth="5"
+                  />
+                  <text fontSize = "15" fill={link.color} fontWeight="bold" fontFamily="arial">
+                    <textPath href = {`#sankey-link-${link.index}`} 
+                              startOffset="50%" 
+                              textAnchor="middle">
+                        {link.info}
+                    </textPath>
+                  </text>
+                </g>
+              )
+              })}
+        </svg>
+      }
     </div>
   )
 }
