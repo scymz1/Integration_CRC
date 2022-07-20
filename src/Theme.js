@@ -8,6 +8,9 @@ export const theme = createTheme({
     },
     voyageIntra: {
       main: "#ab47bc"
+    },
+    whiteIcon: {
+      main: "#f5f5f5"
     }
   },
 });
