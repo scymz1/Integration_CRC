@@ -28,7 +28,6 @@ export const AppContext = React.createContext();
 export default function Filter(props) {
     const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable, page} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
-    // const [output, setOutput] = React.useState([]);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -50,7 +49,6 @@ export default function Filter(props) {
 
         delete newObject[varName];
         set_search_object(newObject); 
-        // setOutput(output.filter((e)=>e!==item))
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
@@ -74,17 +72,12 @@ export default function Filter(props) {
     }
   })()
 
-    //console.log('Current SEARCH OBJECT: ', search_object)
-    // console.log('Current output: ', output)
-
     return (
     <AppContext.Provider
         value={{
           options_flat,
           menuPosition,
           setMenuPosition,
-          // setOutput,
-          // output,
           labels,
           setLabels,
           nested_tree
@@ -142,7 +135,7 @@ export default function Filter(props) {
                           <Grid item xs={10} >
                               <Accordion>
                                   <AccordionSummary>
-                                      <Typography>{item.option}</Typography>
+                                      <Typography>{options_flat[item.option].flatlabel}</Typography>
                                   </AccordionSummary>
                                   <AccordionDetails>
                                       <ComponentFac params={item} index={index} context={props.context}/>

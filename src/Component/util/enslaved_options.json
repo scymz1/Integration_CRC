@@ -10947,7 +10947,7 @@
   "transactions__transaction__voyage__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "Voyage ID"
+    "flatlabel": "Transaction Voyage ID"
   },
   "transactions__transaction__voyage__voyage_itinerary": {
     "type": "table",
