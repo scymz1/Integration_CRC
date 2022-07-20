@@ -42,9 +42,10 @@ export default function Home() {
   const sample = [<ScatterComponent/>, <BarComponent/>, <PieComponent/>, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
-    <HomeContext.Provider value={{dataSet,}}>
       <div>
-        <ResponsiveAppBar context={HomeContext}/>
+        <HomeContext.Provider value={{dataSet, page:"home"}}>
+          <ResponsiveAppBar context={HomeContext}/>
+        </HomeContext.Provider>
         <Container maxWidth={false}>
           <List>
             {sample.map((label, index) => (
@@ -77,6 +78,5 @@ export default function Home() {
           </Box>
         </Container>
       </div>
-    </HomeContext.Provider>
   );
 }

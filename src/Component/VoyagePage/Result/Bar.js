@@ -165,7 +165,17 @@ function Bar (props) {
                                 },
                                 {type: 'bar'},
                             ]}
-                            layout={{width: width>800 ? width*0.8: width * 0.8,title: 'bar Plot'} }
+                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Bar Graph`,
+                            xaxis:{
+                                title: 
+                                {text:`${options_flat[option.field].flatlabel}`},
+                                fixedrange: true
+                                },
+                            yaxis:{
+                            title: 
+                            {text:`${options_flat[option.value].flatlabel}`},
+                            fixedrange: true
+                            }}}
                             config={{responsive: true}}
                         />
                 </Grid>

@@ -84,6 +84,7 @@ function ScatterComponent() {
                   type: "scatter",
                   mode: "lines+markers",
                   marker: {color: "red"},
+                  line: {shape: 'spline'},
                 },
               ]}
               layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
