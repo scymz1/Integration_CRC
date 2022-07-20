@@ -79,7 +79,7 @@ export function ReadFeature(props) {
   var markers = L.markerClusterGroup({
     iconCreateFunction: function(cluster) {
       return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>' , 
-                          className: ' leaflet-div-icon2', 
+                          className: ' cluster-small', 
                           });
 	}
   });
@@ -92,8 +92,7 @@ export function ReadFeature(props) {
     
     //console.log("Zoom: ", map.getZoom())
     
-    if(map.getZoom() < 5) {
-      //console.log("Set Region")
+    if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
       set_complete_object({
         ...complete_object,
@@ -135,7 +134,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      //console.log("Repsonse:", response.data)
+      console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 

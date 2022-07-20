@@ -45,8 +45,7 @@ function Cascading(props) {
 
     const menuName = props.menuName;
     // const buttonName = props.button;
-    //console.log("Menuname: ", menuName)
-    // console.log("options_tree: ", options_tree)
+
     // var render = menuName === "" ? options_tree : options_tree[menuName];
     
 
@@ -69,21 +68,24 @@ function Cascading(props) {
 
     const handleOptionClick = (option, type, flatlabel) => {
         // if (option === "__id") option = "id"
-        // setMenuPosition(null);
         handleClose();
         setOption(option);
-        setLabels([...labels, {option:option, type:type, label:flatlabel}])
 
         var out = option + "***" + type + "***" + flatlabel;
-        if(!search_object[option])
-            setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        // if(!search_object[option]){
+        // if(!output.includes(out)){
+        //     setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
+        // }
+
+        if(!labels.some(e=>e.option == option)){
+            setLabels([...labels, {option:option, type:type, label:flatlabel}])
+        }
         else
             alert("The variable has been selected.")
-        //console.log("OUTPUT STRING ARRAY: ----->",output)
+       
     }
 
     const renderTree = (nodes, name) => {
-        // console.log(chipData)
         return (
             Object.keys(nodes).map((key) =>
                 isChildren(key)
@@ -110,9 +112,6 @@ function Cascading(props) {
     };
 
 
-    // const renderButton = (nodes) => {
-    //     nodes.map((node) => )
-    // }
     return (
         // <Container>
             // <Grid container >
@@ -123,12 +122,6 @@ function Cascading(props) {
                         defaultCollapseIcon={<ExpandMoreIcon/>}
                         defaultExpandIcon={<ChevronRightIcon/>}
                     >
-                        {/* <IconButton
-                            variant="contained"
-                            onClick={handleClick}
-                            >
-                            <AddCircleOutlineIcon />
-                        </IconButton> */}
                         
                         <Button 
                          variant="text"
@@ -136,20 +129,15 @@ function Cascading(props) {
                          style={{maxWidth: '280px', maxHeight: '30px', color: "#fff"}}
                          >
                              {options_flat[menuName].flatlabel}
-                            {/*<Typography textAlign="center" sx={{color: '#fff'}}>{buttonName}</Typography>*/}
                         </Button>
                         <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
                             {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
                             {renderTree(nested_tree[menuName], "")}
                         </Menu>
-                        {/* </Button> */}
                     </TreeView>
 
                 </Grid>
-            
             // </Grid>
-
-    
         // </Container>
     );
 }
