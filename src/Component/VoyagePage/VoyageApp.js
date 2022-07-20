@@ -52,7 +52,7 @@ export default function VoyageApp(props) {
 
   return (
     <VoyageContext.Provider value={{
-      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet, output, setOutput}}>
+      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet, page: "voyage"}}>
       <Voyage/>
     </VoyageContext.Provider>
   );

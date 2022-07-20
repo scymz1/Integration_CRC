@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
+import ReactDOM from 'react-dom';
+import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
 import Radio from '@mui/material/Radio';
@@ -34,25 +35,6 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-function FullscreenButton(props){
-    // const context = useLeafletContext();
-    // const control = new Control({position: 'topright'});
-    // control.onAdd = function (map) {
-    //     let div = DomUtil.create('button');
-    //     div.innerHtml = `Enter fullscreen`  //`<button onClick={props.fullscreen}>Enter fullscreen</button>`
-    //     return div;
-    // }
-    // useEffect(()=>{
-        
-    //     const container = context.layerContainer || context.map;
-    //     container.addControl(control);
-    // }, []);
-    // var map = useMap();
-    // L.easyButton('fa-globe', function(btn, map){
-    // }).addTo( map );
-
-    // return null;
-}
 
 export default function MapBoundingBox(props){
 
@@ -119,7 +101,8 @@ export default function MapBoundingBox(props){
 
     const getRadioValue = (event) => {
         onChangeRadioOption(event.target.value);
-        console.log(radioOptions);
+        SetselectMode(true)
+        console.log("Radio: ", radioOptions);
     }
 
     const SwitchBoundingBoxSelection = (event) => {
@@ -130,6 +113,16 @@ export default function MapBoundingBox(props){
             onChangeRadioOption("embarkation");
         }
         SetselectMode(true);
+    }
+
+    const reset = (e) => {
+        SetselectMode(true);
+        onChangeRadioOption("embarkation");
+        onChangelongitude1(-360);
+        onChangelongitude2(359.9);
+        onChangelatitude1(-90);
+        onChangelatitude2(90);
+
     }
 
     const [open, setOpen] = React.useState(false);
@@ -185,6 +178,7 @@ export default function MapBoundingBox(props){
                     </BaseLayer>
                     <BaseLayer name="modern country border">
                         <TileLayer
+                            noWrap={true}
                             url={normal}
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         /> 
@@ -199,7 +193,11 @@ export default function MapBoundingBox(props){
                 </LayersControl>
                 <ReadFeature search_object={search_object}  radio = {radioOptions}/>
 
-
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={reset}> 
+                    Reset
+                    </Button>
+                </Control>
                 <Control prepend position='topright' >
                     <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
                     Select Embarkation
@@ -211,6 +209,9 @@ export default function MapBoundingBox(props){
                     </Button>
                 </Control>
 
+
+                {/* <ReadFeature search_object={map_search_object} set_search = {set_map_search_object} radio = {radioOptions}/> */}
+            
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
                 {
@@ -230,10 +231,7 @@ export default function MapBoundingBox(props){
 
             </MapContainer>
             </FullScreen>
-            {/* <p>longitude1: {longitude1}</p>
-            <p>longitude2: {longitude2}</p>
-            <p>latitude1: {latitude1}</p>
-            <p>latitude2: {latitude2}</p> */}
+
         </div>
       
     );

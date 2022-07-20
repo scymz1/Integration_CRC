@@ -10,16 +10,25 @@ const base_url = process.env.REACT_APP_BASEURL;
 export default function Auto(props) {
 
  const {labels} = React.useContext(AppContext)
-  const {search_object, set_search_object, endpoint} = React.useContext(props.context)
+  const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
 
-  
   const [value, setValue] = React.useState([]);
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
   
+  const endpoint =(()=> {
+    switch (typeForTable) {
+      case "slaves":
+        return "past/enslaved/"
+      case "enslavers":
+        return "past/enslavers/"
+      default:
+        return "voyage/"
+    }
+  })()
 
     React.useEffect(()=>{
       const fetchData = async (labels,textInput) => {
@@ -43,14 +52,16 @@ export default function Auto(props) {
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
-    },[search_object])
+    },[search_object, textInput])
 
     React.useEffect(()=>{
-      set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
-        ...search_object,
-        [searchLabel.option]: [textInput]
-      }));
-    },[textInput])
+      if(value != '')
+        set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
+          ...search_object,
+          [searchLabel.option]: [value]
+        }));
+
+    },[value])
 
 
   return (
@@ -60,7 +71,8 @@ export default function Auto(props) {
       autoHighlight
       multiple
       options={autocompleteOptions}
-      value={autocompleteOptions[0]}
+      value={search_object[searchLabel.option] ? search_object[searchLabel.option] : autocompleteOptions[0]}
+      // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
       }}
@@ -68,7 +80,7 @@ export default function Auto(props) {
       renderInput={(params) => {
 
         setTestInput(params.inputProps.value)
-
+        console.log("TestInput: ", params.inputProps.value)
         return <TextField {...params} label="field" />
          
     }}

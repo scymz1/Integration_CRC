@@ -27,6 +27,7 @@ import { styled } from '@mui/system';
 // import hierFalse2True from '../../../util/hierFalse2True';
 // import { Key } from '@mui/icons-material';
 // import nameConcat from '../../../util/nameConcat';
+import {Container} from "@mui/material";
 
 
 export default function ColSelector11(props) {
@@ -144,8 +145,9 @@ export default function ColSelector11(props) {
                 }}
                 component="ul"
             > */}
-            <Grid container spacing={1}>
-                <Grid item xs={2}>
+            <Container maxWidth={false}>    
+            <Grid container spacing={1} >
+                <Grid item xs={2} sx={{width:"20%"}}>
                     <TreeView
                         aria-label="option menu"
                         defaultCollapseIcon={<ExpandMoreIcon />}
@@ -169,7 +171,7 @@ export default function ColSelector11(props) {
                 </Grid>
                 {/* </Grid>
             <Grid container spacing = {2}> */}
-                <Grid container item xs={9}>
+                <Grid container item xs={9} sx={{minWidth:400}}>
                     {/* {cols.map((col) => {
                         setChipData([...chipData, { key: col, label: options_flat[col].flatlabel }])
                     })} */}
@@ -185,6 +187,7 @@ export default function ColSelector11(props) {
                     })}
                 </Grid>
             </Grid>
+            </Container>
             {/* </Paper> */}
         </div>
     );
