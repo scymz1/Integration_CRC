@@ -21,8 +21,8 @@ export default function PASTApp(props) {
   const [typeForTable, setTypeForTable] = useState("slaves");
   const [dataSet, setDataSet] = useState("1")
   const [queryData, setQueryData] = React.useState({
-    slaves: [],
-    type: "enslavers",
+    slaves: [500043, 500001],
+    type: "slaves",
     enslavers:[55230]
   })
 

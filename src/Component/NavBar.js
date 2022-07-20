@@ -81,7 +81,7 @@ export default function ResponsiveAppBar(props) {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="whiteIcon"
             >
               <MenuIcon />
             </IconButton>
@@ -127,7 +127,7 @@ export default function ResponsiveAppBar(props) {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "white",
               textDecoration: "none",
             }}
           >
