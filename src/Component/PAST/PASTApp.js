@@ -22,8 +22,8 @@ export default function PASTApp(props) {
   const [dataSet, setDataSet] = useState("1")
   const [queryData, setQueryData] = React.useState({
     slaves: [],
-    type: "slaves",
-    enslavers:[]
+    type: "enslavers",
+    enslavers:[55230]
   })
 
   const windowRef = useRef(null);
@@ -51,18 +51,6 @@ export default function PASTApp(props) {
   //     case "enslavers": return enslaver_var_list
   //   }
   // }
-  // const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('past_option_tree',
-  //   () => fetch(base_url + endpoint, {
-  //     method: "OPTIONS",
-  //     headers: {'Authorization': auth_token}
-  //   }).then(res => res.json()), {refetchOnMount: "always"}
-  // )
-  // const {isLoading: isLoading_flat, error: error_flat, data: options_flat} = useQuery('past_options_flat',
-  //   () => fetch(base_url + endpoint + "?hierarchical=false", {
-  //     method: "OPTIONS",
-  //     headers: {'Authorization': auth_token}
-  //   }).then(res => res.json()), {refetchOnMount: "always"}
-  // )
 
   useEffect(() => {
     const endpoint = (getEndpoint(queryData.type))
@@ -88,18 +76,6 @@ export default function PASTApp(props) {
     }
     fetchData().catch(console.error);
   }, [queryData])
-
-  // const menu_label = {
-  //   "post_disembark_location": "Post Disembark Location",
-  //   "voyage": "Voyage",
-  //   "age": "Age",
-  //   "captive_fate": "Captive Fate",
-  //   "captive_status": "Captive Status",
-  //   "documented_name": "name",
-  //   "id": "Id",
-  //   "transactions": "Transactions",
-  //   "sources": "sources"
-  // }
 
   const [search_object, set_search_object] = useState({
     'dataset':["1", "1"]

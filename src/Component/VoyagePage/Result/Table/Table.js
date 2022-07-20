@@ -108,17 +108,6 @@ function Table(props) {
       .post("/" + endpoint, data)
       .then(function (response) {
         setValue(Object.values(response.data));
-        if (typeForTable === "slaves") {
-          setCols(enslaved_default_list);
-          setLabels(enslaved_labels);
-          setAll_options(enslaved_var_list);
-          setEnslaver(false);
-        } else if (typeForTable === "enslavers") {
-          setCols(enslaver_default_list);
-          setLabels(enslaver_labels);
-          setAll_options(enslaver_var_list);
-          setEnslaver(true);
-        }
         //console.log(response.headers.total_results_count);
         setTotalResultsCount(Number(response.headers.total_results_count));
         setLoading(false);
@@ -214,10 +203,9 @@ function Table(props) {
 
   const createPopover = (row) => {
     // console.log("popover", typeForTable, endpoint)
-    const people =
-      row[
-        "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-      ];
+    const people = row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]?
+      row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]:
+      [];
     const roles = row["transactions__transaction__enslavers__role__role"];
     //console.log(people, roles);
     const output = {};
