@@ -27,9 +27,9 @@ export const AppContext = React.createContext();
 const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet, typeForTable} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, endpoint, nested_tree, dataSet, typeForTable, output, setOutput} = useContext(props.context);
     const [labels, setLabels] = React.useState([]);
-    const [output, setOutput] = React.useState([]);
+    
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -53,8 +53,9 @@ export default function Filter(props) {
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
-    //console.log('Current SEARCH OBJECT: ', search_object)
-    // console.log('Current output: ', output)
+    
+    //React.useEffect(()=>{console.log("search_object", search_object)}, [search_object])
+    //React.useEffect(()=>{console.log("output:", output)}, [output])
 
     return (
     <AppContext.Provider

@@ -44,13 +44,15 @@ export default function VoyageApp(props) {
     'dataset':["0", "0"]
   })
 
+  const [output, setOutput] = React.useState([]);
+
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   // if (isLoading_flat || isLoading_tree) return <CircularProgress/>
 
   return (
     <VoyageContext.Provider value={{
-      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet}}>
+      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet, output, setOutput}}>
       <Voyage/>
     </VoyageContext.Provider>
   );
