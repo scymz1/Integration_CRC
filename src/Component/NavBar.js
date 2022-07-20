@@ -113,6 +113,62 @@ export default function ResponsiveAppBar(props) {
                     Past
                 </Link>
                 </MenuItem>
+                
+
+                <ThemeProvider theme={switchTheme}>
+              {search_object && typeForTable === "slaves" || page === "voyage" ?
+                              <MenuItem>
+                <ToggleButtonGroup
+                  color="blackMode"
+                  value={dataSet}
+                  exclusive
+                  onChange={(event) => {
+                    set_search_object({
+                      ...search_object,
+                      dataset: [event.target.value, event.target.value]
+                    })
+                    setDataSet(event.target.value)
+                  }}
+                  sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
+                  size={"small"}
+
+                >
+                  <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
+                  <ToggleButton sx={{background: "#ab47bc"}} value={"1"} >Intra-American</ToggleButton>
+                </ToggleButtonGroup>                
+                </MenuItem>:null}
+                
+
+              {typeForTable?<MenuItem> 
+                <ToggleButtonGroup
+                  color="blackMode"
+                  value={typeForTable}
+                  exclusive
+                  onChange={(event) => {
+                    switch (event.target.value){
+                      case "slaves":
+                        set_search_object({
+                        ...search_object,
+                        dataset: [dataSet, dataSet]
+                        })
+                        break;
+                      case "enslavers":
+                        set_search_object(_.omit(search_object, "dataset"));
+                        break;
+                    }
+                    setTypeForTable(event.target.value)
+                  }}
+                  // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
+                  size={"small"}
+                >
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
+                </ToggleButtonGroup>
+                </MenuItem>:
+                null}
+
+          </ThemeProvider>
+
             </Menu>
           </Box>
           <Typography
@@ -127,7 +183,7 @@ export default function ResponsiveAppBar(props) {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "white",
               textDecoration: "none",
             }}
           >
