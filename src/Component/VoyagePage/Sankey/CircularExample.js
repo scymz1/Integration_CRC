@@ -44,7 +44,6 @@ import { styled } from "@mui/material/styles";
 //   method: 'post',
 //   url: 'https://voyages3-api.crc.rice.edu/voyage/crosstabs',
 //   headers: {
-//     'Authorization': 'Token d4acb77be3a259c23ee006c70a20d70f7c42ec23',
 //     ...data.getHeaders()
 //   },
 //   data : data
@@ -57,13 +56,13 @@ import { styled } from "@mui/material/styles";
 // .catch(function (error) {
 //   console.log(error);
 // });
-
+const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 export default function SankeyExample(props) {
   const { isLoading, error, data, refetch } = useQuery("", () => {
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Token d4acb77be3a259c23ee006c70a20d70f7c42ec23"
+       AUTH_TOKEN
     );
 
     var formdata = new FormData();
