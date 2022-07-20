@@ -2,7 +2,7 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "Voyage Id"
+    "flatlabel": "Voyage ID"
   },
   "principal_location": {
     "type": "table",
