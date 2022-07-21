@@ -118,7 +118,7 @@ export default function Sankey(props) {
           // console.log("voyage_id",transaction_id)
           // console.log("relation_type",relation_type)
           var voyage_id =  _.get(transaction,["transaction","voyage"],null);
-          // var amount= _.get(transaction,["transaction","amount"],null);
+          var amount= _.get(transaction,["transaction","amount"],null);
           var place= _.get(transaction,["transaction","place","geo_location","name"],null);
           var full_ref= _.get(transaction,["transaction","source","full_ref"],null);
           var date =  _.get(transaction,["transaction","date"],null);
@@ -126,7 +126,7 @@ export default function Sankey(props) {
               nodes.push({id: transaction_id, 
                           name: relation_type,
                           voyage_id: voyage_id,
-                          amount: null,
+                          amount: amount,
                           place: place,
                           full_ref: full_ref,
                           date: date,
@@ -144,6 +144,10 @@ export default function Sankey(props) {
           // console.log("enslaved",enslavedlist)
           if(enslavedlist.length > 10){
             enslaverLength = enslaverLength + 1;
+            // var name_list = []
+            // for(var i = 0; i < 10; i++){
+            //   name_list.push(enslavedlist[i].enslaved.documented_name)
+            // }
             var enslaved_id =  _.get(enslavedlist[0],["enslaved","id"],null);
             if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
               nodes.push({id: enslaved_id, 
