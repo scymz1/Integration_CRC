@@ -57,30 +57,63 @@ export default function Sankey(props) {
     };
     // const openclick = Boolean(anchorElclick);
     // const popOpen = Boolean(anchorEl);
-        const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
+    //     const style = {
+    //     position: 'absolute',
+    //     top: '50%',
+    //     left: '50%',
+    //     transform: 'translate(-50%, -50%)',
+    //     width: 400,
+    //     bgcolor: 'background.paper',
+    //     border: '2px solid #000',
+    //     boxShadow: 24,
+    //     p: 4,
+    // };
 
     useEffect(()=>{
-      if(queryData.type === "enslavers") {
-        setGraph("enslavers")
-        return;
-      }
-
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
       let new_CANVAS_HEIGHT = 0;
       let transLength = 0;
       let enslaverLength = 0;
       let nodes = [];
       let links = [];
+      if(queryData.type === "enslavers") {
+        // setGraph("enslavers")
+        // return;
+       data.forEach((item) => {
+          let existNode = nodes.find(node => node.id === item.id)
+          if(!existNode){
+           nodes.push({id: item.id, name: item.alias.alias, type: "enslaver"})
+          }
+          item.alias.transactions.forEach((transaction)=>{
+            transaction = transaction.transaction;
+            var transaction_id = _.get(transaction,["transaction","voyage","id"],["transaction","id"])
+            var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null)
+            if(nodes.findIndex(node => node.id === transaction.id)===-1){
+                nodes.push({id: transaction_id, 
+                            name: relation_type,
+                            type: "transaction"})
+                }
+                if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === item.id) &&
+                                        x.target === nodes.findIndex(x => x.id === transaction_id &&
+                                                                          x.name === relation_type)) === -1) {
+                  links.push({source: nodes.findIndex(x => x.id === item.id),
+                              target: nodes.findIndex(x => x.id === transaction_id &&
+                                                           x.name === relation_type),
+                              color: "#1e3162",
+                                info: "",
+                              value:5})}
+
+        //  transaction.enslavers.forEach((enslaver) => {
+        //  // console.log("enslaver", enslaver.enslaver_alias.id)
+        //   if(tmp.nodes.findIndex(x => x.id === enslaver.enslaver_alias.id) === -1) {
+        //    tmp.nodes.push({id: enslaver.enslaver_alias.id, 
+        //                  name: enslaver.enslaver_alias.alias});
+        //  }})
+        })
+        })
+      }
+      else{
+
       for (var i = 0; i < data.length; i++) {
         nodes.push({id: data[i].id, name: data[i].documented_name, age:data[i].age,height:data[i].height,type: "enslaved"}); 
         transLength = transLength + data[i].transactions.length;
@@ -189,7 +222,7 @@ export default function Sankey(props) {
               }
             }
           }
-      };
+      };}
 
       nodes.forEach((node)=>{
         const result = [];
@@ -295,6 +328,7 @@ export default function Sankey(props) {
   data.forEach((each)=>{
     enslaved.push(each.documented_name+" ")
   } )
+
   return (
     <div>
       <h1>Connections for {enslaved}</h1>
@@ -306,7 +340,7 @@ export default function Sankey(props) {
       {!graph ?
         <CircularProgress/> :
 
-        graph === "enslavers"? "this is enslavers" :
+        // graph === "enslavers"? "this is enslavers" :
 
         <svg 
         className="canvas"
