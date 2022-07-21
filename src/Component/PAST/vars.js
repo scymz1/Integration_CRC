@@ -10,7 +10,7 @@ export const enslaver_default_list = [
     "number_enslaved",
     // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
     // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-    "alias__transactions__transaction__voyage__id",
+    // "alias__transactions__transaction__voyage__id",
     // "alias__transactions__transaction__date_yyyy",
     // "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
     // "alias__transactions__transaction__place__geo_location__name",
