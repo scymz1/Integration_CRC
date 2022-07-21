@@ -109,10 +109,13 @@ export default function Sankey(props) {
         var transactions = item.alias[0].transactions;
         transLength = transLength+transactions.length;
         transactions.forEach((transaction)=>{
-          // console.log(transaction)
+          // console.log(transaction.id)
           var transaction_default = _.get(transaction,["id"],null);
-          var transaction_id = _.get(transaction,["transaction","voyage"], transaction_default);
+          var transaction_id = transaction.transaction.voyage === null ? transaction_default : transaction.transaction.voyage
           var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
+          // console.log("relation_type",relation_type)
+          // console.log("transaction_id",transaction_default)
+          // console.log("voyage_id",transaction_id)
           // console.log("relation_type",relation_type)
           var voyage_id =  _.get(transaction,["transaction","voyage"],null);
           // var amount= _.get(transaction,["transaction","amount"],null);
@@ -138,11 +141,10 @@ export default function Sankey(props) {
                             color: "#1e3162",
                             value:5})}
           var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
-          console.log("enslaved",enslavedlist)
+          // console.log("enslaved",enslavedlist)
           if(enslavedlist.length > 10){
             enslaverLength = enslaverLength + 1;
-            var enslaved_id =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
-            var enslaved_name =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
+            var enslaved_id =  _.get(enslavedlist[0],["enslaved","id"],null);
             if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
               nodes.push({id: enslaved_id, 
                           name: "greater than 10 people",
@@ -484,6 +486,7 @@ export default function Sankey(props) {
                       >
                         {renderStory(node)}
                       </Popover>
+                      
                       <Popover
                         id={`sankey-node-text-${node.index}`}
                         sx={{
@@ -501,6 +504,7 @@ export default function Sankey(props) {
                         }}
                         onClose={handlePopoverClose}
                       >
+                        {/* {console.log(node.name,node.id)} */}
                         {node.information}
                       </Popover>
                     </div>
