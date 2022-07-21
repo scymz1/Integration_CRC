@@ -30,12 +30,21 @@ export default function PASTApp(props) {
 
   const [data, setData] = useState([]);
 
-  const [endpoint, setEndpoint] = useState((() => {
+  const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
       case "slaves": return "past/enslaved/"
       case "enslavers": return "past/enslavers/"
     }
-  })())
+  }
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  
+  const handleDrawerOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const handleDrawerClose = () => {
+      setDrawerOpen(!drawerOpen);
+  };
 
   // const options_flat = () => {
   //   switch (typeForTable){
@@ -45,45 +54,15 @@ export default function PASTApp(props) {
   // }
   const options_flat = typeForTable === "slaves" ? enslaved_options_flat : enslaver_options_flat;
   const nested_tree = typeForTable === "slaves" ? enslaved_var_list : enslaver_var_list;
-
-  
-
   // const nested_tree = () => {
   //   switch (typeForTable) {
   //     case "slaves": return enslaved_var_list
   //     case "enslavers": return enslaver_var_list
   //   }
   // }
-  // const {isLoading: isLoading_tree, error: error_tree, data: options_tree} = useQuery('past_option_tree',
-  //   () => fetch(base_url + endpoint, {
-  //     method: "OPTIONS",
-  //     headers: {'Authorization': auth_token}
-  //   }).then(res => res.json()), {refetchOnMount: "always"}
-  // )
-  // const {isLoading: isLoading_flat, error: error_flat, data: options_flat} = useQuery('past_options_flat',
-  //   () => fetch(base_url + endpoint + "?hierarchical=false", {
-  //     method: "OPTIONS",
-  //     headers: {'Authorization': auth_token}
-  //   }).then(res => res.json()), {refetchOnMount: "always"}
-  // )
-
-  useEffect(()=>{
-    setEndpoint((() => {
-      switch (typeForTable) {
-        case "slaves": return "past/enslaved/"
-        case "enslavers": return "past/enslavers/"
-      }
-    })())
-    console.log("typeForTable", typeForTable)
-  }, [typeForTable])
 
   useEffect(() => {
-    const endpoint = (() => {
-      switch (queryData.type) {
-        case "slaves": return "past/enslaved/"
-        case "enslavers": return "past/enslavers/"
-      }
-    })()
+    const endpoint = (getEndpoint(queryData.type))
     const targets = (() => {
       switch (queryData.type) {
         case "slaves": return queryData.slaves
@@ -107,23 +86,10 @@ export default function PASTApp(props) {
     fetchData().catch(console.error);
   }, [queryData])
 
-  // const menu_label = {
-  //   "post_disembark_location": "Post Disembark Location",
-  //   "voyage": "Voyage",
-  //   "age": "Age",
-  //   "captive_fate": "Captive Fate",
-  //   "captive_status": "Captive Status",
-  //   "documented_name": "name",
-  //   "id": "Id",
-  //   "transactions": "Transactions",
-  //   "sources": "sources"
-  // }
-
-
   const [search_object, set_search_object] = useState({
     'dataset':["1", "1"]
   })
-
+  const [labels, setLabels] = React.useState([]);
   const [chipData, setChipData] = React.useState({});
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
@@ -132,9 +98,10 @@ export default function PASTApp(props) {
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
-       endpoint, setEndpoint, windowRef, typeForTable, setTypeForTable,
+      drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
+      windowRef, typeForTable, setTypeForTable,labels,setLabels,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet
+      dataSet, setDataSet, labels, setLabels, page: "past"
     }}>
       <PAST/>
     </PASTContext.Provider>

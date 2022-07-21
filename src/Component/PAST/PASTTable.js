@@ -29,11 +29,13 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
   const [enslaver, setEnslaver] = React.useState(true);
-
+  const getEndpoint = (typeForTable) => {
+    switch (typeForTable) {
+      case "slaves": return "past/enslaved/"
+      case "enslavers": return "past/enslavers/"
+    }
+  }
   const {
-    options_tree,
-    endpoint,
-    setEndpoint,
     queryData,
     setQueryData,
     search_object,
@@ -43,19 +45,17 @@ export default function PASTTable(props) {
     typeForTable,
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
-  console.log(endpoint)
+  // console.log(endpoint)
   useEffect(() =>{
-    if (typeForTable == "slaves") {
+    if (typeForTable === "slaves") {
       setCols(enslaved_default_list);
       setLabels(enslaved_labels);
       setAll_options(enslaved_var_list);
-      setEndpoint("past/enslaved/");
       setEnslaver(false);
-    } else if (typeForTable == "enslavers") {
+    } else if (typeForTable === "enslavers") {
       setCols(enslaver_default_list);
       setLabels(enslaver_labels);
       setAll_options(enslaver_var_list);
-      setEndpoint("past/enslavers/");
       setEnslaver(true);
     }
   },[typeForTable])
@@ -66,13 +66,26 @@ export default function PASTTable(props) {
     setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
 
+  const handleSankeyOpen = () => {
+    // console.log(typeForTable);
+    setQueryData({
+      ...queryData,
+      type: typeForTable,
+    });
+    // console.log(queryData);
+    props.handleClickOpen("body")();
+  };
+
   return (
     <div>
       <ColContext.Provider
         value={{
           cols,
           setCols,
-          endpoint,
+          setAll_options,
+          setLabels,
+          setEnslaver,
+          // endpoint,
           id,
           setId,
           open,
@@ -116,7 +129,7 @@ export default function PASTTable(props) {
                   size="large"
                   color="grey"
                   disabled={queryData.slaves.length === 0}
-                  onClick={props.handleClickOpen("body")}
+                  onClick={handleSankeyOpen}
                 >
                   View Connections
                 </Button>
@@ -138,7 +151,7 @@ export default function PASTTable(props) {
             </CardContent>
           </Card>
         )}
-        <Table context={ColContext} />
+        <Table context={ColContext} handleClickOpen={props.handleClickOpen}/>
         <Modal context={ColContext} endpoint="voyage/" />
       </ColContext.Provider>
     </div>

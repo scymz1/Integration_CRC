@@ -12,12 +12,14 @@ import {
   } from '@mui/material';
 
 import {ComponentContext} from "./ComponentFac"
+import { control } from 'leaflet';
 const base_url = process.env.REACT_APP_BASEURL;
 
 const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const Input = styled(MuiInput)`
   width: 80px;
 `;
+
 
 function modifyName(rawName){
     const raw2 = rawName.replace(/ *\([^)]*\) */g, "")
@@ -27,32 +29,38 @@ function modifyName(rawName){
 
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
-  //console.log("INDEX: ", index)
 
-    //console.log("getSlider got called")
-    const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
-    const {search_object, set_search_object, endpoint} = React.useContext(props.context)
-
-    // const curLabel = labels[labels.length - 1];
-
+    const {labels, setLabels} = React.useContext(AppContext)
+    const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
     const curLabel = labels[index];
 
-    // console.log("labels: ", labels);
     const varName = curLabel["option"];
     const varDisplay = modifyName(curLabel["label"])
-    //console.log("varName: ", varName);
-    // console.log("varDisplay: ", varDisplay);
-
-    // console.log("fetch from Provider completed")
 
     const [range, setRange] = React.useState([0,0])
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
+
+    if(search_object[varName]) {
+      console.log("Slider Value in search object: ", search_object[varName])
+      // setValue(search_object[varName])
+    }
 
     var d = new FormData();
     d.append('aggregate_fields', varName);
     //"voyage_slaves_numbers__imp_total_num_slaves_disembarked"
     const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
     
+    const endpoint =(()=> {
+      switch (typeForTable) {
+        case "slaves":
+          return "past/enslaved/"
+        case "enslavers":
+          return "past/enslavers/"
+        default:
+          return "voyage/"
+      }
+    })()
+
     const config =  {
         method: 'post',
         baseURL: base_url+endpoint+'aggregations',
@@ -68,14 +76,11 @@ export default function GetSlider(props) {
   }, [])
 
   function handleCommittedChange(event, newValue) {
-    //console.log("🚀 ~ file: Slider.js ~ line 71 ~ handleCommittedChange ~ handleCommittedChange", handleCommittedChange)
     //setValue(newValue); 
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    //console.log("73 SEARCH OBJECT injection -----> ", search_object)
-    // console.log(varName, ": onchange", value);
   }
   
   const handleChange = (event, newValue) => {
@@ -93,16 +98,13 @@ export default function GetSlider(props) {
       res = [Number(event.target.value), endVal]
       // setValue([Number(event.target.value), endVal])
     }
-    // console.log("res", res)
     setValue(res)
   };
 
   const handleBlur = (event => {
-    //console.log("🚀 ~ file: Slider.js ~ line 122 ~ GetSlider ~ handleBlur", handleBlur)
     const curStart = value[0]
     const curEnd = value[1]
-    // console.log(curStart, curEnd)
-    // console.log(event.target.value)
+
     if (event.target.name === "end") {
       if(event.target.value > range[1]) setValue([curStart, range[1]]);
       if(event.target.value < curStart) setValue([curStart, curStart + 1 < range[1] ? curStart + 1 : range[1]]);
@@ -117,11 +119,8 @@ export default function GetSlider(props) {
       ...search_object,
       [varName]: [value[0], value[1]]
     });
-    //console.log("116 SEARCH OBJECT injection -----> ", search_object)
 
   });
-
-
 
   return (
         <>
@@ -130,7 +129,7 @@ export default function GetSlider(props) {
           <Input 
             color = "secondary"
             name ="start"
-            value={value[0]}
+            value={search_object[varName] ? search_object[varName][0] : value[0]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
@@ -145,7 +144,7 @@ export default function GetSlider(props) {
           />
           <Input
             name ="end"
-            value={value[1]}
+            value={search_object[varName] ? search_object[varName][1] : value[1]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
@@ -166,7 +165,7 @@ export default function GetSlider(props) {
             max = {range[1]}
             // defaultValue={range}
             getAriaLabel={() => 'Temperature range'}
-            value={value}
+            value={search_object[varName] ? search_object[varName] : value}
             onChange={handleChange}
             onChangeCommitted = {handleCommittedChange}
             // valueLabelDisplay="auto"

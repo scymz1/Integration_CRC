@@ -61,8 +61,8 @@
   },
   "voyage_sourceconnection": {
     "type": "table",
-    "label": "voyage sources connection",
-    "flatlabel": "voyage sources connection"
+    "label": "Sources",
+    "flatlabel": "Sources"
   },
   "voyage_outcome__voyage": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -5157,6 +5157,11 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "ID"
+    "flatlabel": "Voyage ID"
+  },
+  "voyage_ownercrewandcaptain":{
+    "type": "table",
+    "label":"Owner, Crew, & Captain",
+    "flatlabel":"Owner, Crew, & Captain"
   }
 }

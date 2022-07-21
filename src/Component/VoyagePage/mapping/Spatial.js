@@ -79,7 +79,7 @@ export function ReadFeature(props) {
   var markers = L.markerClusterGroup({
     iconCreateFunction: function(cluster) {
       return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>' , 
-                          className: ' leaflet-div-icon2', 
+                          className: ' cluster-small', 
                           });
 	}
   });
@@ -90,10 +90,10 @@ export function ReadFeature(props) {
 
   map.on('zoomend', function() {
     
-    //console.log("Zoom: ", map.getZoom())
+    console.log("Zoom: ", map.getZoom())
     
-    if(map.getZoom() < 5) {
-      //console.log("Set Region")
+        
+    if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
       set_complete_object({
         ...complete_object,
@@ -108,7 +108,7 @@ export function ReadFeature(props) {
         ...complete_object,
         groupby_fields: groupby_fields_port_name,
       });
-      setArea(groupby_fields_port[0]);
+      setArea(disembark);
     }
 
   })
@@ -146,25 +146,29 @@ export function ReadFeature(props) {
     //selected disembark
     if (disembark === diskey ){
       //if currently search_object is embark
-      if(complete_object[embkey]){
-        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
-        delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-      }
+        // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
+        const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      // }
       }
     else{
-      if(complete_object[diskey]){
-        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-        delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-        console.log("🚀 ~ file: Spatial.js ~ line 158 ~ useEffect ~ complete_object", complete_object)
-      }
+
+        //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+        const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
       
      }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
 
 
   },[disembark])
 
+<<<<<<< HEAD
   // useEffect(() =>{
   //   let point = complete_object[area];
   //   if (area === groupby_fields_region[0]){
@@ -174,9 +178,20 @@ export function ReadFeature(props) {
   //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
   //    }
   // },[area])
+=======
+  useEffect(() =>{
+    let point = complete_object[area];
+    if (area === groupby_fields_region[0]){
+        delete Object.assign(complete_object, {[area]: point })[disembark];
+      }
+    else if (area === disembark) {
+        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+     }
+     set_complete_object(complete_object)
+  },[area])
+>>>>>>> 5ca1b3de865bea2e0c443b42fcdec397dcfb3e9a
 
   useEffect(() => {
-    console.log("props.search_object changed")
     for (var i in map._layers) {
       if (
         map._layers[i]._path != undefined ||
@@ -191,7 +206,7 @@ export function ReadFeature(props) {
     }
 
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
-    const filterNodes = (feature) => {
+    var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -201,7 +216,7 @@ export function ReadFeature(props) {
       
     };
     
-    console.log(props.search_object.dataset[0]==0)
+    //console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -213,11 +228,13 @@ export function ReadFeature(props) {
       });
       map.removeLayer(markers)
       // Add only actual locations to the map with markers (with clicking events and popups)
+      if(!props.filter){
+        filterNodes=(feature)=>{return true}
+      }
       L.geoJSON(nodes.features, {
-        //filter: featureWayPt,
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
-          console.log(props.search_object.dataset[0]==0)
+          //console.log(props.search_object.dataset[0]==0)
           L.marker(layer["_latlng"]).unbindPopup()
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
@@ -247,9 +264,10 @@ export function ReadFeature(props) {
             );
             
 
-            L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-              maxWidth: "auto",
-            });
+            // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
+            //   maxWidth: "auto",
+            // });
+            markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
         })
           markers.addLayer(layer)
         },
@@ -271,8 +289,6 @@ export function ReadFeature(props) {
 }
 
 function drawUpdate(map, routes) {
-
-  // console.log(routes)
 
   var valueMin = d3.min(routes, function (l) {
     return l[2];
@@ -296,7 +312,6 @@ function drawUpdate(map, routes) {
 }
 
 
-
 // Function to draw the curve routes
 function DrawRoutes(map, links) {
   var valueMin = d3.min(links, function (l) {
@@ -306,12 +321,9 @@ function DrawRoutes(map, links) {
     return l[0];
   });
 
-  // console.log(valueMax)
-
   var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
   
   links.map(array=> {
-    // console.log(array)
     draw(map, array, valueScale)
   })
 }
@@ -329,8 +341,6 @@ function draw(map, link, valueScale) {
   for(var i = 2; i < route.length; i++) {
     commands.push("C", route[i][0], route[i][1], route[i][2])
   }
-
-  // console.log("Commands: ", commands)
 
   L.curve(commands, {color:'blue', weight: valueScale(weight)}).bindPopup("Sum of slaves: " + weight).addTo(map);
 }

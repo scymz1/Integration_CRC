@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData} = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -68,6 +68,7 @@ export default function PAST() {
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button> */}
 
       <Filter context={PASTContext}/>
+      {drawerOpen ? <Toolbar />: null}
       <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
         Table
       </Button>
@@ -88,10 +89,11 @@ export default function PAST() {
         </Grow>
       </Box>}
 
-      {checked &&<Box sx={{ display: 'flex' }}>
+      {checked &&
+      <Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
-          <Gallery />
+          <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} setChipData = {setChipData}/>
           </div>
         </Grow>
       </Box>}
@@ -140,8 +142,8 @@ export default function PAST() {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
-            {data.map((item) => {
-              return <Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
+            {data.map((item, key) => {
+              return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
             })}
           </Grid>
         </TabPanel>

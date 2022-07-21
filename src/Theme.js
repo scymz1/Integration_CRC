@@ -2,6 +2,16 @@ import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
+    // mode: 'dark',
+    voyageTrans: {
+      main: "#42a5f5"
+    },
+    voyageIntra: {
+      main: "#ab47bc"
+    },
+    whiteIcon: {
+      main: "#f5f5f5"
+    }
   },
 });
 
@@ -11,8 +21,11 @@ export const switchTheme = createTheme({
     blackMode: {
       main:"#424242"
     },
-    type:{
-      main:"#311b92"
+    voyageTrans: {
+      main: "#42a5f5"
+    },
+    voyageIntra: {
+      main: "#ab47bc"
     }
   },
   // components: {
