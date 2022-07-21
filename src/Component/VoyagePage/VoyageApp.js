@@ -45,6 +45,7 @@ export default function VoyageApp(props) {
   })
 
   const [output, setOutput] = React.useState([]);
+  const [labels, setLabels] = React.useState([]);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   // Handle Drawer Open and Close
@@ -65,7 +66,7 @@ export default function VoyageApp(props) {
       search_object, set_search_object, 
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       endpoint, nested_tree:columnOptions, 
-      dataSet, setDataSet, page: "voyage"}}>
+      dataSet, setDataSet, labels, setLabels, page: "voyage"}}>
       <Voyage/>
     </VoyageContext.Provider>
   );
