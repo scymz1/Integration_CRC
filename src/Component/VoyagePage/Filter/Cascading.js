@@ -97,6 +97,7 @@ function Cascading(props) {
                         // : null
                         : containsOnly(nodes[key])
                             ?  renderTree(nodes[key], key) 
+                            // ? null
                             : <NestedMenuItem
                                 key={key}
                                 // label={options_flat[nameConcat(name,key)].label}

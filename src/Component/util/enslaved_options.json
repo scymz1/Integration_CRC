@@ -2,7 +2,7 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "Voyage ID"
+    "flatlabel": "Enslaved ID"
   },
   "post_disembark_location": {
     "type": "table",
@@ -8402,7 +8402,7 @@
   "voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of arrival at port of disembarkation (YEARAM)",
-    "flatlabel": "voyage : Dates : Year of arrival at port of disembarkation (YEARAM)"
+    "flatlabel": "Year of arrival at port of disembarkation (YEARAM)"
   },
   "voyage__voyage_dates__imp_length_home_to_disembark": {
     "type": "<class 'rest_framework.fields.IntegerField'>",

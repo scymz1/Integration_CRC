@@ -2,7 +2,7 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-    "flatlabel": "Voyage Id"
+    "flatlabel": "Enslaver ID"
   },
   "principal_location": {
     "type": "table",
@@ -2712,7 +2712,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed port where voyage began (PTDEPIMP) : Location : Location name"
+    "flatlabel": "Imputed port where voyage began (PTDEPIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -2807,7 +2807,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed region where voyage began (DEPTREGIMP) : Location : Location name"
+    "flatlabel": "Imputed region where voyage began (DEPTREGIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -2902,7 +2902,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed broad region where voyage began (DEPTREGIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region where voyage began (DEPTREGIMP1)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3092,7 +3092,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed principal place of slave purchase (MJBYPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal place of slave purchase (MJBYPTIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3187,7 +3187,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed principal region of slave purchase (MAJBYIMP) : Location : Location name"
+    "flatlabel": "Imputed principal region of slave purchase (MAJBYIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3282,7 +3282,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed principal broad region of slave purchase (MAJBYIMP1) : Location : Location name"
+    "flatlabel": "Imputed principal broad region of slave purchase (MAJBYIMP1)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3472,7 +3472,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed principal port of slave disembarkation (MJSLPTIMP) : Location : Location name"
+    "flatlabel": "Imputed principal port of slave disembarkation (MJSLPTIMP)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -3567,7 +3567,7 @@
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Imputed broad region of slave disembarkation (MJSELIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region of slave disembarkation (MJSELIMP1)"
   },
   "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__longitude": {
     "type": "<class 'rest_framework.fields.DecimalField'>",
@@ -5492,7 +5492,7 @@
   "enslaver_sources": {
     "type": "table",
     "label": "enslaver identity source connection",
-    "flatlabel": "enslaver identity source connection"
+    "flatlabel": "Documentary Sources"
   },
   "enslaver_sources__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
