@@ -90,7 +90,7 @@ export function ReadFeature(props) {
 
   map.on('zoomend', function() {
     
-    //console.log("Zoom: ", map.getZoom())
+    console.log("Zoom: ", map.getZoom())
     
     if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
@@ -107,7 +107,7 @@ export function ReadFeature(props) {
         ...complete_object,
         groupby_fields: groupby_fields_port_name,
       });
-      setArea(groupby_fields_port[0]);
+      setArea(disembark);
     }
 
   })
@@ -145,21 +145,24 @@ export function ReadFeature(props) {
     //selected disembark
     if (disembark === diskey ){
       //if currently search_object is embark
-      if(complete_object[embkey]){
-        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
-        delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-      }
+        // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
+        const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      // }
       }
     else{
-      if(complete_object[diskey]){
-        console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-        delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-        console.log("🚀 ~ file: Spatial.js ~ line 158 ~ useEffect ~ complete_object", complete_object)
-      }
+
+        //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+        const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
       
      }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
 
 
   },[disembark])
@@ -167,11 +170,12 @@ export function ReadFeature(props) {
   useEffect(() =>{
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
+        delete Object.assign(complete_object, {[area]: point })[disembark];
       }
-    else if (area === groupby_fields_port[0]) {
+    else if (area === disembark) {
         delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
      }
+     set_complete_object(complete_object)
   },[area])
 
   useEffect(() => {
@@ -199,6 +203,7 @@ export function ReadFeature(props) {
       
     };
     
+    console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
