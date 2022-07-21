@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data, setQueryData, queryData} = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -91,7 +91,7 @@ export default function PAST() {
       {checked &&<Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
-          <Gallery />
+          <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} queryData={queryData}/>
           </div>
         </Grow>
       </Box>}

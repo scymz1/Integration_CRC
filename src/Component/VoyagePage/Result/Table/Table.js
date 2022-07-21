@@ -54,12 +54,12 @@ function Table(props) {
     setInfo,
     setId,
     modal,
-    enslaver,
     options_flat,
     queryData,
     setQueryData,
     search_object,
     chipData,
+    setChipData,
     typeForTable,
   } = useContext(props.context);
 
@@ -72,6 +72,8 @@ function Table(props) {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Switch tables
 
   // Checkbox
   //const [checkedMax, setCheckedMax] = useState(false);
@@ -126,6 +128,15 @@ function Table(props) {
     typeForTable,
     search_object,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(()=>{
+    setChipData({});
+    setQueryData({
+      ...queryData,
+      slaves: [],
+      enslavers:[]
+    })
+  },[typeForTable])
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -211,28 +222,39 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
-    // console.log("popover", typeForTable, endpoint)
     const people = row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]?
       row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]:
       [];
     const roles = row["transactions__transaction__enslavers__role__role"];
-    //console.log(people, roles);
+    const ids = row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
     const output = {};
-    // console.log("table endpoint", endpoint)
-    // console.log("table row", value)
+    //console.log(people,roles,ids)
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
-        output[people[i]] = [];
+        output[people[i]] = {roles: [], id: 0};
       }
-      output[people[i]].push(roles[i][0]);
+      output[people[i]]["roles"].push(roles[i][0]);
+      output[people[i]]["id"] = ids[i][0];
     }
     //console.log(output);
     return output;
   };
 
+  const handleSankeyOpen = (e, id) => {
+    console.log(id);
+    setQueryData({
+      ...queryData,
+      enslavers: [id],
+      type: "enslavers",
+    });
+    props.handleClickOpen("body")();
+    e.stopPropagation();
+  };
+
   if (isLoading) {
     return <CircularProgress />;
   }
+
   return (
     <div>
       <div>
@@ -295,8 +317,8 @@ function Table(props) {
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              row.transactions != null &&
-                              row.transactions.length !== 0 && (
+                              (row.number_enslaved != 0 ||
+                              row.transactions.length !== 0) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -306,8 +328,8 @@ function Table(props) {
                                 </TableCell>
                               )}
                             {checkbox &&
-                              (row.transactions == null ||
-                                row.transactions.length === 0) && (
+                              (!(row.number_enslaved != 0 ||
+                                row.transactions.length !== 0)) && (
                                 <TableCell padding="checkbox"></TableCell>
                               )}
                             {cols.map((k, key) => {
@@ -344,10 +366,10 @@ function Table(props) {
                                         <Tooltip
                                           key={"tooltip-" + key}
                                           arrow
-                                          title={popover[name].join(", ")}
+                                          title={popover[name]["roles"].join(", ")}
                                           placement="top"
                                         >
-                                          <Chip label={name} />
+                                          <Chip label={name} onClick={(e) =>handleSankeyOpen(e, popover[name]["id"])} />
                                         </Tooltip>
                                       ))}
                                     </Stack>

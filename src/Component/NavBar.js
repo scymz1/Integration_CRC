@@ -53,7 +53,7 @@ export default function ResponsiveAppBar(props) {
   })()
 
   return (
-    <AppBar position="sticky" color={ color } elevation={0} style={{zIndex:4}}>
+    <AppBar position="sticky" color={color} elevation={0} style={{zIndex:4}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
