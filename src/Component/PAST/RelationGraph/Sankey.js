@@ -62,19 +62,6 @@ export default function Sankey(props) {
     setAnchorElclick(null);
     setPopOpenclick(null)
   };
-  // const openclick = Boolean(anchorElclick);
-  // const popOpen = Boolean(anchorEl);
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
 
   useEffect(() => {
     setIsLoading(true)
@@ -122,11 +109,11 @@ export default function Sankey(props) {
         var transactions = item.alias[0].transactions;
         transLength = transLength+transactions.length;
         transactions.forEach((transaction)=>{
-          console.log(transaction)
+          // console.log(transaction)
           var transaction_default = _.get(transaction,["id"],null);
           var transaction_id = _.get(transaction,["transaction","voyage"], transaction_default);
           var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
-          console.log("relation_type",relation_type)
+          // console.log("relation_type",relation_type)
           var voyage_id =  _.get(transaction,["transaction","voyage"],null);
           // var amount= _.get(transaction,["transaction","amount"],null);
           var place= _.get(transaction,["transaction","place","geo_location","name"],null);
@@ -151,14 +138,34 @@ export default function Sankey(props) {
                             color: "#1e3162",
                             value:5})}
           var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
-          enslaverLength = enslaverLength + enslavedlist.length;
           console.log("enslaved",enslavedlist)
+          if(enslavedlist.length > 10){
+            enslaverLength = enslaverLength + 1;
+            var enslaved_id =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
+            var enslaved_name =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
+            if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
+              nodes.push({id: enslaved_id, 
+                          name: "greater than 10 people",
+                          type: "enslaved"});
+            if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id 
+                                    ) &&
+                                    x.target === nodes.findIndex(x => x.id === enslaved_id 
+                                              )) === -1) {
+              links.push({source: nodes.findIndex(x => x.id === transaction_id 
+                                                        ),
+                          target: nodes.findIndex(x => x.id === enslaved_id),
+                          color: "#1e3162",
+                          value:5
+                  })}
+        }
+          }
+          else{
+            enslaverLength = enslaverLength + enslavedlist.length;
           enslavedlist.forEach((enslaved) => {
        // console.log("enslaver", enslaver.enslaver_alias.id)
             var enslaved_id =  _.get(enslaved,["enslaved","id"],null);
             var enslaved_name =  _.get(enslaved,["enslaved","documented_name"],null);
             if(nodes.findIndex(x => x.id === enslaved.enslaved.id) === -1) {
-              console.log("enslaved",enslaved_id,enslaved_name)
                 nodes.push({id: enslaved_id, 
                             name: enslaved_name,
                             type: "enslaved"});
@@ -173,7 +180,7 @@ export default function Sankey(props) {
                             color: "#1e3162",
                             value:5
                     })}
-          }})
+          }})}
           })
 
       })
