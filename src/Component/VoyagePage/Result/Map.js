@@ -146,7 +146,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}  radio = {radioOptions}/>
+                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={false}/>
                 
 
 
