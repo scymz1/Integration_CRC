@@ -137,15 +137,4 @@ function modifyName(rawName){
   //        );
 // }
 
-// function GetAuto(){
-//   console.log('get auto')
-//   return <Auto context={}/>
-// }
-//
-// function GetCheck(props){
-//
-// }
-
-
-
 export default ComponentFac;
