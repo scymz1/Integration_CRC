@@ -46,7 +46,7 @@ export default function Filter(props) {
     const handleFullScreen = () =>{
         setFullScreen(!fullScreen);
         setWidth(width === 12 ? 5:12);
-        setMargin(margin === "10px" ? "0px":"10px");
+        setMargin(margin === "10px" ? "2px":"10px");
     };
 
     // Handle delete by removing the specified key
@@ -174,12 +174,13 @@ export default function Filter(props) {
         variant="persistent"
         anchor="left"
         open={drawerOpen}
-        PaperProps={{ sx: { width: fullScreen?"100%":"25%", height: "78%", marginTop: "136px", background:"#EAECEE" }}}
+        PaperProps={{ sx: { width: fullScreen?"100%":"25%", background:"#EAECEE" }}}
+        // PaperProps={{ sx: { width: fullScreen?"100%":"25%", height: "80%", marginTop: "128px", background:"#EAECEE" }}}
         style={{ position:'relative', zIndex:2 }}
     >
-        {/* <Toolbar />
         <Toolbar />
-        <Divider /> */}
+        <Toolbar />
+        <Divider />
         <Grid container item justifyContent="flex-end"> 
                 <IconButton onClick={handleFullScreen}>
                     {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
@@ -191,8 +192,8 @@ export default function Filter(props) {
             // justifyContent="center"
             direction="column"
         >
-            
-            <Grid container item justifyContent="center" rowSpacing={1} columnSpacing={0.5} margin="auto" justify="center">
+        <Divider />
+            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
                         <Typography color="#808B96">No Filter</Typography>
@@ -221,6 +222,7 @@ export default function Filter(props) {
                 }
             </Grid>
         </Grid>
+        <Divider />
         <Grid container item justifyContent="flex-end">
                 <IconButton onClick={handleDrawerClose}>
                     <ChevronLeftIcon />
