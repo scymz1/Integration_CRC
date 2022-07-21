@@ -90,7 +90,6 @@ export default function PASTApp(props) {
     'dataset':["1", "1"]
   })
   const [labels, setLabels] = React.useState([]);
-
   const [chipData, setChipData] = React.useState({});
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
@@ -100,7 +99,7 @@ export default function PASTApp(props) {
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
-      windowRef, typeForTable, setTypeForTable,
+      windowRef, typeForTable, setTypeForTable,labels,setLabels,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
       dataSet, setDataSet, labels, setLabels, page: "past"
     }}>
