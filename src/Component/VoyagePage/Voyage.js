@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography, Grid } from "@mui/material";
+import { Box, Tab, Tabs, Typography, Grid, Toolbar } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -71,7 +71,8 @@ export default function Voyage() {
     <div>
       <ResponsiveAppBar context={VoyageContext}/>
       <Filter context={VoyageContext}/>
-      <Box sx={{bgcolor: 'background.paper', display:'flex', width:width,  marginTop:drawerOpen ? "68px": "0px"}}>
+      {drawerOpen ? <Toolbar />: null}
+      <Box sx={{bgcolor: 'background.paper', display:'flex', width:width}}>
         <Tabs
           orientation="vertical"
           variant="scrollable"

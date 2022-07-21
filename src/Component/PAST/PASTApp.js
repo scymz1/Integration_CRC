@@ -37,6 +37,15 @@ export default function PASTApp(props) {
     }
   }
 
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  
+  const handleDrawerOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const handleDrawerClose = () => {
+      setDrawerOpen(!drawerOpen);
+  };
+
   // const options_flat = () => {
   //   switch (typeForTable){
   //     case "slaves": return enslaved_options_flat
@@ -90,6 +99,7 @@ export default function PASTApp(props) {
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
+      drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       windowRef, typeForTable, setTypeForTable,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
       dataSet, setDataSet, labels, setLabels, page: "past"

@@ -19,8 +19,6 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 import {useContext, useState} from "react";
 import _ from 'lodash';
 
-import Filter from "./VoyagePage/Filter/Filter";
-
 export default function ResponsiveAppBar(props) {
   const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
