@@ -231,7 +231,7 @@ function Table(props) {
   };
 
   const handleSankeyOpen = (e, id) => {
-    console.log(id);
+    // console.log(id);
     setQueryData({
       ...queryData,
       enslavers: [id],
