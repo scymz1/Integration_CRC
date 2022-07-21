@@ -70,6 +70,7 @@ export default function Sankey(props) {
     };
 
     useEffect(()=>{
+      console.log("sankey", queryData, data)
       if(queryData.type === "enslavers") {
         setGraph("enslavers")
         return;
