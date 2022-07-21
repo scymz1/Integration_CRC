@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { PASTContext } from "../PASTApp";
 import * as React from "react";
-import { Box, Button, Typography, Popover, Card, Grid, CircularProgress} from "@mui/material";
-import { sankey, sankeyLeft, sankeyLinkHorizontal } from "d3-sankey";
+import {useContext, useEffect, useState} from "react";
+import {PASTContext} from "../PASTApp";
+import {Box, Button, Card, CircularProgress, Grid, Popover, Typography} from "@mui/material";
+import {sankey, sankeyLeft, sankeyLinkHorizontal} from "d3-sankey";
 import EastIcon from '@mui/icons-material/East';
 import './styles.css'
-import { MODALContext } from "../PAST";
 import _ from 'lodash';
 
 import Story from "./Story";
@@ -14,354 +13,336 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {windowRef,setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
-    const [data, setData] = useState([]);
-    const [graph, setGraph] = useState(null);
-    const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
-    const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
-    const NODE_WIDTH = 140;
-    const MIN_NODE_HEIGHT = 80;
-    const [peoplelist, setList] = React.useState([]);
+  const {windowRef, setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
+  const [graph, setGraph] = useState(null);
+  const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
+  const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
+  const NODE_WIDTH = 140;
+  const MIN_NODE_HEIGHT = 80;
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // const [open, setOpen] = React.useState(false);
-    const handleOpen = (event, info, modal) => {
-      if (modal) {
-        // console.log("voyage id",info)
-          setOpen(true);
-          setId(info);
+  const getEndpoint = (typeForTable) => {
+    switch (typeForTable) {
+      case "slaves": return "past/enslaved/"
+      case "enslavers": return "past/enslavers/"
+    }
+  }
+  // const [open, setOpen] = React.useState(false);
+  const handleOpen = (event, info, modal) => {
+    if (modal) {
+      // console.log("voyage id",info)
+      setOpen(true);
+      setId(info);
       // setId(info.id);
     }
   };
-    // const handleClose = () => setOpen(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [popOpen, setPopOpen] = React.useState(null);
-    const handlePopoverOpen = (event, node) => {
-        setAnchorEl(event.currentTarget);
-        setPopOpen(node.id);
-        // console.log("Hover Success on", node.id);
-    };
-    const handlePopoverClose = () => {
-        setAnchorEl(null);
-        setPopOpen(null);
-        // console.log("Hover Leave from node")
-    };
+  // const handleClose = () => setOpen(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [popOpen, setPopOpen] = React.useState(null);
+  const handlePopoverOpen = (event, node) => {
+    setAnchorEl(event.currentTarget);
+    setPopOpen(node.id);
+    // console.log("Hover Success on", node.id);
+  };
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopOpen(null);
+    // console.log("Hover Leave from node")
+  };
 
-    
-    const [anchorElclick, setAnchorElclick] = React.useState(null);
-    const [popOpenclick, setPopOpenclick] = React.useState(null);
-    const handleClick = (event,node) => {
-      setAnchorElclick(event.currentTarget);
-      setPopOpenclick(node.id)
-    };
-    const handleClose = () => {
-      setAnchorElclick(null);
-      setPopOpenclick(null)
-    };
 
-    useEffect(() => {
-      // setGraph(null)
-      const endpoint = (() => {
-        switch (queryData.type) {
-          case "slaves": return "past/enslaved/"
-          case "enslavers": return "past/enslavers/"
-        }
-      })()
-      const targets = (() => {
-        switch (queryData.type) {
-          case "slaves": return queryData.slaves
-          case "enslavers": return queryData.enslavers
-        }
-      })()
-      const fetchData = async ()=> {
-        const promises = targets.map(target => {
-          let queryData = new FormData();
-          queryData.append("id", target.toString());
-          queryData.append("id", target.toString());
-          return fetch(base_url + endpoint, {
-            method: "POST",
-            body: queryData,
-            headers: {'Authorization': auth_token}
-          }).then(res => res.json()).then(res => res[0])
-        })
-        const response = await Promise.all(promises)
-        setData(response)
+  const [anchorElclick, setAnchorElclick] = React.useState(null);
+  const [popOpenclick, setPopOpenclick] = React.useState(null);
+  const handleClick = (event, node) => {
+    setAnchorElclick(event.currentTarget);
+    setPopOpenclick(node.id)
+  };
+  const handleClose = () => {
+    setAnchorElclick(null);
+    setPopOpenclick(null)
+  };
+  // const openclick = Boolean(anchorElclick);
+  // const popOpen = Boolean(anchorEl);
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  useEffect(() => {
+    setIsLoading(true)
+    const endpoint = (getEndpoint(queryData.type))
+    const targets = (() => {
+      switch (queryData.type) {
+        case "slaves": return queryData.slaves
+        case "enslavers": return queryData.enslavers
       }
-      fetchData().catch(console.error);
-    }, [queryData])
+    })()
+    const fetchData = async ()=> {
+      const promises = targets.map(target => {
+        let queryData = new FormData();
+        queryData.append("id", target.toString());
+        queryData.append("id", target.toString());
+        return fetch(base_url + endpoint, {
+          method: "POST",
+          body: queryData,
+          headers: {'Authorization': auth_token}
+        }).then(res => res.json()).then(res => res[0])
+      })
+      const response = await Promise.all(promises)
+      setData(response)
+      setIsLoading(false)
+    }
+    fetchData().catch(console.error);
+  }, [queryData])
 
-    useEffect(()=>{
-      let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
-      let new_CANVAS_HEIGHT = 0;
-      let transLength = 0;
-      let enslaverLength = 0;
-      let nodes = [];
-      let links = [];
-      console.log(queryData,data)
-      if(queryData.type === "enslavers") {
-        // setGraph("enslavers")
-        // return;
-        data.forEach((item) => {
-          setList.push(item.principal_alias+" ")
-          let existNode = nodes.find(node => node.id === item.id)
-          if(!existNode){
-           nodes.push({id: item.id, name: item.alias.alias, type: "enslaver"})
+  useEffect(() => {
+    if(isLoading) return;
+    if (queryData.type === "enslavers") {
+      setGraph("enslavers")
+      return;
+    }
+
+    let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
+    let new_CANVAS_HEIGHT = 0;
+    let transLength = 0;
+    let enslaverLength = 0;
+    let nodes = [];
+    let links = [];
+    for (var i = 0; i < data.length; i++) {
+      nodes.push({
+        id: data[i].id,
+        name: data[i].documented_name,
+        age: data[i].age,
+        height: data[i].height,
+        type: "enslaved"
+      });
+      transLength = transLength + data[i].transactions.length;
+      for (var j = 0; j < data[i].transactions.length; j++) {
+        var transaction_id;
+        var voyage_id;
+        switch (data[i].transactions[j].transaction.voyage) {
+          case null:
+            transaction_id = data[i].transactions[j].transaction.id;
+            // place_name = data[i].transactions[j].transaction.place.geo_location.name;
+            voyage_id = null;
+
+            break;
+          default:
+            transaction_id = data[i].transactions[j].transaction.voyage.id;
+            voyage_id = transaction_id;
+
+            break;
+        }
+        if (nodes.findIndex(x =>
+          x.id === transaction_id &&
+          x.name === data[i].transactions[j].transaction.relation_type.relation_type &&
+          x.amount === data[i].transactions[j].transaction.amount &&
+          x.voyage_id === voyage_id
+        ) === -1) {
+
+          nodes.push({
+            id: transaction_id,
+            voyage_id: voyage_id,
+            name: _.get(data[i].transactions[j], ["transaction", "relation_type", "relation_type"], null),
+            amount: _.get(data[i].transactions[j], ["transaction", "amount"], null),
+            place: _.get(data[i].transactions[j], ["transaction", "place", "geo_location", "name"], null),
+            full_ref: _.get(data[i].transactions[j], ["transaction", "source", "full_ref"], null),
+            place_purchase: _.get(data[i].transactions[j], ["transaction", "voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], null),
+            place_dis: _.get(data[i].transactions[j], ["transaction", "voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], null),
+            date: _.get(data[i].transactions[j], ["transaction", "date"], null),
+            year: _.get(data[i].transactions[j], ["transaction", "voyage", "voyage_dates", "imp_arrival_at_port_of_dis_yyyy"], null),
+            type: "transaction",
+          });
+        }
+        if (links.findIndex(x =>
+          x.source === nodes.findIndex(x => x.id === data[i].id) &&
+          x.target === nodes.findIndex(x => x.id === transaction_id &&
+            x.name === data[i].transactions[j].transaction.relation_type.relation_type
+          )) === -1) {
+          links.push({
+            source: nodes.findIndex(x => x.id === data[i].id),
+            target: nodes.findIndex(x => x.id === transaction_id &&
+              x.name === data[i].transactions[j].transaction.relation_type.relation_type),
+            color: "#1e3162",
+            info: "",
+            value: 5
+          })
+        }
+        enslaverLength = enslaverLength + data[i].transactions[j].transaction.enslavers.length;
+        for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
+          if (nodes.findIndex(x =>
+            x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id
+          ) === -1) {
+            nodes.push({
+              id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id,
+              name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias,
+              type: "enslaver"
+            });
           }
-          item.alias.transactions.forEach((transaction)=>{
-            transaction = transaction.transaction;
-            var transaction_id = _.get(transaction,["transaction","voyage","id"],["transaction","id"]);
-            var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
-            var voyage_id =  _.get(transaction,["transaction","voyage","id"],null);
-            var amount= _.get(transaction,["transaction","amount"],null);
-            var place= _.get(transaction,["transaction","place","geo_location","name"],null);
-            var full_ref= _.get(transaction,["transaction","source","full_ref"],null);
-            var date =  _.get(transaction,["transaction","date"],null);
-            if(nodes.findIndex(node => node.id === transaction.id)===-1){
-                nodes.push({id: transaction_id, 
-                            name: relation_type,
-                            voyage_id: voyage_id,
-                            amount: amount,
-                            place: place,
-                            full_ref: full_ref,
-                            date: date,
-                            type: "transaction"})
-                }
-                if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === item.id) &&
-                                        x.target === nodes.findIndex(x => x.id === transaction_id &&
-                                                                          x.name === relation_type)) === -1) {
-                  links.push({source: nodes.findIndex(x => x.id === item.id),
-                              target: nodes.findIndex(x => x.id === transaction_id &&
-                                                           x.name === relation_type),
-                              color: "#1e3162",
-                                info: "",
-                              value:5})}
-              enslaverLength = enslaverLength + transaction.transactions.length;
-        //  transaction.enslavers.forEach((enslaver) => {
-        //  // console.log("enslaver", enslaver.enslaver_alias.id)
-        //   if(tmp.nodes.findIndex(x => x.id === enslaver.enslaver_alias.id) === -1) {
-        //    tmp.nodes.push({id: enslaver.enslaver_alias.id, 
-        //                  name: enslaver.enslaver_alias.alias});
-        //  }})
-        })
-        })
-      }
-      else{
-        data.forEach((item) => {
-          setList.push(item.documented_name+" ")
-        })
-      for (var i = 0; i < data.length; i++) {
-        nodes.push({id: data[i].id, name: data[i].documented_name, age:data[i].age,height:data[i].height,type: "enslaved"}); 
-        transLength = transLength + data[i].transactions.length;
-          for (var j = 0; j < data[i].transactions.length; j++) {
-            var transaction_id;
-            var voyage_id;
-            switch (data[i].transactions[j].transaction.voyage) {
-              case null:
-                transaction_id = data[i].transactions[j].transaction.id;
-                // place_name = data[i].transactions[j].transaction.place.geo_location.name;
-                voyage_id = null;
-
+          if (links.findIndex(x =>
+            x.source === nodes.findIndex(x => x.id === transaction_id &&
+              x.name === data[i].transactions[j].transaction.relation_type.relation_type) &&
+            x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) &&
+            x.info === data[i].transactions[j].transaction.enslavers[z].role.role
+          ) === -1) {
+            var link_color;
+            switch (data[i].transactions[j].transaction.enslavers[z].role.id) {
+              case 1:
+                link_color = "#53d4b6";
+                break;
+              case 2:
+                link_color = "#e89a4d";
+                break;
+              case 3:
+                link_color = "#7a8fa1";
+                break;
+              case 4:
+                link_color = "#d188c2";
+                break;
+              case 5:
+                link_color = "#a2e66e";
+                break;
+              case 6:
+                link_color = "#1aa6d9";
+                break;
+              case 7:
+                link_color = "#fcda14";
                 break;
               default:
-                transaction_id = data[i].transactions[j].transaction.voyage.id;
-                voyage_id = transaction_id;
-               
+                link_color = "#1e3162";
                 break;
             }
-            if (nodes.findIndex(x =>  
-                  x.id === transaction_id &&
-                  x.name === data[i].transactions[j].transaction.relation_type.relation_type &&
-                  x.amount === data[i].transactions[j].transaction.amount &&
-                  x.voyage_id === voyage_id
-                ) === -1) {
-                 
-                nodes.push({
-                            id: transaction_id,      
-                            voyage_id: voyage_id,      
-                            name: _.get(data[i].transactions[j],["transaction","relation_type","relation_type"],null),
-                            amount: _.get(data[i].transactions[j],["transaction","amount"],null),
-                            place: _.get(data[i].transactions[j],["transaction","place","geo_location","name"],null),
-                            full_ref: _.get(data[i].transactions[j],["transaction","source","full_ref"],null),
-                            place_purchase:  _.get(data[i].transactions[j],["transaction","voyage","voyage_itinerary","imp_principal_place_of_slave_purchase","geo_location","name"],null),
-                            place_dis: _.get(data[i].transactions[j],["transaction","voyage","voyage_itinerary","imp_principal_port_slave_dis","geo_location","name"],null),
-                            date: _.get(data[i].transactions[j],["transaction","date"],null),
-                            year: _.get(data[i].transactions[j],["transaction","voyage","voyage_dates","imp_arrival_at_port_of_dis_yyyy"],null),
-                            type: "transaction",
-                          });
-            }
-            if (links.findIndex(x =>  
-                x.source === nodes.findIndex(x => x.id === data[i].id) &&
-                x.target === nodes.findIndex(x => x.id === transaction_id &&
-                                                  x.name === data[i].transactions[j].transaction.relation_type.relation_type
-                )) === -1) {
-                links.push({
-                            source: nodes.findIndex(x => x.id === data[i].id),
-                            target: nodes.findIndex(x => x.id === transaction_id &&
-                                                         x.name === data[i].transactions[j].transaction.relation_type.relation_type),
-                            color: "#1e3162",
-                            info: "",
-                            value:5
-                          })
-            }
-            enslaverLength = enslaverLength + data[i].transactions[j].transaction.enslavers.length;
-            for (var z = 0; z < data[i].transactions[j].transaction.enslavers.length; z++) {
-              if (nodes.findIndex(x => 
-                  x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id
-                  ) === -1) {
-                  nodes.push({
-                              id: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id, 
-                              name: data[i].transactions[j].transaction.enslavers[z].enslaver_alias.alias,
-                              type: "enslaver"
-                            });
-                  }     
-              if (links.findIndex(x => 
-                  x.source === nodes.findIndex(x => x.id === transaction_id &&
-                                                    x.name === data[i].transactions[j].transaction.relation_type.relation_type) &&
-                  x.target === nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id) &&
-                  x.info === data[i].transactions[j].transaction.enslavers[z].role.role
-                  ) === -1) 
-              {
-                  var link_color;
-                  switch (data[i].transactions[j].transaction.enslavers[z].role.id) {
-                    case 1:
-                      link_color = "#53d4b6";
-                      break;
-                    case 2:
-                      link_color = "#e89a4d";
-                      break;
-                    case 3:
-                      link_color = "#7a8fa1";
-                      break;
-                    case 4:
-                      link_color = "#d188c2";
-                      break;
-                    case 5:
-                      link_color = "#a2e66e";
-                      break;
-                    case 6:
-                      link_color = "#1aa6d9";
-                      break;
-                    case 7:
-                      link_color = "#fcda14";
-                      break;
-                    default:
-                      link_color = "#1e3162";
-                      break;
-                  }
-                  links.push({source: nodes.findIndex(x => x.id === transaction_id &&
-                                                            x.name === data[i].transactions[j].transaction.relation_type.relation_type),
-                              target: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
-                              color: link_color,
-                              info: data[i].transactions[j].transaction.enslavers[z].role.role,
-                              value:5})
-              }
-            }
+            links.push({
+              source: nodes.findIndex(x => x.id === transaction_id &&
+                x.name === data[i].transactions[j].transaction.relation_type.relation_type),
+              target: nodes.findIndex(x => x.id === data[i].transactions[j].transaction.enslavers[z].enslaver_alias.id),
+              color: link_color,
+              info: data[i].transactions[j].transaction.enslavers[z].role.role,
+              value: 5
+            })
           }
-      };}
+        }
+      }
+    }
+    ;
 
-      nodes.forEach((node)=>{
-        const result = [];
-        var voyagemodal = true;
-        if(node.type==="enslaved"){
+    nodes.forEach((node) => {
+      const result = [];
+      var voyagemodal = true;
+      if (node.type === "enslaved") {
+        result.push(
+          <tbody>
+          <tr>
+            <th>Age:</th>
+            <td>{node.age}</td>
+          </tr>
+          <tr>
+            <th>Height:</th>
+            <td>{node.height}</td>
+          </tr>
+          </tbody>)
+      }
+      if (node.type === "transaction") {
+        if (node.voyage_id === null) {
+          voyagemodal = false;
           result.push(
             <tbody>
             <tr>
-              <th>Age: </th>
-              <td>{node.age}</td>
+              <th>Type:</th>
+              <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
             </tr>
             <tr>
-              <th>Height: </th>
-              <td>{node.height}</td>
+              <th>Amount:</th>
+              <td>{node.amount}</td>
             </tr>
-            </tbody>)
+            <tr>
+              <th>Source:</th>
+              <td>{node.full_ref}</td>
+            </tr>
+            <tr>
+              <th>Place:</th>
+              <td>{node.place}</td>
+            </tr>
+            <tr>
+              <th>Date:</th>
+              <td>{node.date}</td>
+            </tr>
+            </tbody>
+          );
+        } else {
+          // console.log(node.voyage_id)
+          node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event, node.voyage_id, voyagemodal)}>Voyage
+            id:{node.voyage_id}</Button>
+          // console.log(node.voyage_id)
+          result.push(
+            <tbody>
+            <tr>
+              <th>Type:</th>
+              <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
+            </tr>
+            <tr>
+              <th>Place:</th>
+              <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon
+                fontSize="small"/>{node.place_dis}</Grid></td>
+            </tr>
+            <tr>
+              <th>Year:</th>
+              <td>{node.year}</td>
+            </tr>
+            </tbody>
+          );
         }
-        if(node.type==="transaction"){
-          if(node.voyage_id===null){
-            voyagemodal = false;
-            result.push(
-              <tbody>
-              <tr>
-                <th>Type: </th>
-                <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-              </tr>
-              <tr>
-                <th>Amount: </th>
-                <td>{node.amount}</td>
-              </tr>
-              <tr>
-                <th>Source: </th>
-                <td>{node.full_ref}</td>
-              </tr>
-              <tr>
-                <th>Place: </th>
-                <td>{node.place}</td>
-              </tr>
-              <tr>
-                <th>Date: </th>
-                <td>{node.date}</td>
-              </tr>
-              </tbody>
-            );
-          }
-          else{
-            // console.log(node.voyage_id)
-            node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,voyagemodal)}>Voyage id:{node.voyage_id}</Button>
-            // console.log(node.voyage_id) 
-            if(queryData.type === "enslaved"){
-              result.push(
-                <tbody>
-                <tr>
-                  <th>Type: </th>
-                  <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-                </tr>
-                  <tr>
-                  <th>Place: </th>
-                  <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon fontSize="small"/>{node.place_dis}</Grid></td>
-                </tr>
-                <tr>
-                  <th>Year: </th>
-                  <td>{node.year}</td>
-                </tr>
-                </tbody>
-              );}
+      }
 
-          }
-          }
-        
-        
-        node.information = result;
-        // console.log(node.id,node.information)
-      })
-      
-      new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
-      
-      setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
-      setCANVAS_WIDTH(new_CANVAS_WIDTH);
-      const tmpGraph = sankey()
-        .nodeAlign(sankeyLeft)
-        .nodeWidth(NODE_WIDTH)
-        // .nodeheight(40)
-        .extent([
-          [30, 30],
-          [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
-        ])({nodes, links});
-      setGraph(tmpGraph)  
-    }, [data]);
+
+      node.information = result;
+      // console.log(node.id,node.information)
+    })
+
+    new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
+
+    setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
+    setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    const tmpGraph = sankey()
+      .nodeAlign(sankeyLeft)
+      .nodeWidth(NODE_WIDTH)
+      // .nodeheight(40)
+      .extent([
+        [30, 30],
+        [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+      ])({nodes, links});
+    setGraph(tmpGraph)
+  }, [data]);
 
   function renderStory(node) {
     // if(node.type === "enslaved")
     // console.log("hover node", data.find((slave)=> slave.id === node.id))
     // console.log("renderStory")
-    switch(node.type) {
-      case "enslaved": return <Card sx={{ flexGrow: 1,  width: 400}}><Story target={data.find((slave)=> slave.id === node.id)}/></Card>
-      case "transaction": return "TRANSACTION"
-      case "enslaver": return "ENSLAVER"
-      default: return ""
+    switch (node.type) {
+      case "enslaved":
+        return <Card sx={{flexGrow: 1, width: 400}}><Story target={data.find((slave) => slave.id === node.id)}/></Card>
+      case "transaction":
+        return "TRANSACTION"
+      case "enslaver":
+        return "ENSLAVER"
+      default:
+        return ""
     }
-    
+
   }
 
-
-
+  var enslaved = []
+  data.forEach((each) => {
+    enslaved.push(each.documented_name + " ")
+  })
   return (
     <div>
       <h1>Connections for {peoplelist}</h1>
@@ -373,15 +354,15 @@ export default function Sankey(props) {
       {!graph ?
         <CircularProgress/> :
 
-        // graph === "enslavers"? "this is enslavers" :
+        graph === "enslavers" ? "this is enslavers" :
 
-        <svg 
-        className="canvas"
-        width={CANVAS_WIDTH+30}
-        height={CANVAS_HEIGHT+30}
-        >
+          <svg
+            className="canvas"
+            width={CANVAS_WIDTH + 30}
+            height={CANVAS_HEIGHT + 30}
+          >
             {graph.nodes.map((node) => {
-              return(
+              return (
                 <>
                   <rect
                     key={`sankey-node-${node.index}`}
@@ -389,7 +370,7 @@ export default function Sankey(props) {
                     y={node.y0}
                     width={node.x1 - node.x0}
                     height={node.y1 - node.y0}
-                    fill="white" />
+                    fill="white"/>
                   <foreignObject
                     key={`sankey-node-text-${node.index}`}
                     className="node"
@@ -397,14 +378,18 @@ export default function Sankey(props) {
                     y={node.y0}
                     width={node.x1 - node.x0}
                     height={node.y1 - node.y0}
-                    >
+                  >
                     <div className="node-name">
                       <Box
-                        onClick={(e)=>{handleClick(e, node)}}
+                        onClick={(e) => {
+                          handleClick(e, node)
+                        }}
                         // onMouseEnter={()=>{console.log("hover enter", node)}}
-                        onMouseEnter={(e)=>{handlePopoverOpen(e, node)}}
+                        onMouseEnter={(e) => {
+                          handlePopoverOpen(e, node)
+                        }}
                         onMouseLeave={handlePopoverClose}
-                        >
+                      >
                         {/* {console.log(node.name,typeof(node.name))} */}
                         <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
                         {/* <Typography align="center">{node.id}</Typography> */}
@@ -412,14 +397,14 @@ export default function Sankey(props) {
                       </Box>
                       <Popover
                         // id={`sankey-node-text-${node.index}`}
-                        open={popOpenclick === node.id && node.type==="enslaved" }
+                        open={popOpenclick === node.id && node.type === "enslaved"}
                         anchorEl={anchorElclick}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left"
                         }}
                         onClose={handleClose}
-                        >
+                      >
                         {renderStory(node)}
                       </Popover>
                       <Popover
@@ -427,7 +412,7 @@ export default function Sankey(props) {
                         sx={{
                           pointerEvents: 'none',
                         }}
-                        open={popOpen === node.id && node.type!="enslaver" }
+                        open={popOpen === node.id && node.type != "enslaver"}
                         anchorEl={anchorEl}
                         anchorOrigin={{
                           vertical: 'bottom',
@@ -438,15 +423,16 @@ export default function Sankey(props) {
                           horizontal: 'left',
                         }}
                         onClose={handlePopoverClose}
-                        >
-                          {node.information}               
-                        </Popover>
+                      >
+                        {node.information}
+                      </Popover>
                     </div>
                   </foreignObject>
                 </>
-            )})}
+              )
+            })}
             {graph.links.map((link) => {
-              return(
+              return (
                 <g>
                   <path
                     id={`sankey-link-${link.index}`}
@@ -458,17 +444,17 @@ export default function Sankey(props) {
                     opacity="0.5"
                     strokeWidth="5"
                   />
-                  <text fontSize = "15" fill={link.color} fontWeight="bold" fontFamily="arial">
-                    <textPath href = {`#sankey-link-${link.index}`} 
-                              startOffset="50%" 
+                  <text fontSize="15" fill={link.color} fontWeight="bold" fontFamily="arial">
+                    <textPath href={`#sankey-link-${link.index}`}
+                              startOffset="50%"
                               textAnchor="middle">
-                        {link.info}
+                      {link.info}
                     </textPath>
                   </text>
                 </g>
               )
-              })}
-        </svg>
+            })}
+          </svg>
       }
     </div>
   )

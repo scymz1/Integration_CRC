@@ -164,7 +164,7 @@ export default function ResponsiveAppBar(props) {
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Enslaved People</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>
                 </MenuItem>:
@@ -249,7 +249,7 @@ export default function ResponsiveAppBar(props) {
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Enslaved People</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}
