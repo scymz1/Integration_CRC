@@ -1,4 +1,4 @@
-import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer, Divider} from "@mui/material";
+import {Grid, IconButton, AppBar, Toolbar, Drawer, Divider} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -19,18 +19,18 @@ import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
-import { VoyageContext } from "../VoyageApp";
+// import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, page} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, page} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
-    const [width, setWidth] = React.useState(12);
-    const [margin, setMargin] = React.useState("10px");
+    // const [width, setWidth] = React.useState(12);
+    // const [margin, setMargin] = React.useState("10px");
     // const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     // Handle Drawer Open and Close
@@ -44,8 +44,8 @@ export default function Filter(props) {
     // Handle Full Screen
     const handleFullScreen = () =>{
         setFullScreen(!fullScreen);
-        setWidth(width === 12 ? 5:12);
-        setMargin(margin === "10px" ? "2px":"10px");
+        // setWidth(width === 12 ? 5:12);
+        // setMargin(margin === "10px" ? "5px":"10px");
     };
 
     // Handle delete by removing the specified key
@@ -180,7 +180,7 @@ export default function Filter(props) {
         <Toolbar />
         <Toolbar />
         <Divider />
-        <Grid container item justifyContent="flex-end"> 
+        <Grid container item justifyContent="flex-end" > 
                 <IconButton onClick={handleFullScreen}>
                     {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
                 </IconButton>
@@ -188,10 +188,8 @@ export default function Filter(props) {
         <Grid 
             container 
             spacing={0} 
-            // justifyContent="center"
             direction="column"
         >
-        <Divider />
             <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
@@ -200,7 +198,7 @@ export default function Filter(props) {
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={width} sx={{m:margin}} justifyContent="center">
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{m:fullScreen?"5px":"10px"}} justifyContent="center">
                           <Grid item xs={10} >
                               <Accordion>
                                   <AccordionSummary>
@@ -221,7 +219,6 @@ export default function Filter(props) {
                 }
             </Grid>
         </Grid>
-        <Divider />
         <Grid container item justifyContent="flex-end">
                 <IconButton onClick={handleDrawerClose}>
                     <ChevronLeftIcon />
