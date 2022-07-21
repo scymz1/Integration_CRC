@@ -14,8 +14,9 @@ export default function Network(props) {
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
   const [data, setData] = useState([]);
-  const [myQueryData, setMyQueryData] = useState({...queryData})
-  const [isLoading, setIsLoading] = useState(true)
+  const [myQueryData, setMyQueryData] = useState({...queryData});
+  const [isLoading, setIsLoading] = useState(true);
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     console.log("myQueryData", myQueryData)
@@ -48,7 +49,9 @@ export default function Network(props) {
         }).then(res => res.json()).then(res => res[0])
       })
       const data = await Promise.all(promises)
-      setData(data)
+      setTitle(data.map((item, index) => index === data.length - 1 ?
+        (myQueryData.type === "slaves"? item.documented_name : item.principal_alias) :
+        (myQueryData.type === "slaves"? item.documented_name : item.principal_alias) + " & "))
       let tmp = {
         nodes: [],
         edges: [],
@@ -236,19 +239,26 @@ export default function Network(props) {
       switch (node.type) {
         case "slave":
           setMyQueryData({
+            ...myQueryData,
             type: "slaves",
             slaves: nodeId
           })
           break;
-        case "transaction":
-          updateQueryData("transactions__transaction__id", node.id)
-          break;
-        case "voyage":
-          updateQueryData("transactions__transaction__voyage__id", node.id)
-          break;
+        // case "transaction":
+        //   updateQueryData("transactions__transaction__id", node.id)
+        //   break;
+        // case "voyage":
+        //   updateQueryData("transactions__transaction__voyage__id", node.id)
+        //   break;
         case "enslaver":
-          updateQueryData("transactions__transaction__enslavers__enslaver_alias__id", node.id);
+          setMyQueryData({
+            ...myQueryData,
+            type: "enslavers",
+            enslavers: nodeId
+          })
           break;
+          // updateQueryData("transactions__transaction__enslavers__enslaver_alias__id", node.id);
+          // break;
       }
     },
 
@@ -274,7 +284,7 @@ export default function Network(props) {
   return (
     <div>
       <h1>Relation
-        between: {data.map((item, index) => index === data.length - 1 ? item.documented_name : item.documented_name + " & ")}</h1>
+        between: {title}</h1>
       {/*<Button onClick={()=>console.log("data:", data)}>print data</Button>*/}
       {/*<Button onClick={()=>console.log("graph:", graph)}>print graph</Button>*/}
       {/*<Button onClick={()=>console.log("graph:", myQueryData)}>print myQueryData</Button>*/}
