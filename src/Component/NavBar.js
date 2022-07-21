@@ -231,7 +231,7 @@ export default function ResponsiveAppBar(props) {
                     switch (event.target.value){
                       case "slaves":
                         set_search_object({
-                        dataset: [dataSet, dataSet]
+                          dataset: [dataSet, dataSet]
                         })
                         setLabels([])
                         break;
