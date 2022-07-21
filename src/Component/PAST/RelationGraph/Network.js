@@ -10,13 +10,14 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 export default function Network(props) {
-  const {queryData, setQueryData, windowRef} = useContext(PASTContext);
+  const {queryData, windowRef} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
   const [data, setData] = useState([]);
   const [myQueryData, setMyQueryData] = useState({...queryData})
 
   useEffect(() => {
+    setGraph(null)
     const endpoint = (() => {
       switch (myQueryData.type) {
         case "slaves": return "past/enslaved/"
@@ -98,7 +99,7 @@ export default function Network(props) {
     //slave
     data.forEach((item, index) => {
       //self
-      const self = tmp.addNode(item, item.documented_name, "slaves", "red")
+      const self = tmp.addNode(item, item.documented_name, "slave", "red")
       self.font = {size: windowRef.current.offsetHeight*0.03}
       //transaction
       item.transactions.forEach((transaction)=>{
@@ -110,19 +111,11 @@ export default function Network(props) {
         at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
         }else if(transactionData.relation_type.relation_type === "transaction") {
           tmp.addNode(transactionData, `transaction: ${transactionData.id}`, "transportation", "orange")
-          tmp.link(item, transactionData,"")
+          tmp.link(item, transactionData,`sold in ${_.get(transactionData, ["place", "geo_location", "name"], "No Data")} 
+          for ${_.get(transactionData, ["amount"], "No Data")}
+          on ${_.get(transactionData, ["date"], "No Data")}`)
         }
 
-
-        //caption
-        const captainconnection = _.get(transactionData, ["voyage", "voyage_captainconnection"])
-        if(captainconnection) {
-          captainconnection.forEach((captainData)=>{
-            const captain = captainData.captain
-            tmp.addNode(captain, captain.name, "caption", "lightblue")
-            tmp.link(captain, transactionData, "captain")
-          })
-        }
         //enslaver
         const enslavers = _.get(transactionData, ["enslavers"])
         if(enslavers) {
@@ -202,10 +195,10 @@ export default function Network(props) {
       // console.log("nodeId" ,nodeId)
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node.type) {
-        case "slaves":
+        case "slave":
           setMyQueryData({
             type: "slaves",
-            targets: nodeId
+            slaves: nodeId
           })
           break;
         case "transportation":
