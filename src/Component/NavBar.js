@@ -15,11 +15,14 @@ import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {switchTheme} from "../Theme";
 import {ThemeProvider} from "@mui/material/styles";
+import FilterAlt from '@mui/icons-material/FilterAlt';
 import {useContext, useState} from "react";
 import _ from 'lodash';
 
+import Filter from "./VoyagePage/Filter/Filter";
+
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, page} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -50,7 +53,7 @@ export default function ResponsiveAppBar(props) {
   })()
 
   return (
-    <AppBar position="sticky" color={ color }>
+    <AppBar position="sticky" color={ color } elevation={0} style={{zIndex:4}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Icon>
@@ -192,6 +195,17 @@ export default function ResponsiveAppBar(props) {
           <ThemeProvider theme={switchTheme}>
             <Stack spacing={4} direction={"row"} justifyContent="flex-end"
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+              {page !== "home" ? 
+                <IconButton
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start">
+                      <FilterAlt sx={{ color: "white" }}/>
+                      <Typography sx={{ color: "white" }}>Filter</Typography>
+                </IconButton>:
+                null}
+
               {search_object && typeForTable === "slaves" || page === "voyage" ?
                 <ToggleButtonGroup
                   color="blackMode"
