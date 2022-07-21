@@ -14,12 +14,13 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 
-export default function Gallery(){
+export default function Gallery(props){
     const [gData, setGData] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [resPerPage, setResPerPage] = React.useState(12);
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
+    const {remoteControl, dataChange, queryData} = props;
 
     const { search_object } = React.useContext(PASTContext);
 
@@ -77,13 +78,14 @@ export default function Gallery(){
         const oldGallery = [];
         //console.log("gData", gData)
         gData.forEach(item => {
-            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>)
+            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} remoteControl = {remoteControl("body")} queryData = {queryData} dataChange = {dataChange}/></Grid>)
         })
         setGallery(oldGallery);
     }, [gData])
     
   return (
     <div className = "storybackground" marginTop ={{ xs: 2, md: 2, lg:4 }} >
+      {/* <button onClick={() => {remoteControl("body")}}>open</button> */}
     <TablePagination
       component="div"
       count={total}
