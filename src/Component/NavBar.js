@@ -19,10 +19,8 @@ import FilterAlt from '@mui/icons-material/FilterAlt';
 import {useContext, useState} from "react";
 import _ from 'lodash';
 
-import Filter from "./VoyagePage/Filter/Filter";
-
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page, labels, setLabels} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -127,7 +125,6 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => {
                     set_search_object({
-                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
@@ -151,12 +148,11 @@ export default function ResponsiveAppBar(props) {
                     switch (event.target.value){
                       case "slaves":
                         set_search_object({
-                        ...search_object,
-                        dataset: [dataSet, dataSet]
+                          dataset: [dataSet, dataSet]
                         })
                         break;
                       case "enslavers":
-                        set_search_object(_.omit(search_object, "dataset"));
+                        set_search_object({});
                         break;
                     }
                     setTypeForTable(event.target.value)
@@ -213,7 +209,6 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => {
                     set_search_object({
-                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
@@ -236,12 +231,13 @@ export default function ResponsiveAppBar(props) {
                     switch (event.target.value){
                       case "slaves":
                         set_search_object({
-                        ...search_object,
                         dataset: [dataSet, dataSet]
                         })
+                        setLabels([])
                         break;
                       case "enslavers":
-                        set_search_object(_.omit(search_object, "dataset"));
+                        set_search_object({});
+                        setLabels([])
                         break;
                     }
                     setTypeForTable(event.target.value)

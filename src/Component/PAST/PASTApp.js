@@ -37,6 +37,15 @@ export default function PASTApp(props) {
     }
   }
 
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  
+  const handleDrawerOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const handleDrawerClose = () => {
+      setDrawerOpen(!drawerOpen);
+  };
+
   // const options_flat = () => {
   //   switch (typeForTable){
   //     case "slaves": return enslaved_options_flat
@@ -81,7 +90,6 @@ export default function PASTApp(props) {
     'dataset':["1", "1"]
   })
   const [labels, setLabels] = React.useState([]);
-
   const [chipData, setChipData] = React.useState({});
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
@@ -90,7 +98,8 @@ export default function PASTApp(props) {
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
       nested_tree, options_flat, search_object, set_search_object,
-      windowRef, typeForTable, setTypeForTable,
+      drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
+      windowRef, typeForTable, setTypeForTable,labels,setLabels,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
       dataSet, setDataSet, labels, setLabels, page: "past"
     }}>
