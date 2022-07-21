@@ -54,7 +54,6 @@ function Table(props) {
     setInfo,
     setId,
     modal,
-    enslaver,
     options_flat,
     queryData,
     setQueryData,
@@ -72,6 +71,8 @@ function Table(props) {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Switch tables
 
   // Checkbox
   //const [checkedMax, setCheckedMax] = useState(false);
@@ -211,28 +212,39 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
-    // console.log("popover", typeForTable, endpoint)
     const people = row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]?
       row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]:
       [];
     const roles = row["transactions__transaction__enslavers__role__role"];
-    //console.log(people, roles);
+    const ids = row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
     const output = {};
-    // console.log("table endpoint", endpoint)
-    // console.log("table row", value)
+    //console.log(people,roles,ids)
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
-        output[people[i]] = [];
+        output[people[i]] = {roles: [], id: 0};
       }
-      output[people[i]].push(roles[i][0]);
+      output[people[i]]["roles"].push(roles[i][0]);
+      output[people[i]]["id"] = ids[i][0];
     }
     //console.log(output);
     return output;
   };
 
+  const handleSankeyOpen = (e, id) => {
+    console.log(id);
+    setQueryData({
+      ...queryData,
+      enslavers: [id],
+      type: "enslavers",
+    });
+    props.handleClickOpen("body")();
+    e.stopPropagation();
+  };
+
   if (isLoading) {
     return <CircularProgress />;
   }
+
   return (
     <div>
       <div>
@@ -344,10 +356,10 @@ function Table(props) {
                                         <Tooltip
                                           key={"tooltip-" + key}
                                           arrow
-                                          title={popover[name].join(", ")}
+                                          title={popover[name]["roles"].join(", ")}
                                           placement="top"
                                         >
-                                          <Chip label={name} />
+                                          <Chip label={name} onClick={(e) =>handleSankeyOpen(e, popover[name]["id"])} />
                                         </Tooltip>
                                       ))}
                                     </Stack>
