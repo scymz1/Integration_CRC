@@ -20,7 +20,7 @@ export default function Gallery(props){
     const [resPerPage, setResPerPage] = React.useState(12);
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
-    const {remoteControl, dataChange, queryData} = props;
+    const {remoteControl, dataChange, setChipData} = props;
 
     const { search_object } = React.useContext(PASTContext);
 
@@ -78,7 +78,7 @@ export default function Gallery(props){
         const oldGallery = [];
         //console.log("gData", gData)
         gData.forEach(item => {
-            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} remoteControl = {remoteControl("body")} queryData = {queryData} dataChange = {dataChange}/></Grid>)
+            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} remoteControl = {remoteControl("body")} dataChange = {dataChange} setChipData={setChipData}/></Grid>)
         })
         setGallery(oldGallery);
     }, [gData])

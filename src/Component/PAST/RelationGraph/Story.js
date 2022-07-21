@@ -39,7 +39,7 @@ export default function Story (props) {
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
-  const {target, type, dynamic = false , remoteControl, dataChange, queryData} = props;
+  const {target, type, dynamic = false , remoteControl, dataChange, setChipData} = props;
   const isMale = _.get(target, "gender", "1") != 0;
   const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
   const [expand, setExpand] = new React.useState(false);
@@ -50,6 +50,9 @@ export default function Story (props) {
       slaves:[target["id"]],
       type:"slaves"
     }))
+    setChipData({
+      [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
+    })
     remoteControl();
   }
 
