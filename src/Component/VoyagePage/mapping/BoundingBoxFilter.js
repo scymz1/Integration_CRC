@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react'
 import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import Control from 'react-leaflet-custom-control';
 import { Button } from '@mui/material';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import Avatar from 'react-avatar';
 
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 import axios from 'axios';
 import { ReadFeature } from "../mapping/Spatial.js"
+
+import emb_icon from "./emb_icon.png"
+import disemb_icon from "./disemb_icon.png"
 
 const { BaseLayer } = LayersControl;
 //+ '?hierarchical=false'
@@ -112,12 +113,15 @@ export default function BoundingBoxFilter(props){
 
     return (
         <div>
-            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+            {/* style={{width: "40%"}} */}
+            <Button variant="contained" color="grey" startIcon={<Avatar src={emb_icon} size="20"/>} onClick={SwitchBoundingBoxSelection}> 
                     Select Disembarkation
             </Button>
-            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button variant="contained" color="grey" endIcon={<Avatar src={disemb_icon} size="20"/>} onClick={SwitchBoundingBoxSelection}> 
                 Select Embarkation
             </Button>
+            <br/> <br/>
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "75vh", width: "100vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border (old map)">

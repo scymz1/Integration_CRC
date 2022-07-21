@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom';
 import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
@@ -9,6 +8,7 @@ import Modal from '@mui/material/Modal';
 
 import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
 import map_icon from "../mapping/map_icon.png";
+
 
 import Control from 'react-leaflet-custom-control';
 import { Button } from '@mui/material';
@@ -141,9 +141,6 @@ export default function MapBoundingBox(props){
                 Select filter by bounding box
                 </Typography>
                 <BoundingBoxFilter context={props.context}/>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
             </Box>
             </Modal>
             <br/>
