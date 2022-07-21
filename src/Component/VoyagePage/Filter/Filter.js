@@ -82,7 +82,7 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky" color={color}>
+    <AppBar position="sticky" color={color} elevation={0}>
       <Toolbar>
         <IconButton
           aria-label="open drawer"
@@ -109,29 +109,29 @@ export default function Filter(props) {
     <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
-        anchor="left"
+        anchor="bottom"
         open={drawerOpen}
-        PaperProps={{ sx: {width: "25%"} }}
+        PaperProps={{ sx: { height: !labels.length ? "15%":"30%",  background:"#EAECEE"}}}
         style={{ position:'relative', zIndex:2 }}
     >
-        <Toolbar />
-        <Toolbar />
-        <Divider />
+        <IconButton onClick={handleDrawerClose}>
+            <ExpandMoreIcon />
+        </IconButton>
         <Grid 
             container 
             spacing={0} 
-            direction="row"
+            direction="column"
         >
-            <Grid item xs={10} justifyContent="center">
+            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} margin="auto" justify="center">
                 {labels.length === 0 ? 
-                    <Grid container item sx={{m:'10px'}} justifyContent="center" >
-                        <Typography>No Filter</Typography>
+                    <Grid container item justifyContent="center">
+                        <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} direction="row" spacing={0} sx ={{m:'10px'}} justifyContent="center">
-                          <Grid item xs={10} >
+                      <Grid container item key={'grid-' + index} xs={6} justifyContent="center">
+                          <Grid item xs={11} >
                               <Accordion>
                                   <AccordionSummary>
                                       <Typography>{options_flat[item.option].flatlabel}</Typography>
@@ -141,7 +141,7 @@ export default function Filter(props) {
                                   </AccordionDetails>
                               </Accordion>
                           </Grid>
-                          <Grid item xs={2} display="flex">
+                          <Grid item xs={1} display="flex">
                               <IconButton onClick={()=>{handleDelete(item)}}>
                                   <RemoveCircleOutlineIcon />
                               </IconButton>
