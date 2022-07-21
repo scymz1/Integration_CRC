@@ -29,6 +29,15 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
   const [enslaver, setEnslaver] = React.useState(true);
+
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [sortingReq, setSortingReq] = useState(false);
+  const [field, setField] = useState([]);
+  const [direction, setDirection] = useState("asc");
+  
   const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
       case "slaves": return "past/enslaved/"
@@ -58,6 +67,13 @@ export default function PASTTable(props) {
       setAll_options(enslaver_var_list);
       setEnslaver(true);
     }
+    setTotalResultsCount(0);
+    setPage(0);
+    setRowsPerPage(10);
+
+    setSortingReq(false);
+    setField([]);
+    setDirection("asc");
   },[typeForTable])
 
   const handleDelete = (chipToDelete) => () => {
@@ -101,6 +117,12 @@ export default function PASTTable(props) {
           chipData,
           setChipData,
           typeForTable,
+          totalResultsCount, setTotalResultsCount,
+          page, setPage,
+          rowsPerPage, setRowsPerPage,
+          sortingReq, setSortingReq,
+          field, setField,
+          direction, setDirection
         }}
       >
         <ColSelector11 context={ColContext} />
