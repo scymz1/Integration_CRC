@@ -24,7 +24,7 @@ function Pivot(props) {
 
   const { complete_object } = useContext(props.context);
 
-  // console.log("updated_complete_object= ", complete_object);
+  console.log("updated_complete_object= ", complete_object);
 
   // Responses
   const [rows, setRows] = useState([]);

@@ -188,7 +188,7 @@ export function ReadFeature(props) {
     }
 
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
-    const filterNodes = (feature) => {
+    var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -210,8 +210,10 @@ export function ReadFeature(props) {
       });
       map.removeLayer(markers)
       // Add only actual locations to the map with markers (with clicking events and popups)
+      if(!props.filter){
+        filterNodes=(feature)=>{return true}
+      }
       L.geoJSON(nodes.features, {
-        //filter: featureWayPt,
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
