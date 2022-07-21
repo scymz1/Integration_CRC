@@ -122,8 +122,6 @@ export default function GetSlider(props) {
 
   });
 
-
-
   return (
         <>
         {/* <Typography gutterBottom>{varDisplay}</Typography> */}
