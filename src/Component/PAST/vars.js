@@ -43,7 +43,7 @@ export const enslaver_var_list = {
         "last_active_year": null,
     },
 
-    "enslaver_sources": {
+    "enslaver_sources__source__full_ref": {
         "enslaver_sources__source__full_ref": null,
     },
     
@@ -155,7 +155,7 @@ export const enslaved_var_list = {
         "language_group": null
     },
 
-    "post_disembark_location": {
+    "post_disembark_location__geo_location__name": {
         "post_disembark_location__geo_location__name": null,
     },
 
