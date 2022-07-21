@@ -103,12 +103,12 @@ export default function BoundingBoxFilter(props){
 
 
     const SwitchBoundingBoxSelection = (event) => {
-        if(event.target.value=="embarkation"){
-            setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"))
-        }
-        else{
-            setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"))
-        }
+        // if(event.target.value=="embarkation"){
+        //     setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"))
+        // }
+        // else{
+        //     setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"))
+        // }
         console.log("Event target: ", event.target.value)
         onChangeRadioOption(event.target.value)
 
