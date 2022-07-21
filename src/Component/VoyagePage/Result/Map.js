@@ -92,12 +92,16 @@ export default function MapBoundingBox(props){
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
     const SwitchBoundingBoxSelection = (event) => {
-        if(radioOptions=="embarkation"){
-            onChangeRadioOption("disembarkation");
-        }
-        else{
-            onChangeRadioOption("embarkation");
-        }
+        // if(radioOptions=="embarkation"){
+        //     onChangeRadioOption("disembarkation");
+        // }
+        // else{
+        //     onChangeRadioOption("embarkation");
+        // }
+
+        console.log("Event target: ", event.target.value)
+        onChangeRadioOption(event.target.value)
+
         SetselectMode(true);
     }
 
@@ -182,12 +186,12 @@ export default function MapBoundingBox(props){
                     </Button>
                 </Control>
                 <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    <Button style={{background:"white", width: "100%"}} value='embarkation' onClick={SwitchBoundingBoxSelection}> 
                     Select Embarkation
                     </Button>
                 </Control>
                 <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+                    <Button style={{background:"white", width: "100%"}} value='disembarkation' onClick={SwitchBoundingBoxSelection}> 
                     Select Disembarkation
                     </Button>
                 </Control>
