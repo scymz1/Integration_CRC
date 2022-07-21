@@ -62,19 +62,6 @@ export default function Sankey(props) {
     setAnchorElclick(null);
     setPopOpenclick(null)
   };
-  // const openclick = Boolean(anchorElclick);
-  // const popOpen = Boolean(anchorEl);
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
 
   useEffect(() => {
     setIsLoading(true)
@@ -104,18 +91,102 @@ export default function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    if(isLoading) return;
-    if (queryData.type === "enslavers") {
-      setGraph("enslavers")
-      return;
-    }
-
     let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
     let new_CANVAS_HEIGHT = 0;
     let transLength = 0;
     let enslaverLength = 0;
     let nodes = [];
     let links = [];
+    if(isLoading) return;
+    if (queryData.type === "enslavers") {
+      data.forEach((item) => {
+        // setList.push(item.principal_alias+" ")
+        let existNode = nodes.find(node => node.id === item.id)
+        // console.log("item",item)
+        if(!existNode){
+         nodes.push({id: item.id, name: item.alias[0].alias, type: "enslaver"})
+        }
+        var transactions = item.alias[0].transactions;
+        transLength = transLength+transactions.length;
+        transactions.forEach((transaction)=>{
+          // console.log(transaction)
+          var transaction_default = _.get(transaction,["id"],null);
+          var transaction_id = _.get(transaction,["transaction","voyage"], transaction_default);
+          var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
+          // console.log("relation_type",relation_type)
+          var voyage_id =  _.get(transaction,["transaction","voyage"],null);
+          // var amount= _.get(transaction,["transaction","amount"],null);
+          var place= _.get(transaction,["transaction","place","geo_location","name"],null);
+          var full_ref= _.get(transaction,["transaction","source","full_ref"],null);
+          var date =  _.get(transaction,["transaction","date"],null);
+          if(nodes.findIndex(node => node.id === transaction.id)===-1){
+              nodes.push({id: transaction_id, 
+                          name: relation_type,
+                          voyage_id: voyage_id,
+                          amount: null,
+                          place: place,
+                          full_ref: full_ref,
+                          date: date,
+                          type: "transaction"})
+              }
+              if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === item.id) &&
+                                      x.target === nodes.findIndex(x => x.id === transaction_id &&
+                                                                        x.name === relation_type)) === -1) {
+                links.push({source: nodes.findIndex(x => x.id === item.id),
+                            target: nodes.findIndex(x => x.id === transaction_id &&
+                                                         x.name === relation_type),
+                            color: "#1e3162",
+                            value:5})}
+          var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
+          console.log("enslaved",enslavedlist)
+          if(enslavedlist.length > 10){
+            enslaverLength = enslaverLength + 1;
+            var enslaved_id =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
+            var enslaved_name =  _.get(enslavedlist[0],["enslaved","documented_name"],null);
+            if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
+              nodes.push({id: enslaved_id, 
+                          name: "greater than 10 people",
+                          type: "enslaved"});
+            if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id 
+                                    ) &&
+                                    x.target === nodes.findIndex(x => x.id === enslaved_id 
+                                              )) === -1) {
+              links.push({source: nodes.findIndex(x => x.id === transaction_id 
+                                                        ),
+                          target: nodes.findIndex(x => x.id === enslaved_id),
+                          color: "#1e3162",
+                          value:5
+                  })}
+        }
+          }
+          else{
+            enslaverLength = enslaverLength + enslavedlist.length;
+          enslavedlist.forEach((enslaved) => {
+       // console.log("enslaver", enslaver.enslaver_alias.id)
+            var enslaved_id =  _.get(enslaved,["enslaved","id"],null);
+            var enslaved_name =  _.get(enslaved,["enslaved","documented_name"],null);
+            if(nodes.findIndex(x => x.id === enslaved.enslaved.id) === -1) {
+                nodes.push({id: enslaved_id, 
+                            name: enslaved_name,
+                            type: "enslaved"});
+              if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id &&
+                                      x.name === relation_type) &&
+                                      x.target === nodes.findIndex(x => x.id === enslaved_id &&
+                                                x.name === enslaved_name)) === -1) {
+                links.push({source: nodes.findIndex(x => x.id === transaction_id &&
+                                                          x.name === relation_type),
+                            target: nodes.findIndex(x => x.id === enslaved_id &&
+                                                        x.name === enslaved_name),
+                            color: "#1e3162",
+                            value:5
+                    })}
+          }})}
+          })
+
+      })
+    }
+
+    else{
     for (var i = 0; i < data.length; i++) {
       nodes.push({
         id: data[i].id,
@@ -147,7 +218,6 @@ export default function Sankey(props) {
           x.amount === data[i].transactions[j].transaction.amount &&
           x.voyage_id === voyage_id
         ) === -1) {
-
           nodes.push({
             id: transaction_id,
             voyage_id: voyage_id,
@@ -232,12 +302,12 @@ export default function Sankey(props) {
         }
       }
     }
-    ;
+    ;}
 
     nodes.forEach((node) => {
       const result = [];
       var voyagemodal = true;
-      if (node.type === "enslaved") {
+      if (node.type === "enslaved" && queryData.type === "slaves") {
         result.push(
           <tbody>
           <tr>
@@ -282,23 +352,25 @@ export default function Sankey(props) {
           node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event, node.voyage_id, voyagemodal)}>Voyage
             id:{node.voyage_id}</Button>
           // console.log(node.voyage_id)
-          result.push(
-            <tbody>
-            <tr>
-              <th>Type:</th>
-              <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-            </tr>
-            <tr>
-              <th>Place:</th>
-              <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon
-                fontSize="small"/>{node.place_dis}</Grid></td>
-            </tr>
-            <tr>
-              <th>Year:</th>
-              <td>{node.year}</td>
-            </tr>
-            </tbody>
-          );
+          if (queryData.type === "slaves") {
+            result.push(
+              <tbody>
+              <tr>
+                <th>Type:</th>
+                <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
+              </tr>
+              <tr>
+                <th>Place:</th>
+                <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon
+                  fontSize="small"/>{node.place_dis}</Grid></td>
+              </tr>
+              <tr>
+                <th>Year:</th>
+                <td>{node.year}</td>
+              </tr>
+              </tbody>
+            );
+          }  
         }
       }
 
@@ -341,7 +413,12 @@ export default function Sankey(props) {
 
   var enslaved = []
   data.forEach((each) => {
-    enslaved.push(each.documented_name + " ")
+    if(queryData.type === "enslavers"){
+      enslaved.push(each.principal_alias+" ")
+    }
+    else{
+      enslaved.push(each.documented_name + " ")
+    }
   })
   return (
     <div>
@@ -354,7 +431,7 @@ export default function Sankey(props) {
       {!graph ?
         <CircularProgress/> :
 
-        graph === "enslavers" ? "this is enslavers" :
+        // graph === "enslavers" ? "this is enslavers" :
 
           <svg
             className="canvas"
