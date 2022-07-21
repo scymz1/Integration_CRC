@@ -26,8 +26,7 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable, page} = useContext(props.context);
-    const [labels, setLabels] = React.useState([]);
+    const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable,labels, setLabels, page} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
