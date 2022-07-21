@@ -14,12 +14,14 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-    const {data,windowRef,setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
+    const {windowRef,setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
+    const [data, setData] = useState([]);
     const [graph, setGraph] = useState(null);
     const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
     const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
     const NODE_WIDTH = 140;
     const MIN_NODE_HEIGHT = 80;
+    const [peoplelist, setList] = React.useState([]);
 
     // const [open, setOpen] = React.useState(false);
     const handleOpen = (event, info, modal) => {
@@ -55,19 +57,37 @@ export default function Sankey(props) {
       setAnchorElclick(null);
       setPopOpenclick(null)
     };
-    // const openclick = Boolean(anchorElclick);
-    // const popOpen = Boolean(anchorEl);
-    //     const style = {
-    //     position: 'absolute',
-    //     top: '50%',
-    //     left: '50%',
-    //     transform: 'translate(-50%, -50%)',
-    //     width: 400,
-    //     bgcolor: 'background.paper',
-    //     border: '2px solid #000',
-    //     boxShadow: 24,
-    //     p: 4,
-    // };
+
+    useEffect(() => {
+      // setGraph(null)
+      const endpoint = (() => {
+        switch (queryData.type) {
+          case "slaves": return "past/enslaved/"
+          case "enslavers": return "past/enslavers/"
+        }
+      })()
+      const targets = (() => {
+        switch (queryData.type) {
+          case "slaves": return queryData.slaves
+          case "enslavers": return queryData.enslavers
+        }
+      })()
+      const fetchData = async ()=> {
+        const promises = targets.map(target => {
+          let queryData = new FormData();
+          queryData.append("id", target.toString());
+          queryData.append("id", target.toString());
+          return fetch(base_url + endpoint, {
+            method: "POST",
+            body: queryData,
+            headers: {'Authorization': auth_token}
+          }).then(res => res.json()).then(res => res[0])
+        })
+        const response = await Promise.all(promises)
+        setData(response)
+      }
+      fetchData().catch(console.error);
+    }, [queryData])
 
     useEffect(()=>{
       let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
@@ -76,21 +96,33 @@ export default function Sankey(props) {
       let enslaverLength = 0;
       let nodes = [];
       let links = [];
+      console.log(queryData,data)
       if(queryData.type === "enslavers") {
         // setGraph("enslavers")
         // return;
-       data.forEach((item) => {
+        data.forEach((item) => {
+          setList.push(item.principal_alias+" ")
           let existNode = nodes.find(node => node.id === item.id)
           if(!existNode){
            nodes.push({id: item.id, name: item.alias.alias, type: "enslaver"})
           }
           item.alias.transactions.forEach((transaction)=>{
             transaction = transaction.transaction;
-            var transaction_id = _.get(transaction,["transaction","voyage","id"],["transaction","id"])
-            var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null)
+            var transaction_id = _.get(transaction,["transaction","voyage","id"],["transaction","id"]);
+            var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
+            var voyage_id =  _.get(transaction,["transaction","voyage","id"],null);
+            var amount= _.get(transaction,["transaction","amount"],null);
+            var place= _.get(transaction,["transaction","place","geo_location","name"],null);
+            var full_ref= _.get(transaction,["transaction","source","full_ref"],null);
+            var date =  _.get(transaction,["transaction","date"],null);
             if(nodes.findIndex(node => node.id === transaction.id)===-1){
                 nodes.push({id: transaction_id, 
                             name: relation_type,
+                            voyage_id: voyage_id,
+                            amount: amount,
+                            place: place,
+                            full_ref: full_ref,
+                            date: date,
                             type: "transaction"})
                 }
                 if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === item.id) &&
@@ -102,7 +134,7 @@ export default function Sankey(props) {
                               color: "#1e3162",
                                 info: "",
                               value:5})}
-
+              enslaverLength = enslaverLength + transaction.transactions.length;
         //  transaction.enslavers.forEach((enslaver) => {
         //  // console.log("enslaver", enslaver.enslaver_alias.id)
         //   if(tmp.nodes.findIndex(x => x.id === enslaver.enslaver_alias.id) === -1) {
@@ -113,7 +145,9 @@ export default function Sankey(props) {
         })
       }
       else{
-
+        data.forEach((item) => {
+          setList.push(item.documented_name+" ")
+        })
       for (var i = 0; i < data.length; i++) {
         nodes.push({id: data[i].id, name: data[i].documented_name, age:data[i].age,height:data[i].height,type: "enslaved"}); 
         transLength = transLength + data[i].transactions.length;
@@ -272,22 +306,24 @@ export default function Sankey(props) {
             // console.log(node.voyage_id)
             node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event,node.voyage_id,voyagemodal)}>Voyage id:{node.voyage_id}</Button>
             // console.log(node.voyage_id) 
-            result.push(
-              <tbody>
-              <tr>
-                <th>Type: </th>
-                <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
-              </tr>
+            if(queryData.type === "enslaved"){
+              result.push(
+                <tbody>
                 <tr>
-                <th>Place: </th>
-                <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon fontSize="small"/>{node.place_dis}</Grid></td>
-              </tr>
-              <tr>
-                <th>Year: </th>
-                <td>{node.year}</td>
-              </tr>
-              </tbody>
-            );
+                  <th>Type: </th>
+                  <td>{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</td>
+                </tr>
+                  <tr>
+                  <th>Place: </th>
+                  <td><Grid container direction="row" alignItems="center">{node.place_purchase}<EastIcon fontSize="small"/>{node.place_dis}</Grid></td>
+                </tr>
+                <tr>
+                  <th>Year: </th>
+                  <td>{node.year}</td>
+                </tr>
+                </tbody>
+              );}
+
           }
           }
         
@@ -324,14 +360,11 @@ export default function Sankey(props) {
     
   }
 
-  var enslaved = []
-  data.forEach((each)=>{
-    enslaved.push(each.documented_name+" ")
-  } )
+
 
   return (
     <div>
-      <h1>Connections for {enslaved}</h1>
+      <h1>Connections for {peoplelist}</h1>
       {/* <Button onClick={()=>console.log("data:", data)}>print data</Button>
       <Button onClick={()=>console.log("nodes:", graph.nodes)}>print nodes</Button>
       <Button onClick={()=>console.log("links:", graph.links)}>print links</Button>
