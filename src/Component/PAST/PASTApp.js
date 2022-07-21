@@ -80,6 +80,7 @@ export default function PASTApp(props) {
   const [search_object, set_search_object] = useState({
     'dataset':["1", "1"]
   })
+  const [labels, setLabels] = React.useState([]);
 
   const [chipData, setChipData] = React.useState({});
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
@@ -91,7 +92,7 @@ export default function PASTApp(props) {
       nested_tree, options_flat, search_object, set_search_object,
       windowRef, typeForTable, setTypeForTable,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet, page: "past"
+      dataSet, setDataSet, labels, setLabels, page: "past"
     }}>
       <PAST/>
     </PASTContext.Provider>

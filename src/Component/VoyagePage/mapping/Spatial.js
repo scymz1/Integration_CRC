@@ -132,7 +132,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      console.log("Repsonse:", response.data)
+      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 
@@ -157,7 +157,7 @@ export function ReadFeature(props) {
       
      }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
+    //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", complete_object)
 
 
   },[disembark])
@@ -173,7 +173,7 @@ export function ReadFeature(props) {
   },[area])
 
   useEffect(() => {
-    console.log("props.search_object changed")
+    //console.log("props.search_object changed")
     for (var i in map._layers) {
       if (
         map._layers[i]._path != undefined ||
@@ -198,7 +198,7 @@ export function ReadFeature(props) {
       
     };
     
-    console.log(props.search_object.dataset[0]==0)
+    //console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -214,7 +214,7 @@ export function ReadFeature(props) {
         //filter: featureWayPt,
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
-          console.log(props.search_object.dataset[0]==0)
+          //console.log(props.search_object.dataset[0]==0)
           L.marker(layer["_latlng"]).unbindPopup()
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
