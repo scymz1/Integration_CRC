@@ -93,7 +93,7 @@ export default function Filter(props) {
       }}
     >
     {drawerOpen ?
-        <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"68px"}}>
+        <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"64px"}}>
             <Toolbar>
                 {/* <IconButton
                 aria-label="open drawer"

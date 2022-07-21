@@ -185,7 +185,7 @@ export default function BoundingBoxFilter(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}  radio = {radioOptions}/>
+                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={true} />
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>

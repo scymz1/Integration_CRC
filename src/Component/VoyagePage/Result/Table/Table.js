@@ -181,6 +181,7 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.number_enslaved > 0) {
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -326,8 +327,10 @@ function Table(props) {
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              (row.number_enslaved != 0 ||
-                                row.transactions.length !== 0) && (
+                              ((row.transactions != null &&
+                                row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -338,8 +341,10 @@ function Table(props) {
                               )}
                             {checkbox &&
                               !(
-                                row.number_enslaved != 0 ||
-                                row.transactions.length !== 0
+                                (row.transactions != null &&
+                                  row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)
                               ) && <TableCell padding="checkbox"></TableCell>}
                             {cols.map((k, key) => {
                               if (k === "gender") {
