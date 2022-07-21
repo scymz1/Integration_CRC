@@ -59,6 +59,7 @@ function Table(props) {
     setQueryData,
     search_object,
     chipData,
+    setChipData,
     typeForTable,
   } = useContext(props.context);
 
@@ -127,6 +128,15 @@ function Table(props) {
     typeForTable,
     search_object,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(()=>{
+    setChipData({});
+    setQueryData({
+      ...queryData,
+      slaves: [],
+      enslavers:[]
+    })
+  },[typeForTable])
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -307,8 +317,8 @@ function Table(props) {
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              row.transactions != null &&
-                              row.transactions.length !== 0 && (
+                              (row.number_enslaved != 0 ||
+                              row.transactions.length !== 0) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -318,8 +328,8 @@ function Table(props) {
                                 </TableCell>
                               )}
                             {checkbox &&
-                              (row.transactions == null ||
-                                row.transactions.length === 0) && (
+                              (!(row.number_enslaved != 0 ||
+                                row.transactions.length !== 0)) && (
                                 <TableCell padding="checkbox"></TableCell>
                               )}
                             {cols.map((k, key) => {

@@ -39,10 +39,22 @@ export default function Story (props) {
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
-  const {target, type, dynamic = false} = props;
+  const {target, type, dynamic = false , remoteControl, dataChange, setChipData} = props;
   const isMale = _.get(target, "gender", "1") != 0;
   const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
   const [expand, setExpand] = new React.useState(false);
+
+  const onclick = () => {
+    dataChange(preData =>({
+      enslavers:[...preData.enslavers],
+      slaves:[target["id"]],
+      type:"slaves"
+    }))
+    setChipData({
+      [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
+    })
+    remoteControl();
+  }
 
   const handleExpandClick = () => {
     setExpand(!expand);
@@ -69,15 +81,13 @@ export default function Story (props) {
     {dynamic && <Card className="story_func">
       <CardHeader
       // textTransform: 'capitalize'
-        titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:37, textAlign: 'right'}}
-        subheaderTypographyProps = {{ pt:0, variant:"", fontStyle: 'italic', color:"black",  fontSize:20}}
+        titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
         className="test"
-        title = {expand ? "Story" : "Info"}
-        subheader ={_.get(target, ["documented_name"], "Unknown Slave")}
-        sx={{pb: 1}}
+        title = {_.get(target, ["documented_name"], "Unknown Slave")}
+        sx={{pr: 3, pt:3}}
       />
       {/* <hr/> */}
-      <CardContent sx={{pt:0}}>
+      <CardContent>
         <List dense = {true} disablePadding={true}>
           <ListItem  disablePadding={true}><ListItemText primary="Slave ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={(_.get(target, ["modern_name"], "No Record") == null) || (_.get(target, ["modern_name"], "No Record") == "") ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
@@ -93,7 +103,7 @@ export default function Story (props) {
       </CardContent>
 
       <CardActions disableSpacing>
-        <Button aria-label="see personal network" size="large" startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={() => {navigator.clipboard.writeText("Story of " + _.get(target, ["documented_name"], "Unknown Slave"))}} />}>
+        <Button aria-label="see personal network" size="large" startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={onclick} />}>
         </Button>
         <ExpandMore
           expand={expand}

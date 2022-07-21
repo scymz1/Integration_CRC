@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom';
 import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 
-import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
-import map_icon from "../mapping/map_icon.png";
+
+
 
 import Control from 'react-leaflet-custom-control';
 import { Button } from '@mui/material';
@@ -41,17 +37,16 @@ export default function MapBoundingBox(props){
     const [latitude2, onChangelatitude2] = React.useState(90);
 
     
-    const {set_search_object, search_object, setOutput, output} = React.useContext(props.context);
+    const {set_search_object, search_object, labels, setLabels} = React.useContext(props.context);
 
     const [selectMode, SetselectMode] = useState(false);
     
     const handle = useFullScreenHandle();
 
     useEffect(() => {
-        var out;
         if(radioOptions=="embarkation"){
+            
             let newObject = { ...search_object };
-            out = "embarkation***<class 'rest_framework.fields.Map'>***Map embarkation filter";
 
             delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
             delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude"];
@@ -64,7 +59,6 @@ export default function MapBoundingBox(props){
         }
         else{
             let newObject = { ...search_object };
-            out = "disembarkation***<class 'rest_framework.fields.Map'>***Map disembarkation filter";
 
             delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
             delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude"];
@@ -77,7 +71,6 @@ export default function MapBoundingBox(props){
                 "voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude": [longitude1, longitude2]
             });
         }
-        //setOutput([...output, out]);
         
     }, [longitude1, longitude2, latitude1, latitude2, radioOptions]);
   
@@ -87,37 +80,17 @@ export default function MapBoundingBox(props){
 
     const noBorder = `https://api.mapbox.com/styles/v1/jcm10/cl2glcidk000k14nxnr44tu0o/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw`
 
+    const mapping_specialists = "https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw"
+    
     const normal_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4t2jnz6003115mkh34qvveh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
-
-    const SwitchBoundingBoxSelection = (event) => {
-        // if(radioOptions=="embarkation"){
-        //     onChangeRadioOption("disembarkation");
-        // }
-        // else{
-        //     onChangeRadioOption("embarkation");
-        // }
-
-        console.log("Event target: ", event.target.value)
-        onChangeRadioOption(event.target.value)
-
-        SetselectMode(true);
+    
+    const OpenBoundingBoxFilter = (event)=>{
+        if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")){
+            setLabels([...labels, {option:"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
+        }
     }
-
-    const reset = (e) => {
-        SetselectMode(true);
-        onChangeRadioOption("embarkation");
-        onChangelongitude1(-360);
-        onChangelongitude2(359.9);
-        onChangelatitude1(-90);
-        onChangelatitude2(90);
-
-    }
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
     const style = {
         position: 'absolute',
@@ -133,25 +106,12 @@ export default function MapBoundingBox(props){
 
     return (
         <div>
-            <img src={map_icon} alt="map icon" style={{width:"100px", height:"60px"}} onClick={handleOpen}/>
-            <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                Select filter by bounding box
-                </Typography>
-                <BoundingBoxFilter context={props.context}/>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                </Typography>
-            </Box>
-            </Modal>
+            <Button onClick={OpenBoundingBoxFilter}> 
+                Open Bounding Box Filter
+            </Button>
             <br/>
             <FullScreen handle={handle}>
+            
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border (old map)">
@@ -179,25 +139,16 @@ export default function MapBoundingBox(props){
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         />
                     </BaseLayer>
-
+                    <BaseLayer checked name="no country border">
+                        <TileLayer
+                            url={mapping_specialists}
+                            attribution="mapping_specialists"
+                        />
+                    </BaseLayer>
                 </LayersControl>
                 <ReadFeature search_object={search_object}  radio = {radioOptions}/>
+                
 
-                <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} onClick={reset}> 
-                    Reset
-                    </Button>
-                </Control>
-                <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} value='embarkation' onClick={SwitchBoundingBoxSelection}> 
-                    Select Embarkation
-                    </Button>
-                </Control>
-                <Control prepend position='topright' >
-                    <Button style={{background:"white", width: "100%"}} value='disembarkation' onClick={SwitchBoundingBoxSelection}> 
-                    Select Disembarkation
-                    </Button>
-                </Control>
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
@@ -225,6 +176,22 @@ export default function MapBoundingBox(props){
 
 }
 
+{/* 
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} onClick={reset}> 
+                    Reset
+                    </Button>
+                </Control>
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} value='embarkation' onClick={SwitchBoundingBoxSelection}> 
+                    Select Embarkation
+                    </Button>
+                </Control>
+                <Control prepend position='topright' >
+                    <Button style={{background:"white", width: "100%"}} value='disembarkation' onClick={SwitchBoundingBoxSelection}> 
+                    Select Disembarkation
+                    </Button>
+                </Control> */}
 
 
                 {/* <Control prepend position='topright' >
@@ -248,3 +215,21 @@ export default function MapBoundingBox(props){
     <FormControlLabel value="disembarkation" control={<Radio />} label="disembarkation" />
 </RadioGroup>
 </FormControl> */}
+
+
+// const SwitchBoundingBoxSelection = (event) => {
+//     console.log("Event target: ", event.target.value)
+//     onChangeRadioOption(event.target.value)
+
+//     SetselectMode(true);
+// }
+
+// const reset = (e) => {
+//     SetselectMode(true);
+//     onChangeRadioOption("embarkation");
+//     onChangelongitude1(-360);
+//     onChangelongitude2(359.9);
+//     onChangelatitude1(-90);
+//     onChangelatitude2(90);
+
+// }
