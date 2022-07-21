@@ -67,12 +67,12 @@ export default function PASTTable(props) {
   };
 
   const handleSankeyOpen = () => {
-    console.log(typeForTable);
+    // console.log(typeForTable);
     setQueryData({
       ...queryData,
       type: typeForTable,
     });
-    console.log(queryData);
+    // console.log(queryData);
     props.handleClickOpen("body")();
   };
 
