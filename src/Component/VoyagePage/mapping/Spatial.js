@@ -165,15 +165,15 @@ export function ReadFeature(props) {
 
   },[disembark])
 
-  useEffect(() =>{
-    let point = complete_object[area];
-    if (area === groupby_fields_region[0]){
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
-      }
-    else if (area === groupby_fields_port[0]) {
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
-     }
-  },[area])
+  // useEffect(() =>{
+  //   let point = complete_object[area];
+  //   if (area === groupby_fields_region[0]){
+  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
+  //     }
+  //   else if (area === groupby_fields_port[0]) {
+  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+  //    }
+  // },[area])
 
   useEffect(() => {
     console.log("props.search_object changed")
