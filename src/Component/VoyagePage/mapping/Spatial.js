@@ -92,6 +92,7 @@ export function ReadFeature(props) {
     
     console.log("Zoom: ", map.getZoom())
     
+        
     if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
       set_complete_object({
@@ -134,7 +135,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
-      console.log("Repsonse:", response.data)
+      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 
@@ -193,7 +194,7 @@ export function ReadFeature(props) {
     }
 
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
-    const filterNodes = (feature) => {
+    var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -203,7 +204,7 @@ export function ReadFeature(props) {
       
     };
     
-    console.log(props.search_object.dataset[0]==0)
+    //console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -215,11 +216,13 @@ export function ReadFeature(props) {
       });
       map.removeLayer(markers)
       // Add only actual locations to the map with markers (with clicking events and popups)
+      if(!props.filter){
+        filterNodes=(feature)=>{return true}
+      }
       L.geoJSON(nodes.features, {
-        //filter: featureWayPt,
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
-          console.log(props.search_object.dataset[0]==0)
+          //console.log(props.search_object.dataset[0]==0)
           L.marker(layer["_latlng"]).unbindPopup()
           // mouseover or click, which is better
           layer.on("mouseover", function (e) {
@@ -249,9 +252,10 @@ export function ReadFeature(props) {
             );
             
 
-            L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-              maxWidth: "auto",
-            });
+            // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
+            //   maxWidth: "auto",
+            // });
+            markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
         })
           markers.addLayer(layer)
         },
@@ -273,8 +277,6 @@ export function ReadFeature(props) {
 }
 
 function drawUpdate(map, routes) {
-
-  // console.log(routes)
 
   var valueMin = d3.min(routes, function (l) {
     return l[2];
@@ -298,7 +300,6 @@ function drawUpdate(map, routes) {
 }
 
 
-
 // Function to draw the curve routes
 function DrawRoutes(map, links) {
   var valueMin = d3.min(links, function (l) {
@@ -308,12 +309,9 @@ function DrawRoutes(map, links) {
     return l[0];
   });
 
-  // console.log(valueMax)
-
   var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
   
   links.map(array=> {
-    // console.log(array)
     draw(map, array, valueScale)
   })
 }
@@ -331,8 +329,6 @@ function draw(map, link, valueScale) {
   for(var i = 2; i < route.length; i++) {
     commands.push("C", route[i][0], route[i][1], route[i][2])
   }
-
-  // console.log("Commands: ", commands)
 
   L.curve(commands, {color:'blue', weight: valueScale(weight)}).bindPopup("Sum of slaves: " + weight).addTo(map);
 }

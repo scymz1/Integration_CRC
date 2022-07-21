@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography, Grid } from "@mui/material";
+import { Box, Tab, Tabs, Typography, Grid, Toolbar } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -41,7 +41,7 @@ export default function Voyage() {
   const [value, setValue] = React.useState(0);
   const [showSankey, setShowSankey] = React.useState(false);
   const { id } = useParams();
-  const { typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet} = React.useContext(VoyageContext)
+  const { typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet} = React.useContext(VoyageContext)
 
 
   React.useEffect(() => {
@@ -71,7 +71,8 @@ export default function Voyage() {
     <div>
       <ResponsiveAppBar context={VoyageContext}/>
       <Filter context={VoyageContext}/>
-      <Box sx={{bgcolor: 'background.paper', display: 'flex',width:width}}>
+      {drawerOpen ? <Toolbar />: null}
+      <Box sx={{bgcolor: 'background.paper', display:'flex', width:width}}>
         <Tabs
           orientation="vertical"
           variant="scrollable"

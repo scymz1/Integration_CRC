@@ -11,21 +11,19 @@ import {
     ListItemText,
     Card, CardContent, CardHeader, Box, Paper, Chip, TextField, Menu, Typography//, MenuItem
 } from '@mui/material';
-import {TreeView, TreeItem} from '@mui/lab';
+import { TreeView, TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
 import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useQuery } from 'react-query'
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
-// import NestedMenuItem from "material-ui-nested-menu-item";
-// import {NestedMenuItem} from 'mui-nested-menu';
-import {NestedMenuItem} from './NestedMenuItem'
+import { NestedMenuItem } from './NestedMenuItem'
 import { AppContext } from "./Filter";
-import {autocomplete_text_fields} from './var' 
+import { autocomplete_text_fields } from './var'
 
-import {useContext} from "react";
-import {VoyageContext} from "../VoyageApp";
+import { useContext } from "react";
+import { VoyageContext } from "../VoyageApp";
 import { columnOptions } from '../Result/Table/tableVars';
 
 export const MenuContext = React.createContext();
@@ -34,9 +32,9 @@ function Cascading(props) {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
-    const {labels, setLabels} = React.useContext(AppContext)
+    const { labels, setLabels } = React.useContext(AppContext)
     //add end point
-    const {options_flat, search_object, nested_tree} = useContext(props.context);     // <--------- CONTEXT
+    const { options_flat, search_object, nested_tree } = useContext(props.context);     // <--------- CONTEXT
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
@@ -56,7 +54,7 @@ function Cascading(props) {
     function isLast(node) {
         return node === null
     }
-    
+
     function containsOnly(node) {
         if (Object.keys(node).length === 1)
             return true;
@@ -67,12 +65,12 @@ function Cascading(props) {
         handleClose();
         setOption(option);
 
-        if(!labels.some(e=>e.option == option)){
-            setLabels([...labels, {option:option, type:type, label:flatlabel}])
+        if (!labels.some(e => e.option == option)) {
+            setLabels([...labels, { option: option, type: type, label: flatlabel }])
         }
         else
             alert("The variable has been selected.")
-       
+
     }
 
     const renderTree = (nodes, name) => {
@@ -86,7 +84,8 @@ function Cascading(props) {
                         </MenuItem>
                         // : null
                         : containsOnly(nodes[key])
-                            ?  renderTree(nodes[key], key) 
+                            ? renderTree(nodes[key], key)
+                            // ? null
                             : <NestedMenuItem
                                 key={key}
                                 // label={options_flat[nameConcat(name,key)].label}
@@ -104,30 +103,36 @@ function Cascading(props) {
 
     return (
         // <Container>
-            // <Grid container >
-                <Grid item>
-
-                    <TreeView
-                        aria-label="option menu"
-                        defaultCollapseIcon={<ExpandMoreIcon/>}
-                        defaultExpandIcon={<ChevronRightIcon/>}
+        // <Grid container >
+        <Grid item>
+            {Object.keys(nested_tree[menuName]).length > 1 ?
+                <TreeView
+                    aria-label="option menu"
+                    defaultCollapseIcon={<ExpandMoreIcon />}
+                    defaultExpandIcon={<ChevronRightIcon />}
+                >
+                    <Button
+                        variant="text"
+                        onClick={handleClick}
+                        style={{ maxWidth: '280px', maxHeight: '30px', color: "#fff" }}
                     >
-                        
-                        <Button 
-                         variant="text"
-                         onClick={handleClick}
-                         style={{maxWidth: '280px', maxHeight: '30px', color: "#fff"}}
-                         >
-                             {options_flat[menuName].flatlabel}
-                        </Button>
-                        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
-                            {renderTree(nested_tree[menuName], "")}
-                        </Menu>
-                    </TreeView>
-
-                </Grid>
-            // </Grid>
+                        {options_flat[menuName].flatlabel}
+                    </Button>
+                    <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                        {/*<Button onClick={()=>console.log("render:", render)}>print render</Button>*/}
+                        {renderTree(nested_tree[menuName], "")}
+                    </Menu>
+                </TreeView>
+                : <Button
+                    variant="text"
+                    onClick={() => handleOptionClick(menuName, options_flat[menuName].type, options_flat[menuName].flatlabel)}
+                    style={{ maxWidth: '280px', maxHeight: '30px', color: "#fff" }}
+                >
+                    {options_flat[menuName].flatlabel}
+                </Button>
+            }
+        </Grid>
+        // </Grid>
         // </Container>
     );
 }

@@ -15,11 +15,12 @@ import logo from "../images/sv-logo.png";
 import {Stack, ToggleButton, ToggleButtonGroup} from "@mui/material";
 import {switchTheme} from "../Theme";
 import {ThemeProvider} from "@mui/material/styles";
+import FilterAlt from '@mui/icons-material/FilterAlt';
 import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, page} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page, labels, setLabels} = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -124,7 +125,6 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => {
                     set_search_object({
-                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
@@ -148,12 +148,11 @@ export default function ResponsiveAppBar(props) {
                     switch (event.target.value){
                       case "slaves":
                         set_search_object({
-                        ...search_object,
-                        dataset: [dataSet, dataSet]
+                          dataset: [dataSet, dataSet]
                         })
                         break;
                       case "enslavers":
-                        set_search_object(_.omit(search_object, "dataset"));
+                        set_search_object({});
                         break;
                     }
                     setTypeForTable(event.target.value)
@@ -161,7 +160,7 @@ export default function ResponsiveAppBar(props) {
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Enslaved People</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>
                 </MenuItem>:
@@ -192,6 +191,17 @@ export default function ResponsiveAppBar(props) {
           <ThemeProvider theme={switchTheme}>
             <Stack spacing={4} direction={"row"} justifyContent="flex-end"
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+              {page !== "home" ? 
+                <IconButton
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start">
+                      <FilterAlt sx={{ color: "white" }}/>
+                      <Typography sx={{ color: "white" }}>Filter</Typography>
+                </IconButton>:
+                null}
+
               {search_object && typeForTable === "slaves" || page === "voyage" ?
                 <ToggleButtonGroup
                   color="blackMode"
@@ -199,7 +209,6 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => {
                     set_search_object({
-                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
@@ -222,12 +231,13 @@ export default function ResponsiveAppBar(props) {
                     switch (event.target.value){
                       case "slaves":
                         set_search_object({
-                        ...search_object,
                         dataset: [dataSet, dataSet]
                         })
+                        setLabels([])
                         break;
                       case "enslavers":
-                        set_search_object(_.omit(search_object, "dataset"));
+                        set_search_object({});
+                        setLabels([])
                         break;
                     }
                     setTypeForTable(event.target.value)
@@ -235,7 +245,7 @@ export default function ResponsiveAppBar(props) {
                   // sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
                 >
-                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Slaves</ToggleButton>
+                  <ToggleButton sx={{background: dataSet === "0"?"#42a5f5":"#ab47bc"}} value="slaves">Enslaved People</ToggleButton>
                   <ToggleButton sx={{background: "#388e3c"}} value="enslavers">Enslavers</ToggleButton>
                 </ToggleButtonGroup>:
                 null}

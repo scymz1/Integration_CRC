@@ -45,6 +45,16 @@ export default function VoyageApp(props) {
   })
 
   const [output, setOutput] = React.useState([]);
+  const [labels, setLabels] = React.useState([]);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  // Handle Drawer Open and Close
+  const handleDrawerOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const handleDrawerClose = () => {
+      setDrawerOpen(!drawerOpen);
+  };
 
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
@@ -52,7 +62,11 @@ export default function VoyageApp(props) {
 
   return (
     <VoyageContext.Provider value={{
-      options_flat, search_object, set_search_object, endpoint, nested_tree:columnOptions, dataSet, setDataSet, page: "voyage"}}>
+      options_flat, 
+      search_object, set_search_object, 
+      drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
+      endpoint, nested_tree:columnOptions, 
+      dataSet, setDataSet, labels, setLabels, page: "voyage"}}>
       <Voyage/>
     </VoyageContext.Provider>
   );
