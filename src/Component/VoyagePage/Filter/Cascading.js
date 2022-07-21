@@ -18,8 +18,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useQuery } from 'react-query'
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
-// import NestedMenuItem from "material-ui-nested-menu-item";
-// import {NestedMenuItem} from 'mui-nested-menu';
 import {NestedMenuItem} from './NestedMenuItem'
 import { AppContext } from "./Filter";
 import {autocomplete_text_fields} from './var' 
@@ -34,7 +32,7 @@ function Cascading(props) {
 
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [option, setOption] = React.useState('');
-    const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
+    const {labels, setLabels} = React.useContext(AppContext)
     //add end point
     const {options_flat, search_object, nested_tree} = useContext(props.context);     // <--------- CONTEXT
 
@@ -47,11 +45,8 @@ function Cascading(props) {
     // const buttonName = props.button;
 
     // var render = menuName === "" ? options_tree : options_tree[menuName];
-    
-
 
     function isChildren(key) {
-        // console.log("ischildren", key)
         if (key) return true
         else return false
     }
@@ -67,15 +62,8 @@ function Cascading(props) {
     }
 
     const handleOptionClick = (option, type, flatlabel) => {
-        // if (option === "__id") option = "id"
         handleClose();
         setOption(option);
-
-        var out = option + "***" + type + "***" + flatlabel;
-        // if(!search_object[option]){
-        // if(!output.includes(out)){
-        //     setOutput([...output, out])                             // THIS IS THE OUTPUT AFTER USER SELECTS IN MENU
-        // }
 
         if(!labels.some(e=>e.option == option)){
             setLabels([...labels, {option:option, type:type, label:flatlabel}])

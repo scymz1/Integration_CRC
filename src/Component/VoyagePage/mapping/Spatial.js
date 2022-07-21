@@ -89,9 +89,7 @@ export function ReadFeature(props) {
   // var markers = L.markerClusterGroup();
 
   map.on('zoomend', function() {
-    
-    //console.log("Zoom: ", map.getZoom())
-    
+        
     if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
       set_complete_object({
@@ -246,9 +244,10 @@ export function ReadFeature(props) {
             );
             
 
-            L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
-              maxWidth: "auto",
-            });
+            // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
+            //   maxWidth: "auto",
+            // });
+            markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
         })
           markers.addLayer(layer)
         },
@@ -270,8 +269,6 @@ export function ReadFeature(props) {
 }
 
 function drawUpdate(map, routes) {
-
-  // console.log(routes)
 
   var valueMin = d3.min(routes, function (l) {
     return l[2];
@@ -295,7 +292,6 @@ function drawUpdate(map, routes) {
 }
 
 
-
 // Function to draw the curve routes
 function DrawRoutes(map, links) {
   var valueMin = d3.min(links, function (l) {
@@ -305,12 +301,9 @@ function DrawRoutes(map, links) {
     return l[0];
   });
 
-  // console.log(valueMax)
-
   var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
   
   links.map(array=> {
-    // console.log(array)
     draw(map, array, valueScale)
   })
 }
@@ -328,8 +321,6 @@ function draw(map, link, valueScale) {
   for(var i = 2; i < route.length; i++) {
     commands.push("C", route[i][0], route[i][1], route[i][2])
   }
-
-  // console.log("Commands: ", commands)
 
   L.curve(commands, {color:'blue', weight: valueScale(weight)}).bindPopup("Sum of slaves: " + weight).addTo(map);
 }

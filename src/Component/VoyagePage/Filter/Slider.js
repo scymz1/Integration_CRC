@@ -29,25 +29,13 @@ function modifyName(rawName){
 
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
-  //console.log("INDEX: ", index)
 
-    //console.log("getSlider got called")
-    const {setOutput, output, labels, setLabels} = React.useContext(AppContext)
+    const {labels, setLabels} = React.useContext(AppContext)
     const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
-
-    console.log("Labels in slider: ", labels)
-
-    // const curLabel = labels[labels.length - 1];
-
     const curLabel = labels[index];
 
-    // console.log("labels: ", labels);
     const varName = curLabel["option"];
     const varDisplay = modifyName(curLabel["label"])
-    //console.log("varName: ", varName);
-    // console.log("varDisplay: ", varDisplay);
-
-    // console.log("fetch from Provider completed")
 
     const [range, setRange] = React.useState([0,0])
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
@@ -133,8 +121,6 @@ export default function GetSlider(props) {
     });
 
   });
-
-
 
   return (
         <>
