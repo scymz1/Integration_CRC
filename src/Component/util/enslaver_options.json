@@ -2,11 +2,7 @@
   "id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "ID",
-<<<<<<< HEAD
     "flatlabel": "Enslaver ID"
-=======
-    "flatlabel": "Voyage ID"
->>>>>>> 195312312e29e2adf12dabb3186d271070dcce24
   },
   "principal_location": {
     "type": "table",
