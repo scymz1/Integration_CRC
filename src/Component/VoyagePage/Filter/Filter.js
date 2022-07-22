@@ -126,57 +126,6 @@ export default function Filter(props) {
             </Toolbar>
         </AppBar>: 
         null}
-    {/* <Drawer
-        className={"Selected Fields Drawer"}
-        variant="persistent"
-        anchor="bottom"
-        open={drawerOpen}
-        PaperProps={{ sx: { height: !labels.length ? "15%":"30%",  background:"#EAECEE" }}}
-        style={{ position:'relative', zIndex:2 }}
-    >
-        <IconButton onClick={handleDrawerClose}>
-            <ExpandMoreIcon />
-        </IconButton>
-        <Grid 
-            container 
-            spacing={0} 
-            direction="column"
-        >
-            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} margin="auto" justify="center">
-                {labels.length === 0 ? 
-                    <Grid container item justifyContent="center">
-                        <Typography color="#808B96">No Filter</Typography>
-                    </Grid>
-                :
-                    labels.map((item, index) => {
-                    return(
-                      <Grid container item key={'grid-' + index} xs={6} justifyContent="center">
-                          <Grid item xs={11} >
-                              <Accordion>
-                                  <AccordionSummary>
-                                      <Typography>{options_flat[item.option].flatlabel}</Typography>
-                                  </AccordionSummary>
-                                  <AccordionDetails>
-                                      <ComponentFac params={item} index={index} context={props.context}/>
-                                  </AccordionDetails>
-                              </Accordion>
-                          </Grid>
-                          <Grid item xs={1} >
-                              <IconButton onClick={()=>{handleDelete(item)}}>
-                                  <RemoveCircleOutlineIcon />
-                              </IconButton>
-                          </Grid>
-                      </Grid>
-                    )})
-                }
-            </Grid>
-            <Grid container item sx={2} justifyContent="flex-end">
-                <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
-            </Grid>
-        </Grid>
-    </Drawer> */}
     <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
@@ -189,22 +138,28 @@ export default function Filter(props) {
         <Toolbar />
         <Toolbar />
         <Divider />
-        <Grid container item justifyContent="flex-end" > 
-                <IconButton onClick={handleFullScreen}>
-                    {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
-                </IconButton>
-        </Grid>
-        <Grid 
-            container 
-            spacing={0} 
-            direction="column"
-        >
-            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
+        <Grid container justifyContent="center" sx={{mb:"10px"}}> 
+                <Grid container item justifyContent="flex-end">
+                    <IconButton onClick={handleFullScreen}>
+                        {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
+                    </IconButton>
+                </Grid>
                 {
                     pageType=='voyage' ? 
-                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>Add Visual Filter
-                    </Button> : ""
+                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>
+                        Add Visual Filter
+                    </Button> : null
                 }
+        </Grid>
+        <Divider />
+        <Grid 
+            container 
+            item
+            rowSpacing={2} columnSpacing={0.5}
+            direction="row"
+            justifyContent="center"
+            sx={{mt:"10px", mb:"10px", ml:"10px"}}
+        >
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
                         <Typography color="#808B96">No Filter</Typography>
@@ -212,8 +167,8 @@ export default function Filter(props) {
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{m:fullScreen?"5px":"10px"}} justifyContent="center">
-                          <Grid item xs={10} >
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:fullScreen?"5px":"10px"}}>
+                          <Grid item xs={10}>
                               <Accordion>
                                   <AccordionSummary>
                                       <Typography>{options_flat[item.option].flatlabel}</Typography>
@@ -231,8 +186,8 @@ export default function Filter(props) {
                       </Grid>
                     )})
                 }
-            </Grid>
         </Grid>
+        <Divider />
         <Grid container item justifyContent="flex-end">
                 <IconButton onClick={handleDrawerClose}>
                     <ChevronLeftIcon />
