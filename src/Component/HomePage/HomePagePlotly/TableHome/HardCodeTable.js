@@ -37,17 +37,16 @@ const rows = [
   createData(110409, 'Wilhelmina Margaretta van Steeman', 'Accra', 1798),
   createData(11410, 'Mercurius', 'Accra', 1799),
   createData(124, 'Minerva', 'Accra', 1821),
-  createData(9953, 'Margaret and Mary', 'Accra', 9984670),
-  createData(10021, 'Agatha', 'Accra', 7692024),
-  createData(10072, 'Catharina Christina', 'Accra', 357578),
-  createData(10171, 'Groot Bentvelt', 'Accra', 70273),
-  createData(10260, 'Quinera', 'Accra', 1972550),
-  createData(20776, 'Thomas and Elizabeth', 'Accra', 377973),
-  createData(20901, '', 'Accra', 640679),
-  createData(11984, 'Josua Galeij', 'Accra', 242495),
-  createData(16045, 'Charles Gally', 'Accra', 17098246),
-  createData(21065, '', 'Accra', 923768),
-  createData(7309, 'NS da Conceição Especuladora', 'Accra', 8515767),
+  createData(900236, 'Rio Tâmega', 'Benguela', 1851),
+  createData(900235, 'Havana', 'Benguela', 1851),
+  createData(900234, 'Duas Clementinas', 'Benguela', 1850),
+  createData(900233, 'General Rêgo', 'Benguela', 1849),
+  createData(900232, 'Tourville	Rio de Janeiro', 'West Central Africa and St. Helena, port unspecified', 1848),
+  createData(900231, 'NS do Rosario', 'Benguela', 1848),
+  createData(900230, 'Indiano', 'Benguela', 1848),
+  createData(900229, 'General Rêgo', 'West Central Africa and St. Helena, port unspecified', 1848),
+  createData(900228, 'Brazil', 'West Central Africa and St. Helena, port unspecified', 1848),
+  
 ];
 
 export default function HardCodeTableHome() {
