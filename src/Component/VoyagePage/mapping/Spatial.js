@@ -264,7 +264,7 @@ export function ReadFeature(props) {
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
-              value={{ complete_object, set_complete_object , disembark, setDisembark}}
+              value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
             >
               <Grid>
                                 {layer.feature.properties.name +
@@ -277,7 +277,7 @@ export function ReadFeature(props) {
                       {/* only show if intraamerican, otherwise hidden */
                       }
                         {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-                      <Pivot context={PivotContext} />
+                      {/* <Pivot context={PivotContext} /> */}
                   </div>
                 </div>
               </Grid>

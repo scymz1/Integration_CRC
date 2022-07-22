@@ -24,7 +24,7 @@ function Pivot(props) {
 
   const { complete_object, set_complete_object , disembark, setDisembark } = useContext(props.context);
 
-  console.log("Pivot table complete object: ", complete_object)
+  console.log("Change tab to ",disembark, " Pivot table complete object: ", complete_object)
   console.log("Disembark: ", disembark)
   // Responses
   const [rows, setRows] = useState([]);
