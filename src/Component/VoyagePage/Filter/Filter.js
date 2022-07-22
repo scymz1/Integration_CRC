@@ -103,16 +103,6 @@ export default function Filter(props) {
     {drawerOpen ?
         <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"64px"}}>
             <Toolbar>
-                {/* <IconButton
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                >
-                <FilterAlt sx={{ color: "white" }}/>
-                </IconButton>
-                {!drawerOpen ?
-                    <Typography sx={{ color: "white" }}>Filter</Typography>
-                : */}
                     <Grid container direction="row" spacing={1}>
                         {
                         Object.keys(nested_tree).map((key) => {
@@ -146,8 +136,8 @@ export default function Filter(props) {
                 </Grid>
                 {
                     pageType=='voyage' ? 
-                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>
-                        Add Visual Filter
+                    <Button variant="contained" color={color} onClick={OpenBoundingBoxFilter}>
+                        <Typography color="white">Add Visual Filter</Typography>
                     </Button> : null
                 }
         </Grid>
@@ -161,13 +151,13 @@ export default function Filter(props) {
             sx={{mt:"10px", mb:"10px", ml:"10px"}}
         >
                 {labels.length === 0 ? 
-                    <Grid container item justifyContent="center" >
+                    <Grid container item justifyContent="center" sx={{mb:"15px"}}>
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:fullScreen?"5px":"10px"}}>
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
                           <Grid item xs={10}>
                               <Accordion>
                                   <AccordionSummary>
