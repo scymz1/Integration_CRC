@@ -23,6 +23,7 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 function Bar (props) {
+
     const [width, height] = useWindowSize()
     const {
         search_object, endpoint
@@ -30,7 +31,8 @@ function Bar (props) {
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
-
+    // const [oldYField, setOldYfield] = useState();
+    
     // const [option_field, setField] = React.useState(scatter_plot_x_vars[0]);
     // const [option_value, setValue] = React.useState(scatter_plot_y_vars[1]);
 
@@ -38,8 +40,20 @@ function Bar (props) {
         field: bar_x_vars[0],
         value: bar_y_vars[1]
     })
-
+    const [barData, setBarData] = useState([]);
+    const [data, setData] = useState({
+        x: plot_field,
+        y: plot_value,
+        type: 'bar',
+        name:`${options_flat[option.value].flatlabel}`,
+        barmode: 'group',
+    })
+    
     const [aggregation, setAgg] = React.useState('sum');
+
+  // group bar plotly usage
+//   setOldYfield(plot_value)
+
 
     //const {sum, average} = aggregation;
 
@@ -53,6 +67,27 @@ function Bar (props) {
             [name]: event.target.value,
         })
     }
+
+
+
+    useEffect(() => {
+
+        setBarData([...barData, 
+                {
+                    x: plot_field,
+                    y: plot_value,
+                    type: 'bar',
+                    name: `${options_flat[option.value].flatlabel}`,
+                    barmode: "group"
+                }
+            ])
+
+    }, [option.value])
+
+
+
+
+
     useEffect(() => {
         //var group_by = option.field
         var value = option.value
@@ -80,18 +115,29 @@ function Bar (props) {
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
+                console.log("🚌",plot_value)
                 setarry(Object.values(response.data[value]))
+                console.log("💩",plot_value)
 
-                // console.log(plot_value)
+                setBarData([...barData, 
+                    {
+                        x: plot_field,
+                        y: plot_value,
+                        type: 'bar',
+                        name: `${options_flat[option.value].flatlabel}`,
+                        barmode: "group"
+                    }
+                ])
 
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation, search_object]);
-
-
+            console.log("😭",barData)
+            
+    }, [option.value, aggregation, search_object]);
+    
     return (
         <div>
             <div>
@@ -156,15 +202,23 @@ function Bar (props) {
             <div>
                 <Grid>
                         <Plot
-                            data={[
-                                {
-                                    x: plot_field,
-                                    y: plot_value,
-                                    type: 'bar',
-                                    mode: 'lines+markers',
-                                },
-                                {type: 'bar'},
-                            ]}
+                        data ={barData}
+                            // data={[
+                            //     {
+                            //         x: plot_field,
+                            //         y: plot_value,
+                            //         type: 'bar',
+                            //         name:`${options_flat[option.value].flatlabel}`,
+                            //         barmode: 'group',
+                            //     },{
+                            //         x: plot_field,
+                            //         y: plot_value,
+                            //         type: 'bar',
+                            //         name:`${options_flat[option.value].flatlabel}`,
+                            //         barmode: 'group',
+                            //     },
+
+                            // ]}
                             layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Bar Graph`,
                             xaxis:{
                                 title: 
@@ -172,8 +226,8 @@ function Bar (props) {
                                 fixedrange: true
                                 },
                             yaxis:{
-                            title: 
-                            {text:`${options_flat[option.value].flatlabel}`},
+                            // title: 
+                            // {text:`${options_flat[option.value].flatlabel}`},
                             fixedrange: true
                             }}}
                             config={{responsive: true}}
