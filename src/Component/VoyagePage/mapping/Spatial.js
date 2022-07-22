@@ -168,17 +168,6 @@ export function ReadFeature(props) {
 
   },[disembark])
 
-<<<<<<< HEAD
-  // useEffect(() =>{
-  //   let point = complete_object[area];
-  //   if (area === groupby_fields_region[0]){
-  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
-  //     }
-  //   else if (area === groupby_fields_port[0]) {
-  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
-  //    }
-  // },[area])
-=======
   useEffect(() =>{
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
@@ -189,7 +178,6 @@ export function ReadFeature(props) {
      }
      set_complete_object(complete_object)
   },[area])
->>>>>>> 5ca1b3de865bea2e0c443b42fcdec397dcfb3e9a
 
   useEffect(() => {
     for (var i in map._layers) {
