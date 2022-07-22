@@ -20,7 +20,7 @@ const columns = [
   },
   {
     id: 'year',
-    label: 'Year arriced with slaves',
+    label: 'Year arrived of enslaved people',
     minWidth: 170,
     align: 'right',
     format: (value) => value.toLocaleString('en-US'),
