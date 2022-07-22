@@ -154,8 +154,8 @@ export default function PASTTable(props) {
         }}
       >
         <ColSelector11 context={ColContext} />
-        {((queryData.type === "slaves" && queryData.slaves.length !== 0) ||
-          (queryData.type === "enslavers" &&
+        {((typeForTable === "slaves" && queryData.slaves.length !== 0) ||
+          (typeForTable === "enslavers" &&
             queryData.enslavers.length !== 0)) && (
           <Card
             sx={{
@@ -181,9 +181,9 @@ export default function PASTTable(props) {
                   size="large"
                   color="grey"
                   disabled={
-                    (queryData.type === "slaves" &&
+                    (typeForTable === "slaves" &&
                       queryData.slaves.length === 0) ||
-                    (queryData.type === "enslavers" &&
+                    (typeForTable === "enslavers" &&
                       queryData.enslavers.length === 0)
                   }
                   onClick={handleSankeyOpen}
