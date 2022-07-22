@@ -61,17 +61,23 @@ function Table(props) {
     chipData,
     setChipData,
     typeForTable,
+    totalResultsCount, setTotalResultsCount,
+    page, setPage,
+    rowsPerPage, setRowsPerPage,
+    sortingReq, setSortingReq,
+    field, setField,
+    direction, setDirection
   } = useContext(props.context);
 
   // Pagination
-  const [totalResultsCount, setTotalResultsCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [totalResultsCount, setTotalResultsCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Sorting
-  const [sortingReq, setSortingReq] = useState(false);
-  const [field, setField] = useState([]);
-  const [direction, setDirection] = useState("asc");
+  // const [sortingReq, setSortingReq] = useState(false);
+  // const [field, setField] = useState([]);
+  // const [direction, setDirection] = useState("asc");
 
   // Switch tables
 
@@ -117,7 +123,7 @@ function Table(props) {
         setLoading(false);
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }, [
     page,
@@ -181,6 +187,7 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.number_enslaved > 0) {
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -229,8 +236,8 @@ function Table(props) {
       "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
     ]
       ? row[
-          "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-        ]
+      "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+      ]
       : [];
     const roles = row["transactions__transaction__enslavers__role__role"];
     const ids =
@@ -322,12 +329,14 @@ function Table(props) {
                           <StyledTableRow
                             key={row.id}
                             onClick={(event) => handleOpen(event, row)}
-                            //selected={isItemSelected}
+                          //selected={isItemSelected}
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              (row.number_enslaved != 0 ||
-                                row.transactions.length !== 0) && (
+                              ((row.transactions != null &&
+                                row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -338,8 +347,10 @@ function Table(props) {
                               )}
                             {checkbox &&
                               !(
-                                row.number_enslaved != 0 ||
-                                row.transactions.length !== 0
+                                (row.transactions != null &&
+                                  row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)
                               ) && <TableCell padding="checkbox"></TableCell>}
                             {cols.map((k, key) => {
                               if (k === "gender") {
