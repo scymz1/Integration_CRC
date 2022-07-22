@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data, setData, setQueryData, setChipData, chipData, queryData} = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -91,7 +91,7 @@ export default function PAST() {
       {checked &&<Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
-          <Gallery />
+          <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} setChipData = {setChipData} data = {data} setData = {setData}/>
           </div>
         </Grow>
       </Box>}
@@ -140,9 +140,12 @@ export default function PAST() {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
-            {data.map((item, key) => {
+          {queryData["type"] == "slaves" && data.map((item, key) => {
               return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
             })}
+          {queryData["type"] != "slaves" && data.map((item, key) => {
+            return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="slaver"/></Grid>
+          })}
           </Grid>
         </TabPanel>
       </Dialog>
