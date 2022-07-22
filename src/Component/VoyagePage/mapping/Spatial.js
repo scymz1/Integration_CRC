@@ -276,8 +276,6 @@ export function ReadFeature(props) {
             console.log("Mouseover object: ", complete_object)
 
             // complete_object[area] = [layer.feature.id, layer.feature.id];
-            console.log("Area: ", area)
-
             set_complete_object({...complete_object, [area]: [layer.feature.id, layer.feature.id]})
             
             const container = L.DomUtil.create("div");
