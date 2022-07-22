@@ -31,7 +31,7 @@ function ComponentFac(props){
   // const varType = raw[1].split('.').pop().slice(0, -2)
 
   const raw = props.params;
-  console.log(raw);
+  //console.log(raw);
   const varDisplay = raw.flatlabel;
   const varName = raw.option;
   const varType = raw.type.split('.').pop().slice(0, -2);
