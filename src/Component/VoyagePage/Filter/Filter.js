@@ -200,9 +200,11 @@ export default function Filter(props) {
             direction="column"
         >
             <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
-                <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}> 
-                    Add Visual Filter
-                </Button>
+                {
+                    page=='voyage' ? 
+                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>Add Visual Filter
+                    </Button> : ""
+                }
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
                         <Typography color="#808B96">No Filter</Typography>

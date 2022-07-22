@@ -207,6 +207,7 @@ export function ReadFeature(props) {
 
   }, [complete_object])
 
+
   useEffect(() => {
     for (var i in map._layers) {
       if (
@@ -245,7 +246,7 @@ export function ReadFeature(props) {
       // Add only actual locations to the map with markers (with clicking events and popups)
       if(!props.filter){
         filterNodes=(feature)=>{return true}
-      }
+      }      
       L.geoJSON(nodes.features, {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
@@ -257,7 +258,7 @@ export function ReadFeature(props) {
             console.log("Mouseover object: ", complete_object)
 
             complete_object[area] = [layer.feature.id, layer.feature.id];
-            
+            set_complete_object({...complete_object, area:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
