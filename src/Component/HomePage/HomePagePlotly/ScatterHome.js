@@ -1,10 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState,useRef} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import {Box, Button, Card, CardContent, Typography} from "@mui/material";
+import {Box, Button, Card, CardContent, Typography,Grid} from "@mui/material";
 import {scatter_plot_x_vars, scatter_plot_y_vars,} from "../../VoyagePage/Result/vars";
 import {Link, useNavigate} from 'react-router-dom';
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
+
+
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -18,6 +23,11 @@ const featuredPosts = {
 };
 
 function ScatterComponent() {
+  const [width, height] = useWindowSize()
+  // const [height, setHeight] = useState();
+  // const [width, setWidth] = useState();
+  // const windowRef = useRef(null);
+
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
   const [option, setOption] = useState({
@@ -25,6 +35,13 @@ function ScatterComponent() {
     value: "voyage_slaves_numbers__imp_adult_death_middle_passage",
   });
   const [aggregation, setAgg] = React.useState("sum");
+
+  // useEffect(()=> {
+  //   setHeight((0.7 * windowRef.current.offsetHeight).toString())
+  //   setWidth((0.7 * windowRef.current.offsetWidth).toString())
+  //   console.log("height",height,windowRef.current.offsetHeight);
+  // }, [windowRef.current.offsetHeight])
+
   useEffect(() => {
     var value = option.value;
     var data = new FormData();
@@ -55,8 +72,10 @@ function ScatterComponent() {
   return (
     <div>
       <Card sx={{ display: "flex" }} style={{background: 'transparent', boxShadow: 'none'}}>
-        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
+        <Grid container>
+        {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+        <Grid item sx={{width:"60%"}}>
+          {/* <CardContent sx={{ flex: "1 0 auto" }}> */}
             <Plot
               data={[
                 {
@@ -65,15 +84,18 @@ function ScatterComponent() {
                   type: "scatter",
                   mode: "lines+markers",
                   marker: {color: "red"},
+                  line: {shape: 'spline'},
                 },
               ]}
-              layout={{width: 800, height: 600, title: "Scatter Plot"}}
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
               config={{responsive: true}}
             />
-          </CardContent>
-        </Box>
+          {/* </CardContent> */}
+        </Grid>
+        {/* </Box> */}
+        <Grid item sx={{maxWidth: width>800 ? "40%": "100%"}}>
 
-        <Box sx={{boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+        <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/voyage/Scatter">Data Visualization - Scatter Charts</Button>
               <CardContent>
@@ -83,12 +105,14 @@ function ScatterComponent() {
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
                   Continue reading...
-                </Button>
+                </Button> */}
               </CardContent>
           </CardContent>
         </Box>
+        </Grid>
+        </Grid>
       </Card>
     </div>
   );

@@ -1,8 +1,13 @@
 import React from 'react'
 import HardCodeTableHome from './HardCodeTable'
-import { Button,Typography, Card, CardContent, Box } from "@mui/material";
+import { Button,Typography, Card, CardContent, Box,Grid } from "@mui/material";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
+
+
 
 const featuredPosts = {
     title: "Data Table",
@@ -14,6 +19,8 @@ const featuredPosts = {
 
   
 function TableHome() {
+    const [width, height] = useWindowSize()
+
     const navigate = useNavigate();
     const GotoVoyagePage = () => {
       navigate('/');
@@ -21,7 +28,10 @@ function TableHome() {
   return (
     <div>
          <Card sx={{ display: "flex" }} style={{ background: 'transparent', boxShadow: 'none'}}>
-        <Box sx={{margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+         <Grid container>
+        {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+        <Grid item sx={{maxWidth: width>800 ? "40%": width}}>
+        <Box sx={{height:height*0.65,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
           <CardContent sx={{ flex: "1 0 auto" }} >
             <Button
               variant="text"
@@ -46,12 +56,15 @@ function TableHome() {
             </div>
           </CardContent>
         </Box>
-
+        </Grid>
+        <Grid item sx={{width:width>800 ? "60%": width*0.9}}>
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <CardContent sx={{ flex: "1 0 auto" }}>
            <HardCodeTableHome/>
           </CardContent>
         </Box>
+        </Grid>
+        </Grid>
       </Card>
     </div>
   )

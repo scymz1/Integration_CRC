@@ -4,6 +4,8 @@ import { Component, useContext } from 'react';
 // import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
+import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
+
 import * as React from 'react';
 import {
   Typography,
@@ -23,19 +25,19 @@ export const ComponentContext = React.createContext();
 
 // <ComponentFac params={item} index={index} />
 function ComponentFac(props){
-  const raw = props.params.split("***")
-  const varDisplay = raw[2]
-  const varName = raw[0]
-  const varType = raw[1].split('.').pop().slice(0, -2)
+  // const raw = props.params.split("***")
+  // const varDisplay = raw[2]
+  // const varName = raw[0]
+  // const varType = raw[1].split('.').pop().slice(0, -2)
 
-  const index = props.index;
+  const raw = props.params;
+  console.log(raw);
+  const varDisplay = raw.flatlabel;
+  const varName = raw.option;
+  const varType = raw.type.split('.').pop().slice(0, -2);
 
-  //console.log("Variable Name: ----> ", raw)
-  
+  const index = props.index;  
   const {search_object} = useContext(props.context);
-
-  //console.log(search_object)
-
 
 
   switch(varType){
@@ -48,12 +50,19 @@ function ComponentFac(props){
         )
       // return GetSlider();
     case "BooleanField":
-      return <Chip label={modifyName(varDisplay)} color="primary" />;
+      return <Chip label={
+        modifyName(varDisplay)
+        // varDisplay
+      } color="primary" />;
     case "CharField":
       return (
         <ComponentContext.Provider value = {{index}}>
           <Auto context={props.context}/>
         </ComponentContext.Provider>  
+      )
+    case "Map":
+      return (
+        <BoundingBoxFilter context={props.context}/>
       )
     default:
       return <Chip label="NA" color="primary" />;
@@ -134,16 +143,5 @@ function modifyName(rawName){
   //       </>
   //        );
 // }
-
-// function GetAuto(){
-//   console.log('get auto')
-//   return <Auto context={}/>
-// }
-//
-// function GetCheck(props){
-//
-// }
-
-
 
 export default ComponentFac;

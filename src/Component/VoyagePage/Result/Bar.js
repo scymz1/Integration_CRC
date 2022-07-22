@@ -14,6 +14,9 @@ import Radio from '@mui/material/Radio';
 import {bar_x_vars,bar_y_vars} from './vars';
 import { Grid, Paper} from '@mui/material';
 import * as options_flat from "../../util/options.json"
+import {
+    useWindowSize,
+  } from '@react-hook/window-size'
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -21,13 +24,15 @@ axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 function Bar (props) {
 
+    const [width, height] = useWindowSize()
     const {
         search_object, endpoint
     } = React.useContext(props.context)
 
     const [plot_field, setarrx] = useState([])
     const [plot_value, setarry] = useState([])
-
+    // const [oldYField, setOldYfield] = useState();
+    
     // const [option_field, setField] = React.useState(scatter_plot_x_vars[0]);
     // const [option_value, setValue] = React.useState(scatter_plot_y_vars[1]);
 
@@ -35,8 +40,20 @@ function Bar (props) {
         field: bar_x_vars[0],
         value: bar_y_vars[1]
     })
-
+    const [barData, setBarData] = useState([]);
+    const [data, setData] = useState({
+        x: plot_field,
+        y: plot_value,
+        type: 'bar',
+        name:`${options_flat[option.value].flatlabel}`,
+        barmode: 'group',
+    })
+    
     const [aggregation, setAgg] = React.useState('sum');
+
+  // group bar plotly usage
+//   setOldYfield(plot_value)
+
 
     //const {sum, average} = aggregation;
 
@@ -50,6 +67,27 @@ function Bar (props) {
             [name]: event.target.value,
         })
     }
+
+
+
+    useEffect(() => {
+
+        setBarData([...barData, 
+                {
+                    x: plot_field,
+                    y: plot_value,
+                    type: 'bar',
+                    name: `${options_flat[option.value].flatlabel}`,
+                    barmode: "group"
+                }
+            ])
+
+    }, [option.value])
+
+
+
+
+
     useEffect(() => {
         //var group_by = option.field
         var value = option.value
@@ -77,22 +115,33 @@ function Bar (props) {
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
+                // console.log("🚌",plot_value)
                 setarry(Object.values(response.data[value]))
+                // console.log("💩",plot_value)
 
-                // console.log(plot_value)
+                setBarData([...barData, 
+                    {
+                        x: plot_field,
+                        y: plot_value,
+                        type: 'bar',
+                        name: `${options_flat[option.value].flatlabel}`,
+                        barmode: "group"
+                    }
+                ])
 
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-    }, [option.field, option.value, aggregation, search_object]);
-
-
+            // console.log("😭",barData)
+            
+    }, [option.value, aggregation, search_object]);
+    
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120}}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -104,7 +153,7 @@ function Bar (props) {
                             name="field"
                         >
                             {bar_x_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
@@ -112,7 +161,7 @@ function Bar (props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 120,my:2 }}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7,my:2 }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
                         <Select
@@ -124,7 +173,7 @@ function Bar (props) {
                             onChange={(event) => {handleChange(event, "value")}}
                         >
                             {bar_y_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
@@ -151,29 +200,38 @@ function Bar (props) {
             </div>
 
             <div>
-                <Grid item xs={12} md={4} lg={3}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 500,
-                        }}
-                        >
+                <Grid>
                         <Plot
-                            data={[
-                                {
-                                    x: plot_field,
-                                    y: plot_value,
-                                    type: 'bar',
-                                    mode: 'lines+markers',
+                        data ={barData}
+                            // data={[
+                            //     {
+                            //         x: plot_field,
+                            //         y: plot_value,
+                            //         type: 'bar',
+                            //         name:`${options_flat[option.value].flatlabel}`,
+                            //         barmode: 'group',
+                            //     },{
+                            //         x: plot_field,
+                            //         y: plot_value,
+                            //         type: 'bar',
+                            //         name:`${options_flat[option.value].flatlabel}`,
+                            //         barmode: 'group',
+                            //     },
+
+                            // ]}
+                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Bar Graph`,
+                            xaxis:{
+                                title: 
+                                {text:`${options_flat[option.field].flatlabel}`},
+                                fixedrange: true
                                 },
-                                {type: 'bar'},
-                            ]}
-                            layout={ {title: 'bar Plot'} }
+                            yaxis:{
+                            // title: 
+                            // {text:`${options_flat[option.value].flatlabel}`},
+                            fixedrange: true
+                            }}}
                             config={{responsive: true}}
                         />
-                    </Paper>
                 </Grid>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import ResponsiveAppBar from "../NavBar";
 import * as React from "react";
-import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide} from "@mui/material";
+import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide, Grid} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import Sankey from "./RelationGraph/Sankey"
 import Network from './RelationGraph/Network'
@@ -8,7 +8,7 @@ import Story from './RelationGraph/Story'
 import PASTTable from './PASTTable'
 import Filter from "../VoyagePage/Filter/Filter";
 import {PASTContext} from "./PASTApp";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import Modal from "../VoyagePage/Result/Table/TableModal";
 
 import Grow from '@mui/material/Grow';
@@ -36,11 +36,22 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function PAST() {
-  const [value, setValue] = React.useState(0);
-  const [dialogopen, setdialogOpen] = React.useState(false);
-  const {options_tree, options_flat, search_object, set_search_object, endpoint, windowRef, queryData} = useContext(PASTContext)
-  const [scroll, setScroll] = React.useState('body');
-  const [checked, setChecked] = React.useState(false);
+  const [value, setValue] = useState(0);
+  const [dialogopen, setdialogOpen] = useState(false);
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData,
+
+    // totalResultsCount, setTotalResultsCount,
+    // page, setPage,
+    // rowsPerPage, setRowsPerPage,
+
+    sortingReq, setSortingReq,
+    field, setField,
+    direction, setDirection,
+    setData, queryData,
+
+  } = useContext(PASTContext)
+  const [scroll, setScroll] = useState('body');
+  const [checked, setChecked] = useState(false);
 
   function handleChange(e) {
     if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
@@ -61,13 +72,14 @@ export default function PAST() {
 
   return (
     <div>
-      <ResponsiveAppBar/>
+      <ResponsiveAppBar context={PASTContext}/>
 
       {/* <Button onClick={()=>console.log("options_tree:", options_tree)}>print options_tree</Button>
       <Button onClick={()=>console.log("options_flat:", options_flat)}>print options_flat</Button>
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button> */}
 
       <Filter context={PASTContext}/>
+      {drawerOpen ? <Toolbar />: null}
       <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
         Table
       </Button>
@@ -88,10 +100,11 @@ export default function PAST() {
         </Grow>
       </Box>}
 
-      {checked &&<Box sx={{ display: 'flex' }}>
+      {checked &&
+      <Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
-          <Gallery />
+          <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} setChipData = {setChipData} data = {data} setData = {setData}/>
           </div>
         </Grow>
       </Box>}
@@ -101,7 +114,7 @@ export default function PAST() {
         fullScreen
         open={dialogopen}
         onClose={handleClose}
-        scroll={scroll}
+        scroll="body"
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
@@ -133,14 +146,21 @@ export default function PAST() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <Sankey/>
-          <Modal context={PASTContext} endpoint="voyage/"/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Story target={500001} type="slave"/>
+          <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
+          {queryData["type"] == "slaves" && data.map((item, key) => {
+              return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
+            })}
+          {queryData["type"] != "slaves" && data.map((item, key) => {
+            return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="slaver"/></Grid>
+          })}
+          </Grid>
         </TabPanel>
+        <Modal context={PASTContext} endpoint="voyage/"/>
       </Dialog>
 
     </div>

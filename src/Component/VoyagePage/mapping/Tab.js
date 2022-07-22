@@ -9,25 +9,24 @@ export default function IntraTabs(props) {
 
 
   const handleChange = (event,newValue) => {
-
+    console.log("Change tab to: ", newValue)
     setValue(newValue);
     setDisembark(newValue)
   };
 
 
-
   return (
     <Box sx={{ width: '100%' }}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-      >
-        <Tab
-          value="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
-          label="Port of embarkation"
-        />
-        <Tab value="voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" label="Port of disembarkation" />
-      </Tabs>
-    </Box>
+    <Tabs
+      value={value}
+      onChange={handleChange}
+    >
+      <Tab
+        value="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+        label="Port of embarkation"
+      />
+      <Tab value="voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" label="Port of disembarkation" />
+    </Tabs>
+  </Box>
   );
 }

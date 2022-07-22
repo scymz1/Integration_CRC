@@ -12,10 +12,12 @@ import { FormControlLabel, RadioGroup } from '@mui/material';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import {donut_value_vars, donut_name_vars} from './vars';
-import { VoyageContext } from '../VoyageApp';
+//import { VoyageContext } from '../VoyageApp';
 import { Grid, Paper} from '@mui/material';
 import * as options_flat from "../../util/options.json"
-
+import {
+    useWindowSize,
+  } from '@react-hook/window-size'
 
 
 //const option_url = '/voyage/' + '?hierarchical=false'
@@ -28,7 +30,7 @@ console.log(process.env.REACT_APP_BASEURL)
 
 
 function Pie (props) {
-
+    const [width, height] = useWindowSize()
     const {
         search_object, endpoint
     } = React.useContext(props.context)
@@ -102,7 +104,7 @@ function Pie (props) {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120}}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Sectors</InputLabel>
                         <Select
@@ -114,7 +116,7 @@ function Pie (props) {
                             name="field"
                         >
                             {donut_name_vars.map((option) => (
-                                <MenuItem value={option}>
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                     {/* {option} */}
                                 </MenuItem>
@@ -123,7 +125,7 @@ function Pie (props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7,my:2  }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Values</InputLabel>
                         <Select
@@ -135,7 +137,7 @@ function Pie (props) {
                             onChange={(event) => {handleChange(event, "value")}}
                         >
                             {donut_value_vars.map((option) => (
-                                <MenuItem value={option} >
+                                <MenuItem value={option} key={option}>
                                     {options_flat[option].flatlabel}
                                 </MenuItem>
                             ))}
@@ -162,15 +164,7 @@ function Pie (props) {
             </div>
 
             <div>
-                <Grid item xs={12} md={4} lg={3}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 500,
-                        }}
-                        >
+                <Grid>
                         <Plot
                             data={[
                                 {
@@ -180,10 +174,9 @@ function Pie (props) {
                                     mode: 'lines+markers',
                                 }
                             ]}
-                            layout={ {title: 'Pie Plot'} }
+                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Pie Graph`} }
                             config={{responsive: true}}
                         />
-                    </Paper>
                 </Grid>
             </div>
         </div>

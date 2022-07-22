@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 // import { VoyageContext } from "../VoyageApp";
-import { Paper } from "@mui/material";
+import { Paper,Grid } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +9,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 // import { PivotContext } from "./PivotApp";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 // const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
 
@@ -17,10 +20,14 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Pivot(props) {
-  const { complete_object } = useContext(props.context);
+  const [width, height] = useWindowSize()
 
-  //console.log("updated_complete_object= ", complete_object);
+  const { complete_object, disembark } = useContext(props.context);
 
+  console.log("updated_complete_object= ", complete_object);
+
+  console.log("Pivot table complete object: ", complete_object)
+  console.log("Disembark: ", disembark)
   // Responses
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
@@ -47,6 +54,8 @@ function Pivot(props) {
 
   // Set rows
   useEffect(() => {
+    console.log("updated_complete_object= ", complete_object);
+
     //console.log("2222222222222222222222222222223333");
     var data = new FormData();
     data.append("hierarchical", "False");
@@ -130,26 +139,27 @@ function Pivot(props) {
             }}
           ></Paper>
         </Grid> */}
+        <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
-                {cols.map((col) => (
-                  <TableCell>{col}</TableCell>
+                {cols.map((col, key) => (
+                  <TableCell key={'title-' + key}>{col}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.map((row, key) => (
                 <TableRow
-                  key={row.name}
+                  key={'row-' + key}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {cols.map((s) => {
+                  {cols.map((s, key) => {
                     if (typeof row[s] === "number") {
-                      return <TableCell>{Math.round(row[s])}</TableCell>;
+                      return <TableCell key={'content-' + key}>{Math.round(row[s])}</TableCell>;
                     } else {
-                      return <TableCell>{row[s] || 0}</TableCell>;
+                      return <TableCell key={'content-' + key}>{row[s] || 0}</TableCell>;
                     }
                   })}
                 </TableRow>
@@ -157,6 +167,7 @@ function Pivot(props) {
             </TableBody>
           </Table>
         </TableContainer>
+        </Grid>
       </div>
     </div>
   );

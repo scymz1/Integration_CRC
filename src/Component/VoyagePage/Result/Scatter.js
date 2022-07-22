@@ -15,7 +15,9 @@ import {scatter_plot_x_vars, scatter_plot_y_vars} from './vars';
 import { VoyageContext } from '../VoyageApp';
 import {Grid, Paper} from '@mui/material';
 import * as options_flat from "../../util/options.json"
-
+import {
+    useWindowSize,
+  } from '@react-hook/window-size'
 const option_url = '/voyage/?hierarchical=false' // labels in dropdowns
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -23,6 +25,7 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 function Scatter (props) {
+    const [width, height] = useWindowSize()
 
     const {
         search_object, endpoint
@@ -110,7 +113,7 @@ function Scatter (props) {
     return (
         <div>
             <div>
-                <Box sx={{ minWidth: 120}}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7}}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">X Field</InputLabel>
                         <Select
@@ -132,7 +135,7 @@ function Scatter (props) {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 120,my:2  }}>
+                <Box sx={{ maxWidth: width>500 ? width*0.9: width * 0.7, my:2  }}>
                     <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
                         <Select
@@ -170,30 +173,36 @@ function Scatter (props) {
             </div>
 
             <div>
-            <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                    sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: 500,
-                    }}
-                    >
+            <Grid>
                 <Plot
                     data={[
                         {
                             x: plot_field,
                             y: plot_value,
                             type: 'scatter',
-                            mode: 'lines+markers',
+                            mode: 'lines',
                             marker: {color: 'red'},
+                            line: {shape: 'spline'},
                         },
                         {type: 'bar'},
                     ]}
-                    layout={{title: 'Scatter Plot'}}
+                    
+                    layout={{width:width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel}  Scatter Graph`,
+                    xaxis:{
+                        title: 
+                        {text:`${options_flat[option.field].flatlabel}`},
+                        fixedrange: true
+                        },
+                    yaxis:{
+                    title: 
+                    {text:`${options_flat[option.value].flatlabel}`},
+                    fixedrange: true
+                    
+                    }}}
+
                     config={{responsive: true}}
+                    
                 />
-                </Paper>
             </Grid>
             </div>
         </div>
