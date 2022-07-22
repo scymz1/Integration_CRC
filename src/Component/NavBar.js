@@ -137,6 +137,16 @@ export default function ResponsiveAppBar(props) {
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
+
+                    setLabels([])
+                    
+                    setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                   }}
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
@@ -159,9 +169,27 @@ export default function ResponsiveAppBar(props) {
                         set_search_object({
                           dataset: [dataSet, dataSet]
                         })
+                        setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                       case "enslavers":
                         set_search_object({});
+                        setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                     }
                     setTypeForTable(event.target.value)
@@ -221,6 +249,14 @@ export default function ResponsiveAppBar(props) {
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
+
+                    setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                   }}
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
