@@ -39,7 +39,7 @@ export default function Home() {
     });
   }, []);
   const dataSet = "0";
-  const sample = [<ScatterComponent/>, <BarComponent/>, <PieComponent/>, < TableHome/>];
+  const sample = [ <BarComponent/>, <PieComponent/>, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
       <div>
@@ -47,6 +47,7 @@ export default function Home() {
           <ResponsiveAppBar context={HomeContext}/>
         </HomeContext.Provider>
         <Container maxWidth={false}>
+        <ScatterComponent/>
           <List>
             {sample.map((label, index) => (
               <ListItem key={index}>

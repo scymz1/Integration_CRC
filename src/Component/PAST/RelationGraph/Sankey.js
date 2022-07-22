@@ -302,6 +302,7 @@ export default function Sankey(props) {
       var voyagemodal = true;
       if (node.type === "enslaved" && queryData.type === "slaves") {
         result.push(
+          <table>
           <tbody>
           <tr>
             <th>Age:</th>
@@ -311,12 +312,14 @@ export default function Sankey(props) {
             <th>Height:</th>
             <td>{node.height}</td>
           </tr>
-          </tbody>)
+          </tbody>
+          </table>)
       }
       if (node.type === "transaction") {
         if (node.voyage_id === null) {
           voyagemodal = false;
           result.push(
+            <table>
             <tbody>
             <tr>
               <th>Type:</th>
@@ -339,6 +342,7 @@ export default function Sankey(props) {
               <td>{node.date}</td>
             </tr>
             </tbody>
+            </table>
           );
         } else {
           // console.log(node.voyage_id)
@@ -347,6 +351,7 @@ export default function Sankey(props) {
           // console.log(node.voyage_id)
           if (queryData.type === "slaves") {
             result.push(
+              <table>
               <tbody>
               <tr>
                 <th>Type:</th>
@@ -362,6 +367,7 @@ export default function Sankey(props) {
                 <td>{node.year}</td>
               </tr>
               </tbody>
+              </table>
             );
           }  
         }
@@ -502,7 +508,7 @@ export default function Sankey(props) {
             })}
             {graph.links.map((link) => {
               return (
-                <g>
+                <g key={`sankey-node-${link.index}`}>
                   <path
                     id={`sankey-link-${link.index}`}
                     key={`sankey-link-${link.index}`}
