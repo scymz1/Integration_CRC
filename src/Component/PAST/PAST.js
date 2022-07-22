@@ -135,7 +135,6 @@ export default function PAST() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <Sankey/>
-          <Modal context={PASTContext} endpoint="voyage/"/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network/>
@@ -147,6 +146,7 @@ export default function PAST() {
             })}
           </Grid>
         </TabPanel>
+        <Modal context={PASTContext} endpoint="voyage/"/>
       </Dialog>
 
     </div>

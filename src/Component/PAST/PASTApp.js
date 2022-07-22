@@ -101,7 +101,7 @@ export default function PASTApp(props) {
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       windowRef, typeForTable, setTypeForTable,labels,setLabels,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet, labels, setLabels, page: "past"
+      dataSet, setDataSet, page: "past", initContext: PASTContext
     }}>
       <PAST/>
     </PASTContext.Provider>

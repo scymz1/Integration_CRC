@@ -55,6 +55,8 @@ const embkey = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_loc
 
 export const PivotContext = React.createContext({});
 var customIcon = L.divIcon({className: 'leaflet-div-icon2'})
+L.Marker.prototype.options.icon = customIcon;
+
 
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
@@ -67,7 +69,7 @@ export function ReadFeature(props) {
 
   const map = useMap();
 
-  // Popup
+  // tab selection in popup
   const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
   const [area, setArea] = useState(groupby_fields_region[0]); // port or region
   const [complete_object, set_complete_object] = useState({
@@ -84,15 +86,10 @@ export function ReadFeature(props) {
 	}
   });
 
-  L.Marker.prototype.options.icon = customIcon;
 
-  // var markers = L.markerClusterGroup();
-
+  // Switching region/port views based on map zoom level
   map.on('zoomend', function() {
     
-    console.log("Zoom: ", map.getZoom())
-    
-        
     if(map.getZoom() < 8) {
       setGroupBy(groupby_fields_region)
       set_complete_object({
@@ -102,7 +99,6 @@ export function ReadFeature(props) {
       setArea(groupby_fields_region[0]);
     }
     else {
-      //console.log("Set Port")
       setGroupBy(groupby_fields_port)
       set_complete_object({
         ...complete_object,
@@ -110,7 +106,6 @@ export function ReadFeature(props) {
       });
       setArea(disembark);
     }
-
   })
 
 
@@ -139,9 +134,9 @@ export function ReadFeature(props) {
     });
   }, [props.search_object, groupby_fields]);
 
+    
 
-  //for updating search object
-
+  // Update complete object based on tab selection in popup
   useEffect(() =>{
     //selected disembark
     if (disembark === diskey ){
@@ -154,7 +149,6 @@ export function ReadFeature(props) {
       // }
       }
     else{
-
         //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
         const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
         // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
@@ -168,6 +162,7 @@ export function ReadFeature(props) {
 
   },[disembark])
 
+
   useEffect(() =>{
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
@@ -178,6 +173,40 @@ export function ReadFeature(props) {
      }
      set_complete_object(complete_object)
   },[area])
+
+
+  useEffect(()=>{
+
+    console.log("UseEffect Complete Object: ", complete_object)
+
+    map.on('popupopen', function(){
+
+      console.log("Popup open function")
+
+      const container = L.DomUtil.create("div");
+
+      const root = ReactDOM.createRoot(container);
+      // root.render(
+      //   <PivotContext.Provider
+      //         value={{ complete_object, set_complete_object , disembark, setDisembark}}
+      //       >
+      //         <Grid>
+              
+      //           <div style={{ fontSize: "24px", color: "black" }}>
+      //             <div>
+                   
+      //                 {/* only show if intraamerican, otherwise hidden */
+      //                 }
+      //                   {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
+      //                 <Pivot context={PivotContext} />
+      //             </div>
+      //           </div>
+      //         </Grid>
+      //         </PivotContext.Provider>
+      // );
+    })
+
+  }, [complete_object])
 
   useEffect(() => {
     for (var i in map._layers) {
@@ -204,7 +233,6 @@ export function ReadFeature(props) {
       
     };
     
-    //console.log(props.search_object.dataset[0]==0)
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -224,9 +252,13 @@ export function ReadFeature(props) {
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
           L.marker(layer["_latlng"]).unbindPopup()
-          // mouseover or click, which is better
-          layer.on("mouseover", function (e) {
+
+          layer.on("click", function (e) {
+            
+            console.log("Mouseover object: ", complete_object)
+
             complete_object[area] = [layer.feature.id, layer.feature.id];
+            
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
@@ -256,6 +288,12 @@ export function ReadFeature(props) {
             //   maxWidth: "auto",
             // });
             markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
+
+            // var popup = L.popup();
+            // layer.on('click', (e)=> {
+            //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
+            // })
+
         })
           markers.addLayer(layer)
         },
@@ -266,7 +304,7 @@ export function ReadFeature(props) {
       drawUpdate(map, csv)
       
     }
-  }, [nodes, csv,props.search_object.dataset]);
+  }, [nodes, csv, props.search_object.dataset, complete_object]);
 
 
   if (isLoading == false) {
@@ -299,105 +337,3 @@ function drawUpdate(map, routes) {
 
 }
 
-
-// Function to draw the curve routes
-function DrawRoutes(map, links) {
-  var valueMin = d3.min(links, function (l) {
-    return l[0];
-  });
-  var valueMax = d3.max(links, function (l) {
-    return l[0];
-  });
-
-  var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
-  
-  links.map(array=> {
-    draw(map, array, valueScale)
-  })
-}
-
-function draw(map, link, valueScale) {
-
-  var weight = link[0]
-  var route = link[1]
-
-  var commands = []
-  commands = ["M", route[0]]
-
-  commands.push("Q", route[1][0], route[1][1])
-
-  for(var i = 2; i < route.length; i++) {
-    commands.push("C", route[i][0], route[i][1], route[i][2])
-  }
-
-  L.curve(commands, {color:'blue', weight: valueScale(weight)}).bindPopup("Sum of slaves: " + weight).addTo(map);
-}
-
-
-// Function to draw the edges (line segments)
-function DrawLink(map, links) {
-  var valueMin = d3.min(links, function (l) {
-    return l[0] != l[1] ? parseInt(l[2]) : null;
-  });
-  var valueMax = d3.max(links, function (l) {
-    return l[0] != l[1] ? parseInt(l[2]) : null;
-  });
-
-  var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
-
-  links.forEach(function (link) {
-    if (link[0] != link[1]) {
-      var path = [link[0], link[1]].join("-");
-      var pathReverse = [link[1], link[0]].join("-");
-
-      var lineWeight = valueScale(link[2]);
-
-      var lineCenterLatLng = L.polyline([
-        nodeLayers[link[0]].layer._latlng,
-        nodeLayers[link[1]].layer._latlng,
-      ])
-        .getBounds()
-        .getCenter();
-
-      var line = L.polyline(
-        [
-          nodeLayers[link[0]].layer._latlng,
-          nodeLayers[link[1]].layer._latlng,
-        ],
-        {
-          weight: lineWeight,
-        }
-      );
-
-      var feature = L.featureGroup([line])
-        .bindPopup(
-          "<p3>" +
-            link[0] +
-            "</p3> to <p3>" +
-            link[1] +
-            "</p3>" +
-            "<br>" +
-            "<p4>" +
-            link[2] +
-            " migrants" +
-            "</p4>"
-        )
-        .on("click", function (e) {
-          this.openPopup();
-
-          this.setStyle({
-            opacity: 1,
-          });
-        })
-        .addTo(map);
-
-      linkLayers[path] = {
-        feature: feature,
-        line: line,
-        data: link,
-      };
-    }
-  });
-
-  return null;
-}
