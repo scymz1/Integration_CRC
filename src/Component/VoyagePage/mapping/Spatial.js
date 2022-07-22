@@ -268,7 +268,6 @@ export function ReadFeature(props) {
                   " " +
                   layer.feature.geometry.coordinates}
               
-              
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
                    
