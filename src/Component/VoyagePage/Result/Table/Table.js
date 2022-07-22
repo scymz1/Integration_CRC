@@ -54,12 +54,12 @@ function Table(props) {
     setInfo,
     setId,
     modal,
-    enslaver,
     options_flat,
     queryData,
     setQueryData,
     search_object,
     chipData,
+    setChipData,
     typeForTable,
   } = useContext(props.context);
 
@@ -72,6 +72,8 @@ function Table(props) {
   const [sortingReq, setSortingReq] = useState(false);
   const [field, setField] = useState([]);
   const [direction, setDirection] = useState("asc");
+
+  // Switch tables
 
   // Checkbox
   //const [checkedMax, setCheckedMax] = useState(false);
@@ -127,6 +129,18 @@ function Table(props) {
     search_object,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    //console.log(typeForTable);
+    if (typeForTable != null && typeForTable != "voyage") {
+      setChipData({});
+      setQueryData({
+        ...queryData,
+        slaves: [],
+        enslavers: [],
+      });
+    }
+  }, [typeForTable]);
+
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -167,6 +181,7 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.number_enslaved > 0) {
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -211,48 +226,65 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
-    // console.log("popover", typeForTable, endpoint)
-    const people = row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]?
-      row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]:
-      [];
+    const people = row[
+      "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+    ]
+      ? row[
+          "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+        ]
+      : [];
     const roles = row["transactions__transaction__enslavers__role__role"];
-    //console.log(people, roles);
+    const ids =
+      row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
     const output = {};
-    // console.log("table endpoint", endpoint)
-    // console.log("table row", value)
+    //console.log(people,roles,ids)
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
-        output[people[i]] = [];
+        output[people[i]] = { roles: [], id: 0 };
       }
-      output[people[i]].push(roles[i][0]);
+      output[people[i]]["roles"].push(roles[i][0]);
+      output[people[i]]["id"] = ids[i][0];
     }
     //console.log(output);
     return output;
   };
 
+  const handleSankeyOpen = (e, id) => {
+    // console.log(id);
+    setQueryData({
+      ...queryData,
+      enslavers: [id],
+      type: "enslavers",
+    });
+    props.handleClickOpen("body")();
+    e.stopPropagation();
+  };
+
   if (isLoading) {
     return <CircularProgress />;
   }
+
   return (
     <div>
       <div>
-      <Grid
-              container
-              spacing={0}
-              direction="column"
-              alignItems="center"
-              justifyContent="center">
-            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
-        <Box sx={{ minWidth: 120, my: 2 }}>
-          <FormControl fullWidth>
-            <TablePagination
-              component="div"
-              count={totalResultsCount}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
+            <Box sx={{ minWidth: 120, my: 2 }}>
+              <FormControl fullWidth>
+                <TablePagination
+                  component="div"
+                  count={totalResultsCount}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <TableContainer component={Paper}>
                   <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -295,8 +327,10 @@ function Table(props) {
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              row.transactions != null &&
-                              row.transactions.length !== 0 && (
+                              ((row.transactions != null &&
+                                row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -306,10 +340,12 @@ function Table(props) {
                                 </TableCell>
                               )}
                             {checkbox &&
-                              (row.transactions == null ||
-                                row.transactions.length === 0) && (
-                                <TableCell padding="checkbox"></TableCell>
-                              )}
+                              !(
+                                (row.transactions != null &&
+                                  row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)
+                              ) && <TableCell padding="checkbox"></TableCell>}
                             {cols.map((k, key) => {
                               if (k === "gender") {
                                 if (row[k] === 1) {
@@ -344,10 +380,20 @@ function Table(props) {
                                         <Tooltip
                                           key={"tooltip-" + key}
                                           arrow
-                                          title={popover[name].join(", ")}
+                                          title={popover[name]["roles"].join(
+                                            ", "
+                                          )}
                                           placement="top"
                                         >
-                                          <Chip label={name} />
+                                          <Chip
+                                            label={name}
+                                            onClick={(e) =>
+                                              handleSankeyOpen(
+                                                e,
+                                                popover[name]["id"]
+                                              )
+                                            }
+                                          />
                                         </Tooltip>
                                       ))}
                                     </Stack>
@@ -406,22 +452,22 @@ function Table(props) {
                     </TableBody>
                   </Tables>
                 </TableContainer>
-            <Stack
-              spacing={2}
-              margin={2}
-              direction="row"
-              justifyContent="flex-end"
-            >
-              <Pagination
-                count={Math.ceil(totalResultsCount / rowsPerPage)}
-                page={page + 1}
-                onChange={handleChangePagePagination}
-              />
-            </Stack>
-          </FormControl>
-        </Box>
+                <Stack
+                  spacing={2}
+                  margin={2}
+                  direction="row"
+                  justifyContent="flex-end"
+                >
+                  <Pagination
+                    count={Math.ceil(totalResultsCount / rowsPerPage)}
+                    page={page + 1}
+                    onChange={handleChangePagePagination}
+                  />
+                </Stack>
+              </FormControl>
+            </Box>
+          </Grid>
         </Grid>
-            </Grid>
       </div>
     </div>
   );

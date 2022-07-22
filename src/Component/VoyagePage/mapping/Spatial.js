@@ -104,7 +104,7 @@ export function ReadFeature(props) {
         ...complete_object,
         groupby_fields: groupby_fields_port_name,
       });
-      setArea(groupby_fields_port[0]);
+      setArea(disembark);
     }
   })
 
@@ -130,6 +130,7 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
 
+      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 
@@ -137,51 +138,40 @@ export function ReadFeature(props) {
 
   // Update complete object based on tab selection in popup
   useEffect(() =>{
-
-    console.log("First entry!")
-
-      var temp;
-
-      //selected disembark
-      if (disembark === diskey ){
-        console.log("Select disembark")
-        //if currently search_object is embark
-        if(complete_object[embkey]){
-          
-          temp = complete_object[embkey]
-          let newObject = {...complete_object};
-          delete newObject[embkey];
-          set_complete_object({...newObject, [diskey]: temp});
-          console.log("New Object: ", newObject)
-          // delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-        }
+    //selected disembark
+    if (disembark === diskey ){
+      //if currently search_object is embark
+        // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
+        const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      // }
       }
-      else{
-        if(complete_object[diskey]){
+    else{
+        //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+        const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       set_complete_object(complete_object)
+      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      
+     }
 
-          temp = complete_object[diskey]
-          let newObject = {...complete_object};
-          delete newObject[diskey];
-          set_complete_object({...newObject, [embkey]: temp});
-          console.log("New Object: ", newObject)
-          // delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-        }
-      }
-      console.log("🚀 ~ file: Spatial.js ~ line 171 ~ useEffect ~ complete_object", complete_object)
+    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
 
 
   },[disembark])
 
 
-
   useEffect(() =>{
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_port[0]];
+        delete Object.assign(complete_object, {[area]: point })[disembark];
       }
-    else if (area === groupby_fields_port[0]) {
+    else if (area === disembark) {
         delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
      }
+     set_complete_object(complete_object)
   },[area])
 
 
@@ -219,7 +209,6 @@ export function ReadFeature(props) {
   }, [complete_object])
 
   useEffect(() => {
-    console.log("props.search_object changed")
     for (var i in map._layers) {
       if (
         map._layers[i]._path != undefined ||
@@ -234,7 +223,7 @@ export function ReadFeature(props) {
     }
 
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
-    const filterNodes = (feature) => {
+    var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
       if(props.radio == "embarkation"){
         return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
@@ -244,7 +233,6 @@ export function ReadFeature(props) {
       
     };
     
-
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -256,9 +244,13 @@ export function ReadFeature(props) {
       });
       map.removeLayer(markers)
       // Add only actual locations to the map with markers (with clicking events and popups)
+      if(!props.filter){
+        filterNodes=(feature)=>{return true}
+      }
       L.geoJSON(nodes.features, {
-        // filter: filterNodes,
+        filter: filterNodes,
         onEachFeature: function (feature, layer) {
+          //console.log(props.search_object.dataset[0]==0)
           L.marker(layer["_latlng"]).unbindPopup()
 
           layer.on("click", function (e) {

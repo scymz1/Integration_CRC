@@ -66,6 +66,16 @@ export default function PASTTable(props) {
     setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
   };
 
+  const handleSankeyOpen = () => {
+    // console.log(typeForTable);
+    setQueryData({
+      ...queryData,
+      type: typeForTable,
+    });
+    // console.log(queryData);
+    props.handleClickOpen("body")();
+  };
+
   return (
     <div>
       <ColContext.Provider
@@ -119,7 +129,7 @@ export default function PASTTable(props) {
                   size="large"
                   color="grey"
                   disabled={queryData.slaves.length === 0}
-                  onClick={props.handleClickOpen("body")}
+                  onClick={handleSankeyOpen}
                 >
                   View Connections
                 </Button>
@@ -141,7 +151,7 @@ export default function PASTTable(props) {
             </CardContent>
           </Card>
         )}
-        <Table context={ColContext} />
+        <Table context={ColContext} handleClickOpen={props.handleClickOpen}/>
         <Modal context={ColContext} endpoint="voyage/" />
       </ColContext.Provider>
     </div>
