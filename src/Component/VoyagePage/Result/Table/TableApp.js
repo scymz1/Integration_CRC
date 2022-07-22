@@ -15,11 +15,28 @@ function TableApp(props) {
     "voyage_shipownerconnection__owner__name",
     "voyage_sourceconnection__source__full_ref"
   ]);
-  const { endpoint } = React.useContext(props.context);
+  const { endpoint ,
+  totalResultsCount, setTotalResultsCount,
+  page, setPage,
+  rowsPerPage, setRowsPerPage,
+
+  sortingReq, setSortingReq,
+  field, setField,
+  direction, setDirection,
+  } = React.useContext(props.context);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [info, setInfo] = useState([]);
   const { search_object } = useContext(VoyageContext);
+
+  // const [totalResultsCount, setTotalResultsCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // // Sorting
+  // const [sortingReq, setSortingReq] = useState(false);
+  // const [field, setField] = useState([]);
+  // const [direction, setDirection] = useState("asc");
 
   return (
     <div>
@@ -40,6 +57,12 @@ function TableApp(props) {
           columnOptions,
           options_flat: labels,
           search_object,
+          totalResultsCount, setTotalResultsCount,
+          page, setPage,
+          rowsPerPage, setRowsPerPage,
+          sortingReq, setSortingReq,
+          field, setField,
+          direction, setDirection
         }}
       >
         <ColSelector11 context={ColContext} />

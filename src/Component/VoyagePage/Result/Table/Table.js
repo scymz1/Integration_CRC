@@ -59,18 +59,31 @@ function Table(props) {
     setQueryData,
     search_object,
     chipData,
+    setChipData,
     typeForTable,
+    totalResultsCount,
+    setTotalResultsCount,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    sortingReq,
+    setSortingReq,
+    field,
+    setField,
+    direction,
+    setDirection,
   } = useContext(props.context);
 
   // Pagination
-  const [totalResultsCount, setTotalResultsCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [totalResultsCount, setTotalResultsCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Sorting
-  const [sortingReq, setSortingReq] = useState(false);
-  const [field, setField] = useState([]);
-  const [direction, setDirection] = useState("asc");
+  // const [sortingReq, setSortingReq] = useState(false);
+  // const [field, setField] = useState([]);
+  // const [direction, setDirection] = useState("asc");
 
   // Switch tables
 
@@ -116,7 +129,7 @@ function Table(props) {
         setLoading(false);
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }, [
     page,
@@ -127,6 +140,18 @@ function Table(props) {
     typeForTable,
     search_object,
   ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    //console.log(typeForTable);
+    if (typeForTable != null && typeForTable != "voyage") {
+      setChipData({});
+      setQueryData({
+        ...queryData,
+        slaves: [],
+        enslavers: [],
+      });
+    }
+  }, [typeForTable]);
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -168,6 +193,22 @@ function Table(props) {
       setOpen(true);
       setInfo(info);
       setId(info.id);
+    } else if (info.number_enslaved > 0) {
+      const selectedIndex = queryData[typeForTable].indexOf(info.id);
+      if (selectedIndex === -1) {
+        if (!checkedMax(info.id)) {
+          // console.log("chipData", chipData)
+          chipData[info.id] = info.principal_alias;
+        }
+      } else {
+        delete chipData[info.id];
+      }
+      setQueryData({
+        ...queryData,
+        enslavers: Object.keys(chipData).map(Number),
+        type: "enslavers",
+      });
+      //console.log(queryData);
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -187,6 +228,7 @@ function Table(props) {
       setQueryData({
         ...queryData,
         slaves: Object.keys(chipData).map(Number),
+        type: "slaves",
       });
     }
   };
@@ -212,16 +254,21 @@ function Table(props) {
   };
 
   const createPopover = (row) => {
-    const people = row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]?
-      row["transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"]:
-      [];
+    const people = row[
+      "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+    ]
+      ? row[
+          "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+        ]
+      : [];
     const roles = row["transactions__transaction__enslavers__role__role"];
-    const ids = row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
+    const ids =
+      row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
     const output = {};
     //console.log(people,roles,ids)
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
-        output[people[i]] = {roles: [], id: 0};
+        output[people[i]] = { roles: [], id: 0 };
       }
       output[people[i]]["roles"].push(roles[i][0]);
       output[people[i]]["id"] = ids[i][0];
@@ -231,7 +278,7 @@ function Table(props) {
   };
 
   const handleSankeyOpen = (e, id) => {
-    console.log(id);
+    // console.log(id);
     setQueryData({
       ...queryData,
       enslavers: [id],
@@ -248,23 +295,24 @@ function Table(props) {
   return (
     <div>
       <div>
-      <Grid
-              container
-              spacing={0}
-              direction="column"
-              alignItems="center"
-              justifyContent="center">
-            <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
-        <Box sx={{ minWidth: 120, my: 2 }}>
-          <FormControl fullWidth>
-            <TablePagination
-              component="div"
-              count={totalResultsCount}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
+            <Box sx={{ minWidth: 120, my: 2 }}>
+              <FormControl fullWidth>
+                <TablePagination
+                  component="div"
+                  count={totalResultsCount}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <TableContainer component={Paper}>
                   <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -307,8 +355,10 @@ function Table(props) {
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
-                              row.transactions != null &&
-                              row.transactions.length !== 0 && (
+                              ((row.transactions != null &&
+                                row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)) && (
                                 <TableCell padding="checkbox">
                                   <Checkbox
                                     color="primary"
@@ -318,10 +368,12 @@ function Table(props) {
                                 </TableCell>
                               )}
                             {checkbox &&
-                              (row.transactions == null ||
-                                row.transactions.length === 0) && (
-                                <TableCell padding="checkbox"></TableCell>
-                              )}
+                              !(
+                                (row.transactions != null &&
+                                  row.transactions.length !== 0) ||
+                                (row.number_enslaved != null &&
+                                  row.number_enslaved > 0)
+                              ) && <TableCell padding="checkbox"></TableCell>}
                             {cols.map((k, key) => {
                               if (k === "gender") {
                                 if (row[k] === 1) {
@@ -356,10 +408,20 @@ function Table(props) {
                                         <Tooltip
                                           key={"tooltip-" + key}
                                           arrow
-                                          title={popover[name]["roles"].join(", ")}
+                                          title={popover[name]["roles"].join(
+                                            ", "
+                                          )}
                                           placement="top"
                                         >
-                                          <Chip label={name} onClick={(e) =>handleSankeyOpen(e, popover[name]["id"])} />
+                                          <Chip
+                                            label={name}
+                                            onClick={(e) =>
+                                              handleSankeyOpen(
+                                                e,
+                                                popover[name]["id"]
+                                              )
+                                            }
+                                          />
                                         </Tooltip>
                                       ))}
                                     </Stack>
@@ -418,22 +480,22 @@ function Table(props) {
                     </TableBody>
                   </Tables>
                 </TableContainer>
-            <Stack
-              spacing={2}
-              margin={2}
-              direction="row"
-              justifyContent="flex-end"
-            >
-              <Pagination
-                count={Math.ceil(totalResultsCount / rowsPerPage)}
-                page={page + 1}
-                onChange={handleChangePagePagination}
-              />
-            </Stack>
-          </FormControl>
-        </Box>
+                <Stack
+                  spacing={2}
+                  margin={2}
+                  direction="row"
+                  justifyContent="flex-end"
+                >
+                  <Pagination
+                    count={Math.ceil(totalResultsCount / rowsPerPage)}
+                    page={page + 1}
+                    onChange={handleChangePagePagination}
+                  />
+                </Stack>
+              </FormControl>
+            </Box>
+          </Grid>
         </Grid>
-            </Grid>
       </div>
     </div>
   );

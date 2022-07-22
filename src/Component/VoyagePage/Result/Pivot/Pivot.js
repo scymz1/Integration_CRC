@@ -22,10 +22,12 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Pivot(props) {
   const [width, height] = useWindowSize()
 
-  const { complete_object } = useContext(props.context);
+  const { complete_object, disembark } = useContext(props.context);
 
-  // console.log("updated_complete_object= ", complete_object);
+  console.log("updated_complete_object= ", complete_object);
 
+  console.log("Pivot table complete object: ", complete_object)
+  console.log("Disembark: ", disembark)
   // Responses
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
@@ -52,6 +54,8 @@ function Pivot(props) {
 
   // Set rows
   useEffect(() => {
+    console.log("updated_complete_object= ", complete_object);
+
     //console.log("2222222222222222222222222222223333");
     var data = new FormData();
     data.append("hierarchical", "False");

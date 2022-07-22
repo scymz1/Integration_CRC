@@ -4,6 +4,8 @@ import { Component, useContext } from 'react';
 // import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
+import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
+
 import * as React from 'react';
 import {
   Typography,
@@ -29,6 +31,7 @@ function ComponentFac(props){
   // const varType = raw[1].split('.').pop().slice(0, -2)
 
   const raw = props.params;
+  console.log(raw);
   const varDisplay = raw.flatlabel;
   const varName = raw.option;
   const varType = raw.type.split('.').pop().slice(0, -2);
@@ -56,6 +59,10 @@ function ComponentFac(props){
         <ComponentContext.Provider value = {{index}}>
           <Auto context={props.context}/>
         </ComponentContext.Provider>  
+      )
+    case "Map":
+      return (
+        <BoundingBoxFilter context={props.context}/>
       )
     default:
       return <Chip label="NA" color="primary" />;

@@ -29,12 +29,23 @@ export default function PASTTable(props) {
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState(0);
   const [enslaver, setEnslaver] = React.useState(true);
+
+  // const [totalResultsCount, setTotalResultsCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // const [sortingReq, setSortingReq] = useState(false);
+  // const [field, setField] = useState([]);
+  // const [direction, setDirection] = useState("asc");
+
   const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
-      case "slaves": return "past/enslaved/"
-      case "enslavers": return "past/enslavers/"
+      case "slaves":
+        return "past/enslaved/";
+      case "enslavers":
+        return "past/enslavers/";
     }
-  }
+  };
   const {
     queryData,
     setQueryData,
@@ -43,10 +54,24 @@ export default function PASTTable(props) {
     chipData,
     setChipData,
     typeForTable,
+
+    totalResultsCount,
+    setTotalResultsCount,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+
+    sortingReq,
+    setSortingReq,
+    field,
+    setField,
+    direction,
+    setDirection,
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
   // console.log(endpoint)
-  useEffect(() =>{
+  useEffect(() => {
     if (typeForTable === "slaves") {
       setCols(enslaved_default_list);
       setLabels(enslaved_labels);
@@ -58,21 +83,34 @@ export default function PASTTable(props) {
       setAll_options(enslaver_var_list);
       setEnslaver(true);
     }
-  },[typeForTable])
+    // setTotalResultsCount(0);
+    // setPage(0);
+    // setRowsPerPage(10);
+
+    // setSortingReq(false);
+    // setField([]);
+    // setDirection("asc");
+  }, [typeForTable]);
 
   const handleDelete = (chipToDelete) => () => {
-    //setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
     delete chipData[chipToDelete];
-    setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
+    if (typeForTable === "slaves") {
+      setQueryData({ ...queryData, slaves: Object.keys(chipData).map(Number) });
+    } else if (typeForTable === "enslavers") {
+      setQueryData({
+        ...queryData,
+        enslavers: Object.keys(chipData).map(Number),
+      });
+    }
   };
 
   const handleSankeyOpen = () => {
-    console.log(typeForTable);
+    // console.log(typeForTable);
     setQueryData({
       ...queryData,
       type: typeForTable,
     });
-    console.log(queryData);
+    //console.log(queryData);
     props.handleClickOpen("body")();
   };
 
@@ -101,10 +139,24 @@ export default function PASTTable(props) {
           chipData,
           setChipData,
           typeForTable,
+          totalResultsCount,
+          setTotalResultsCount,
+          page,
+          setPage,
+          rowsPerPage,
+          setRowsPerPage,
+          sortingReq,
+          setSortingReq,
+          field,
+          setField,
+          direction,
+          setDirection,
         }}
       >
         <ColSelector11 context={ColContext} />
-        {queryData.slaves.length !== 0 && (
+        {((typeForTable === "slaves" && queryData.slaves.length !== 0) ||
+          (typeForTable === "enslavers" &&
+            queryData.enslavers.length !== 0)) && (
           <Card
             sx={{
               width: 800,
@@ -128,7 +180,12 @@ export default function PASTTable(props) {
                   startIcon={<HubIcon />}
                   size="large"
                   color="grey"
-                  disabled={queryData.slaves.length === 0}
+                  disabled={
+                    (typeForTable === "slaves" &&
+                      queryData.slaves.length === 0) ||
+                    (typeForTable === "enslavers" &&
+                      queryData.enslavers.length === 0)
+                  }
                   onClick={handleSankeyOpen}
                 >
                   View Connections
@@ -151,7 +208,7 @@ export default function PASTTable(props) {
             </CardContent>
           </Card>
         )}
-        <Table context={ColContext} handleClickOpen={props.handleClickOpen}/>
+        <Table context={ColContext} handleClickOpen={props.handleClickOpen} />
         <Modal context={ColContext} endpoint="voyage/" />
       </ColContext.Provider>
     </div>

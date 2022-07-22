@@ -1,4 +1,4 @@
-import {Grid, IconButton, AppBar, Toolbar, Popover, Drawer, Divider} from "@mui/material";
+import {Grid, IconButton, AppBar, Toolbar, Drawer, Divider} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -9,35 +9,46 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import FilterAlt from '@mui/icons-material/FilterAlt';
-import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 
+import { Button } from '@mui/material';
+
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
-import { VoyageContext } from "../VoyageApp";
+// import { VoyageContext } from "../VoyageApp";
 
 export const AppContext = React.createContext();
 
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, nested_tree, dataSet, typeForTable, page} = useContext(props.context);
-    const [labels, setLabels] = React.useState([]);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [fullScreen, setFullScreen] = React.useState(false);
+    // const [width, setWidth] = React.useState(12);
+    // const [margin, setMargin] = React.useState("10px");
+    // const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     // Handle Drawer Open and Close
-    const handleDrawerOpen = () => {
-        setDrawerOpen(!drawerOpen);
-    };
+    // const handleDrawerOpen = () => {
+    //     setDrawerOpen(!drawerOpen);
+    // };
+    // const handleDrawerClose = () => {
+    //     setDrawerOpen(!drawerOpen);
+    // };
 
-    const handleDrawerClose = () => {
-        setDrawerOpen(!drawerOpen);
+    // Handle Full Screen
+    // console.log("length:", labels.length)
+    const handleFullScreen = () =>{
+        setFullScreen(!fullScreen);
+        // setWidth(width === 12 ? 5:12);
+        // setMargin(margin === "10px" ? "5px":"10px");
     };
 
     // Handle delete by removing the specified key
@@ -53,7 +64,7 @@ export default function Filter(props) {
     };
 
   const color = (() =>{
-    if(page === "voyage") {
+    if(pageType === "voyage") {
       if(dataSet==="0") {
         return "voyageTrans"
       }else{
@@ -72,6 +83,12 @@ export default function Filter(props) {
     }
   })()
 
+  const OpenBoundingBoxFilter = (event)=>{
+    if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")){
+        setLabels([...labels, {option:"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
+    }
+  }
+
     return (
     <AppContext.Provider
         value={{
@@ -83,56 +100,65 @@ export default function Filter(props) {
           nested_tree
       }}
     >
-    <AppBar position="sticky" color={color} elevation={0}>
-      <Toolbar>
-        <IconButton
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-        >
-          <FilterAlt sx={{ color: "white" }}/>
-        </IconButton>
-        {!drawerOpen ?
-            <Typography sx={{ color: "white" }}>Filter</Typography>
-        :
-            <Grid container direction="row" spacing={1}>
-                {
-                  Object.keys(nested_tree).map((key) => {
-                    return(
-                      <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
-                    )
-                  })
-                }
-            </Grid>
-        }
-      </Toolbar>
-    </AppBar>
+    {drawerOpen ?
+        <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"64px"}}>
+            <Toolbar>
+                    <Grid container direction="row" spacing={1}>
+                        {
+                        Object.keys(nested_tree).map((key) => {
+                            return(
+                            <Cascading key={'cascading-' + key} menuName={key} button={nested_tree[key]} context={props.context}/>
+                            )
+                        })
+                        }
+                    </Grid>
+                {/* } */}
+            </Toolbar>
+        </AppBar>: 
+        null}
     <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
-        anchor="bottom"
+        anchor="left"
         open={drawerOpen}
-        PaperProps={{ sx: { height: !labels.length ? "15%":"30%",  background:"#EAECEE"}}}
+        PaperProps={{ sx: { width: fullScreen?"100%":"25%", background:"#EAECEE" }}}
+        // PaperProps={{ sx: { width: fullScreen?"100%":"25%", height: "80%", marginTop: "128px", background:"#EAECEE" }}}
         style={{ position:'relative', zIndex:2 }}
     >
-        <IconButton onClick={handleDrawerClose}>
-            <ExpandMoreIcon />
-        </IconButton>
+        <Toolbar />
+        <Toolbar />
+        <Divider />
+        <Grid container justifyContent="center" sx={{mb:"10px"}}> 
+                <Grid container item justifyContent="flex-end">
+                    <IconButton onClick={handleFullScreen}>
+                        {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
+                    </IconButton>
+                </Grid>
+                {
+                    pageType=='voyage' ? 
+                    <Button variant="contained" color={color} onClick={OpenBoundingBoxFilter}>
+                        <Typography color="white">Add Visual Filter</Typography>
+                    </Button> : null
+                }
+        </Grid>
+        <Divider />
         <Grid 
             container 
-            spacing={0} 
-            direction="column"
+            item
+            rowSpacing={2} columnSpacing={0.5}
+            direction="row"
+            justifyContent="center"
+            sx={{mt:"10px", mb:"10px", ml:"10px"}}
         >
-            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} margin="auto" justify="center">
                 {labels.length === 0 ? 
-                    <Grid container item justifyContent="center">
+                    <Grid container item justifyContent="center" sx={{mb:"15px"}}>
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container item key={'grid-' + index} xs={6} justifyContent="center">
-                          <Grid item xs={11} >
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
+                          <Grid item xs={10}>
                               <Accordion>
                                   <AccordionSummary>
                                       <Typography>{options_flat[item.option].flatlabel}</Typography>
@@ -142,7 +168,7 @@ export default function Filter(props) {
                                   </AccordionDetails>
                               </Accordion>
                           </Grid>
-                          <Grid item xs={1} display="flex">
+                          <Grid item xs={2}>
                               <IconButton onClick={()=>{handleDelete(item)}}>
                                   <RemoveCircleOutlineIcon />
                               </IconButton>
@@ -150,12 +176,12 @@ export default function Filter(props) {
                       </Grid>
                     )})
                 }
-            </Grid>
-            <Grid container item sx={2} justifyContent="flex-end">
+        </Grid>
+        <Divider />
+        <Grid container item justifyContent="flex-end">
                 <IconButton onClick={handleDrawerClose}>
                     <ChevronLeftIcon />
                 </IconButton>
-            </Grid>
         </Grid>
     </Drawer>
     </AppContext.Provider>

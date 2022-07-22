@@ -2,16 +2,23 @@ import React, { useState, useEffect } from 'react'
 import {MapContainer, TileLayer, LayersControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import Control from 'react-leaflet-custom-control';
 import { Button } from '@mui/material';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import Avatar from 'react-avatar';
 
 import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 import axios from 'axios';
-import { ReadFeature } from "../mapping/Spatial.js"
+import { ReadFeature } from "./Spatial.js"
+import map_icon from "../mapping/map_icon.png";
+
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+
+
+import emb_icon from "./emb_icon.png"
+import disemb_icon from "./disemb_icon.png"
 
 const { BaseLayer } = LayersControl;
 //+ '?hierarchical=false'
@@ -32,7 +39,7 @@ export default function BoundingBoxFilter(props){
     const [latitude2, onChangelatitude2] = React.useState(90);
 
     
-    const {set_search_object, search_object} = React.useContext(props.context);
+    const {set_search_object, search_object, labels, setLabels} = React.useContext(props.context);
     
     //const [map_search_object, set_map_search_object] = useState(search_object);
 
@@ -43,6 +50,11 @@ export default function BoundingBoxFilter(props){
     useEffect(() => {
         var out;
         if(radioOptions=="embarkation"){
+            if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")){
+                setLabels([...labels, {option:"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
+            }
+            
+
             let newObject = { ...search_object };
             out = "embarkation***<class 'rest_framework.fields.Map'>***Map embarkation filter";
 
@@ -56,6 +68,10 @@ export default function BoundingBoxFilter(props){
             });
         }
         else{
+            if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name")){
+                setLabels([...labels, {option:"voyage_itinerary__imp_principal_port_slave_dis__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
+            }
+
             let newObject = { ...search_object };
             out = "disembarkation***<class 'rest_framework.fields.Map'>***Map disembarkation filter";
 
@@ -83,14 +99,19 @@ export default function BoundingBoxFilter(props){
 
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
 
+    const mapping_specialists = "https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw"
+
 
     const SwitchBoundingBoxSelection = (event) => {
-        if(radioOptions=="embarkation"){
-            onChangeRadioOption("disembarkation");
-        }
-        else{
-            onChangeRadioOption("embarkation");
-        }
+        // if(event.target.value=="embarkation"){
+        //     setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"))
+        // }
+        // else{
+        //     setLabels(labels.filter((e)=>e.option!=="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"))
+        // }
+        console.log("Event target: ", event.target.value)
+        onChangeRadioOption(event.target.value)
+
         SetselectMode(true);
     }
 
@@ -102,8 +123,9 @@ export default function BoundingBoxFilter(props){
         position: 'absolute',
         top: '50%',
         left: '50%',
+
         transform: 'translate(-50%, -50%)',
-        width: 400,
+        width: 630,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -112,13 +134,26 @@ export default function BoundingBoxFilter(props){
 
     return (
         <div>
-            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
-                    Select Disembarkation
+            <img src={map_icon} alt="map icon" style={{width:"100px", height:"60px"}} onClick={handleOpen}/>
+            <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            >
+            <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+            Select filter by bounding box
+            </Typography>
+            <Button variant="contained" color="grey" startIcon={<Avatar src={emb_icon} size="20"/>} value='disembarkation' onClick={SwitchBoundingBoxSelection}> 
+                Select Disembarkation
             </Button>
-            <Button style={{background:"white", width: "100%"}} onClick={SwitchBoundingBoxSelection}> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button variant="contained" color="grey" endIcon={<Avatar src={disemb_icon} size="20"/>} value='embarkation' onClick={SwitchBoundingBoxSelection}> 
                 Select Embarkation
             </Button>
-            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "75vh", width: "100vh", zIndex: 0}}>
+            <br/> <br/>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "75vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border (old map)">
                         <TileLayer
@@ -144,14 +179,21 @@ export default function BoundingBoxFilter(props){
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         />
                     </BaseLayer>
-
+                    <BaseLayer checked name="no country border">
+                        <TileLayer
+                            url={mapping_specialists}
+                            attribution="mapping_specialists"
+                        />
+                    </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}  radio = {radioOptions}/>
+                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={true} />
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
                 onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
 
             </MapContainer>
+            </Box>
+            </Modal>
         </div>      
     );
 }

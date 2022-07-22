@@ -38,7 +38,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, dataSet, setDataSet, data, setData, setQueryData, setChipData, chipData, queryData} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData,
+
+    // totalResultsCount, setTotalResultsCount,
+    // page, setPage,
+    // rowsPerPage, setRowsPerPage,
+
+    sortingReq, setSortingReq,
+    field, setField,
+    direction, setDirection,
+
+  } = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 
@@ -68,6 +78,7 @@ export default function PAST() {
       <Button onClick={()=>console.log("search_object:", search_object)}>print search_object</Button> */}
 
       <Filter context={PASTContext}/>
+      {drawerOpen ? <Toolbar />: null}
       <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
         Table
       </Button>
@@ -88,7 +99,8 @@ export default function PAST() {
         </Grow>
       </Box>}
 
-      {checked &&<Box sx={{ display: 'flex' }}>
+      {checked &&
+      <Box sx={{ display: 'flex' }}>
         <Grow in={checked}>
           <div>
           <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} setChipData = {setChipData} data = {data} setData = {setData}/>
@@ -133,7 +145,6 @@ export default function PAST() {
         </AppBar>
         <TabPanel value={value} index={0}>
           <Sankey/>
-          <Modal context={PASTContext} endpoint="voyage/"/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network/>
@@ -148,6 +159,7 @@ export default function PAST() {
           })}
           </Grid>
         </TabPanel>
+        <Modal context={PASTContext} endpoint="voyage/"/>
       </Dialog>
 
     </div>
