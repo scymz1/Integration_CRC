@@ -38,7 +38,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function PAST() {
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
-  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData} = useContext(PASTContext)
+  const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData,
+
+    // totalResultsCount, setTotalResultsCount,
+    // page, setPage,
+    // rowsPerPage, setRowsPerPage,
+
+    sortingReq, setSortingReq,
+    field, setField,
+    direction, setDirection,
+
+  } = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
   const [checked, setChecked] = useState(false);
 

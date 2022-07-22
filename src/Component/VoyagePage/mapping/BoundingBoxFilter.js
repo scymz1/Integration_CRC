@@ -123,6 +123,7 @@ export default function BoundingBoxFilter(props){
         position: 'absolute',
         top: '50%',
         left: '50%',
+
         transform: 'translate(-50%, -50%)',
         width: 630,
         bgcolor: 'background.paper',
@@ -152,7 +153,7 @@ export default function BoundingBoxFilter(props){
                 Select Embarkation
             </Button>
             <br/> <br/>
-            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "75vh", width: "100vh", zIndex: 0}}>
+            <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "75vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
                     <BaseLayer name="modern country border (old map)">
                         <TileLayer

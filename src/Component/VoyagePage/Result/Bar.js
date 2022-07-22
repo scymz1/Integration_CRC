@@ -115,9 +115,9 @@ function Bar (props) {
             .then(function (response) {
 
                 setarrx(Object.keys(response.data[value]))
-                console.log("🚌",plot_value)
+                // console.log("🚌",plot_value)
                 setarry(Object.values(response.data[value]))
-                console.log("💩",plot_value)
+                // console.log("💩",plot_value)
 
                 setBarData([...barData, 
                     {
@@ -134,7 +134,7 @@ function Bar (props) {
                 console.log(error);
             });
 
-            console.log("😭",barData)
+            // console.log("😭",barData)
             
     }, [option.value, aggregation, search_object]);
     

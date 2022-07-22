@@ -20,7 +20,16 @@ import {useContext, useState} from "react";
 import _ from 'lodash';
 
 export default function ResponsiveAppBar(props) {
-  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, page, labels, setLabels} = useContext(props.context)
+  const {typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose, dataSet, setDataSet, pageType, labels, setLabels,
+  
+    totalResultsCount, setTotalResultsCount,
+    page, setPage,
+    rowsPerPage, setRowsPerPage,
+
+    sortingReq, setSortingReq,
+    field, setField,
+    direction, setDirection,
+  } = useContext(props.context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -31,7 +40,7 @@ export default function ResponsiveAppBar(props) {
   };
 
   const color = (() =>{
-    if(page === "voyage") {
+    if(pageType === "voyage") {
       if(dataSet==="0") {
         return "voyageTrans"
       }else{
@@ -105,6 +114,17 @@ export default function ResponsiveAppBar(props) {
               }}
             >
                 <MenuItem onClick={handleCloseNavMenu}>
+                {pageType !== "home" ? 
+                <IconButton
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start">
+                      <FilterAlt/>
+                      <Typography>Filter</Typography>
+                </IconButton>:
+                null}
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
                    <Link to={"/voyage/Scatter"} style={{ textDecoration: "none" }}>
                     Voyages
                   </Link>
@@ -117,7 +137,7 @@ export default function ResponsiveAppBar(props) {
                 
 
                 <ThemeProvider theme={switchTheme}>
-              {search_object && typeForTable === "slaves" || page === "voyage" ?
+              {search_object && typeForTable === "slaves" || pageType === "voyage" ?
                               <MenuItem>
                 <ToggleButtonGroup
                   color="blackMode"
@@ -128,6 +148,16 @@ export default function ResponsiveAppBar(props) {
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
+
+                    setLabels([])
+                    
+                    setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                   }}
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
@@ -150,9 +180,27 @@ export default function ResponsiveAppBar(props) {
                         set_search_object({
                           dataset: [dataSet, dataSet]
                         })
+                        setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                       case "enslavers":
                         set_search_object({});
+                        setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                     }
                     setTypeForTable(event.target.value)
@@ -192,7 +240,7 @@ export default function ResponsiveAppBar(props) {
             <Stack spacing={4} direction={"row"} justifyContent="flex-end"
                    alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 
-              {page !== "home" ? 
+              {pageType !== "home" ? 
                 <IconButton
                   aria-label="open drawer"
                   onClick={handleDrawerOpen}
@@ -202,7 +250,7 @@ export default function ResponsiveAppBar(props) {
                 </IconButton>:
                 null}
 
-              {search_object && typeForTable === "slaves" || page === "voyage" ?
+              {search_object && typeForTable === "slaves" || pageType === "voyage" ?
                 <ToggleButtonGroup
                   color="blackMode"
                   value={dataSet}
@@ -212,6 +260,14 @@ export default function ResponsiveAppBar(props) {
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
+
+                    setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                   }}
                   sx={{background: dataSet === "0" ? "#42a5f5" : "#ab47bc"}}
                   size={"small"}
@@ -234,10 +290,26 @@ export default function ResponsiveAppBar(props) {
                           dataset: [dataSet, dataSet]
                         })
                         setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                       case "enslavers":
                         set_search_object({});
                         setLabels([])
+
+                        setTotalResultsCount(0);
+                        setPage(0);
+                        setRowsPerPage(10);
+
+                        setSortingReq(false);
+                        setField([]);
+                        setDirection("asc");
                         break;
                     }
                     setTypeForTable(event.target.value)

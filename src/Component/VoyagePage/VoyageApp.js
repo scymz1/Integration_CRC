@@ -61,19 +61,27 @@ export default function VoyageApp(props) {
   // if (isLoading_flat || isLoading_tree) return <CircularProgress/>
   // Pagination
 
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [sortingReq, setSortingReq] = useState(false);
+  const [field, setField] = useState([]);
+  const [direction, setDirection] = useState("asc");
+  
   return (
     <VoyageContext.Provider value={{
       options_flat,
       search_object, set_search_object,
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       endpoint, nested_tree: columnOptions,
-      dataSet, setDataSet, labels, setLabels, page: "voyage",
-      // sortingReq, setSortingReq,
-      // field, setField,
-      // direction, setDirection,
-      // totalResultsCount, setTotalResultsCount,
-      // page, setPage,
-      // rowsPerPage, setRowsPerPage
+      dataSet, setDataSet, labels, setLabels, pageType: "voyage",
+      sortingReq, setSortingReq,
+      field, setField,
+      direction, setDirection,
+      totalResultsCount, setTotalResultsCount,
+      page, setPage,
+      rowsPerPage, setRowsPerPage
     }}>
       <Voyage />
     </VoyageContext.Provider>

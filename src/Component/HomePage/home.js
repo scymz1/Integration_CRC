@@ -43,7 +43,7 @@ export default function Home() {
   return (
     // <ThemeProvider theme={darkTheme}>
       <div>
-        <HomeContext.Provider value={{dataSet, page:"home"}}>
+        <HomeContext.Provider value={{dataSet, pageType:"home"}}>
           <ResponsiveAppBar context={HomeContext}/>
         </HomeContext.Provider>
         <Container maxWidth={false}>
@@ -56,9 +56,9 @@ export default function Home() {
                     <Animated
                       animationIn="slideInLeft"
                       animationOut="fadeOut"
-                      animationInDelay="600"
+                      animationInDelay= {600}
                       isVisible={isVisible}
-                      animationInDuration ="1600"
+                      animationInDuration = {1600}
                     >
                       {label}
                       <Divider/>

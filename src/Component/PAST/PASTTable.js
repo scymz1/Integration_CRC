@@ -30,13 +30,13 @@ export default function PASTTable(props) {
   const [id, setId] = React.useState(0);
   const [enslaver, setEnslaver] = React.useState(true);
 
-  const [totalResultsCount, setTotalResultsCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // const [totalResultsCount, setTotalResultsCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [sortingReq, setSortingReq] = useState(false);
-  const [field, setField] = useState([]);
-  const [direction, setDirection] = useState("asc");
+  // const [sortingReq, setSortingReq] = useState(false);
+  // const [field, setField] = useState([]);
+  // const [direction, setDirection] = useState("asc");
   
   const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
@@ -52,6 +52,14 @@ export default function PASTTable(props) {
     chipData,
     setChipData,
     typeForTable,
+    
+    totalResultsCount, setTotalResultsCount,
+      page, setPage,
+      rowsPerPage, setRowsPerPage,
+
+      sortingReq, setSortingReq,
+      field, setField,
+      direction, setDirection,
   } = React.useContext(props.context);
   // const [chipData, setChipData] = React.useState({});
   // console.log(endpoint)
@@ -67,13 +75,13 @@ export default function PASTTable(props) {
       setAll_options(enslaver_var_list);
       setEnslaver(true);
     }
-    setTotalResultsCount(0);
-    setPage(0);
-    setRowsPerPage(10);
+    // setTotalResultsCount(0);
+    // setPage(0);
+    // setRowsPerPage(10);
 
-    setSortingReq(false);
-    setField([]);
-    setDirection("asc");
+    // setSortingReq(false);
+    // setField([]);
+    // setDirection("asc");
   },[typeForTable])
 
   const handleDelete = (chipToDelete) => () => {
@@ -88,7 +96,7 @@ export default function PASTTable(props) {
       ...queryData,
       type: typeForTable,
     });
-    // console.log(queryData);
+    //console.log(queryData);
     props.handleClickOpen("body")();
   };
 
@@ -126,7 +134,8 @@ export default function PASTTable(props) {
         }}
       >
         <ColSelector11 context={ColContext} />
-        {queryData.slaves.length !== 0 && (
+        {(queryData.type === "slaves" && queryData.slaves.length !== 0
+        || queryData.type === "enslavers" && queryData.enslavers.length !== 0) && (
           <Card
             sx={{
               width: 800,
@@ -150,7 +159,8 @@ export default function PASTTable(props) {
                   startIcon={<HubIcon />}
                   size="large"
                   color="grey"
-                  disabled={queryData.slaves.length === 0}
+                  disabled={(queryData.type === "slaves" && queryData.slaves.length === 0)
+                || (queryData.type === "enslavers" && queryData.enslavers.length === 0)}
                   onClick={handleSankeyOpen}
                 >
                   View Connections

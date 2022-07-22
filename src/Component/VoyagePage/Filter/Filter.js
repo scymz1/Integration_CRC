@@ -28,7 +28,7 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, page} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     // const [width, setWidth] = React.useState(12);
@@ -64,7 +64,7 @@ export default function Filter(props) {
     };
 
   const color = (() =>{
-    if(page === "voyage") {
+    if(pageType === "voyage") {
       if(dataSet==="0") {
         return "voyageTrans"
       }else{
@@ -144,11 +144,12 @@ export default function Filter(props) {
                         {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
                     </IconButton>
                 </Grid>
-                {page==='voyage' ? 
-                <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>
-                    Add Visual Filter
-                </Button>
-                : null}
+                {
+                    pageType=='voyage' ? 
+                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>
+                        Add Visual Filter
+                    </Button> : null
+                }
         </Grid>
         <Divider />
         <Grid 
@@ -159,7 +160,6 @@ export default function Filter(props) {
             justifyContent="center"
             sx={{mt:"10px", mb:"10px", ml:"10px"}}
         >
-            {/* <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} align = "center"> */}
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
                         <Typography color="#808B96">No Filter</Typography>
@@ -186,7 +186,6 @@ export default function Filter(props) {
                       </Grid>
                     )})
                 }
-            {/* </Grid> */}
         </Grid>
         <Divider />
         <Grid container item justifyContent="flex-end">
