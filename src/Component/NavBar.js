@@ -137,6 +137,9 @@ export default function ResponsiveAppBar(props) {
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
+
+                    setLabels([])
+                    
                     setTotalResultsCount(0);
                         setPage(0);
                         setRowsPerPage(10);
