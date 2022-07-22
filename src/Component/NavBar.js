@@ -114,6 +114,17 @@ export default function ResponsiveAppBar(props) {
               }}
             >
                 <MenuItem onClick={handleCloseNavMenu}>
+                {pageType !== "home" ? 
+                <IconButton
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start">
+                      <FilterAlt/>
+                      <Typography>Filter</Typography>
+                </IconButton>:
+                null}
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
                    <Link to={"/voyage/Scatter"} style={{ textDecoration: "none" }}>
                     Voyages
                   </Link>
