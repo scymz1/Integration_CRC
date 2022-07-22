@@ -94,6 +94,15 @@ export default function PASTApp(props) {
   // if (error_flat) return 'An error has occurred on option flat: ' + error_flat.message
   // if (error_tree) return 'An error has occurred on option tree: ' + error_tree.message
   // if (isLoading_flat || isLoading_tree) return <CircularProgress/>
+
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [sortingReq, setSortingReq] = useState(false);
+  const [field, setField] = useState([]);
+  const [direction, setDirection] = useState("asc");
+
   return (
     <PASTContext.Provider value={{
       queryData, setQueryData, data,
@@ -101,7 +110,15 @@ export default function PASTApp(props) {
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       windowRef, typeForTable, setTypeForTable,labels,setLabels,
       modal: false, id, setId, open, setOpen, info, setInfo, chipData, setChipData,
-      dataSet, setDataSet, page: "past", initContext: PASTContext
+      dataSet, setDataSet, pageType: "past", initContext: PASTContext,
+
+      totalResultsCount, setTotalResultsCount,
+      page, setPage,
+      rowsPerPage, setRowsPerPage,
+
+      sortingReq, setSortingReq,
+      field, setField,
+      direction, setDirection,
     }}>
       <PAST/>
     </PASTContext.Provider>

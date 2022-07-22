@@ -267,7 +267,7 @@ export default function Network(props) {
       const {nodes: nodeId} = event;
       const node = graph.nodes.find(e => e.id === nodeId[0])
       // console.log("click", node)
-      if(node.type === "voyage"){
+      if(node && node.type === "voyage"){
         setOpen(true)
         setId(nodeId[0])
       }

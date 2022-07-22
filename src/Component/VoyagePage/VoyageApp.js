@@ -67,7 +67,7 @@ export default function VoyageApp(props) {
       search_object, set_search_object,
       drawerOpen, setDrawerOpen, handleDrawerOpen, handleDrawerClose,
       endpoint, nested_tree: columnOptions,
-      dataSet, setDataSet, labels, setLabels, page: "voyage",
+      dataSet, setDataSet, labels, setLabels, pageType: "voyage",
       // sortingReq, setSortingReq,
       // field, setField,
       // direction, setDirection,
