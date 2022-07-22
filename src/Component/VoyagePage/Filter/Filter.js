@@ -57,8 +57,17 @@ export default function Filter(props) {
         // var varName = raw[0]
         var varName = item.option
         let newObject = {...search_object};
-
-        delete newObject[varName];
+        if(varName=="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"){
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude"];
+        }
+        else if(varName=="voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"){
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude"];
+        }
+        else{
+            delete newObject[varName];
+        }
         set_search_object(newObject); 
         setLabels(labels.filter((e)=>e.option!==varName))
     };
