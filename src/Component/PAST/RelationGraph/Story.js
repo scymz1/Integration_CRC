@@ -39,19 +39,62 @@ export default function Story (props) {
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
-  const {target, type, dynamic = false , remoteControl, dataChange, setChipData} = props;
+  const {target, type, dynamic = false , remoteControl, dataChange, setChipData, slavery = "slaves", setData, data} = props;
   const isMale = _.get(target, "gender", "1") != 0;
-  const prefix = _.get(target, ["documented_name"], "Unknown Enslaved Person") == 'Unknown' ? "This enslaved person" : _.get(target, ["documented_name"], "Unknown Enslaved Person")
+  const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
+  
+  const slaverAlias = [];
+
   const [expand, setExpand] = new React.useState(false);
+  _.get(target, "alias", []).forEach(item => {
+    if(item["alias"] !== null) slaverAlias.push(item["alias"]);
+  })
+
+
+
+  // const onclick = () => {
+  //   // if(data.length == 0) setData([target])
+  //   // console.log("data: ", data)
+  //   if(slavery == "slaves"){
+  //     dataChange(preData =>({
+  //       enslavers:[...preData.enslavers],
+  //       slaves:[target["id"]],
+  //       type:"slaves"
+  //     }))
+  //   }else{
+  //     dataChange(preData =>({
+  //       enslavers:[target["id"]],
+  //       slaves:[...preData.slaves],
+  //       type:"enslavers"
+  //     }))
+  //   }
+
+  //   setChipData({
+  //     [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
+  //   })
+  //   if(data.length > 0)remoteControl();
+  // }
+
+
+
 
   const onclick = () => {
-    dataChange(preData =>({
-      enslavers:[...preData.enslavers],
-      slaves:[target["id"]],
-      type:"slaves"
-    }))
+    if(slavery == "slaves"){
+      dataChange(preData =>({
+        enslavers:[...preData.enslavers],
+        slaves:[target["id"]],
+        type:"slaves"
+      }))
+    }else{
+      console.log("slaver!");
+      dataChange(preData =>({
+        enslavers:[target["id"]],
+        slaves:[...preData.slaves],
+        type:"enslavers"
+      }))
+    }
     setChipData({
-      [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
+      [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Enslaved Person")
     })
     remoteControl();
   }
@@ -62,7 +105,8 @@ export default function Story (props) {
 
   return (
     <>
-    {!dynamic && <Card 
+    {/*slaved people*/}
+    {!dynamic && slavery == "slaves" && <Card 
     // sx={{ flexGrow: 1,  width: 400}}
     className="story"
     >
@@ -78,7 +122,7 @@ export default function Story (props) {
 
     </Card>}
 
-    {dynamic && <Card className="story_func">
+    {dynamic && slavery == "slaves" && <Card className="story_func">
       <CardHeader
       // textTransform: 'capitalize'
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
@@ -124,6 +168,57 @@ export default function Story (props) {
       </Collapse>
         
         {/* <Button variant="contained" startIcon={<VisibilityIcon />} size="large" color="grey" onClick={() => window.alert("hi")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }} /> */}
+    </Card>}
+
+    {/*slaver*/}
+    {!dynamic && slavery != "slaves" && <Card 
+    className="story"
+    >
+      <CardHeader
+        title={`Story of ${_.get(target, ["principal_alias"], "Unknown Slaver")}`}
+      />
+      <CardContent>
+        <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year <b>{_.get(target, "first_active_year", "NA")}</b>, and out of record at <b>{_.get(target, "last_active_year", "NA")}</b></Div>
+        <Div>He has slaved <b>{_.get(target, "number_enslaved", "NA")}</b> people  doing trading business most in <b>{_.get(target, ["principal_location", "geo_location", "name"], "NA")}</b> area</Div>
+      </CardContent>
+
+    </Card>}
+
+    {dynamic && slavery != "slaves" && <Card className="story_func">
+      <CardHeader
+        titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
+        className="test"
+        title = {_.get(target, ["principal_alias"], "Unknown Slaver")}
+        sx={{pr: 3, pt:3}}
+      />
+      <CardContent>
+        <List dense = {true} disablePadding={true}>
+          <ListItem  disablePadding={true}><ListItemText primary="Slaver ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Principal Alia" secondary={_.get(target, "principal_alias", "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Other Alias" secondary={slaverAlias.length === 1 ? "NA" : slaverAlias}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="People Slaved" secondary={_.get(target, "number_enslaved", "NA")}/></ListItem>
+        </List>
+      </CardContent>
+
+      <CardActions disableSpacing>
+        <Button aria-label="see personal network" size="large" startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={onclick} />}>
+        </Button>
+        <ExpandMore
+          expand={expand}
+          onClick={handleExpandClick}
+          aria-expanded={expand}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expand} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year <b>{_.get(target, "first_active_year", "NA")}</b>, and out of record at <b>{_.get(target, "last_active_year", "NA")}</b></Div>
+          <Div>He has slaved <b>{_.get(target, "number_enslaved", "NA")}</b> people  doing trading business most in <b>{_.get(target, ["principal_location", "geo_location", "name"], "NA")}</b> area</Div>
+        </CardContent>
+      </Collapse>
+      
     </Card>}
     </>
   )
