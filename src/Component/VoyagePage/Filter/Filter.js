@@ -28,7 +28,7 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, page} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     // const [width, setWidth] = React.useState(12);
@@ -64,7 +64,7 @@ export default function Filter(props) {
     };
 
   const color = (() =>{
-    if(page === "voyage") {
+    if(pageType === "voyage") {
       if(dataSet==="0") {
         return "voyageTrans"
       }else{
@@ -201,7 +201,7 @@ export default function Filter(props) {
         >
             <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
                 {
-                    page=='voyage' ? 
+                    pageType=='voyage' ? 
                     <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>Add Visual Filter
                     </Button> : ""
                 }
