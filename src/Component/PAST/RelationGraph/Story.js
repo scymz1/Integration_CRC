@@ -41,7 +41,7 @@ export default function Story (props) {
   //target: the character of the popover story
   const {target, type, dynamic = false , remoteControl, dataChange, setChipData} = props;
   const isMale = _.get(target, "gender", "1") != 0;
-  const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
+  const prefix = _.get(target, ["documented_name"], "Unknown Enslaved Person") == 'Unknown' ? "This enslaved person" : _.get(target, ["documented_name"], "Unknown Enslaved Person")
   const [expand, setExpand] = new React.useState(false);
 
   const onclick = () => {
@@ -67,7 +67,7 @@ export default function Story (props) {
     className="story"
     >
       <CardHeader
-        title={`Story of ${_.get(target, ["documented_name"], "Unknown Slave")}`}
+        title={`Story of ${_.get(target, ["documented_name"], "Unknown Enslaved Person")}`}
       />
       <CardContent>
         <Div>{prefix} was <b>{_.get(target, ["captive_fate", "name"], "not recorded with date")}</b>, transported on voyage <b>{_.get(target, ["voyage", "id"], "* target NA *")}</b></Div>
@@ -83,13 +83,13 @@ export default function Story (props) {
       // textTransform: 'capitalize'
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
         className="test"
-        title = {_.get(target, ["documented_name"], "Unknown Slave")}
+        title = {_.get(target, ["documented_name"], "Unknown Enslaved Person")}
         sx={{pr: 3, pt:3}}
       />
       {/* <hr/> */}
       <CardContent>
         <List dense = {true} disablePadding={true}>
-          <ListItem  disablePadding={true}><ListItemText primary="Slave ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Enslaved ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={(_.get(target, ["modern_name"], "No Record") == null) || (_.get(target, ["modern_name"], "No Record") == "") ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Sex" secondary={_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 0 ? "Female" : "No Record"}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Age" secondary={_.get(target, "age", "No Record")}/></ListItem>
