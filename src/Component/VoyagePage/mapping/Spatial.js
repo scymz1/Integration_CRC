@@ -153,7 +153,7 @@ export function ReadFeature(props) {
         const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
         // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
        set_complete_object(complete_object)
-      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      //console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
       
      }
 
@@ -178,7 +178,7 @@ export function ReadFeature(props) {
 
   useEffect(()=>{
 
-    console.log("UseEffect Complete Object: ", complete_object)
+    //console.log("UseEffect Complete Object: ", complete_object)
 
     map.on('popupopen', function(){
 
