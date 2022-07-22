@@ -90,7 +90,7 @@ export default function Network(props) {
           // slaves
           item.alias.forEach((alias) => {
             //transaction
-            alias.transactions.forEach((transaction) => {
+            alias.transactions.slice(0, 30).forEach((transaction) => {
               const transactionData = transaction.transaction
               if (transactionData.relation_type.relation_type === "transportation") {
                 tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "orange")
@@ -276,7 +276,7 @@ export default function Network(props) {
 
   const options = {
     physics: {
-      enabled: false
+      enabled: true,
     },
     height: height
   };
