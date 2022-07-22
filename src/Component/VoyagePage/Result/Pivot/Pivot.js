@@ -24,13 +24,15 @@ function Pivot(props) {
 
   const { complete_object, disembark } = useContext(props.context);
 
-  console.log("updated_complete_object= ", complete_object);
+  // console.log("updated_complete_object= ", complete_object);
 
-  console.log("Pivot table complete object: ", complete_object)
-  console.log("Disembark: ", disembark)
+  // console.log("Pivot table complete object: ", complete_object)
+  // console.log("Disembark: ", disembark)
   // Responses
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
@@ -54,77 +56,90 @@ function Pivot(props) {
 
   // Set rows
   useEffect(() => {
-    console.log("updated_complete_object= ", complete_object);
+    console.log("pivot", complete_object)
+    setIsLoading(true)
+    const fetchData = async () => {
+      const promise = [];
+      console.log("updated_complete_object= ", complete_object);
 
-    //console.log("2222222222222222222222222222223333");
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    for (var property in complete_object) {
-      if (property !== "groupby_fields") {
-        //console.log(property);
-        // eslint-disable-next-line no-loop-func
-        complete_object[property].forEach((v) => {
-          //console.log(property, v);
-          data.append(property, v);
-        });
-      }
-    }
-    data.append("groupby_fields", complete_object["groupby_fields"][1]);
-    data.append("groupby_fields", complete_object["groupby_fields"][0]);
-    // data.append("value_field_tuple", option.cell);
-    // data.append("value_field_tuple", aggregation);
-    // data.append("cachename", "voyage_export");
-    axios
-      .post("/voyage/crosstabs", data)
-      .then(function (response) {
-        //console.log("-----set rows-----");
-        //console.log(response.data);
-        const row_name = Object.keys(response.data);
-        const rows = Object.values(response.data);
-        for (var i = 0; i < rows.length; i++) {
-          rows[i][""] = row_name[i];
+      //console.log("2222222222222222222222222222223333");
+      var data = new FormData();
+      data.append("hierarchical", "False");
+      for (var property in complete_object) {
+        if (property !== "groupby_fields") {
+          //console.log(property);
+          // eslint-disable-next-line no-loop-func
+          complete_object[property].forEach((v) => {
+            //console.log(property, v);
+            data.append(property, v);
+          });
         }
-        setRows(rows);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [complete_object]);
-
-  // Set columns
-  useEffect(() => {
-    var data = new FormData();
-    data.append("hierarchical", "False");
-    for (var property in complete_object) {
-      if (property !== "groupby_fields") {
-        //console.log(property);
-        // eslint-disable-next-line no-loop-func
-        complete_object[property].forEach((v) => {
-          data.append(property, v);
-        });
       }
+      data.append("groupby_fields", complete_object["groupby_fields"][1]);
+      data.append("groupby_fields", complete_object["groupby_fields"][0]);
+      // data.append("value_field_tuple", option.cell);
+      // data.append("value_field_tuple", aggregation);
+      // data.append("cachename", "voyage_export");
+      promise.push(axios
+        .post("/voyage/crosstabs", data)
+        .then(function (response) {
+          //console.log("-----set rows-----");
+          //console.log(response.data);
+          const row_name = Object.keys(response.data);
+          const rows = Object.values(response.data);
+          for (var i = 0; i < rows.length; i++) {
+            rows[i][""] = row_name[i];
+          }
+          setRows(rows);
+  
+        })
+        .catch(function (error) {
+          console.log(error);
+        })); 
+
+        var data = new FormData();
+        data.append("hierarchical", "False");
+        for (var property in complete_object) {
+          if (property !== "groupby_fields") {
+            //console.log(property);
+            // eslint-disable-next-line no-loop-func
+            complete_object[property].forEach((v) => {
+              data.append(property, v);
+            });
+          }
+        }
+        data.append("groupby_fields", complete_object["groupby_fields"][0]);
+        data.append("groupby_fields", complete_object["groupby_fields"][1]);
+        // data.append("value_field_tuple", option.cell);
+        // data.append("value_field_tuple", aggregation);
+        // data.append("cachename", "voyage_export");
+        promise.push(axios
+          .post("/voyage/crosstabs", data)
+          .then(function (response) {
+            //console.log("-----set columns-----");
+            const empty = [""];
+            //console.log(empty.concat(Object.keys(response.data)));
+            setCols(empty.concat(Object.keys(response.data)));
+          })
+          .catch(function (error) {
+            console.log(error);
+          })) 
+          await Promise.all(promise)
+          setIsLoading(false);
     }
-    data.append("groupby_fields", complete_object["groupby_fields"][0]);
-    data.append("groupby_fields", complete_object["groupby_fields"][1]);
-    // data.append("value_field_tuple", option.cell);
-    // data.append("value_field_tuple", aggregation);
-    // data.append("cachename", "voyage_export");
-    axios
-      .post("/voyage/crosstabs", data)
-      .then(function (response) {
-        //console.log("-----set columns-----");
-        const empty = [""];
-        //console.log(empty.concat(Object.keys(response.data)));
-        setCols(empty.concat(Object.keys(response.data)));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    fetchData().catch(console.error)
+    
   }, [complete_object]);
 
-  // if (isLoading) {
-  //   return <div className="spinner"></div>;
-  // }
+
+  // // Set columns
+  // useEffect(() => {
+    
+  // }, [complete_object]);
+
+  if (isLoading) {
+    return <div>ISLOADING</div>;
+  }
 
   return (
     <div>

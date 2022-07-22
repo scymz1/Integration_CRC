@@ -43,14 +43,11 @@ export default function Sankey(props) {
   const handlePopoverOpen = (event, node) => {
     setAnchorEl(event.currentTarget);
     setPopOpen(node.id);
-    // console.log("Hover Success on", node.id);
   };
   const handlePopoverClose = () => {
     setAnchorEl(null);
     setPopOpen(null);
-    // console.log("Hover Leave from node")
   };
-
 
   const [anchorElclick, setAnchorElclick] = React.useState(null);
   const [popOpenclick, setPopOpenclick] = React.useState(null);
@@ -100,23 +97,16 @@ export default function Sankey(props) {
     if(isLoading) return;
     if (queryData.type === "enslavers") {
       data.forEach((item) => {
-        // setList.push(item.principal_alias+" ")
         let existNode = nodes.find(node => node.id === item.id)
-        // console.log("item",item)
         if(!existNode){
          nodes.push({id: item.id, name: item.alias[0].alias, type: "enslaver"})
         }
         var transactions = item.alias[0].transactions;
         transLength = transLength+transactions.length;
         transactions.forEach((transaction)=>{
-          // console.log(transaction.id)
           var transaction_default = _.get(transaction,["id"],null);
           var transaction_id = transaction.transaction.voyage === null ? transaction_default : transaction.transaction.voyage
           var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
-          // console.log("relation_type",relation_type)
-          // console.log("transaction_id",transaction_default)
-          // console.log("voyage_id",transaction_id)
-          // console.log("relation_type",relation_type)
           var voyage_id =  _.get(transaction,["transaction","voyage"],null);
           var amount= _.get(transaction,["transaction","amount"],null);
           var place= _.get(transaction,["transaction","place","geo_location","name"],null);
@@ -141,7 +131,6 @@ export default function Sankey(props) {
                             color: "#1e3162",
                             value:5})}
           var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
-          // console.log("enslaved",enslavedlist)
           if(enslavedlist.length > 10){
             enslaverLength = enslaverLength + 1;
             // var name_list = []
@@ -167,28 +156,26 @@ export default function Sankey(props) {
           }
           else{
             enslaverLength = enslaverLength + enslavedlist.length;
-          enslavedlist.forEach((enslaved) => {
-       // console.log("enslaver", enslaver.enslaver_alias.id)
-            var enslaved_id =  _.get(enslaved,["enslaved","id"],null);
-            var enslaved_name =  _.get(enslaved,["enslaved","documented_name"],null);
-            if(nodes.findIndex(x => x.id === enslaved.enslaved.id) === -1) {
-                nodes.push({id: enslaved_id, 
-                            name: enslaved_name,
-                            type: "enslaved"});
-              if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id &&
-                                      x.name === relation_type) &&
-                                      x.target === nodes.findIndex(x => x.id === enslaved_id &&
-                                                x.name === enslaved_name)) === -1) {
-                links.push({source: nodes.findIndex(x => x.id === transaction_id &&
-                                                          x.name === relation_type),
-                            target: nodes.findIndex(x => x.id === enslaved_id &&
-                                                        x.name === enslaved_name),
-                            color: "#1e3162",
-                            value:5
-                    })}
-          }})}
+            enslavedlist.forEach((enslaved) => {
+              var enslaved_id =  _.get(enslaved,["enslaved","id"],null);
+              var enslaved_name =  _.get(enslaved,["enslaved","documented_name"],null);
+              if(nodes.findIndex(x => x.id === enslaved.enslaved.id) === -1) {
+                  nodes.push({id: enslaved_id, 
+                              name: enslaved_name,
+                              type: "enslaved"});
+                if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id &&
+                                        x.name === relation_type) &&
+                                        x.target === nodes.findIndex(x => x.id === enslaved_id &&
+                                                  x.name === enslaved_name)) === -1) {
+                  links.push({source: nodes.findIndex(x => x.id === transaction_id &&
+                                                            x.name === relation_type),
+                              target: nodes.findIndex(x => x.id === enslaved_id &&
+                                                          x.name === enslaved_name),
+                              color: "#1e3162",
+                              value:5
+                      })}
+            }})}
           })
-
       })
     }
 
@@ -315,6 +302,7 @@ export default function Sankey(props) {
       var voyagemodal = true;
       if (node.type === "enslaved" && queryData.type === "slaves") {
         result.push(
+          <table>
           <tbody>
           <tr>
             <th>Age:</th>
@@ -324,12 +312,14 @@ export default function Sankey(props) {
             <th>Height:</th>
             <td>{node.height}</td>
           </tr>
-          </tbody>)
+          </tbody>
+          </table>)
       }
       if (node.type === "transaction") {
         if (node.voyage_id === null) {
           voyagemodal = false;
           result.push(
+            <table>
             <tbody>
             <tr>
               <th>Type:</th>
@@ -352,6 +342,7 @@ export default function Sankey(props) {
               <td>{node.date}</td>
             </tr>
             </tbody>
+            </table>
           );
         } else {
           // console.log(node.voyage_id)
@@ -360,6 +351,7 @@ export default function Sankey(props) {
           // console.log(node.voyage_id)
           if (queryData.type === "slaves") {
             result.push(
+              <table>
               <tbody>
               <tr>
                 <th>Type:</th>
@@ -375,6 +367,7 @@ export default function Sankey(props) {
                 <td>{node.year}</td>
               </tr>
               </tbody>
+              </table>
             );
           }  
         }
@@ -473,9 +466,7 @@ export default function Sankey(props) {
                         }}
                         onMouseLeave={handlePopoverClose}
                       >
-                        {/* {console.log(node.name,typeof(node.name))} */}
                         <Typography align="center">{node.name.charAt(0).toUpperCase() + node.name.slice(1)}</Typography>
-                        {/* <Typography align="center">{node.id}</Typography> */}
                         <Typography align="center">{node.voyagebutton}</Typography>
                       </Box>
                       <Popover
@@ -496,7 +487,8 @@ export default function Sankey(props) {
                         sx={{
                           pointerEvents: 'none',
                         }}
-                        open={popOpen === node.id && node.type != "enslaver"}
+                        open={popOpen === node.id && node.type != "enslaver" && 
+                              (queryData.type === "enslavers" ? node.type != "enslaved" && node.name != "transportation":true)}
                         anchorEl={anchorEl}
                         anchorOrigin={{
                           vertical: 'bottom',
@@ -508,7 +500,6 @@ export default function Sankey(props) {
                         }}
                         onClose={handlePopoverClose}
                       >
-                        {/* {console.log(node.name,node.id)} */}
                         {node.information}
                       </Popover>
                     </div>
@@ -518,7 +509,7 @@ export default function Sankey(props) {
             })}
             {graph.links.map((link) => {
               return (
-                <g>
+                <g key={`sankey-node-${link.index}`}>
                   <path
                     id={`sankey-link-${link.index}`}
                     key={`sankey-link-${link.index}`}

@@ -86,11 +86,6 @@ export default function MapBoundingBox(props){
 
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     
-    const OpenBoundingBoxFilter = (event)=>{
-        if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")){
-            setLabels([...labels, {option:"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
-        }
-    }
 
     const style = {
         position: 'absolute',
@@ -106,10 +101,6 @@ export default function MapBoundingBox(props){
 
     return (
         <div>
-            <Button onClick={OpenBoundingBoxFilter}> 
-                Open Bounding Box Filter
-            </Button>
-            <br/>
             <FullScreen handle={handle}>
             
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh", zIndex: 0}}>

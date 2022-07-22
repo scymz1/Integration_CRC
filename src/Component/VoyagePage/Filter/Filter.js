@@ -18,6 +18,8 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
 
+import { Button } from '@mui/material';
+
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 // import { VoyageContext } from "../VoyageApp";
 
@@ -42,7 +44,7 @@ export default function Filter(props) {
     // };
 
     // Handle Full Screen
-    console.log("length:", labels.length)
+    // console.log("length:", labels.length)
     const handleFullScreen = () =>{
         setFullScreen(!fullScreen);
         // setWidth(width === 12 ? 5:12);
@@ -80,6 +82,12 @@ export default function Filter(props) {
       return "secondary"
     }
   })()
+
+  const OpenBoundingBoxFilter = (event)=>{
+    if(!labels.some(e=>e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")){
+        setLabels([...labels, {option:"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type:"<class 'rest_framework.fields.Map'>", label:""}])
+    }
+  }
 
     return (
     <AppContext.Provider
@@ -192,6 +200,11 @@ export default function Filter(props) {
             direction="column"
         >
             <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
+                {
+                    page=='voyage' ? 
+                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>Add Visual Filter
+                    </Button> : ""
+                }
                 {labels.length === 0 ? 
                     <Grid container item justifyContent="center" >
                         <Typography color="#808B96">No Filter</Typography>

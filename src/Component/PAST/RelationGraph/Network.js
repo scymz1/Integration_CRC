@@ -19,7 +19,7 @@ export default function Network(props) {
   const [title, setTitle] = useState("");
 
   useEffect(() => {
-    console.log("myQueryData", myQueryData)
+    // console.log("myQueryData", myQueryData)
     setIsLoading(true)
     const endpoint = (() => {
       switch (myQueryData.type) {
@@ -82,7 +82,7 @@ export default function Network(props) {
       setIsLoading(true)
       //enslavers
       if (myQueryData.type === "enslavers") {
-        console.log("data", data)
+        // console.log("data", data)
         data.forEach((item, index) => {
           //self
           const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "green")
@@ -93,7 +93,7 @@ export default function Network(props) {
             alias.transactions.forEach((transaction) => {
               const transactionData = transaction.transaction
               if (transactionData.relation_type.relation_type === "transportation") {
-                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "transportation", "orange")
+                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "orange")
                 tmp.link(transactionData.voyage, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
@@ -101,7 +101,7 @@ export default function Network(props) {
                   tmp.link(slave.enslaved.id, transactionData.voyage, "")
                 })
               } else if (transactionData.relation_type.relation_type === "transaction") {
-                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transportation", "orange")
+                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "orange")
                 tmp.link(transactionData.id, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
@@ -114,7 +114,7 @@ export default function Network(props) {
         })
         setGraph(tmp)
         setIsLoading(false)
-        console.log("tmp", tmp)
+        // console.log("tmp", tmp)
         return;
       }
       //slave
@@ -190,7 +190,7 @@ export default function Network(props) {
         })
         setGraph(tmp)
         setIsLoading(false)
-        console.log("tmp", tmp)
+        // console.log("tmp", tmp)
       }
       fetchData().catch(console.error);
     }
@@ -201,35 +201,35 @@ export default function Network(props) {
     setHeight((0.7 * windowRef.current.offsetHeight).toString())
   }, [])
 
-  function updateQueryData(path, id) {
-    let formdata = new FormData();
-    formdata.append(path, id);
-    formdata.append(path, id);
-    const endpoint = (() => {
-      switch (myQueryData.type) {
-        case "slaves":
-          return "past/enslaved/"
-        case "enslavers":
-          return "past/enslavers/"
-      }
-    })()
-    fetch(base_url + endpoint, {
-      method: 'POST',
-      headers: {'Authorization': auth_token},
-      body: formdata,
-    }).then(response => response.json()).then(res => {
-      const targets = []
-      res.forEach((slave => {
-        if (!targets.find(e => e === slave.id))
-          targets.push(slave.id)
-      }))
-      console.log("targets", targets)
-      setMyQueryData({
-        type: "slaves",
-        slaves: targets
-      })
-    })
-  }
+  // function updateQueryData(path, id) {
+  //   let formdata = new FormData();
+  //   formdata.append(path, id);
+  //   formdata.append(path, id);
+  //   const endpoint = (() => {
+  //     switch (myQueryData.type) {
+  //       case "slaves":
+  //         return "past/enslaved/"
+  //       case "enslavers":
+  //         return "past/enslavers/"
+  //     }
+  //   })()
+  //   fetch(base_url + endpoint, {
+  //     method: 'POST',
+  //     headers: {'Authorization': auth_token},
+  //     body: formdata,
+  //   }).then(response => response.json()).then(res => {
+  //     const targets = []
+  //     res.forEach((slave => {
+  //       if (!targets.find(e => e === slave.id))
+  //         targets.push(slave.id)
+  //     }))
+  //     // console.log("targets", targets)
+  //     setMyQueryData({
+  //       type: "slaves",
+  //       slaves: targets
+  //     })
+  //   })
+  // }
 
   const events = {
     doubleClick: function (event) {
@@ -266,8 +266,8 @@ export default function Network(props) {
 
       const {nodes: nodeId} = event;
       const node = graph.nodes.find(e => e.id === nodeId[0])
-      console.log("click", node)
-      if(node.type === "voyage"){
+      // console.log("click", node)
+      if(node && node.type === "voyage"){
         setOpen(true)
         setId(nodeId[0])
       }

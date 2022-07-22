@@ -138,41 +138,53 @@ export function ReadFeature(props) {
     
 
   // Update complete object based on tab selection in popup
-  useEffect(() =>{
-    //selected disembark
-    if (disembark === diskey ){
-      //if currently search_object is embark
-       const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-       set_complete_object(complete_object)
-      //  var temp = complete_object[embkey]
-      //  set_complete_object(_.omit(complete_object, embkey))
+  // useEffect(() =>{
+  //   //selected disembark
+  //   if (disembark === diskey ){
+  //     //if currently search_object is embark
+  //     //  const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
+  //     //  set_complete_object(complete_object)
 
-      //  set_complete_object(current => {
-      //   const {embkey, ...complete_object} = current;
-      //   return complete_object;
-      // });
-      //  set_complete_object({...complete_object, [diskey] : temp})
-      // }
-      }
-    else{
-       const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-       set_complete_object(complete_object)
+  //      console.log("Disembark changed ===> set search object to disembark")
 
-      //  var temp = complete_object[diskey]
-      //  set_complete_object(_.omit(complete_object, diskey))
+  //      var temp = complete_object[embkey]
+  //     //  set_complete_object(_.omit(complete_object, embkey))
 
-      //  set_complete_object(current => {
-      //   const {diskey, ...complete_object} = current;
-      //   return complete_object;
-      // });
-      //  set_complete_object({...complete_object, [embkey] : temp})
-     }
+  //     //  set_complete_object(current => {
+  //     //   const {embkey, ...complete_object} = current;
+  //     //   return complete_object;
+  //     // });
+  //     //  set_complete_object({...complete_object, [diskey] : temp})
+  //     // }
 
-    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
+  //     const tempObject = {...complete_object}
+  //     delete tempObject[embkey]
+  //     set_complete_object( {...tempObject, [diskey]: temp} )
 
+  //     }
+  //   else{
+  //     //  const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
+  //     //  set_complete_object(complete_object)
+       
+  //      console.log("Disembark changed ===> set search object to embark")
+  //      var temp = complete_object[diskey]
+  //     //  set_complete_object(_.omit(complete_object, diskey))
 
-  },[disembark])
+  //     //  set_complete_object(current => {
+  //     //   const {diskey, ...complete_object} = current;
+  //     //   return complete_object;
+  //     // });
+  //     //  set_complete_object({...complete_object, [embkey] : temp})
 
+  //     const tempObject = {...complete_object}
+  //     delete tempObject[diskey]
+  //     set_complete_object( {...tempObject, [embkey]: temp} )
+  //    }
+
+  //   // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
+    
+
+  // },[disembark])
 
   useEffect(() =>{
     let point = complete_object[area];
@@ -197,34 +209,35 @@ export function ReadFeature(props) {
 
     console.log("UseEffect Complete Object: ", complete_object)
 
-    map.on('popupopen', function(){
+    // map.on('popupopen', function(){
 
       console.log("Popup open function")
 
       const container = L.DomUtil.create("div");
 
       const root = ReactDOM.createRoot(container);
-      // root.render(
-      //   <PivotContext.Provider
-      //         value={{ complete_object, set_complete_object , disembark, setDisembark}}
-      //       >
-      //         <Grid>
+    //   root.render(
+    //     <PivotContext.Provider
+    //           value={{ complete_object, set_complete_object , disembark, setDisembark}}
+    //         >
+    //           <Grid>
               
-      //           <div style={{ fontSize: "24px", color: "black" }}>
-      //             <div>
+    //             <div style={{ fontSize: "24px", color: "black" }}>
+    //               <div>
                    
-      //                 {/* only show if intraamerican, otherwise hidden */
-      //                 }
-      //                   {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-      //                 <Pivot context={PivotContext} />
-      //             </div>
-      //           </div>
-      //         </Grid>
-      //         </PivotContext.Provider>
-      // );
-    })
+    //                   {/* only show if intraamerican, otherwise hidden */
+    //                   }
+    //                     {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
+    //                   <Pivot context={PivotContext} />
+    //               </div>
+    //             </div>
+    //           </Grid>
+    //           </PivotContext.Provider>
+    //   );
+    // })
 
   }, [complete_object])
+
 
   useEffect(() => {
     for (var i in map._layers) {
@@ -264,14 +277,14 @@ export function ReadFeature(props) {
       // Add only actual locations to the map with markers (with clicking events and popups)
       if(!props.filter){
         filterNodes=(feature)=>{return true}
-      }
+      }      
       L.geoJSON(nodes.features, {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
-          L.marker(layer["_latlng"]).unbindPopup()
+          // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("click", function (e) {
+          layer.on("mouseover", function (e) {
             
             console.log("Mouseover object: ", complete_object)
 
@@ -285,7 +298,6 @@ export function ReadFeature(props) {
             >
               <Grid>
                   { layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
-              
               
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
@@ -304,12 +316,12 @@ export function ReadFeature(props) {
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
             //   maxWidth: "auto",
             // });
-            markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
+            markers.addLayer(layer)//.bindPopup(container, {maxWidth:"auto"})
 
-            // var popup = L.popup();
-            // layer.on('click', (e)=> {
-            //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
-            // })
+            var popup = L.popup();
+            layer.on('click', (e)=> {
+              popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
+            })
 
         })
           markers.addLayer(layer)

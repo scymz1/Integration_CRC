@@ -39,14 +39,15 @@ export default function Home() {
     });
   }, []);
   const dataSet = "0";
-  const sample = [<ScatterComponent/>, <BarComponent/>, <PieComponent/>, < TableHome/>];
+  const sample = [ <BarComponent/>, <PieComponent/>, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
       <div>
-        <HomeContext.Provider value={{dataSet, page:"home"}}>
+        <HomeContext.Provider value={{dataSet, pageType:"home"}}>
           <ResponsiveAppBar context={HomeContext}/>
         </HomeContext.Provider>
         <Container maxWidth={false}>
+        <ScatterComponent/>
           <List>
             {sample.map((label, index) => (
               <ListItem key={index}>
