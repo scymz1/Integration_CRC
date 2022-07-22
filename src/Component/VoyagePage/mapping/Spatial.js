@@ -162,7 +162,6 @@ export function ReadFeature(props) {
 
   },[disembark])
 
-
   useEffect(() =>{
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
@@ -268,7 +267,6 @@ export function ReadFeature(props) {
                                 {layer.feature.properties.name +
                   " " +
                   layer.feature.geometry.coordinates}
-              
               
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
