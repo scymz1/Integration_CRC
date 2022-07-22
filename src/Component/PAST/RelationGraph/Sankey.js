@@ -487,7 +487,8 @@ export default function Sankey(props) {
                         sx={{
                           pointerEvents: 'none',
                         }}
-                        open={popOpen === node.id && node.type != "enslaver"}
+                        open={popOpen === node.id && node.type != "enslaver" && 
+                              (queryData.type === "enslavers" ? node.type != "enslaved" && node.name != "transportation":true)}
                         anchorEl={anchorEl}
                         anchorOrigin={{
                           vertical: 'bottom',
