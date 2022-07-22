@@ -9,7 +9,7 @@ export default function IntraTabs(props) {
 
 
   const handleChange = (event,newValue) => {
-
+    console.log("Change tab to: ", newValue)
     setValue(newValue);
     setDisembark(newValue)
   };
