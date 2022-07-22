@@ -52,28 +52,28 @@ export default function Story (props) {
 
 
 
-  const onclick = () => {
-    // if(data.length == 0) setData([target])
-    // console.log("data: ", data)
-    if(slavery == "slaves"){
-      dataChange(preData =>({
-        enslavers:[...preData.enslavers],
-        slaves:[target["id"]],
-        type:"slaves"
-      }))
-    }else{
-      dataChange(preData =>({
-        enslavers:[target["id"]],
-        slaves:[...preData.slaves],
-        type:"enslavers"
-      }))
-    }
+  // const onclick = () => {
+  //   // if(data.length == 0) setData([target])
+  //   // console.log("data: ", data)
+  //   if(slavery == "slaves"){
+  //     dataChange(preData =>({
+  //       enslavers:[...preData.enslavers],
+  //       slaves:[target["id"]],
+  //       type:"slaves"
+  //     }))
+  //   }else{
+  //     dataChange(preData =>({
+  //       enslavers:[target["id"]],
+  //       slaves:[...preData.slaves],
+  //       type:"enslavers"
+  //     }))
+  //   }
 
-    setChipData({
-      [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
-    })
-    if(data.length > 0)remoteControl();
-  }
+  //   setChipData({
+  //     [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
+  //   })
+  //   if(data.length > 0)remoteControl();
+  // }
 
 
 
@@ -162,7 +162,7 @@ export default function Story (props) {
     </Card>}
 
     {/*slaver*/}
-    {!dynamic && slavery != "slaves" && <Card 
+    {slavery != "slaves" && <Card 
     className="story"
     >
       <CardHeader
@@ -175,7 +175,7 @@ export default function Story (props) {
 
     </Card>}
 
-    {dynamic && slavery != "slaves" && <Card className="story_func">
+    {/* {dynamic && slavery != "slaves" && <Card className="story_func">
       <CardHeader
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
         className="test"
@@ -210,7 +210,7 @@ export default function Story (props) {
         </CardContent>
       </Collapse>
       
-    </Card>}
+    </Card>} */}
     </>
   )
 }

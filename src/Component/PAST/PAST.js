@@ -47,6 +47,7 @@ export default function PAST() {
     sortingReq, setSortingReq,
     field, setField,
     direction, setDirection,
+    setData, queryData,
 
   } = useContext(PASTContext)
   const [scroll, setScroll] = useState('body');
