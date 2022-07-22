@@ -93,7 +93,7 @@ export default function Network(props) {
             alias.transactions.forEach((transaction) => {
               const transactionData = transaction.transaction
               if (transactionData.relation_type.relation_type === "transportation") {
-                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "transportation", "orange")
+                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "orange")
                 tmp.link(transactionData.voyage, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
@@ -101,7 +101,7 @@ export default function Network(props) {
                   tmp.link(slave.enslaved.id, transactionData.voyage, "")
                 })
               } else if (transactionData.relation_type.relation_type === "transaction") {
-                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transportation", "orange")
+                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "orange")
                 tmp.link(transactionData.id, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
