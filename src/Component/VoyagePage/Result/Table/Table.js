@@ -61,12 +61,18 @@ function Table(props) {
     chipData,
     setChipData,
     typeForTable,
-    totalResultsCount, setTotalResultsCount,
-    page, setPage,
-    rowsPerPage, setRowsPerPage,
-    sortingReq, setSortingReq,
-    field, setField,
-    direction, setDirection
+    totalResultsCount,
+    setTotalResultsCount,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    sortingReq,
+    setSortingReq,
+    field,
+    setField,
+    direction,
+    setDirection,
   } = useContext(props.context);
 
   // Pagination
@@ -188,6 +194,21 @@ function Table(props) {
       setInfo(info);
       setId(info.id);
     } else if (info.number_enslaved > 0) {
+      const selectedIndex = queryData[typeForTable].indexOf(info.id);
+      if (selectedIndex === -1) {
+        if (!checkedMax(info.id)) {
+          // console.log("chipData", chipData)
+          chipData[info.id] = info.principal_alias;
+        }
+      } else {
+        delete chipData[info.id];
+      }
+      setQueryData({
+        ...queryData,
+        enslavers: Object.keys(chipData).map(Number),
+        type: "enslavers",
+      });
+      //console.log(queryData);
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -207,6 +228,7 @@ function Table(props) {
       setQueryData({
         ...queryData,
         slaves: Object.keys(chipData).map(Number),
+        type: "slaves",
       });
     }
   };
@@ -236,8 +258,8 @@ function Table(props) {
       "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
     ]
       ? row[
-      "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-      ]
+          "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+        ]
       : [];
     const roles = row["transactions__transaction__enslavers__role__role"];
     const ids =
@@ -329,7 +351,7 @@ function Table(props) {
                           <StyledTableRow
                             key={row.id}
                             onClick={(event) => handleOpen(event, row)}
-                          //selected={isItemSelected}
+                            //selected={isItemSelected}
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&

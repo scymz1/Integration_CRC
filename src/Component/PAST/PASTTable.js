@@ -96,7 +96,7 @@ export default function PASTTable(props) {
       ...queryData,
       type: typeForTable,
     });
-    // console.log(queryData);
+    //console.log(queryData);
     props.handleClickOpen("body")();
   };
 
@@ -134,7 +134,8 @@ export default function PASTTable(props) {
         }}
       >
         <ColSelector11 context={ColContext} />
-        {queryData.slaves.length !== 0 && (
+        {(queryData.type === "slaves" && queryData.slaves.length !== 0
+        || queryData.type === "enslavers" && queryData.enslavers.length !== 0) && (
           <Card
             sx={{
               width: 800,
@@ -158,7 +159,8 @@ export default function PASTTable(props) {
                   startIcon={<HubIcon />}
                   size="large"
                   color="grey"
-                  disabled={queryData.slaves.length === 0}
+                  disabled={(queryData.type === "slaves" && queryData.slaves.length === 0)
+                || (queryData.type === "enslavers" && queryData.enslavers.length === 0)}
                   onClick={handleSankeyOpen}
                 >
                   View Connections
