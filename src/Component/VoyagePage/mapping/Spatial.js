@@ -11,6 +11,7 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
+import _ from 'lodash';
 import { set } from "lodash";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -141,20 +142,30 @@ export function ReadFeature(props) {
     //selected disembark
     if (disembark === diskey ){
       //if currently search_object is embark
-        // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
-        const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
        set_complete_object(complete_object)
-      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
+      //  var temp = complete_object[embkey]
+      //  set_complete_object(_.omit(complete_object, embkey))
+
+      //  set_complete_object(current => {
+      //   const {embkey, ...complete_object} = current;
+      //   return complete_object;
+      // });
+      //  set_complete_object({...complete_object, [diskey] : temp})
       // }
       }
     else{
-        //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-        const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+       const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
        set_complete_object(complete_object)
-      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
-      
+
+      //  var temp = complete_object[diskey]
+      //  set_complete_object(_.omit(complete_object, diskey))
+
+      //  set_complete_object(current => {
+      //   const {diskey, ...complete_object} = current;
+      //   return complete_object;
+      // });
+      //  set_complete_object({...complete_object, [embkey] : temp})
      }
 
     // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
@@ -167,11 +178,18 @@ export function ReadFeature(props) {
     let point = complete_object[area];
     if (area === groupby_fields_region[0]){
         delete Object.assign(complete_object, {[area]: point })[disembark];
+        delete Object.assign(complete_object, {[area]: point })[embkey];
       }
-    else if (area === disembark) {
+    else if (area === diskey) {
         delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+        delete Object.assign(complete_object, {[area]: point })[embkey];
      }
-     set_complete_object(complete_object)
+
+     else{
+        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+        delete Object.assign(complete_object, {[area]: point })[diskey];
+     }
+    //  set_complete_object(complete_object)
   },[area])
 
 
@@ -257,7 +275,10 @@ export function ReadFeature(props) {
             
             console.log("Mouseover object: ", complete_object)
 
-            complete_object[area] = [layer.feature.id, layer.feature.id];
+            // complete_object[area] = [layer.feature.id, layer.feature.id];
+            console.log("Area: ", area)
+
+            set_complete_object({...complete_object, [area]: [layer.feature.id, layer.feature.id]})
             
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
@@ -265,9 +286,7 @@ export function ReadFeature(props) {
               value={{ complete_object, set_complete_object , disembark, setDisembark}}
             >
               <Grid>
-                                {layer.feature.properties.name +
-                  " " +
-                  layer.feature.geometry.coordinates}
+                  { layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
               
               
                 <div style={{ fontSize: "24px", color: "black" }}>
