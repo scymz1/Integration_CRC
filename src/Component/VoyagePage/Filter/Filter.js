@@ -42,7 +42,7 @@ export default function Filter(props) {
     // };
 
     // Handle Full Screen
-    console.log("length:", labels.length)
+    // console.log("length:", labels.length)
     const handleFullScreen = () =>{
         setFullScreen(!fullScreen);
         // setWidth(width === 12 ? 5:12);

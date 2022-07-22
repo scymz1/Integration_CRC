@@ -21,6 +21,15 @@ function TableApp(props) {
   const [info, setInfo] = useState([]);
   const { search_object } = useContext(VoyageContext);
 
+  const [totalResultsCount, setTotalResultsCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // Sorting
+  const [sortingReq, setSortingReq] = useState(false);
+  const [field, setField] = useState([]);
+  const [direction, setDirection] = useState("asc");
+
   return (
     <div>
       {/* <Button onClick={()=>console.log("options_tree:", endpoint)}>print options_tree</Button> */}
@@ -40,6 +49,12 @@ function TableApp(props) {
           columnOptions,
           options_flat: labels,
           search_object,
+          totalResultsCount, setTotalResultsCount,
+          page, setPage,
+          rowsPerPage, setRowsPerPage,
+          sortingReq, setSortingReq,
+          field, setField,
+          direction, setDirection
         }}
       >
         <ColSelector11 context={ColContext} />
