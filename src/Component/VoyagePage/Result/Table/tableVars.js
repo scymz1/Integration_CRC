@@ -152,3 +152,11 @@ export const columnOptions = {
   }
 
 }
+
+export const voyage_default_list = [
+  "id",
+  'voyage_ship__ship_name',
+  "voyage_shipownerconnection__owner__name",
+  "voyage_itinerary__principal_place_of_slave_purchase__geo_location__name",
+  "voyage_sourceconnection__source__full_ref"
+]
