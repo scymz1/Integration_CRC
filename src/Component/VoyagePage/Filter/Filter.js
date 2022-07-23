@@ -14,6 +14,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
+import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
@@ -31,6 +33,7 @@ export default function Filter(props) {
     const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
+    const [rightScreen, setRightScreen] = React.useState(false);
     // const [width, setWidth] = React.useState(12);
     // const [margin, setMargin] = React.useState("10px");
     // const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -49,6 +52,10 @@ export default function Filter(props) {
         setFullScreen(!fullScreen);
         // setWidth(width === 12 ? 5:12);
         // setMargin(margin === "10px" ? "5px":"10px");
+    };
+
+    const handleSwitchScreen = () =>{
+        setRightScreen(!rightScreen);
     };
 
     // Handle delete by removing the specified key
@@ -128,7 +135,7 @@ export default function Filter(props) {
     <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
-        anchor="left"
+        anchor={rightScreen?"right":"left"}
         open={drawerOpen}
         PaperProps={{ sx: { width: fullScreen?"100%":"25%", background:"#EAECEE" }}}
         // PaperProps={{ sx: { width: fullScreen?"100%":"25%", height: "80%", marginTop: "128px", background:"#EAECEE" }}}
@@ -139,6 +146,9 @@ export default function Filter(props) {
         <Divider />
         <Grid container justifyContent="center" sx={{mb:"10px"}}> 
                 <Grid container item justifyContent="flex-end">
+                    <IconButton onClick={handleSwitchScreen}>
+                        {rightScreen ? <SwitchRightIcon /> : <SwitchLeftIcon />}
+                    </IconButton>
                     <IconButton onClick={handleFullScreen}>
                         {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
                     </IconButton>
@@ -160,7 +170,7 @@ export default function Filter(props) {
             sx={{mt:"10px", mb:"10px", ml:"10px"}}
         >
                 {labels.length === 0 ? 
-                    <Grid container item justifyContent="center" sx={{mb:"15px"}}>
+                    <Grid container item justifyContent="center" sx={{mb:"15px", mr:"10px"}}>
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
