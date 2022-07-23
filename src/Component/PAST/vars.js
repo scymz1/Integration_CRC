@@ -18,6 +18,7 @@ export const enslaver_default_list = [
     // "alias__transactions__transaction__place__geo_location__name",
     // "enslaver_sources__source__full_ref",
     // "enslaver_sources__text_ref",
+    "alias__transactions__transaction__source__full_ref",
 ]
 export const enslaver_var_list = {
     "id": {
