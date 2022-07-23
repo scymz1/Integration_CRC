@@ -452,20 +452,27 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else if (typeof row[k] === "object") {
+                                console.log(
+                                  "obj=",
+                                  [...new Set(row[k])]
+                                    .join(" ")
+                                    .replaceAll("</p>,<p>", "</p><p>")
+                                );
                                 return (
                                   <TableCell key={"content-" + key}>
-                                    <div // [...new Set(row[k])]
+                                    <div
                                       dangerouslySetInnerHTML={{
-                                        __html: [...new Set(row[k])].join(", "),
+                                        __html: [...new Set(row[k])]
+                                          .join(" ")
+                                          .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
                                     />
-                                    {/* {[...new Set(row[k])].join(", ")} */}
                                   </TableCell>
                                 );
                               } else {
                                 return (
                                   <TableCell key={"content-" + key}>
-                                    <div // [...new Set(row[k])]
+                                    <div
                                       dangerouslySetInnerHTML={{
                                         __html: row[k],
                                       }}

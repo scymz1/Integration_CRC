@@ -44,7 +44,7 @@ function PieComponent() {
       .then(function (response) {
         setarrx(Object.keys(response.data[value]));
         setarry(Object.values(response.data[value]));
-        console.log(plot_value);
+        //console.log(plot_value);
       })
       .catch(function (error) {
         console.log(error);
