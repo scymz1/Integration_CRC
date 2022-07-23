@@ -107,7 +107,7 @@ export function ReadFeature(props) {
       setArea(disembark);
     }
   })
-
+  console.log("useEffect ~ complete_object",map.getZoom())
 
   useEffect(() => {
     var data = new FormData();
@@ -157,22 +157,23 @@ export function ReadFeature(props) {
       
      }
 
-    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
+    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",  JSON.parse(JSON.stringify(complete_object)))
 
 
   },[disembark])
 
+  // useEffect(() =>{
+  //   let point = complete_object[area];
+  //   if (area === groupby_fields_region[0]){
+  //       delete Object.assign(complete_object, {[area]: point })[disembark];
+  //     }
+  //   else if (area === disembark) {
+  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+  //    }
+  //    set_complete_object(complete_object)
+  // },[area])
 
-  useEffect(() =>{
-    let point = complete_object[area];
-    if (area === groupby_fields_region[0]){
-        delete Object.assign(complete_object, {[area]: point })[disembark];
-      }
-    else if (area === disembark) {
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
-     }
-     set_complete_object(complete_object)
-  },[area])
+  console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",  JSON.parse(JSON.stringify(complete_object)))
 
 
   useEffect(()=>{
@@ -258,12 +259,12 @@ export function ReadFeature(props) {
             
             console.log("Mouseover object: ", complete_object)
 
-            complete_object[area] = [layer.feature.id, layer.feature.id];
-            set_complete_object({...complete_object, area:[layer.feature.id, layer.feature.id]})
+            complete_object[disembark] = [layer.feature.id, layer.feature.id];
+            //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
-              value={{ complete_object, set_complete_object , disembark, setDisembark}}
+              value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
             >
               <Grid>
                                 {layer.feature.properties.name +
@@ -276,7 +277,7 @@ export function ReadFeature(props) {
                       {/* only show if intraamerican, otherwise hidden */
                       }
                         {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-                      <Pivot context={PivotContext} />
+                      {/* <Pivot context={PivotContext} /> */}
                   </div>
                 </div>
               </Grid>
