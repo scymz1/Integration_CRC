@@ -8,6 +8,8 @@ export const enslaver_default_list = [
     "first_active_year",
     "last_active_year",
     "number_enslaved",
+    "alias__transactions__transaction__relation_type__relation_type",
+    "alias__transactions__transaction__place__geo_location__name",
     // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
     // "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
     // "alias__transactions__transaction__voyage__id",
