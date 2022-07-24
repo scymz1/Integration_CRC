@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -145,9 +146,9 @@ export default function Filter(props) {
         <Toolbar />
         <Divider />
         <Grid container justifyContent="center" sx={{mb:"10px"}}> 
-                <Grid container item justifyContent="flex-end">
+                <Grid container item justifyContent={rightScreen?"flex-start":"flex-end"}>
                     <IconButton onClick={handleSwitchScreen}>
-                        {rightScreen ? <SwitchRightIcon /> : <SwitchLeftIcon />}
+                        {rightScreen ? <SwitchLeftIcon /> : <SwitchRightIcon />}
                     </IconButton>
                     <IconButton onClick={handleFullScreen}>
                         {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
@@ -197,9 +198,9 @@ export default function Filter(props) {
                 }
         </Grid>
         <Divider />
-        <Grid container item justifyContent="flex-end">
+        <Grid container item justifyContent={rightScreen?"flex-start":"flex-end"}>
                 <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
+                    {rightScreen?<ChevronRightIcon />:<ChevronLeftIcon />}
                 </IconButton>
         </Grid>
     </Drawer>
