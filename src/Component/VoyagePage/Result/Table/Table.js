@@ -277,12 +277,12 @@ function Table(props) {
     return output;
   };
 
-  const handleSankeyOpen = (e, id) => {
+  const handleSankeyOpen = (e, id, variety) => {
     // console.log(id);
     setQueryData({
       ...queryData,
-      enslavers: [id],
-      type: "enslavers",
+      [variety]: id,
+      type: variety,
     });
     props.handleClickOpen("body")();
     e.stopPropagation();
@@ -395,6 +395,31 @@ function Table(props) {
                                     </TableCell>
                                   );
                                 }
+                              } else if (k === "number_enslaved") {
+                                //console.log([...new Set(row["alias__transactions__transaction__enslaved_person__enslaved__id"].flat(Infinity))]);
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <Link
+                                      component="button"
+                                      variant="body2"
+                                      onClick={(e) =>
+                                        handleSankeyOpen(
+                                          e,
+                                          [
+                                            ...new Set(
+                                              row[
+                                                "alias__transactions__transaction__enslaved_person__enslaved__id"
+                                              ].flat(Infinity)
+                                            ),
+                                          ],
+                                          "slaves"
+                                        )
+                                      }
+                                    >
+                                      {row[k]}
+                                    </Link>
+                                  </TableCell>
+                                );
                               } else if (
                                 k ===
                                 "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -418,7 +443,8 @@ function Table(props) {
                                             onClick={(e) =>
                                               handleSankeyOpen(
                                                 e,
-                                                popover[name]["id"]
+                                                [popover[name]["id"]],
+                                                "enslavers"
                                               )
                                             }
                                           />
@@ -457,7 +483,11 @@ function Table(props) {
                                   <TableCell key={"content-" + key}>
                                     <div
                                       dangerouslySetInnerHTML={{
-                                        __html: [...new Set([].concat.apply([], row[k]))]
+                                        __html: [
+                                          ...new Set(
+                                            [].concat.apply([], row[k])
+                                          ),
+                                        ]
                                           .join(" ")
                                           .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
