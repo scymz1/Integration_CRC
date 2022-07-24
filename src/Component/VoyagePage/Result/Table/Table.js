@@ -452,17 +452,12 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else if (typeof row[k] === "object") {
-                                console.log(
-                                  "obj=",
-                                  [...new Set(row[k])]
-                                    .join(" ")
-                                    .replaceAll("</p>,<p>", "</p><p>")
-                                );
+                                //console.log([...new Set([].concat.apply([], row[k]))]);
                                 return (
                                   <TableCell key={"content-" + key}>
                                     <div
                                       dangerouslySetInnerHTML={{
-                                        __html: [...new Set(row[k])]
+                                        __html: [...new Set([].concat.apply([], row[k]))]
                                           .join(" ")
                                           .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
@@ -470,6 +465,7 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else {
+                                // console.log(row[k]);
                                 return (
                                   <TableCell key={"content-" + key}>
                                     <div
