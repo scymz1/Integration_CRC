@@ -76,9 +76,16 @@ function PieComponent() {
          </Grid>
 
       <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
-      <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+      <Box sx={{height:height*0.8,
+                boxShadow: 4, 
+                margin: 2, 
+                padding:2, 
+                borderRadius: '10px',
+                overflow: "hidden",
+                overflowY: "scroll"}} 
+            style={{backgroundColor: "#f1f1f1"}}>
         <CardContent sx={{flex: "1 0 auto"}}>
-            <CardContent>
+            {/* <CardContent> */}
               <Button
                 variant="text"
                 style={{fontSize: "24px"}}
@@ -96,7 +103,7 @@ function PieComponent() {
               {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
                 Continue reading...
               </Button> */}
-            </CardContent>
+            {/* </CardContent> */}
         </CardContent>
       </Box>
       </Grid>
