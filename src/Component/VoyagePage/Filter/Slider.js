@@ -77,14 +77,17 @@ export default function GetSlider(props) {
 
   function handleCommittedChange(event, newValue) {
     //setValue(newValue); 
+
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
+    setValue(newValue);
   }
   
+
   const handleChange = (event, newValue) => {
-      setValue(newValue); 
+    setValue(newValue); 
   };
 
   const handleInputChange = (event) => {
@@ -129,7 +132,7 @@ export default function GetSlider(props) {
           <Input 
             color = "secondary"
             name ="start"
-            value={search_object[varName] ? search_object[varName][0] : value[0]}
+            value={value[0]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
@@ -144,7 +147,7 @@ export default function GetSlider(props) {
           />
           <Input
             name ="end"
-            value={search_object[varName] ? search_object[varName][1] : value[1]}
+            value={value[1]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
@@ -165,7 +168,7 @@ export default function GetSlider(props) {
             max = {range[1]}
             // defaultValue={range}
             getAriaLabel={() => 'Temperature range'}
-            value={search_object[varName] ? search_object[varName] : value}
+            value={value}
             onChange={handleChange}
             onChangeCommitted = {handleCommittedChange}
             // valueLabelDisplay="auto"

@@ -23,14 +23,14 @@ import Chip from "@mui/material/Chip";
 import Link from "@mui/material/Link";
 import { CircularProgress, Grid } from "@mui/material";
 import { useWindowSize } from "@react-hook/window-size";
-import {
-  enslaved_default_list,
-  enslaved_var_list,
-  enslaver_default_list,
-  enslaver_var_list,
-} from "../../../PAST/vars";
-import * as enslaved_labels from "../../../util/enslaved_options.json";
-import * as enslaver_labels from "../../../util/enslaver_options.json";
+// import {
+//   enslaved_default_list,
+//   enslaved_var_list,
+//   enslaver_default_list,
+//   enslaver_var_list,
+// } from "../../../PAST/vars";
+// import * as enslaved_labels from "../../../util/enslaved_options.json";
+// import * as enslaver_labels from "../../../util/enslaver_options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -45,10 +45,10 @@ function Table(props) {
   // Menu
   const {
     cols,
-    setCols,
-    setAll_options,
-    setLabels,
-    setEnslaver,
+    // setCols,
+    // setAll_options,
+    // setLabels,
+    // setEnslaver,
     checkbox,
     setOpen,
     setInfo,
@@ -61,13 +61,23 @@ function Table(props) {
     chipData,
     setChipData,
     typeForTable,
-    totalResultsCount, setTotalResultsCount,
-    page, setPage,
-    rowsPerPage, setRowsPerPage,
-    sortingReq, setSortingReq,
-    field, setField,
-    direction, setDirection
+    totalResultsCount,
+    setTotalResultsCount,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    sortingReq,
+    setSortingReq,
+    field,
+    setField,
+    direction,
+    setDirection,
   } = useContext(props.context);
+
+  // Force Re-render
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   // Pagination
   // const [totalResultsCount, setTotalResultsCount] = useState(0);
@@ -78,11 +88,6 @@ function Table(props) {
   // const [sortingReq, setSortingReq] = useState(false);
   // const [field, setField] = useState([]);
   // const [direction, setDirection] = useState("asc");
-
-  // Switch tables
-
-  // Checkbox
-  //const [checkedMax, setCheckedMax] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -137,7 +142,7 @@ function Table(props) {
 
   useEffect(() => {
     //console.log(typeForTable);
-    if (typeForTable != null && typeForTable != "voyage") {
+    if (typeForTable != null && typeForTable !== "voyage") {
       setChipData({});
       setQueryData({
         ...queryData,
@@ -188,6 +193,21 @@ function Table(props) {
       setInfo(info);
       setId(info.id);
     } else if (info.number_enslaved > 0) {
+      const selectedIndex = queryData[typeForTable].indexOf(info.id);
+      if (selectedIndex === -1) {
+        if (!checkedMax(info.id)) {
+          // console.log("chipData", chipData)
+          chipData[info.id] = info.principal_alias;
+        }
+      } else {
+        delete chipData[info.id];
+      }
+      setQueryData({
+        ...queryData,
+        enslavers: Object.keys(chipData).map(Number),
+        type: "enslavers",
+      });
+      //console.log(queryData);
     } else if (info.transactions.length !== 0) {
       //setOpen(true);
       // setInfo(info);
@@ -207,6 +227,7 @@ function Table(props) {
       setQueryData({
         ...queryData,
         slaves: Object.keys(chipData).map(Number),
+        type: "slaves",
       });
     }
   };
@@ -236,8 +257,8 @@ function Table(props) {
       "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
     ]
       ? row[
-      "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-      ]
+          "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+        ]
       : [];
     const roles = row["transactions__transaction__enslavers__role__role"];
     const ids =
@@ -255,15 +276,30 @@ function Table(props) {
     return output;
   };
 
-  const handleSankeyOpen = (e, id) => {
+  const handleSankeyOpen = (e, id, variety) => {
     // console.log(id);
     setQueryData({
       ...queryData,
-      enslavers: [id],
-      type: "enslavers",
+      [variety]: id,
+      type: variety,
     });
     props.handleClickOpen("body")();
     e.stopPropagation();
+  };
+
+  const dragStart = (e, v) => {
+    //console.log(v);
+    e.dataTransfer.setData("col_id", v);
+    //console.log(e.dataTransfer);
+  };
+
+  const dragDrop = (e, v) => {
+    e.preventDefault();
+    var data = e.dataTransfer.getData("col_id");
+    var dragOut = cols.indexOf(data);
+    var dragIn = cols.indexOf(v);
+    [cols[dragOut], cols[dragIn]] = [cols[dragIn], cols[dragOut]];
+    forceUpdate();
   };
 
   if (isLoading) {
@@ -302,10 +338,17 @@ function Table(props) {
                       /> */}
                           </TableCell>
                         )}
+                        {/* {console.log(cols +"123")} */}
                         {cols.map((v, key) => (
                           <TableCell
                             style={{ color: "#389c90" }}
                             onClick={(event) => handleSorting(event, v)}
+                            draggable
+                            onDragStart={(e) => dragStart(e, v)}
+                            onDrop={(e) => dragDrop(e, v)}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                            }}
                             key={"title-" + key}
                           >
                             <div>{options_flat[v].flatlabel}</div>
@@ -329,7 +372,7 @@ function Table(props) {
                           <StyledTableRow
                             key={row.id}
                             onClick={(event) => handleOpen(event, row)}
-                          //selected={isItemSelected}
+                            //selected={isItemSelected}
                           >
                             {/* {console.log(row)} */}
                             {checkbox &&
@@ -373,6 +416,31 @@ function Table(props) {
                                     </TableCell>
                                   );
                                 }
+                              } else if (k === "number_enslaved") {
+                                //console.log([...new Set(row["alias__transactions__transaction__enslaved_person__enslaved__id"].flat(Infinity))]);
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    <Link
+                                      component="button"
+                                      variant="body2"
+                                      onClick={(e) =>
+                                        handleSankeyOpen(
+                                          e,
+                                          [
+                                            ...new Set(
+                                              row[
+                                                "alias__transactions__transaction__enslaved_person__enslaved__id"
+                                              ].flat(Infinity)
+                                            ),
+                                          ],
+                                          "slaves"
+                                        )
+                                      }
+                                    >
+                                      {row[k]}
+                                    </Link>
+                                  </TableCell>
+                                );
                               } else if (
                                 k ===
                                 "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -396,7 +464,8 @@ function Table(props) {
                                             onClick={(e) =>
                                               handleSankeyOpen(
                                                 e,
-                                                popover[name]["id"]
+                                                [popover[name]["id"]],
+                                                "enslavers"
                                               )
                                             }
                                           />
@@ -430,20 +499,27 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else if (typeof row[k] === "object") {
+                                //console.log([...new Set([].concat.apply([], row[k]))]);
                                 return (
                                   <TableCell key={"content-" + key}>
-                                    <div // [...new Set(row[k])]
+                                    <div
                                       dangerouslySetInnerHTML={{
-                                        __html: [...new Set(row[k])].join(", "),
+                                        __html: [
+                                          ...new Set(
+                                            [].concat.apply([], row[k])
+                                          ),
+                                        ]
+                                          .join(" ")
+                                          .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
                                     />
-                                    {/* {[...new Set(row[k])].join(", ")} */}
                                   </TableCell>
                                 );
                               } else {
+                                // console.log(row[k]);
                                 return (
                                   <TableCell key={"content-" + key}>
-                                    <div // [...new Set(row[k])]
+                                    <div
                                       dangerouslySetInnerHTML={{
                                         __html: row[k],
                                       }}

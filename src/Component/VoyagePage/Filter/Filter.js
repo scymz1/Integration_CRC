@@ -11,9 +11,12 @@ import Typography from '@mui/material/Typography';
 
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
+import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
@@ -28,9 +31,10 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, page} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
+    const [rightScreen, setRightScreen] = React.useState(false);
     // const [width, setWidth] = React.useState(12);
     // const [margin, setMargin] = React.useState("10px");
     // const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -51,20 +55,33 @@ export default function Filter(props) {
         // setMargin(margin === "10px" ? "5px":"10px");
     };
 
+    const handleSwitchScreen = () =>{
+        setRightScreen(!rightScreen);
+    };
+
     // Handle delete by removing the specified key
     const handleDelete = (item) => { 
         // var raw = item.split("***")
         // var varName = raw[0]
         var varName = item.option
         let newObject = {...search_object};
-
-        delete newObject[varName];
+        if(varName=="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"){
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
+            delete newObject["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude"];
+        }
+        else if(varName=="voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"){
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
+            delete newObject["voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude"];
+        }
+        else{
+            delete newObject[varName];
+        }
         set_search_object(newObject); 
         setLabels(labels.filter((e)=>e.option!==varName))
     };
 
   const color = (() =>{
-    if(page === "voyage") {
+    if(pageType === "voyage") {
       if(dataSet==="0") {
         return "voyageTrans"
       }else{
@@ -103,16 +120,6 @@ export default function Filter(props) {
     {drawerOpen ?
         <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"64px"}}>
             <Toolbar>
-                {/* <IconButton
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                >
-                <FilterAlt sx={{ color: "white" }}/>
-                </IconButton>
-                {!drawerOpen ?
-                    <Typography sx={{ color: "white" }}>Filter</Typography>
-                : */}
                     <Grid container direction="row" spacing={1}>
                         {
                         Object.keys(nested_tree).map((key) => {
@@ -126,61 +133,10 @@ export default function Filter(props) {
             </Toolbar>
         </AppBar>: 
         null}
-    {/* <Drawer
-        className={"Selected Fields Drawer"}
-        variant="persistent"
-        anchor="bottom"
-        open={drawerOpen}
-        PaperProps={{ sx: { height: !labels.length ? "15%":"30%",  background:"#EAECEE" }}}
-        style={{ position:'relative', zIndex:2 }}
-    >
-        <IconButton onClick={handleDrawerClose}>
-            <ExpandMoreIcon />
-        </IconButton>
-        <Grid 
-            container 
-            spacing={0} 
-            direction="column"
-        >
-            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} margin="auto" justify="center">
-                {labels.length === 0 ? 
-                    <Grid container item justifyContent="center">
-                        <Typography color="#808B96">No Filter</Typography>
-                    </Grid>
-                :
-                    labels.map((item, index) => {
-                    return(
-                      <Grid container item key={'grid-' + index} xs={6} justifyContent="center">
-                          <Grid item xs={11} >
-                              <Accordion>
-                                  <AccordionSummary>
-                                      <Typography>{options_flat[item.option].flatlabel}</Typography>
-                                  </AccordionSummary>
-                                  <AccordionDetails>
-                                      <ComponentFac params={item} index={index} context={props.context}/>
-                                  </AccordionDetails>
-                              </Accordion>
-                          </Grid>
-                          <Grid item xs={1} >
-                              <IconButton onClick={()=>{handleDelete(item)}}>
-                                  <RemoveCircleOutlineIcon />
-                              </IconButton>
-                          </Grid>
-                      </Grid>
-                    )})
-                }
-            </Grid>
-            <Grid container item sx={2} justifyContent="flex-end">
-                <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
-            </Grid>
-        </Grid>
-    </Drawer> */}
     <Drawer
         className={"Selected Fields Drawer"}
         variant="persistent"
-        anchor="left"
+        anchor={rightScreen?"right":"left"}
         open={drawerOpen}
         PaperProps={{ sx: { width: fullScreen?"100%":"25%", background:"#EAECEE" }}}
         // PaperProps={{ sx: { width: fullScreen?"100%":"25%", height: "80%", marginTop: "128px", background:"#EAECEE" }}}
@@ -189,31 +145,40 @@ export default function Filter(props) {
         <Toolbar />
         <Toolbar />
         <Divider />
-        <Grid container item justifyContent="flex-end" > 
-                <IconButton onClick={handleFullScreen}>
-                    {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
-                </IconButton>
+        <Grid container justifyContent="center" sx={{mb:"10px"}}> 
+                <Grid container item justifyContent={rightScreen?"flex-start":"flex-end"}>
+                    <IconButton onClick={handleSwitchScreen}>
+                        {rightScreen ? <SwitchLeftIcon /> : <SwitchRightIcon />}
+                    </IconButton>
+                    <IconButton onClick={handleFullScreen}>
+                        {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon/>}
+                    </IconButton>
+                </Grid>
+                {
+                    pageType=='voyage' ? 
+                    <Button variant="contained" color={color} onClick={OpenBoundingBoxFilter}>
+                        <Typography color="white">Add Visual Filter</Typography>
+                    </Button> : null
+                }
         </Grid>
+        <Divider />
         <Grid 
             container 
-            spacing={0} 
-            direction="column"
+            item
+            rowSpacing={2} columnSpacing={0.5}
+            direction="row"
+            justifyContent="center"
+            sx={{mt:"10px", mb:"10px", ml:"10px"}}
         >
-            <Grid container item justifyContent="center" rowSpacing={2} columnSpacing={0.5} justify="center">
-                {
-                    page=='voyage' ? 
-                    <Button variant="contained" color="grey" onClick={OpenBoundingBoxFilter}>Add Visual Filter
-                    </Button> : ""
-                }
                 {labels.length === 0 ? 
-                    <Grid container item justifyContent="center" >
+                    <Grid container item justifyContent="center" sx={{mb:"15px", mr:"10px"}}>
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{m:fullScreen?"5px":"10px"}} justifyContent="center">
-                          <Grid item xs={10} >
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
+                          <Grid item xs={10}>
                               <Accordion>
                                   <AccordionSummary>
                                       <Typography>{options_flat[item.option].flatlabel}</Typography>
@@ -231,11 +196,11 @@ export default function Filter(props) {
                       </Grid>
                     )})
                 }
-            </Grid>
         </Grid>
-        <Grid container item justifyContent="flex-end">
+        <Divider />
+        <Grid container item justifyContent={rightScreen?"flex-start":"flex-end"}>
                 <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
+                    {rightScreen?<ChevronRightIcon />:<ChevronLeftIcon />}
                 </IconButton>
         </Grid>
     </Drawer>
