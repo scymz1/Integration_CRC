@@ -144,12 +144,13 @@ export default function ResponsiveAppBar(props) {
                   value={dataSet}
                   exclusive
                   onChange={(event) => {
+
                     set_search_object({
+                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)
 
-                    setLabels([])
                     
                     setTotalResultsCount(0);
                         setPage(0);
@@ -257,6 +258,7 @@ export default function ResponsiveAppBar(props) {
                   exclusive
                   onChange={(event) => {
                     set_search_object({
+                      ...search_object,
                       dataset: [event.target.value, event.target.value]
                     })
                     setDataSet(event.target.value)

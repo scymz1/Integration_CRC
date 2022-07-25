@@ -139,7 +139,7 @@ export default function BoundingBoxFilter(props){
 
     return (
         <div>
-            <img src={map_icon} alt="map icon" style={{width:"100px", height:"60px"}} onClick={handleOpen}/>
+            <img src={map_icon} alt="map icon" style={{width:"100%", height:"60px"}} onClick={handleOpen}/>
             <Modal
             open={open}
             onClose={handleClose}

@@ -1,31 +1,30 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-// import { VoyageContext } from "../VoyageApp";
-import { Paper,Grid } from "@mui/material";
+import { Paper, Grid } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-// import { PivotContext } from "./PivotApp";
-import {
-  useWindowSize,
-} from '@react-hook/window-size'
-
-// const option_url = "/voyage/?hierarchical=false"; // labels in dropdowns
+import { useWindowSize } from "@react-hook/window-size";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Pivot(props) {
-  const [width, height] = useWindowSize()
+  const [width, height] = useWindowSize();
 
-  const { complete_object, set_complete_object , disembark, setDisembark } = useContext(props.context);
-
-  console.log("Change tab to ",disembark, " Pivot table complete object: ", complete_object)
-  console.log("Disembark: ", disembark)
+  const {
+    complete_object,
+    set_complete_object,
+    disembark,
+    setDisembark,
+    isNormalize,
+  } = useContext(props.context);
+  //console.log(isNormalize === undefined);
+  //console.log(complete_object);
   // Responses
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
@@ -52,14 +51,10 @@ function Pivot(props) {
 
   // Set rows
   useEffect(() => {
-    console.log("updated_complete_object= ", complete_object);
-
-    //console.log("2222222222222222222222222222223333");
     var data = new FormData();
     data.append("hierarchical", "False");
     for (var property in complete_object) {
       if (property !== "groupby_fields") {
-        //console.log(property);
         // eslint-disable-next-line no-loop-func
         complete_object[property].forEach((v) => {
           //console.log(property, v);
@@ -87,7 +82,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object,disembark]);
+  }, [complete_object, disembark]);
 
   // Set columns
   useEffect(() => {
@@ -95,7 +90,6 @@ function Pivot(props) {
     data.append("hierarchical", "False");
     for (var property in complete_object) {
       if (property !== "groupby_fields") {
-        //console.log(property);
         // eslint-disable-next-line no-loop-func
         complete_object[property].forEach((v) => {
           data.append(property, v);
@@ -118,7 +112,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object,disembark]);
+  }, [complete_object, disembark]);
 
   // if (isLoading) {
   //   return <div className="spinner"></div>;
@@ -127,44 +121,44 @@ function Pivot(props) {
   return (
     <div>
       <div>
-        {/* <Grid item xs={12} md={4} lg={3}>
-          <Paper
-            sx={{
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              height: 500,
-            }}
-          ></Paper>
-        </Grid> */}
-        <Grid item sx={{width:width>800 ? width*0.9: width*0.7}}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
-                {cols.map((col, key) => (
-                  <TableCell key={'title-' + key}>{col}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, key) => (
-                <TableRow
-                  key={'row-' + key}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {cols.map((s, key) => {
-                    if (typeof row[s] === "number") {
-                      return <TableCell key={'content-' + key}>{Math.round(row[s])}</TableCell>;
-                    } else {
-                      return <TableCell key={'content-' + key}>{row[s] || 0}</TableCell>;
-                    }
-                  })}
+        <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
+                  {cols.map((col, key) => (
+                    <TableCell key={"title-" + key}>{col}</TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, key) => (
+                  <TableRow
+                    key={"row-" + key}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    {cols.map((s, key) => {
+                      if (typeof row[s] === "number") {
+                        return (
+                          <TableCell key={"content-" + key}>
+                            {isNormalize !== undefined && isNormalize
+                              ? Math.round(row[s] * 1000) / 10 + "%"
+                              : Math.round(row[s])}
+                          </TableCell>
+                        );
+                      } else {
+                        return (
+                          <TableCell key={"content-" + key}>
+                            {row[s] || 0}
+                          </TableCell>
+                        );
+                      }
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </div>
     </div>

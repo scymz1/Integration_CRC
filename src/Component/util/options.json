@@ -1522,7 +1522,7 @@
   "voyage_dates__voyage_completed_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year on which slave voyage completed (DATARR44,43,45)",
-    "flatlabel": "Dates : Year on which slave voyage completed (DATARR44,43,45)"
+    "flatlabel": "Date on which captive voyage completed (DATARR44,43,45)"
   },
   "voyage_dates__voyage_completed_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1542,7 +1542,7 @@
   "voyage_dates__departure_last_place_of_landing_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of departure from last place of landing (DDEPAMB,*,C)",
-    "flatlabel": "Dates : Year of departure from last place of landing (DDEPAMB,*,C)"
+    "flatlabel": "Date of departure from last place of landing (DDEPAMB,*,C)"
   },
   "voyage_dates__departure_last_place_of_landing_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1602,7 +1602,7 @@
   "voyage_dates__date_departed_africa_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year vessel departed Africa (DATELEFTAFR)",
-    "flatlabel": "Dates : Year vessel departed Africa (DATELEFTAFR)"
+    "flatlabel": "Date vessel departed Africa (DATELEFTAFR)"
   },
   "voyage_dates__date_departed_africa_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1622,7 +1622,7 @@
   "voyage_dates__first_dis_of_slaves_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year of first disembarkation of slaves (DATARR33,32,34)",
-    "flatlabel": "Dates : Year of first disembarkation of slaves (DATARR33,32,34)"
+    "flatlabel": "Date of first disembarkation of captives (DATARR33,32,34)"
   },
   "voyage_dates__first_dis_of_slaves_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1662,7 +1662,7 @@
   "voyage_dates__slave_purchase_began_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year that slave purchase began (D1SLATRB,A,C)",
-    "flatlabel": "Dates : Year that slave purchase began (D1SLATRB,A,C)"
+    "flatlabel": "Date that captive purchase began (D1SLATRB,A,C)"
   },
   "voyage_dates__slave_purchase_began_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
@@ -1682,7 +1682,7 @@
   "voyage_dates__voyage_began_yyyy": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
     "label": "Year that voyage began (DATEDEPB,A,C)",
-    "flatlabel": "Dates : Year that voyage began (DATEDEPB,A,C)"
+    "flatlabel": "Date that voyage began (DATEDEPB,A,C)"
   },
   "voyage_dates__voyage_began_dd": {
     "type": "<class 'rest_framework.fields.IntegerField'>",

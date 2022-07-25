@@ -131,7 +131,7 @@ export default function Sankey(props) {
                             color: "#1e3162",
                             value:5})}
           var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
-          if(enslavedlist.length > 10){
+          if(enslavedlist.length > 20){
             enslaverLength = enslaverLength + 1;
             // var name_list = []
             // for(var i = 0; i < 10; i++){
@@ -140,7 +140,7 @@ export default function Sankey(props) {
             var enslaved_id =  _.get(enslavedlist[0],["enslaved","id"],null);
             if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
               nodes.push({id: enslaved_id, 
-                          name: "greater than 10 people",
+                          name:  enslavedlist.length + " enslaved people",
                           type: "enslaved"});
             if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id 
                                     ) &&

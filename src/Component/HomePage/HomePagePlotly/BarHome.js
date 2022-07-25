@@ -62,7 +62,14 @@ function BarComponent() {
       <Grid container>
         {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
         <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
-        <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+        <Box sx={{height:height*0.8,
+                  boxShadow: 4, 
+                  margin: 2, 
+                  padding:2, 
+                  borderRadius: '10px',
+                  overflow: "hidden",
+                  overflowY: "scroll"}} 
+              style={{backgroundColor: "#f1f1f1"}}>
           <CardContent sx={{flex: "1 0 auto"}}>
             <Button
               variant="text"
@@ -101,7 +108,21 @@ function BarComponent() {
                 },
                 {type: "bar"},
               ]}
-              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "The sum of voyage : Ship : Imputed Ship Nationality : Name vs <br> enslaved in relation : enslavement relation : voyage : voyage slaves numbers : Total slaves embarked imputed * (slaximp)",
+              font: {
+                size: 8
+              },
+              xaxis:{
+                title: 
+                {text:"Name "},
+                fixedrange: true
+              },
+              yaxis:{
+                title: 
+                {text:"Total slaves embarked imputed * (slaximp)"},
+                fixedrange: true
+              }
+            }}
               config={{responsive: true}}
             />
           </CardContent>
