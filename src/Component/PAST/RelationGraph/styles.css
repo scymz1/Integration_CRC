@@ -111,10 +111,16 @@
   }
 
   @media (min-width: 800px){
-    .story{
+    .enslaved_story{
         /* min-height: 52vh;
         max-height: 68vh; */
         height: 70vh;
+    }
+    /* .enslaver_story_func{
+      height: 24em;
+    } */
+    .enslaver_story_func_head{
+      height: 3em;
     }
 }
 
