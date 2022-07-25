@@ -81,7 +81,6 @@ export const columnOptions = {
     'voyage_dates__date_departed_africa': null,
     'voyage_dates__departure_last_place_of_landing': null,
     'voyage_dates__first_dis_of_slaves': null,
-    'voyage_dates__imp_arrival_at_port_of_dis': null,
     'voyage_dates__imp_length_home_to_disembark': null,
     'voyage_dates__imp_arrival_at_port_of_dis_yyyy': null,
     'voyage_dates__length_middle_passage_days': null,
@@ -156,7 +155,11 @@ export const columnOptions = {
 export const voyage_default_list = [
   "id",
   'voyage_ship__ship_name',
-  "voyage_shipownerconnection__owner__name",
-  "voyage_itinerary__principal_place_of_slave_purchase__geo_location__name",
-  "voyage_sourceconnection__source__full_ref"
+  'voyage_itinerary__imp_port_voyage_begin__geo_location__name',
+  'voyage_itinerary__principal_place_of_slave_purchase__geo_location__name',
+  'voyage_itinerary__principal_port_of_slave_dis__geo_location__name',
+  'voyage_dates__imp_arrival_at_port_of_dis_yyyy',
+  'voyage_slaves_numbers__imp_total_num_slaves_disembarked',
+  'voyage_captainconnection__captain__name',
+  //"voyage_sourceconnection__source__full_ref"
 ]
