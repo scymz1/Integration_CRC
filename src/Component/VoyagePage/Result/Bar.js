@@ -71,13 +71,12 @@ function Bar (props) {
 
 
     useEffect(() => {
-
         setBarData([...barData, 
                 {
                     x: plot_field,
                     y: plot_value,
                     type: 'bar',
-                    name: `${options_flat[option.value].flatlabel}`,
+                    name: `${options_flat[option.value].flatlabel}` ,
                     barmode: "group"
                 }
             ])
@@ -103,7 +102,7 @@ function Bar (props) {
             // eslint-disable-next-line no-loop-func
             search_object[property].forEach((v)=>{
                 data.append(property, v)
-                //console.log("v", v)
+                console.log("v", v)
             })
         }
 
@@ -219,7 +218,7 @@ function Bar (props) {
                             //     },
 
                             // ]}
-                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} with ${options_flat[option.value].flatlabel} Bar Graph`,
+                            layout={{width: width*0.8,title: `The ${aggregation} of ${options_flat[option.field].flatlabel} vs <br> ${options_flat[option.value].flatlabel} Bar Graph`,
                             xaxis:{
                                 title: 
                                 {text:`${options_flat[option.field].flatlabel}`},

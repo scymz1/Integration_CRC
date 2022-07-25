@@ -82,12 +82,27 @@ function ScatterComponent() {
                   x: plot_field,
                   y: plot_value,
                   type: "scatter",
-                  mode: "lines+markers",
+                  mode: "lines",
                   marker: {color: "red"},
                   line: {shape: 'spline'},
+                 
                 },
               ]}
-              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "The sum of Year of arrival at port of disembarkation (YEARAM) vs <br> Imputed number of adults who died on Middle Passage (ADLT2IMP) Scatter Graph",
+              font: {
+                size: 8
+              },
+              xaxis:{
+                title: 
+                {text:"Year of arrival at port of disembarkation (YEARAM)"},
+                fixedrange: true
+              },
+              yaxis:{
+                title: 
+                {text:"Imputed number of adults who died on Middle Passage (ADLT2IMP)"},
+                fixedrange: true
+              }}}
+
               config={{responsive: true}}
             />
           {/* </CardContent> */}

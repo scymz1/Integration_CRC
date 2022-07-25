@@ -108,7 +108,21 @@ function BarComponent() {
                 },
                 {type: "bar"},
               ]}
-              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "Scatter Plot"}}
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "The sum of voyage : Ship : Imputed Ship Nationality : Name vs <br> enslaved in relation : enslavement relation : voyage : voyage slaves numbers : Total slaves embarked imputed * (slaximp)",
+              font: {
+                size: 8
+              },
+              xaxis:{
+                title: 
+                {text:"Name "},
+                fixedrange: true
+              },
+              yaxis:{
+                title: 
+                {text:"Total slaves embarked imputed * (slaximp)"},
+                fixedrange: true
+              }
+            }}
               config={{responsive: true}}
             />
           </CardContent>

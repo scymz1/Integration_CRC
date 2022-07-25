@@ -11,6 +11,7 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
+import _ from 'lodash';
 import { set } from "lodash";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -180,32 +181,13 @@ export function ReadFeature(props) {
 
     //console.log("UseEffect Complete Object: ", complete_object)
 
-    map.on('popupopen', function(){
+    // map.on('popupopen', function(){
 
       console.log("Popup open function")
 
       const container = L.DomUtil.create("div");
 
       const root = ReactDOM.createRoot(container);
-      // root.render(
-      //   <PivotContext.Provider
-      //         value={{ complete_object, set_complete_object , disembark, setDisembark}}
-      //       >
-      //         <Grid>
-              
-      //           <div style={{ fontSize: "24px", color: "black" }}>
-      //             <div>
-                   
-      //                 {/* only show if intraamerican, otherwise hidden */
-      //                 }
-      //                   {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-      //                 <Pivot context={PivotContext} />
-      //             </div>
-      //           </div>
-      //         </Grid>
-      //         </PivotContext.Provider>
-      // );
-    })
 
   }, [complete_object])
 
@@ -253,9 +235,9 @@ export function ReadFeature(props) {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
-          L.marker(layer["_latlng"]).unbindPopup()
+          // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("click", function (e) {
+          layer.on("mouseover", function (e) {
             
             console.log("Mouseover object: ", complete_object)
 
@@ -267,9 +249,7 @@ export function ReadFeature(props) {
               value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
             >
               <Grid>
-                                {layer.feature.properties.name +
-                  " " +
-                  layer.feature.geometry.coordinates}
+                  { layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
               
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
