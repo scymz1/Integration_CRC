@@ -23,7 +23,7 @@ function TableHome() {
 
     const navigate = useNavigate();
     const GotoVoyagePage = () => {
-      navigate('/');
+      navigate('voyage/Table');
     }
   return (
     <div>
@@ -37,9 +37,9 @@ function TableHome() {
               variant="text"
               style={{ fontSize: "24px" }}
               component={Link}
-              to="/Bar"
+              to="voyage/Table"
             >
-              Data Visualization - Bar Charts
+              Data Visualization - Table Charts
             </Button>
             <div>
               <CardContent>
@@ -49,9 +49,6 @@ function TableHome() {
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
-                  Continue reading...
-                </Button>
               </CardContent>
             </div>
           </CardContent>
