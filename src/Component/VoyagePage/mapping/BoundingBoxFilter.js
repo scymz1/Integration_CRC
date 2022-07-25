@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 
+import L from 'leaflet'
 
 import emb_icon from "./emb_icon.png"
 import disemb_icon from "./disemb_icon.png"
@@ -44,6 +45,8 @@ export default function BoundingBoxFilter(props){
     //const [map_search_object, set_map_search_object] = useState(search_object);
 
     const [selectMode, SetselectMode] = useState(false);
+
+    const [latlong, setlatlong] = useState([[0, 0], [0, 0]]);
     
     const handle = useFullScreenHandle();
 
@@ -132,6 +135,8 @@ export default function BoundingBoxFilter(props){
         p: 4,
     };
 
+    
+
     return (
         <div>
             <img src={map_icon} alt="map icon" style={{width:"100%", height:"60px"}} onClick={handleOpen}/>
@@ -186,10 +191,10 @@ export default function BoundingBoxFilter(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={true} />
+                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={true} latlong={latlong} />
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
+                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode} latlong={latlong} setlatlong={setlatlong} />
 
             </MapContainer>
             </Box>
