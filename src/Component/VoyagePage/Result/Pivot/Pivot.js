@@ -22,11 +22,9 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Pivot(props) {
   const [width, height] = useWindowSize()
 
-  const { complete_object, disembark } = useContext(props.context);
+  const { complete_object, set_complete_object , disembark, setDisembark } = useContext(props.context);
 
-  console.log("updated_complete_object= ", complete_object);
-
-  console.log("Pivot table complete object: ", complete_object)
+  console.log("Change tab to ",disembark, " Pivot table complete object: ", complete_object)
   console.log("Disembark: ", disembark)
   // Responses
   const [rows, setRows] = useState([]);
@@ -89,7 +87,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object]);
+  }, [complete_object,disembark]);
 
   // Set columns
   useEffect(() => {
@@ -120,7 +118,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object]);
+  }, [complete_object,disembark]);
 
   // if (isLoading) {
   //   return <div className="spinner"></div>;

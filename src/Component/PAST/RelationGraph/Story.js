@@ -108,7 +108,7 @@ export default function Story (props) {
     {/*slaved people*/}
     {!dynamic && slavery == "slaves" && <Card 
     // sx={{ flexGrow: 1,  width: 400}}
-    className="story"
+    className="enslaved_story"
     >
       <CardHeader
         title={`Story of ${_.get(target, ["documented_name"], "Unknown Enslaved Person")}`}
@@ -122,11 +122,10 @@ export default function Story (props) {
 
     </Card>}
 
-    {dynamic && slavery == "slaves" && <Card className="story_func">
+    {dynamic && slavery == "slaves" && <Card className="enslaved_story_func">
       <CardHeader
       // textTransform: 'capitalize'
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
-        className="test"
         title = {_.get(target, ["documented_name"], "Unknown Enslaved Person")}
         sx={{pr: 3, pt:3}}
       />
@@ -172,7 +171,7 @@ export default function Story (props) {
 
     {/*slaver*/}
     {!dynamic && slavery != "slaves" && <Card 
-    className="story"
+    className="enslaver_story"
     >
       <CardHeader
         title={`Story of ${_.get(target, ["principal_alias"], "Unknown Slaver")}`}
@@ -184,16 +183,16 @@ export default function Story (props) {
 
     </Card>}
 
-    {dynamic && slavery != "slaves" && <Card className="story_func">
+    {dynamic && slavery != "slaves" && <Card className="enslaver_story_func">
       <CardHeader
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
-        className="test"
         title = {_.get(target, ["principal_alias"], "Unknown Slaver")}
+        className = "enslaver_story_func_head"
         sx={{pr: 3, pt:3}}
       />
       <CardContent>
         <List dense = {true} disablePadding={true}>
-          <ListItem  disablePadding={true}><ListItemText primary="Slaver ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Enslaver ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Principal Alia" secondary={_.get(target, "principal_alias", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Other Alias" secondary={slaverAlias.length === 1 ? "NA" : slaverAlias}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="People Slaved" secondary={_.get(target, "number_enslaved", "NA")}/></ListItem>
@@ -215,7 +214,7 @@ export default function Story (props) {
       <Collapse in={expand} timeout="auto" unmountOnExit>
         <CardContent>
           <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year <b>{_.get(target, "first_active_year", "NA")}</b>, and out of record at <b>{_.get(target, "last_active_year", "NA")}</b></Div>
-          <Div>He has slaved <b>{_.get(target, "number_enslaved", "NA")}</b> people  doing trading business most in <b>{_.get(target, ["principal_location", "geo_location", "name"], "NA")}</b> area</Div>
+          <Div>He has slaved <b>{_.get(target, "number_enslaved", "NA")}</b> people,  doing trading business often in <b>{_.get(target, ["principal_location", "geo_location", "name"], "NA")}</b> area</Div>
         </CardContent>
       </Collapse>
       
