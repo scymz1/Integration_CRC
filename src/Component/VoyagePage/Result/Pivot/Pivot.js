@@ -30,8 +30,6 @@ function Pivot(props) {
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(true);
-
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
   // const [option, setOption] = useState({
@@ -125,9 +123,6 @@ function Pivot(props) {
 
 }, [complete_object,disembark]);
 
-  if (isLoading) {
-    return <div>ISLOADING</div>;
-  }
 
   return (
     <div>
