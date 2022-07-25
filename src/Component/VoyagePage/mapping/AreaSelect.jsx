@@ -20,7 +20,7 @@ export default function AreaSelect(props) {
 
     map.selectArea.enable();
 
-    let drawbox = L.rectangle([[0, 0], [0, 0]], { color: "blue", weight: 1, fillOpacity:0.0 })
+    let drawbox = L.rectangle(props.latlong, { color: "blue", weight: 5, fillOpacity:0.0 })
     map.on("areaselected", (e) => {
       //console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
       //console.log(e.bounds);
@@ -31,6 +31,7 @@ export default function AreaSelect(props) {
       props.onChangelatitude2(parseFloat(box[3]));
       drawbox.remove();
       drawbox.setBounds(e.bounds);
+      props.setlatlong(e.bounds);
       drawbox.addTo(map);
       props.SetselectMode(false);
     });
