@@ -156,7 +156,13 @@ function TableModal(props) {
                           </Grid>
                           <Grid item xs={8}>
                             <div
-                              dangerouslySetInnerHTML={{ __html: content[obj] }}
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  content[obj] !== null &&
+                                  typeof content[obj] === "object"
+                                    ? content[obj].join(" ")
+                                    : content[obj],
+                              }}
                             />
                           </Grid>
                         </Grid>
