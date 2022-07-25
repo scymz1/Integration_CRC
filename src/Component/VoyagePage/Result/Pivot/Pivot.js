@@ -77,7 +77,15 @@ function Pivot(props) {
         for (var i = 0; i < rows.length; i++) {
           rows[i][""] = row_name[i];
         }
+        if (isNormalize) {
+          rows.map((row) => {
+            Object.keys(row).map((e) => {
+              row[e] = Math.round(row[e] * 1000) / 10 + "%";
+            });
+          });
+        }
         setRows(rows);
+        //console.log("rows=",rows);
       })
       .catch(function (error) {
         console.log(error);
@@ -141,9 +149,7 @@ function Pivot(props) {
                       if (typeof row[s] === "number") {
                         return (
                           <TableCell key={"content-" + key}>
-                            {isNormalize !== undefined && isNormalize
-                              ? Math.round(row[s] * 1000) / 10 + "%"
-                              : Math.round(row[s])}
+                            {Math.round(row[s])}
                           </TableCell>
                         );
                       } else {
