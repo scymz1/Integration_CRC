@@ -89,6 +89,8 @@ function Pivot(props) {
       });
   }, [complete_object,disembark]);
 
+      
+
   // Set columns
   useEffect(() => {
     var data = new FormData();
@@ -117,12 +119,10 @@ function Pivot(props) {
       })
       .catch(function (error) {
         console.log(error);
-      });
-  }, [complete_object,disembark]);
+      })
 
-  // if (isLoading) {
-  //   return <div className="spinner"></div>;
-  // }
+}, [complete_object,disembark]);
+
 
   return (
     <div>
