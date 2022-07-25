@@ -101,7 +101,7 @@ function Table(props) {
       var modified_field = direction === "asc" ? field : "-" + field;
       data.append("order_by", modified_field);
     }
-
+        
     for (var property in search_object) {
       // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
