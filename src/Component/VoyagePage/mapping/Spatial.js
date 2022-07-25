@@ -11,6 +11,7 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
+import _ from 'lodash';
 import { set } from "lodash";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -107,7 +108,7 @@ export function ReadFeature(props) {
       setArea(disembark);
     }
   })
-
+  console.log("useEffect ~ complete_object",map.getZoom())
 
   useEffect(() => {
     var data = new FormData();
@@ -157,54 +158,36 @@ export function ReadFeature(props) {
       
      }
 
-    // console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object", JSON.parse(JSON.stringify(complete_object)))
+    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",  JSON.parse(JSON.stringify(complete_object)))
 
 
   },[disembark])
 
+  // useEffect(() =>{
+  //   let point = complete_object[area];
+  //   if (area === groupby_fields_region[0]){
+  //       delete Object.assign(complete_object, {[area]: point })[disembark];
+  //     }
+  //   else if (area === disembark) {
+  //       delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
+  //    }
+  //    set_complete_object(complete_object)
+  // },[area])
 
-  useEffect(() =>{
-    let point = complete_object[area];
-    if (area === groupby_fields_region[0]){
-        delete Object.assign(complete_object, {[area]: point })[disembark];
-      }
-    else if (area === disembark) {
-        delete Object.assign(complete_object, {[area]: point })[groupby_fields_region[0]];
-     }
-     set_complete_object(complete_object)
-  },[area])
+  console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",  JSON.parse(JSON.stringify(complete_object)))
 
 
   useEffect(()=>{
 
     //console.log("UseEffect Complete Object: ", complete_object)
 
-    map.on('popupopen', function(){
+    // map.on('popupopen', function(){
 
       console.log("Popup open function")
 
       const container = L.DomUtil.create("div");
 
       const root = ReactDOM.createRoot(container);
-      // root.render(
-      //   <PivotContext.Provider
-      //         value={{ complete_object, set_complete_object , disembark, setDisembark}}
-      //       >
-      //         <Grid>
-              
-      //           <div style={{ fontSize: "24px", color: "black" }}>
-      //             <div>
-                   
-      //                 {/* only show if intraamerican, otherwise hidden */
-      //                 }
-      //                   {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-      //                 <Pivot context={PivotContext} />
-      //             </div>
-      //           </div>
-      //         </Grid>
-      //         </PivotContext.Provider>
-      // );
-    })
 
   }, [complete_object])
 
@@ -222,7 +205,6 @@ export function ReadFeature(props) {
         }
       }
     }
-
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
@@ -252,23 +234,21 @@ export function ReadFeature(props) {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
-          L.marker(layer["_latlng"]).unbindPopup()
+          // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("click", function (e) {
+          layer.on("mouseover", function (e) {
             
             console.log("Mouseover object: ", complete_object)
 
-            complete_object[area] = [layer.feature.id, layer.feature.id];
-            set_complete_object({...complete_object, area:[layer.feature.id, layer.feature.id]})
+            complete_object[disembark] = [layer.feature.id, layer.feature.id];
+            //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
-              value={{ complete_object, set_complete_object , disembark, setDisembark}}
+              value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
             >
               <Grid>
-                                {layer.feature.properties.name +
-                  " " +
-                  layer.feature.geometry.coordinates}
+                  { layer.feature.properties.name + " " + layer.feature.geometry.coordinates }
               
                 <div style={{ fontSize: "24px", color: "black" }}>
                   <div>
@@ -276,7 +256,7 @@ export function ReadFeature(props) {
                       {/* only show if intraamerican, otherwise hidden */
                       }
                         {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-                      <Pivot context={PivotContext} />
+                      {/* <Pivot context={PivotContext} /> */}
                   </div>
                 </div>
               </Grid>
@@ -304,6 +284,8 @@ export function ReadFeature(props) {
       drawUpdate(map, csv)
       
     }
+    let drawbox = L.rectangle(props.latlong, { color: "blue", weight: 5, fillOpacity:0.0 });
+    drawbox.addTo(map);
   }, [nodes, csv, props.search_object.dataset, complete_object]);
 
 

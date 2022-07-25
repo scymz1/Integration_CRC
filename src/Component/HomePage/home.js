@@ -10,8 +10,10 @@ import PieComponent from "./HomePagePlotly/PieHome";
 import ScatterComponent from "./HomePagePlotly/ScatterHome";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import TableHome from "./HomePagePlotly/TableHome/TableHome";
-import PAST from "../PAST/PAST";
-import {PASTContext} from "../PAST/PASTApp";
+import SankeyHome from "./HomePagePlotly/SankeyHome";
+import StoryHome from "./HomePagePlotly/StoryHome"
+//import PAST from "../PAST/PAST";
+//import {PASTContext} from "../PAST/PASTApp";
 // const darkTheme = createTheme({
 //   palette: {
 //     mode: 'dark',
@@ -39,7 +41,7 @@ export default function Home() {
     });
   }, []);
   const dataSet = "0";
-  const sample = [ <BarComponent/>, <PieComponent/>, < TableHome/>];
+  const sample = [ <BarComponent/>, <PieComponent/>, < TableHome/>, <SankeyHome/>, <StoryHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
       <div>
@@ -56,9 +58,9 @@ export default function Home() {
                     <Animated
                       animationIn="slideInLeft"
                       animationOut="fadeOut"
-                      animationInDelay= {600}
+                      animationInDelay= {300}
                       isVisible={isVisible}
-                      animationInDuration = {1600}
+                      animationInDuration = {1300}
                     >
                       {label}
                       <Divider/>

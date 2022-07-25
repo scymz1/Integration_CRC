@@ -3,26 +3,29 @@ import ColSelector11 from "./ColSelector11";
 import Table from "./Table";
 import Modal from "./TableModal";
 import React, { useState, useContext } from "react";
-import { columnOptions } from "./tableVars";
+import { columnOptions, voyage_default_list } from "./tableVars";
 import * as labels from "../../../util/options.json";
 import { VoyageContext } from "../../VoyageApp";
 
 export const ColContext = React.createContext({});
 
 function TableApp(props) {
-  const [cols, setCols] = React.useState([
-    "id",
-    "voyage_shipownerconnection__owner__name",
-    "voyage_sourceconnection__source__full_ref"
-  ]);
-  const { endpoint ,
-  totalResultsCount, setTotalResultsCount,
-  page, setPage,
-  rowsPerPage, setRowsPerPage,
+  const [cols, setCols] = React.useState(voyage_default_list);
+  const {
+    endpoint,
+    totalResultsCount,
+    setTotalResultsCount,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
 
-  sortingReq, setSortingReq,
-  field, setField,
-  direction, setDirection,
+    sortingReq,
+    setSortingReq,
+    field,
+    setField,
+    direction,
+    setDirection,
   } = React.useContext(props.context);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
@@ -57,12 +60,18 @@ function TableApp(props) {
           columnOptions,
           options_flat: labels,
           search_object,
-          totalResultsCount, setTotalResultsCount,
-          page, setPage,
-          rowsPerPage, setRowsPerPage,
-          sortingReq, setSortingReq,
-          field, setField,
-          direction, setDirection
+          totalResultsCount,
+          setTotalResultsCount,
+          page,
+          setPage,
+          rowsPerPage,
+          setRowsPerPage,
+          sortingReq,
+          setSortingReq,
+          field,
+          setField,
+          direction,
+          setDirection,
         }}
       >
         <ColSelector11 context={ColContext} />
