@@ -222,7 +222,6 @@ export function ReadFeature(props) {
         }
       }
     }
-
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
@@ -304,6 +303,8 @@ export function ReadFeature(props) {
       drawUpdate(map, csv)
       
     }
+    let drawbox = L.rectangle(props.latlong, { color: "blue", weight: 5, fillOpacity:0.0 });
+    drawbox.addTo(map);
   }, [nodes, csv, props.search_object.dataset, complete_object]);
 
 
