@@ -10,15 +10,11 @@ import { FormControlLabel, RadioGroup } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import { pivot_row_vars, pivot_col_vars, pivot_cell_vars } from "../vars";
-// import { VoyageContext } from "../VoyageApp";
 import * as options_flat from "../../../util/options.json";
-import {
-  useWindowSize,
-} from '@react-hook/window-size'
+import { useWindowSize } from "@react-hook/window-size";
 
 export const PivotContext = React.createContext({});
 
-//const option_url = "/voyage/?hierarchical=false";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -30,51 +26,36 @@ const default_object = {
 };
 
 function PivotApp(props) {
-  const [width, height] = useWindowSize()
+  const [width, height] = useWindowSize();
   const { search_object } = useContext(props.context);
   //console.log(search_object);
   const [complete_object, set_complete_object] = useState(default_object);
   const [selected_object, set_selected_object] = useState(default_object);
-  //console.log("init_selected_object= ",selected_object);
-  // const [selected_object, set_selected_object] = useState({
-  //   groupby_fields: [pivot_row_vars[0], pivot_col_vars[1]],
-  //   value_field_tuple: [pivot_cell_vars[0], "sum"],
-  //   cachename: ["voyage_export"],
-  // });
-
-  // Labels
-  // const [label, setLabel] = useState();
-  // const [isLoading, setLoading] = useState(true);
+  const [selected_value, set_selected_value] = useState("sum");
+  const [isNormalize, setIsNormalize] = useState(false);
 
   // Options
-  //   const [aggregation, setAgg] = React.useState("sum");
   const [option, setOption] = useState({
     0: pivot_row_vars[0],
     1: pivot_col_vars[1],
-    // 2: pivot_cell_vars[0],
   });
 
   const [value, setValue] = useState({
     0: pivot_cell_vars[0],
     1: "sum",
-    // 2: pivot_cell_vars[0],
   });
 
-  const handleChange_agg = (event, idx) => {
-    //setAgg(event.target.value);
-    setValue({
-      ...value,
-      [idx]: event.target.value,
-    });
+  const handleCell = (event) => {
+    value[0] = event.target.value;
     let tmp = selected_object["value_field_tuple"];
-    tmp[idx] = event.target.value;
+    tmp[0] = event.target.value;
     set_selected_object({
       ...selected_object,
       value_field_tuple: tmp,
     });
   };
 
-  const handleChange = (event, idx) => {
+  const handleGroupby = (event, idx) => {
     setOption({
       ...option,
       [idx]: event.target.value,
@@ -87,11 +68,26 @@ function PivotApp(props) {
     });
   };
 
+  const handleValueFunction = (event, valueSelected) => {
+    set_selected_value(event.target.value); // control the radio
+    value[1] = valueSelected;
+    let tmp = selected_object["value_field_tuple"];
+    tmp[1] = valueSelected;
+    if (event.target.value === "mean" || event.target.value === "sum") {
+      delete selected_object["normalize"];
+      setIsNormalize(false);
+    } else {
+      selected_object["normalize"] = [event.target.value];
+      setIsNormalize(true);
+    }
+    set_selected_object({
+      ...selected_object,
+      value_field_tuple: tmp,
+    });
+  };
+
   // Combine the filter and the default
   useEffect(() => {
-    //console.log("updating");
-    //console.log(selected_object);
-    //console.log(search_object);
     set_complete_object(Object.assign({}, search_object, selected_object));
   }, [search_object, selected_object]);
 
@@ -102,7 +98,7 @@ function PivotApp(props) {
   return (
     <div>
       <div>
-        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7}}>
+        <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Rows</InputLabel>
             <Select
@@ -112,7 +108,7 @@ function PivotApp(props) {
               label="Rows"
               name="Rows"
               onChange={(event) => {
-                handleChange(event, 0);
+                handleGroupby(event, 0);
               }}
             >
               {pivot_row_vars.map((option) => (
@@ -123,7 +119,7 @@ function PivotApp(props) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7, my: 2 }}>
+        <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7, my: 2 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Columns</InputLabel>
             <Select
@@ -133,7 +129,7 @@ function PivotApp(props) {
               name="Columns"
               label="Columns"
               onChange={(event) => {
-                handleChange(event, 1);
+                handleGroupby(event, 1);
               }}
             >
               {pivot_col_vars.map((option) => (
@@ -144,7 +140,7 @@ function PivotApp(props) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{maxWidth: width>500 ? width*0.9: width * 0.7, my: 2 }}>
+        <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7, my: 2 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Cells</InputLabel>
             <Select
@@ -154,7 +150,7 @@ function PivotApp(props) {
               name="Cells"
               label="Cells"
               onChange={(event) => {
-                handleChange_agg(event, 0);
+                handleCell(event);
               }}
             >
               {pivot_cell_vars.map((option) => (
@@ -169,48 +165,46 @@ function PivotApp(props) {
       <div>
         <FormControl>
           <FormLabel id="demo-controlled-radio-buttons-group">
-            Remove NA? (does not work)
-          </FormLabel>
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            value={true}
-            //onChange={handleChange_agg}
-            row
-          >
-            <FormControlLabel value="true" control={<Radio />} label="True" />
-            <FormControlLabel
-              disabled
-              value="false"
-              control={<Radio />}
-              label="False"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">
             Value Function
           </FormLabel>
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
             name="controlled-radio-buttons-group"
-            value={value[1]}
-            onChange={(event) => {
-              handleChange_agg(event, 1);
-            }}
+            value={selected_value}
+            // onChange={(event) => {
+            //   handleValueFunction(event, "sum");
+            // }}
             row
           >
-            <FormControlLabel value="sum" control={<Radio />} label="Sum" />
-            <FormControlLabel value="mean" control={<Radio />} label="Mean" />
             <FormControlLabel
-              disabled
+              value="sum"
+              onChange={(event) => {
+                handleValueFunction(event, "sum");
+              }}
+              control={<Radio />}
+              label="Sum"
+            />
+            <FormControlLabel
+              value="mean"
+              onChange={(event) => {
+                handleValueFunction(event, "mean");
+              }}
+              control={<Radio />}
+              label="Mean"
+            />
+            <FormControlLabel
+              value="columns"
+              onChange={(event) => {
+                handleValueFunction(event, "sum");
+              }}
               control={<Radio />}
               label="Normalize_rows"
             />
             <FormControlLabel
-              disabled
+              value="index"
+              onChange={(event) => {
+                handleValueFunction(event, "sum");
+              }}
               control={<Radio />}
               label="Normalize_columns"
             />
@@ -218,7 +212,9 @@ function PivotApp(props) {
         </FormControl>
       </div>
       <div>
-        <PivotContext.Provider value={{ complete_object, set_complete_object }}>
+        <PivotContext.Provider
+          value={{ complete_object, set_complete_object, isNormalize }}
+        >
           <Pivot context={PivotContext} />
         </PivotContext.Provider>
       </div>
