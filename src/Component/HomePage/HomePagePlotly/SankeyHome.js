@@ -28,6 +28,7 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 function Sankey(props) {
+  const [width, height] = useWindowSize();
   const {setOpen, setInfo, setId, modal} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
@@ -109,7 +110,7 @@ function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    let new_CANVAS_WIDTH = 0.8 * 950;
+    let new_CANVAS_WIDTH = width*0.5;
     let new_CANVAS_HEIGHT = 0;
     let transLength = 0;
     let enslaverLength = 0;
@@ -317,14 +318,16 @@ function Sankey(props) {
     new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
 
     setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
-    setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    setCANVAS_WIDTH(width*0.5);
+    //setCANVAS_WIDTH(new_CANVAS_WIDTH);
     const tmpGraph = sankey()
       .nodeAlign(sankeyLeft)
       .nodeWidth(NODE_WIDTH)
       // .nodeheight(40)
       .extent([
         [30, 30],
-        [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+        [width*0.5, new_CANVAS_HEIGHT]
+        //[new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
       ])({nodes, links});
     setGraph(tmpGraph)
   }, [data]);
@@ -370,7 +373,8 @@ function Sankey(props) {
 
           <svg
             className="canvas"
-            width={CANVAS_WIDTH + 30}
+            width={width*0.5}
+            //width={CANVAS_WIDTH + 30}
             height={CANVAS_HEIGHT + 30}
           >
             {graph.nodes.map((node) => {
