@@ -49,9 +49,6 @@ function TableHome() {
                 <Typography variant="subtitle1" paragraph>
                   {featuredPosts.description}
                 </Typography>
-                <Button variant="text" type="button" onClick={GotoVoyagePage}>
-                  Continue reading...
-                </Button>
               </CardContent>
             </div>
           </CardContent>

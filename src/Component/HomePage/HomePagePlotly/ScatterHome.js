@@ -95,10 +95,17 @@ function ScatterComponent() {
         {/* </Box> */}
         <Grid item sx={{maxWidth: width>800 ? "40%": "100%"}}>
 
-        <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+        <Box sx={{height:height*0.8,
+                  boxShadow: 4, 
+                  margin: 2, 
+                  padding:2, 
+                  borderRadius: '10px',
+                  overflow: "hidden",
+                  overflowY: "scroll"}} 
+              style={{backgroundColor: "#f1f1f1"}}>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Button variant="text" style={{ fontSize: '24px' }} component={Link} to="/voyage/Scatter">Data Visualization - Scatter Charts</Button>
-              <CardContent>
+              <CardContent sx={{overflow: 'auto'}}> 
                 <Typography variant="subtitle1" color="textSecondary">
                   {featuredPosts.date}
                 </Typography>
