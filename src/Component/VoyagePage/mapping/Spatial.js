@@ -244,12 +244,14 @@ export function ReadFeature(props) {
           //console.log(props.search_object.dataset[0]==0)
           // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("mouseover", function (e) {
+          layer.on("click", function (e) {
             console.log("Mouseover object: ", complete_object);
 
             complete_object[disembark] = [layer.feature.id, layer.feature.id];
             //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
+            var event = new Event('update_popup');
+            var dispatch=()=>{document.querySelector(".leaflet-popup-pane").dispatchEvent(event)};
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
                 value={{
@@ -271,7 +273,7 @@ export function ReadFeature(props) {
                       {props.search_object.dataset[0] == 0 ? (
                         ""
                       ) : (
-                        <IntraTabs context={PivotContext} />
+                        <IntraTabs context={PivotContext} dispatch={dispatch} />
                       )}
                       {/* <Pivot context={PivotContext} /> */}
                     </div>
@@ -284,7 +286,6 @@ export function ReadFeature(props) {
             //   maxWidth: "auto",
             // });
             markers.addLayer(layer).bindPopup(container, { maxWidth: "auto" });
-
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
@@ -298,6 +299,11 @@ export function ReadFeature(props) {
       // DrawLink(map, csv);
       drawUpdate(map, csv);
     }
+    document.querySelector(".leaflet-popup-pane").addEventListener("update_popup", function (event) {
+      var tagName = event.target.tagName,
+          popup = map._popup; 
+      popup.update();
+    }, true); // Capture the load event, because it does not bubble.
     let drawbox = L.rectangle(props.latlong, {
       color: "blue",
       weight: 5,

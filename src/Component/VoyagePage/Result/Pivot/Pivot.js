@@ -130,6 +130,12 @@ function Pivot(props) {
   //   return <div className="spinner"></div>;
   // }
 
+  useEffect(()=>{
+    if(props.dispatch){
+      props.dispatch();
+    }
+  }, [rows, cols]);
+
   return (
     <div>
       <div>
