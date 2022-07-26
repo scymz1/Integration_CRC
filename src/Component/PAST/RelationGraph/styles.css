@@ -114,7 +114,7 @@
     .enslaved_story{
         /* min-height: 52vh;
         max-height: 68vh; */
-        height: 70vh;
+        height: "100%";
     }
     /* .enslaver_story_func{
       height: 24em;

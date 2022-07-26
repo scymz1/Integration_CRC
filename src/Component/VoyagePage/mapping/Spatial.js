@@ -11,6 +11,7 @@ import axios from "axios";
 import Pivot from "../Result/Pivot/Pivot";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
+import _ from "lodash";
 import { set } from "lodash";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -22,24 +23,24 @@ var linkLayers = {};
 
 var groupby_fields_region = [
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
-	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
+  "voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
 ];
 
 // only use for pivot table
 var groupby_fields_region_name = [
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name",
-	"voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
+  "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
 ];
 
 var groupby_fields_port = [
-  'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id',
-	'voyage_itinerary__imp_principal_port_slave_dis__geo_location__id'
+  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id",
+  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id",
 ];
 
 // only use for pivot table
 var groupby_fields_port_name = [
-  'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name',
-	'voyage_itinerary__imp_principal_port_slave_dis__geo_location__name'
+  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name",
+  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
 ];
 
 var value_field_tuple = [
@@ -50,13 +51,14 @@ var value_field_tuple = [
 var cachename = "voyage_maps";
 var dataset = [0, 0];
 var output_format = "geosankey";
-const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" 
-const embkey = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id" 
+const diskey =
+  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id";
+const embkey =
+  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id";
 
 export const PivotContext = React.createContext({});
-var customIcon = L.divIcon({className: 'leaflet-div-icon2'})
+var customIcon = L.divIcon({ className: "leaflet-div-icon2" });
 L.Marker.prototype.options.icon = customIcon;
-
 
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
@@ -70,7 +72,9 @@ export function ReadFeature(props) {
   const map = useMap();
 
   // tab selection in popup
-  const [disembark, setDisembark] = React.useState('voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id');
+  const [disembark, setDisembark] = React.useState(
+    "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+  );
   const [area, setArea] = useState(groupby_fields_region[0]); // port or region
   const [complete_object, set_complete_object] = useState({
     groupby_fields: groupby_fields_region_name,
@@ -79,40 +83,37 @@ export function ReadFeature(props) {
   });
 
   var markers = L.markerClusterGroup({
-    iconCreateFunction: function(cluster) {
-      return L.divIcon({ html: '<div><span>' + cluster.getChildCount() + '</span></div>' , 
-                          className: ' cluster-small', 
-                          });
-	}
+    iconCreateFunction: function (cluster) {
+      return L.divIcon({
+        html: "<div><span>" + cluster.getChildCount() + "</span></div>",
+        className: " cluster-small",
+      });
+    },
   });
 
-
   // Switching region/port views based on map zoom level
-  map.on('zoomend', function() {
-    
-    if(map.getZoom() < 8) {
-      setGroupBy(groupby_fields_region)
+  map.on("zoomend", function () {
+    if (map.getZoom() < 8) {
+      setGroupBy(groupby_fields_region);
       set_complete_object({
         ...complete_object,
         groupby_fields: groupby_fields_region_name,
       });
       setArea(groupby_fields_region[0]);
-    }
-    else {
-      setGroupBy(groupby_fields_port)
+    } else {
+      setGroupBy(groupby_fields_port);
       set_complete_object({
         ...complete_object,
         groupby_fields: groupby_fields_port_name,
       });
       setArea(disembark);
     }
-  })
-  console.log("useEffect ~ complete_object",map.getZoom())
+  });
+  console.log("useEffect ~ complete_object", map.getZoom());
 
   useEffect(() => {
     var data = new FormData();
     for (var property in props.search_object) {
- 
       props.search_object[property].forEach((v) => {
         data.append(property, v);
       });
@@ -134,33 +135,34 @@ export function ReadFeature(props) {
     });
   }, [props.search_object, groupby_fields]);
 
-    
-
   // Update complete object based on tab selection in popup
-  useEffect(() =>{
+  useEffect(() => {
     //selected disembark
-    if (disembark === diskey ){
+    if (disembark === diskey) {
       //if currently search_object is embark
-        // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")  
-        const res = delete Object.assign(complete_object, {[diskey]: complete_object[embkey] })[embkey];
-        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
-       set_complete_object(complete_object)
+      // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")
+      const res = delete Object.assign(complete_object, {
+        [diskey]: complete_object[embkey],
+      })[embkey];
+      // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+      set_complete_object(complete_object);
       //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
       // }
-      }
-    else{
-        //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-        const res = delete Object.assign(complete_object, {[embkey]: complete_object[diskey] })[diskey];
-        // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
-       set_complete_object(complete_object)
+    } else {
+      //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+      const res = delete Object.assign(complete_object, {
+        [embkey]: complete_object[diskey],
+      })[diskey];
+      // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+      set_complete_object(complete_object);
       //console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
-      
-     }
+    }
 
-    console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",  JSON.parse(JSON.stringify(complete_object)))
-
-
-  },[disembark])
+    console.log(
+      "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",
+      JSON.parse(JSON.stringify(complete_object))
+    );
+  }, [disembark]);
 
   // useEffect(() =>{
   //   let point = complete_object[area];
@@ -173,42 +175,22 @@ export function ReadFeature(props) {
   //    set_complete_object(complete_object)
   // },[area])
 
-  console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",  JSON.parse(JSON.stringify(complete_object)))
+  console.log(
+    "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",
+    JSON.parse(JSON.stringify(complete_object))
+  );
 
-
-  useEffect(()=>{
-
+  useEffect(() => {
     //console.log("UseEffect Complete Object: ", complete_object)
 
-    map.on('popupopen', function(){
+    // map.on('popupopen', function(){
 
-      console.log("Popup open function")
+    console.log("Popup open function");
 
-      const container = L.DomUtil.create("div");
+    const container = L.DomUtil.create("div");
 
-      const root = ReactDOM.createRoot(container);
-      // root.render(
-      //   <PivotContext.Provider
-      //         value={{ complete_object, set_complete_object , disembark, setDisembark}}
-      //       >
-      //         <Grid>
-              
-      //           <div style={{ fontSize: "24px", color: "black" }}>
-      //             <div>
-                   
-      //                 {/* only show if intraamerican, otherwise hidden */
-      //                 }
-      //                   {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
-      //                 <Pivot context={PivotContext} />
-      //             </div>
-      //           </div>
-      //         </Grid>
-      //         </PivotContext.Provider>
-      // );
-    })
-
-  }, [complete_object])
-
+    const root = ReactDOM.createRoot(container);
+  }, [complete_object]);
 
   useEffect(() => {
     for (var i in map._layers) {
@@ -223,18 +205,23 @@ export function ReadFeature(props) {
         }
       }
     }
-
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
-      if(props.radio == "embarkation"){
-        return feature.geometry.coordinates[0]>=-23.334960 && !feature.properties.name.includes("ocean waypt")
-      }else{ //if disembarkation is selected, only show nodes on American side
-        return feature.geometry.coordinates[0]<-23.334960 && !feature.properties.name.includes("ocean waypt");
+      if (props.radio == "embarkation") {
+        return (
+          feature.geometry.coordinates[0] >= -23.33496 &&
+          !feature.properties.name.includes("ocean waypt")
+        );
+      } else {
+        //if disembarkation is selected, only show nodes on American side
+        return (
+          feature.geometry.coordinates[0] < -23.33496 &&
+          !feature.properties.name.includes("ocean waypt")
+        );
       }
-      
     };
-    
+
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -244,69 +231,80 @@ export function ReadFeature(props) {
           };
         },
       });
-      map.removeLayer(markers)
+      map.removeLayer(markers);
       // Add only actual locations to the map with markers (with clicking events and popups)
-      if(!props.filter){
-        filterNodes=(feature)=>{return true}
-      }      
+      if (!props.filter) {
+        filterNodes = (feature) => {
+          return true;
+        };
+      }
       L.geoJSON(nodes.features, {
         filter: filterNodes,
         onEachFeature: function (feature, layer) {
           //console.log(props.search_object.dataset[0]==0)
-          L.marker(layer["_latlng"]).unbindPopup()
+          // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("click", function (e) {
-            
-            console.log("Mouseover object: ", complete_object)
+          layer.on("mouseover", function (e) {
+            console.log("Mouseover object: ", complete_object);
 
             complete_object[disembark] = [layer.feature.id, layer.feature.id];
             //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
-              value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
-            >
-              <Grid>
-                                {layer.feature.properties.name +
-                  " " +
-                  layer.feature.geometry.coordinates}
-              
-                <div style={{ fontSize: "24px", color: "black" }}>
-                  <div>
-                   
-                      {/* only show if intraamerican, otherwise hidden */
-                      }
-                        {props.search_object.dataset[0] == 0? "":<IntraTabs context={PivotContext}/>}
+                value={{
+                  complete_object,
+                  set_complete_object,
+                  disembark,
+                  setDisembark,
+                  layer,
+                }}
+              >
+                <Grid>
+                  {layer.feature.properties.name +
+                    " " +
+                    layer.feature.geometry.coordinates}
+
+                  <div style={{ fontSize: "24px", color: "black" }}>
+                    <div>
+                      {/* only show if intraamerican, otherwise hidden */}
+                      {props.search_object.dataset[0] == 0 ? (
+                        ""
+                      ) : (
+                        <IntraTabs context={PivotContext} />
+                      )}
                       {/* <Pivot context={PivotContext} /> */}
+                    </div>
                   </div>
-                </div>
-              </Grid>
+                </Grid>
               </PivotContext.Provider>
             );
-            
 
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
             //   maxWidth: "auto",
             // });
-            markers.addLayer(layer).bindPopup(container, {maxWidth:"auto"})
+            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto" });
 
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
             // })
-
-        })
-          markers.addLayer(layer)
+          });
+          markers.addLayer(layer);
         },
       });
 
       map.addLayer(markers);
       // DrawLink(map, csv);
-      drawUpdate(map, csv)
-      
+      drawUpdate(map, csv);
     }
+    let drawbox = L.rectangle(props.latlong, {
+      color: "blue",
+      weight: 5,
+      fillOpacity: 0.0,
+    });
+    drawbox.addTo(map);
   }, [nodes, csv, props.search_object.dataset, complete_object]);
-
 
   if (isLoading == false) {
     return "isLoading";
@@ -316,25 +314,23 @@ export function ReadFeature(props) {
 }
 
 function drawUpdate(map, routes) {
-
   var valueMin = d3.min(routes, function (l) {
     return l[2];
   });
   var valueMax = d3.max(routes, function (l) {
     return l[2];
   });
-  
+
   var valueScale = d3.scaleLinear().domain([valueMin, valueMax]).range([1, 10]);
 
-
-  routes.map(route => {
+  routes.map((route) => {
     var commands = [];
 
-    commands.push('M', route[0][0])
-    commands.push('C', route[1][0], route[1][1], route[0][1])
+    commands.push("M", route[0][0]);
+    commands.push("C", route[1][0], route[1][1], route[0][1]);
 
-    L.curve(commands, {color: 'blue', weight: valueScale(route[2])}).bindPopup("Sum of slaves: " + route[2]).addTo(map)
-  })
-
+    L.curve(commands, { color: "blue", weight: valueScale(route[2]) })
+      .bindPopup("Sum of slaves: " + route[2])
+      .addTo(map);
+  });
 }
-
