@@ -134,6 +134,11 @@ export default function ResponsiveAppBar(props) {
                     Past
                 </Link>
                 </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                <Link to={"/Documents"} style={{ textDecoration: "none" }}>
+                    Documents
+                </Link>
+                </MenuItem>
                 
 
                 <ThemeProvider theme={switchTheme}>
