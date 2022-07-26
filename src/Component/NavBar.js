@@ -368,7 +368,7 @@ export default function ResponsiveAppBar(props) {
                 Blog
               </Button>
             </Link> */}
-            {/* <Link to={"/Documents"} style={{ textDecoration: "none" }}>
+            <Link to={"/Documents"} style={{ textDecoration: "none" }}>
               <Button
                 sx={{
                   my: 2,
@@ -379,7 +379,7 @@ export default function ResponsiveAppBar(props) {
               >
                 Documents
               </Button>
-            </Link> */}
+            </Link>
           </Box>
         </Toolbar>
       </Container>
