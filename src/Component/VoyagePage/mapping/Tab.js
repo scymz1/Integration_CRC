@@ -42,8 +42,6 @@ export default function IntraTabs(props) {
   };
 
 
-
-
   return (
     <TabContext.Provider
 value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
@@ -61,10 +59,10 @@ value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
     </Tabs>
 
     <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"}>
-        <Pivot context={TabContext} /> 
+        <Pivot context={TabContext} dispatch={props.dispatch}/> 
       </TabPanel>
     <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_port_slave_dis__geo_location__id"}>
-        <Pivot context={TabContext} /> 
+        <Pivot context={TabContext} dispatch={props.dispatch}/> 
       </TabPanel>
 
   </Box>
