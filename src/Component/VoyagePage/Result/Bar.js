@@ -45,9 +45,10 @@ export default function Bar(props) {
           : theme.typography.fontWeightMedium,
     };
   }
-
+// chip is used to change the box shape during each tiem we add information
+// plot 
   const theme = useTheme();
-
+  const [isLoading, setIsLoading] = useState(true);
   const [width, height] = useWindowSize();
   const { search_object, endpoint } = React.useContext(props.context);
 
@@ -55,15 +56,18 @@ export default function Bar(props) {
   const [plot_value, setarry] = useState([]);
 
 
-  const [chips, setchips] = useState([]);
+  const [chips, setchips] = useState([bar_y_vars[1]]);
 
   const [option, setOption] = useState({
     field: bar_x_vars[0],
     value: bar_y_vars[1],
   });
+  
   const [barData, setBarData] = useState([]);
 
   const [aggregation, setAgg] = React.useState("sum");
+
+  // console.log("🏀", barData)
 
   const handleChange_agg = (event) => {
     setAgg(event.target.value);
@@ -97,7 +101,10 @@ export default function Bar(props) {
       );
   }
 
+
   useEffect(() => {
+    // console.log("🎾", option)
+    setIsLoading(true);
     // console.log("🎾",option)
     //var group_by = option.field
     var value = option.value;
@@ -123,6 +130,7 @@ export default function Bar(props) {
     axios
       .post(endpoint + "groupby", (data = data))
       .then(function (response) {
+        console.log("response", response)
         setarrx(Object.keys(response.data[value]));
         // console.log("🚌",plot_value)
         setarry(Object.values(response.data[value]));
@@ -131,20 +139,25 @@ export default function Bar(props) {
         setBarData([
           ...barData,
           {
-            x: plot_field,
-            y: plot_value,
+            x: Object.keys(response.data[value]),
+            y: Object.values(response.data[value]),
             type: "bar",
             name: `${options_flat[option.value].flatlabel}`,
             barmode: "group",
           },
         ]);
+        setIsLoading(false)
       })
       .catch(function (error) {
         console.log(error);
       });
 
+    
+
     // console.log("😭",barData)
-  }, [option.value, aggregation, search_object]);
+  }, [option.field, option.value, aggregation, search_object]);
+
+  if(isLoading) return;
 
   return (
     <div>

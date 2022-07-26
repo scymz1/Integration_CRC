@@ -49,6 +49,7 @@ export default function Auto(props) {
         .then(result => {
             var newOptions = result[labels.option]
             setautocompleteOptions(newOptions) })
+            console.log(autocompleteOptions)
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
@@ -63,28 +64,37 @@ export default function Auto(props) {
 
     },[value])
 
+//   const parsehtml = (inputarr) => {let arr =[]; inputarr.map(input => {arr.push(input.replace(/(<([^>]+)>)/gi, ""));})
+// return arr}
+
+  const parsehtml = (input) => {return input.replace(/(<([^>]+)>)/gi, "")}
 
   return (
-
     <Autocomplete
       disablePortal
       autoHighlight
       multiple
       options={autocompleteOptions}
+      getOptionLabel={(option) => parsehtml(option)}
       value={search_object[searchLabel.option] ? search_object[searchLabel.option] : autocompleteOptions[0]}
       // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
       }}
       // sx={{ width: 300 }}
+      // renderOption = {
+      //   autocompleteOptions.forEach((option) => {return <div dangerouslySetInnerHTML={{__html: option}} />;})
+      // }
+
+      
+
       renderInput={(params) => {
 
         setTestInput(params.inputProps.value)
-        console.log("TestInput: ", params.inputProps.value)
+        // console.log("TestInput: ", params.inputProps.value)
         return <TextField {...params} label="field" />
          
     }}
     />
-
   );
 }
