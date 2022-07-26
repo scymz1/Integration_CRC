@@ -106,7 +106,8 @@ export default function Story (props) {
   return (
     <>
     {/*slaved people*/}
-    {!dynamic && slavery == "slaves" && <Card 
+    {!dynamic && slavery == "slaves" && 
+    <Card 
     // sx={{ flexGrow: 1,  width: 400}}
     className="enslaved_story"
     >

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {MapContainer, TileLayer, LayersControl, ZoomControl} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-
+import L from 'leaflet'
 
 
 
@@ -35,6 +35,8 @@ export default function MapBoundingBox(props){
     const [longitude2, onChangelongitude2] = React.useState(359.99);
     const [latitude1, onChangelatitude1] = React.useState(-90);
     const [latitude2, onChangelatitude2] = React.useState(90);
+
+    const [latlong, setlatlong] = useState([[0, 0], [0, 0]]);
 
     
     const {set_search_object, search_object, labels, setLabels} = React.useContext(props.context);
@@ -137,12 +139,12 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={false}/>
+                <ReadFeature search_object={search_object}  radio = {radioOptions} filter={false} latlong={latlong}/>
                 
 
 
                 <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode}/>
+                onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={SetselectMode} latlong={latlong} setlatlong={setlatlong}/>
                 {
                     handle.active?
                         <Control prepend position='topleft' >

@@ -1,19 +1,35 @@
-import * as React from "react";
-import {useContext, useEffect, useState} from "react";
-import {PASTContext} from "../PASTApp";
-import {Box, Button, Card, CircularProgress, Grid, Popover, Typography} from "@mui/material";
-import {sankey, sankeyLeft, sankeyLinkHorizontal} from "d3-sankey";
-import EastIcon from '@mui/icons-material/East';
-import './styles.css'
+import React, {useContext, useEffect, useState} from "react";
+// import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
+import axios from "axios";
+import Plot from "react-plotly.js";
+import {Box, Button, Card, CardContent, Typography,Grid, Popover, CircularProgress} from "@mui/material";
+import {Link, useNavigate} from "react-router-dom";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
+import Story from "../../PAST/RelationGraph/Story";
+import {PASTContext} from "../../PAST/PASTApp";
 import _ from 'lodash';
+import EastIcon from '@mui/icons-material/East';
+import {sankey, sankeyLeft, sankeyLinkHorizontal} from "d3-sankey";
 
-import Story from "./Story";
+const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+
+const featuredPosts = {
+  title: "Data Visualization: Sankey Diagrams",
+  date: "July 7, 2022",
+  description:
+    "The Sankey Diagrams shows relationships between several enslaved people. For example, this sankey shows connections between Henry, Patrick and Brown, Cesar, who are on the same voyage from Alexandria to New Orleans. Click through to study more relationships among enslavers (shipper, consigner), enslaved people, and information about their voyages.",
+};
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
-export default function Sankey(props) {
-  const {windowRef, setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
+function Sankey(props) {
+  const [width, height] = useWindowSize();
+  const {setOpen, setInfo, setId, modal} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
   const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
@@ -21,6 +37,12 @@ export default function Sankey(props) {
   const MIN_NODE_HEIGHT = 80;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [queryData, setQueryData] = React.useState({
+    slaves: [500002, 500004],
+    type: "slaves",
+    enslavers:[]
+  })
+
   const getEndpoint = (typeForTable) => {
     switch (typeForTable) {
       case "slaves": return "past/enslaved/"
@@ -88,98 +110,14 @@ export default function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
+    let new_CANVAS_WIDTH = width>800 ?width*0.55:width*0.8;
     let new_CANVAS_HEIGHT = 0;
     let transLength = 0;
     let enslaverLength = 0;
     let nodes = [];
     let links = [];
     if(isLoading) return;
-    if (queryData.type === "enslavers") {
-      data.forEach((item) => {
-        let existNode = nodes.find(node => node.id === item.id)
-        if(!existNode){
-         nodes.push({id: item.id, name: item.alias[0].alias, type: "enslaver"})
-        }
-        var transactions = item.alias[0].transactions;
-        transLength = transLength+transactions.length;
-        transactions.forEach((transaction)=>{
-          var transaction_default = _.get(transaction,["id"],null);
-          var transaction_id = transaction.transaction.voyage === null ? transaction_default : transaction.transaction.voyage
-          var relation_type = _.get(transaction,["transaction","relation_type","relation_type"],null);
-          var voyage_id =  _.get(transaction,["transaction","voyage"],null);
-          var amount= _.get(transaction,["transaction","amount"],null);
-          var place= _.get(transaction,["transaction","place","geo_location","name"],null);
-          var full_ref= _.get(transaction,["transaction","source","full_ref"],null);
-          var date =  _.get(transaction,["transaction","date"],null);
-          if(nodes.findIndex(node => node.id === transaction.id)===-1){
-              nodes.push({id: transaction_id, 
-                          name: relation_type,
-                          voyage_id: voyage_id,
-                          amount: amount,
-                          place: place,
-                          full_ref: full_ref,
-                          date: date,
-                          type: "transaction"})
-              }
-              if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === item.id) &&
-                                      x.target === nodes.findIndex(x => x.id === transaction_id &&
-                                                                        x.name === relation_type)) === -1) {
-                links.push({source: nodes.findIndex(x => x.id === item.id),
-                            target: nodes.findIndex(x => x.id === transaction_id &&
-                                                         x.name === relation_type),
-                            color: "#1e3162",
-                            value:5})}
-          var enslavedlist =  _.get(transaction,["transaction","enslaved_person"],null);
-          if(enslavedlist.length > 20){
-            enslaverLength = enslaverLength + 1;
-            // var name_list = []
-            // for(var i = 0; i < 10; i++){
-            //   name_list.push(enslavedlist[i].enslaved.documented_name)
-            // }
-            var enslaved_id =  _.get(enslavedlist[0],["enslaved","id"],null);
-            if(nodes.findIndex(x => x.id === enslaved_id) === -1) {
-              nodes.push({id: enslaved_id, 
-                          name:  enslavedlist.length + " enslaved people",
-                          type: "enslaved"});
-            if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id 
-                                    ) &&
-                                    x.target === nodes.findIndex(x => x.id === enslaved_id 
-                                              )) === -1) {
-              links.push({source: nodes.findIndex(x => x.id === transaction_id 
-                                                        ),
-                          target: nodes.findIndex(x => x.id === enslaved_id),
-                          color: "#1e3162",
-                          value:5
-                  })}
-        }
-          }
-          else{
-            enslaverLength = enslaverLength + enslavedlist.length;
-            enslavedlist.forEach((enslaved) => {
-              var enslaved_id =  _.get(enslaved,["enslaved","id"],null);
-              var enslaved_name =  _.get(enslaved,["enslaved","documented_name"],null);
-              if(nodes.findIndex(x => x.id === enslaved.enslaved.id) === -1) {
-                  nodes.push({id: enslaved_id, 
-                              name: enslaved_name,
-                              type: "enslaved"});
-                if(links.findIndex(x => x.source === nodes.findIndex(x => x.id === transaction_id &&
-                                        x.name === relation_type) &&
-                                        x.target === nodes.findIndex(x => x.id === enslaved_id &&
-                                                  x.name === enslaved_name)) === -1) {
-                  links.push({source: nodes.findIndex(x => x.id === transaction_id &&
-                                                            x.name === relation_type),
-                              target: nodes.findIndex(x => x.id === enslaved_id &&
-                                                          x.name === enslaved_name),
-                              color: "#1e3162",
-                              value:5
-                      })}
-            }})}
-          })
-      })
-    }
 
-    else{
     for (var i = 0; i < data.length; i++) {
       nodes.push({
         id: data[i].id,
@@ -295,7 +233,6 @@ export default function Sankey(props) {
         }
       }
     }
-    ;}
 
     nodes.forEach((node) => {
       const result = [];
@@ -381,14 +318,16 @@ export default function Sankey(props) {
     new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
 
     setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
-    setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    setCANVAS_WIDTH(width>800 ?width*0.5:width*0.8);
+    //setCANVAS_WIDTH(new_CANVAS_WIDTH);
     const tmpGraph = sankey()
       .nodeAlign(sankeyLeft)
       .nodeWidth(NODE_WIDTH)
       // .nodeheight(40)
       .extent([
         [30, 30],
-        [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+        [width>800 ?width*0.5:width*0.8, new_CANVAS_HEIGHT]
+        //[new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
       ])({nodes, links});
     setGraph(tmpGraph)
   }, [data]);
@@ -434,7 +373,8 @@ export default function Sankey(props) {
 
           <svg
             className="canvas"
-            width={CANVAS_WIDTH + 30}
+            width={width>800 ?width*0.5:width*0.8}
+            //width={CANVAS_WIDTH + 30}
             height={CANVAS_HEIGHT + 30}
           >
             {graph.nodes.map((node) => {
@@ -535,3 +475,56 @@ export default function Sankey(props) {
     </div>
   )
 }
+
+
+
+
+
+function SankeyHome() {
+  const [width, height] = useWindowSize()
+
+  return (
+    <div>
+      <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
+        <Grid container>
+          {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+          <Grid item sx={{width:width>800 ?"60%":"90%"}}>
+          {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
+            <CardContent sx={{flex: "1 0 auto"}}>
+              <Sankey />
+            </CardContent>
+          </Grid>
+          <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+            <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
+              <CardContent sx={{flex: "1 0 auto"}}>
+                <Button
+                  variant="text"
+                  style={{fontSize: "24px"}}
+                  component={Link}
+                  to="past"
+                >
+                Data Visualization - Sankey Diagrams
+                </Button>
+                <div>
+                  <CardContent>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {featuredPosts.date}
+                    </Typography>
+                    <Typography variant="subtitle1" paragraph>
+                      {featuredPosts.description}
+                    </Typography>
+                    {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                      Continue reading...
+                    </Button> */}
+                  </CardContent>
+                </div>
+              </CardContent>
+            </Box>
+          </Grid>
+        </Grid>
+      </Card>
+    </div>
+  );
+}
+
+export default SankeyHome;

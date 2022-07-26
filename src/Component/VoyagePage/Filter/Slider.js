@@ -77,14 +77,17 @@ export default function GetSlider(props) {
 
   function handleCommittedChange(event, newValue) {
     //setValue(newValue); 
+
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
     });
+    setValue(newValue);
   }
   
+
   const handleChange = (event, newValue) => {
-      setValue(newValue); 
+    setValue(newValue); 
   };
 
   const handleInputChange = (event) => {
@@ -98,6 +101,7 @@ export default function GetSlider(props) {
       res = [Number(event.target.value), endVal]
       // setValue([Number(event.target.value), endVal])
     }
+
     setValue(res)
   };
 
@@ -129,10 +133,30 @@ export default function GetSlider(props) {
           <Input 
             color = "secondary"
             name ="start"
-            value={search_object[varName] ? search_object[varName][0] : value[0]}
+            value={value[0]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter'){
+                
+                var temp = Number(event.target.value);
+
+                if(event.target.value < range[0]){
+                  setValue([range[0], value[1]]);
+                  temp = range[0]
+                } 
+                else if(event.target.value > range[1]){
+                  setValue([value[1] - 1 < range[0] ? range[0] : value[1] - 1 , value[1]]);
+                  temp = value[1] - 1 < range[0] ? range[0] : value[1] - 1
+                } 
+
+                set_search_object({
+                  ...search_object,
+                  [varName]: [temp, value[1]]
+                })         
+              }
+            }}
             inputProps={{
               step: range[1] - range[0] > 20 ? 10 : 1,
               min: range[0],
@@ -144,10 +168,30 @@ export default function GetSlider(props) {
           />
           <Input
             name ="end"
-            value={search_object[varName] ? search_object[varName][1] : value[1]}
+            value={value[1]}
             size="small"
             onChange={handleInputChange}
             onBlur={handleBlur}
+            onKeyPress={(event) => {
+              if (event.key === 'Enter'){
+
+                var temp = Number(event.target.value);
+
+                if(event.target.value > range[1]) {
+                  temp = range[1]
+                  setValue([value[0], range[1]]);
+                }
+                else if(event.target.value < value[0]) {
+                  temp = value[0] + 1 < range[1] ? value[0] + 1 : range[1]
+                  setValue([value[0], value[0] + 1 < range[1] ? value[0] + 1 : range[1]]);
+                }
+
+                set_search_object({
+                  ...search_object,
+                  [varName]: [value[0], temp]
+                })
+              }
+            }}
             inputProps={{
               step: range[1] - range[0] > 20 ? 10 : 1,
               min: range[0],
@@ -165,7 +209,7 @@ export default function GetSlider(props) {
             max = {range[1]}
             // defaultValue={range}
             getAriaLabel={() => 'Temperature range'}
-            value={search_object[varName] ? search_object[varName] : value}
+            value={value}
             onChange={handleChange}
             onChangeCommitted = {handleCommittedChange}
             // valueLabelDisplay="auto"
