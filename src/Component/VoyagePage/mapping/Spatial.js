@@ -285,7 +285,7 @@ export function ReadFeature(props) {
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
             //   maxWidth: "auto",
             // });
-            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto" });
+            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto", maxHeight: "auto" });
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
@@ -299,11 +299,13 @@ export function ReadFeature(props) {
       // DrawLink(map, csv);
       drawUpdate(map, csv);
     }
+
     document.querySelector(".leaflet-popup-pane").addEventListener("update_popup", function (event) {
       var tagName = event.target.tagName,
           popup = map._popup; 
       popup.update();
     }, true); // Capture the load event, because it does not bubble.
+
     let drawbox = L.rectangle(props.latlong, {
       color: "blue",
       weight: 5,

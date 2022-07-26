@@ -34,6 +34,8 @@ function PivotApp(props) {
   const [selected_value, set_selected_value] = useState("sum");
   const [isNormalize, setIsNormalize] = useState(false);
 
+  console.log("Selected_value: ", selected_value)
+
   // Options
   const [option, setOption] = useState({
     0: pivot_row_vars[0],
