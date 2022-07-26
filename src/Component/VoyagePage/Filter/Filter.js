@@ -175,7 +175,7 @@ export default function Filter(props) {
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
-                    labels.map((item, index) => {
+                    labels.slice(0).reverse().map((item, index) => {
                     return(
                       <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
                           <Grid item xs={10}>
