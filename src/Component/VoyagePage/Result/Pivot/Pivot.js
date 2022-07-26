@@ -79,9 +79,13 @@ function Pivot(props) {
         }
         if (isNormalize) {
           rows.map((row) => {
-            Object.keys(row).map((e) => {
-              row[e] = Math.round(row[e] * 1000) / 10 + "%";
-            });
+            Object.keys(row)
+              .filter(
+                (num) => !isNaN(parseFloat(row[num])) && isFinite(row[num])
+              )
+              .map((e) => {
+                row[e] = Math.round(row[e] * 1000) / 10 + "%";
+              });
           });
         }
         setRows(rows);
