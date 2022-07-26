@@ -22,7 +22,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 const default_object = {
   groupby_fields: [pivot_row_vars[0], pivot_col_vars[1]],
   value_field_tuple: [pivot_cell_vars[0], "sum"],
-  cachename: ["voyage_export"],
+  cachename: ["voyage_pivot_tables"],
 };
 
 function PivotApp(props) {
@@ -198,7 +198,7 @@ function PivotApp(props) {
                 handleValueFunction(event, "sum");
               }}
               control={<Radio />}
-              label="Normalize_rows"
+              label="Normalized Rows"
             />
             <FormControlLabel
               value="index"
@@ -206,7 +206,7 @@ function PivotApp(props) {
                 handleValueFunction(event, "sum");
               }}
               control={<Radio />}
-              label="Normalize_columns"
+              label="Normalized Columns"
             />
           </RadioGroup>
         </FormControl>

@@ -29,7 +29,7 @@ function Network(props) {
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  console.log("aaaaa", queryData)
+  //console.log("aaaaa", queryData)
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
