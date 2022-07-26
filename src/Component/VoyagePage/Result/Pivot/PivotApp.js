@@ -28,11 +28,10 @@ const default_object = {
 function PivotApp(props) {
   const [width, height] = useWindowSize();
   const { search_object } = useContext(props.context);
+
   //console.log(search_object);
   const [complete_object, set_complete_object] = useState(default_object);
   const [selected_object, set_selected_object] = useState(default_object);
-  const [selected_value, set_selected_value] = useState("sum");
-  const [isNormalize, setIsNormalize] = useState(false);
 
   console.log("Selected_value: ", selected_value)
 
@@ -71,16 +70,13 @@ function PivotApp(props) {
   };
 
   const handleValueFunction = (event, valueSelected) => {
-    set_selected_value(event.target.value); // control the radio
     value[1] = valueSelected;
     let tmp = selected_object["value_field_tuple"];
     tmp[1] = valueSelected;
     if (event.target.value === "mean" || event.target.value === "sum") {
       delete selected_object["normalize"];
-      setIsNormalize(false);
     } else {
       selected_object["normalize"] = [event.target.value];
-      setIsNormalize(true);
     }
     set_selected_object({
       ...selected_object,
@@ -106,7 +102,7 @@ function PivotApp(props) {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={option[0]}
+              value={selected_object.groupby_fields[0]}
               label="Rows"
               name="Rows"
               onChange={(event) => {
@@ -127,7 +123,7 @@ function PivotApp(props) {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={option[1]}
+              value={selected_object.groupby_fields[1]}
               name="Columns"
               label="Columns"
               onChange={(event) => {
@@ -148,7 +144,7 @@ function PivotApp(props) {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={value[0]}
+              value={selected_object.value_field_tuple[0]}
               name="Cells"
               label="Cells"
               onChange={(event) => {
@@ -172,10 +168,11 @@ function PivotApp(props) {
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
             name="controlled-radio-buttons-group"
-            value={selected_value}
-            // onChange={(event) => {
-            //   handleValueFunction(event, "sum");
-            // }}
+            value={
+              "normalize" in selected_object
+                ? selected_object.normalize
+                : selected_object.value_field_tuple[1]
+            }
             row
           >
             <FormControlLabel
@@ -215,7 +212,7 @@ function PivotApp(props) {
       </div>
       <div>
         <PivotContext.Provider
-          value={{ complete_object, set_complete_object, isNormalize }}
+          value={{ complete_object, set_complete_object }}
         >
           <Pivot context={PivotContext} />
         </PivotContext.Provider>
