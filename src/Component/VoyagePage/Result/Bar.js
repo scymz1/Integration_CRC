@@ -70,7 +70,7 @@ export default function Bar(props) {
   };
 
   const handleChange_x = (event, name) => {
-    console.log("🏈", event.target.value)
+    // console.log("🏈", event.target.value)
   setOption({
     ...option,
     [name]: event.target.value,
@@ -78,7 +78,7 @@ export default function Bar(props) {
 }
 
   const handleChange_y = (event, name) => {
-      console.log("🏈", event.target.value)
+    //   console.log("🏈", event.target.value)
     setOption({
       ...option,
       [name]: event.target.value[event.target.value.length - 1],
@@ -86,7 +86,7 @@ export default function Bar(props) {
   };
 
   const handleChange_chips = (event) => {
-      console.log("⚽️", "Chips changed")
+    //   console.log("⚽️", "Chips changed")
     const {
         target: { value },
       } = event;
@@ -98,7 +98,7 @@ export default function Bar(props) {
   }
 
   useEffect(() => {
-    console.log("🎾",option)
+    // console.log("🎾",option)
     //var group_by = option.field
     var value = option.value;
     //var agg = aggregation
