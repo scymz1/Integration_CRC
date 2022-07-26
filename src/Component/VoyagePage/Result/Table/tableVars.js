@@ -79,9 +79,9 @@ export const columnOptions = {
 
   "voyage_dates": {
     'voyage_dates__date_departed_africa_yyyy': null,
-    'voyage_dates__departure_last_place_of_landing_yyyy': null,
+    // 'voyage_dates__departure_last_place_of_landing_yyyy': null,
     'voyage_dates__first_dis_of_slaves_yyyy': null,
-    'voyage_dates__imp_length_home_to_disembark': null,
+    // 'voyage_dates__imp_length_home_to_disembark': null,
     'voyage_dates__imp_arrival_at_port_of_dis_yyyy': null,
     'voyage_dates__length_middle_passage_days': null,
     'voyage_dates__slave_purchase_began_yyyy': null,
