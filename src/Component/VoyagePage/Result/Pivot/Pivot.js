@@ -21,9 +21,7 @@ function Pivot(props) {
     set_complete_object,
     disembark,
     setDisembark,
-    isNormalize,
   } = useContext(props.context);
-  //console.log(isNormalize === undefined);
   //console.log(complete_object);
   // Responses
   const [rows, setRows] = useState([]);
@@ -77,7 +75,7 @@ function Pivot(props) {
         for (var i = 0; i < rows.length; i++) {
           rows[i][""] = row_name[i];
         }
-        if (isNormalize) {
+        if ('normalize' in complete_object) {
           rows.map((row) => {
             Object.keys(row)
               .filter(
