@@ -103,7 +103,7 @@ export default function Voyage() {
           <TableApp context={VoyageContext} />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <PivotApp context={VoyageContext} currentpage={value}/>
+          <PivotApp context={VoyageContext} />
         </TabPanel>
         <TabPanel value={value} index={5}>
         <Grid container justifyContent="flex-end">
