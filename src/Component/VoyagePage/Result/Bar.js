@@ -124,9 +124,9 @@ export default function Bar(props) {
     data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
 
-    console.log("option_field🍕", option.field)
-    console.log("option_value🍔",element)
-    console.log("agg_fn🥤", aggregation)
+    // console.log("option_field🍕", option.field)
+    // console.log("option_value🍔",element)
+    // console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
     return axios
       .post(endpoint + "groupby", (data = data))
@@ -136,7 +136,7 @@ export default function Bar(props) {
     })
   
     const data = await Promise.all(promises)
-    console.log("💩", data)
+    // console.log("💩", data)
 
 
     let arr = []
