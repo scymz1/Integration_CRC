@@ -32,11 +32,6 @@ function PivotApp(props) {
   //console.log(search_object);
   const [complete_object, set_complete_object] = useState(default_object);
   const [selected_object, set_selected_object] = useState(default_object);
-  const [isNormalize, setIsNormalize] = useState(false);
-
-  // Force Re-render
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   // Options
   const [option, setOption] = useState({
@@ -78,10 +73,8 @@ function PivotApp(props) {
     tmp[1] = valueSelected;
     if (event.target.value === "mean" || event.target.value === "sum") {
       delete selected_object["normalize"];
-      setIsNormalize(false);
     } else {
       selected_object["normalize"] = [event.target.value];
-      setIsNormalize(true);
     }
     set_selected_object({
       ...selected_object,
@@ -217,7 +210,7 @@ function PivotApp(props) {
       </div>
       <div>
         <PivotContext.Provider
-          value={{ complete_object, set_complete_object, isNormalize }}
+          value={{ complete_object, set_complete_object }}
         >
           <Pivot context={PivotContext} />
         </PivotContext.Provider>
