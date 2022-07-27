@@ -7,7 +7,7 @@ import Home from "./Component/HomePage/home";
 import Home2 from "./Component/HomePage-darkmode/home";
 import OptionSelector from "./Component/util/optionSelector";
 import PASTApp from "./Component/PAST/PASTApp";
-import Documents from "./Component/Documents/Documents";
+import DocumentsApp from "./Component/Documents/DocumentsApp";
 import Map from './Component/VoyagePage/mapping/Map2';
 import { ThemeProvider } from '@mui/material/styles';
 import {theme} from "./Theme";
@@ -31,7 +31,7 @@ root.render(
               <div>
                 {/* <SankeyExample width={960} height={500}/> */}
               </div></>}/>
-            <Route path="documents" element={<Documents/>}/>
+            <Route path="documents" element={<DocumentsApp/>}/>
             <Route path="optionSelector" element={<OptionSelector/>}/>
           </Routes>
         </BrowserRouter>
