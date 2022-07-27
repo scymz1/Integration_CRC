@@ -1767,7 +1767,7 @@
   "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed broad region of slave disembarkation (MJSELIMP1) : Location : Location name"
+    "flatlabel": "Imputed broad region of slave disembarkation (MJSELIMP1)"
   },
   "voyage_itinerary__imp_broad_region_slave_dis__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2147,7 +2147,7 @@
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed principal region of slave purchase (MAJBYIMP) : Location : Location name"
+    "flatlabel": "Imputed principal region of slave purchase (MAJBYIMP)"
   },
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -2812,7 +2812,7 @@
   "voyage_itinerary__region_of_return__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Region of return (RETRNREG) : Location : Location name"
+    "flatlabel": "Region of return (RETRNREG)"
   },
   "voyage_itinerary__region_of_return__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -4332,7 +4332,7 @@
   "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Location name",
-    "flatlabel": "Itinerary : Imputed principal region of slave disembarkation (MJSELIMP) : Location : Location name"
+    "flatlabel": "Imputed principal region of slave disembarkation (MJSELIMP)"
   },
   "voyage_itinerary__imp_principal_region_slave_dis__geo_location__location_type__name": {
     "type": "<class 'rest_framework.fields.CharField'>",

@@ -16,11 +16,6 @@ export var bar_x_vars = [
   "voyage_itinerary__place_voyage_ended__geo_location__name",
   "voyage_itinerary__region_of_return__geo_location__name",
   "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-  "voyage_dates__voyage_began_mm",
-  "voyage_dates__slave_purchase_began_mm",
-  "voyage_dates__date_departed_africa_mm",
-  "voyage_dates__first_dis_of_slaves_mm",
-  "voyage_dates__voyage_completed_mm",
 ];
 
 export var bar_y_vars = [
