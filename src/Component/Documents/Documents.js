@@ -8,7 +8,7 @@ import UVModal from "./UVModal"
 export default function Documents(props) {
     const { dataSet, pageType } = useContext(DocContext);
     const UVContext = React.createContext({});
-    const [manifest, setManifest]= useState("http://150.136.1.167/iiif/3/766");
+    const [manifest, setManifest]= useState(props.url);
     const [title, setTitle] = useState(null);
     const [image, setImage] = useState(null);
     const [uvOpen, setUVOpen] = useState(false);
@@ -26,9 +26,9 @@ export default function Documents(props) {
     
     return (
         <div>
-            <ResponsiveAppBar context={DocContext}/>
-            <Button onClick={handleUVOpen} startIcon={<Avatar src={image}/>} >
-                {title}
+            {/* <ResponsiveAppBar context={DocContext}/> */}
+            <Button onClick={handleUVOpen} >
+                {props.title}
             </Button>
             <UVContext.Provider
                 value={{
