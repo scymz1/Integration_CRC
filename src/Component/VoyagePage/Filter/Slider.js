@@ -41,7 +41,7 @@ export default function GetSlider(props) {
     const [value, setValue] = React.useState([range[0]/2, range[1]/2])
 
     if(search_object[varName]) {
-      console.log("Slider Value in search object: ", search_object[varName])
+      //console.log("Slider Value in search object: ", search_object[varName])
       // setValue(search_object[varName])
     }
 

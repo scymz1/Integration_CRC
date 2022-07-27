@@ -457,7 +457,6 @@ function Table(props) {
                                     {Object.values(
                                       row["voyage_sourceconnection"]
                                     ).map((element, ref_key) => {
-                                      console.log(element["doc"]);
                                       if (element["doc"] != null) {
                                         return (
                                           <Documents
