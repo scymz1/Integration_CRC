@@ -17,10 +17,11 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-//import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { CircularProgress, Grid } from "@mui/material";
 import { useWindowSize } from "@react-hook/window-size";
+import Documents from "../../../Documents/Documents";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -147,6 +148,11 @@ function Table(props) {
     "&:hover": {
       backgroundColor: "#389c90",
     },
+  }));
+
+  const ButtonLink = styled(Button)(({ theme }) => ({
+    textAlign: "left",
+    flexWrap: "wrap",
   }));
 
   const handleChangePage = (event, newPage) => {
@@ -435,6 +441,41 @@ function Table(props) {
                                     >
                                       {[...new Set(row[k])].join(", ")}
                                     </Link>
+                                  </TableCell>
+                                );
+                              } else if (
+                                k ===
+                                "voyage_sourceconnection__source__full_ref"
+                              ) {
+                                return (
+                                  <TableCell
+                                    key={"content-" + key}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                    }}
+                                  >
+                                    {Object.values(
+                                      row["voyage_sourceconnection"]
+                                    ).map((element, ref_key) => {
+                                      if (element["doc"] != null) {
+                                        return (
+                                          <Documents
+                                            title={element["text_ref"]}
+                                            url={element["doc"]["url"]}
+                                          />
+                                        );
+                                      } else {
+                                        return (
+                                          <Link
+                                            color="inherit"
+                                            component={ButtonLink}
+                                            key={"text_ref-" + ref_key}
+                                          >
+                                            {element["text_ref"]}
+                                          </Link>
+                                        );
+                                      }
+                                    })}
                                   </TableCell>
                                 );
                               } else if (typeof row[k] === "object") {
