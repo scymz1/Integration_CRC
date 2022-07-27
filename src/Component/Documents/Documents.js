@@ -43,7 +43,7 @@ export default function Documents(props) {
   return (
     <div>
       {/* <ResponsiveAppBar context={DocContext}/> */}
-      <Link component={ButtonLink} onClick={handleUVOpen}>
+      <Link component={ButtonLink} onClick={handleUVOpen} style={{color: "#f21b42", textDecorationColor: '#f21b42'}}>
         {props.title}
       </Link>
       <UVContext.Provider
