@@ -146,7 +146,7 @@ function Table(props) {
       border: 0,
     },
     "&:hover": {
-      backgroundColor: "#389c90",
+      backgroundColor: "#85d4cb",
     },
   }));
 
@@ -470,6 +470,7 @@ function Table(props) {
                                             color="inherit"
                                             component={ButtonLink}
                                             key={"text_ref-" + ref_key}
+                                            style={{ textDecoration: "none" }}
                                           >
                                             {element["text_ref"]}
                                           </Link>
