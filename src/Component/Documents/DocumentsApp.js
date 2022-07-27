@@ -12,9 +12,9 @@ export default function DocApp(props) {
         <DocContext.Provider 
             value={{
                 dataSet:"0", 
-                pageType:"home"
+                pageType:"home",
                 }}>
-            <Documents context={DocContext}/>
+            <Documents/>
         </DocContext.Provider>
         </div>
     )
