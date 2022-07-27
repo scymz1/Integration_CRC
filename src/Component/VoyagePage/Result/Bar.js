@@ -124,19 +124,23 @@ export default function Bar(props) {
     data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
 
-    // console.log("option_field🍕", option.field)
-    // console.log("option_value🍔",element)
-    // console.log("agg_fn🥤", aggregation)
+    console.log("option_field🍕", option.field)
+    console.log("option_value🍔",element)
+    console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
-    return axios
-      .post(endpoint + "groupby", (data = data))
-      .then(function (response) {
-        return Object.values(response.data)[0];
+    return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
+      method: "POST",
+      body: data,
+      headers: {'Authorization':AUTH_TOKEN}
+    }).then(res => res.json())
+    .then(function (response) {
+        console.log("data", response)
+        return Object.values(response)[0];
       })
     })
   
     const data = await Promise.all(promises)
-    // console.log("💩", data)
+    console.log("💩", data)
 
 
     let arr = []
