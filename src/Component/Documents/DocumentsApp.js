@@ -1,5 +1,7 @@
 import React from "react";
 import Documents from "./Documents";
+import Archive from "./Archive";
+import ResponsiveAppBar from "../NavBar";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -14,7 +16,8 @@ export default function DocApp(props) {
                 dataSet:"0", 
                 pageType:"home",
                 }}>
-            <Documents/>
+            <ResponsiveAppBar context={DocContext}/>
+            <Archive/>
         </DocContext.Provider>
         </div>
     )
