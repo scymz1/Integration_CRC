@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Pivot from "../Result/Pivot/Pivot";
+import { Grid } from "@mui/material";
 
 const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" 
 const embkey = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id" 
@@ -35,39 +36,39 @@ export default function IntraTabs(props) {
 
 
   const handleChange = (event,newValue) => {
-    console.log("Change tab to: ", newValue)
+    event.stopPropagation()
+    event.preventDefault()
+    console.log("Change tab to: ", newValue, event)
     setValue(newValue);
     setDisembark(newValue)
 
   };
 
 
-
-
   return (
-    <TabContext.Provider
-value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}
->
-    <Box sx={{ width: '100%' }}>
-    <Tabs
-      value={value}
-      onChange={handleChange}
-    >
-      <Tab
-        value="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
-        label="Port of embarkation"
-      />
-      <Tab value="voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" label="Port of disembarkation" />
-    </Tabs>
-
-    <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"}>
-        <Pivot context={TabContext} /> 
-      </TabPanel>
-    <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_port_slave_dis__geo_location__id"}>
-        <Pivot context={TabContext} /> 
-      </TabPanel>
-
-  </Box>
+    <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
+    <Grid>
+      {props.title}
+      <div style={{ fontSize: "24px", color: "black" }}>
+        <div>
+          <Box sx={{ width: '100%' }}>
+            <Tabs value={value} onChange={handleChange}>
+            <Tab
+              value="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+              label="Port of embarkation"
+            />
+            <Tab value="voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" label="Port of disembarkation" />
+            </Tabs>
+            <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"}>
+              <Pivot context={TabContext} dispatch={props.dispatch}/> 
+            </TabPanel>
+            <TabPanel context={TabContext} value={value} index={"voyage_itinerary__imp_principal_port_slave_dis__geo_location__id"}>
+              <Pivot context={TabContext} dispatch={props.dispatch}/> 
+            </TabPanel>
+          </Box>
+        </div>
+      </div>
+    </Grid>
   </TabContext.Provider>
   );
 }

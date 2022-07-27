@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { Grid } from "@mui/material";
 //import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
@@ -109,7 +108,7 @@ export function ReadFeature(props) {
       setArea(disembark);
     }
   });
-  console.log("useEffect ~ complete_object", map.getZoom());
+  //console.log("useEffect ~ complete_object", map.getZoom());
 
   useEffect(() => {
     var data = new FormData();
@@ -175,10 +174,7 @@ export function ReadFeature(props) {
   //    set_complete_object(complete_object)
   // },[area])
 
-  console.log(
-    "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",
-    JSON.parse(JSON.stringify(complete_object))
-  );
+  //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object", JSON.parse(JSON.stringify(complete_object)));
 
   useEffect(() => {
     //console.log("UseEffect Complete Object: ", complete_object)
@@ -244,12 +240,14 @@ export function ReadFeature(props) {
           //console.log(props.search_object.dataset[0]==0)
           // L.marker(layer["_latlng"]).unbindPopup()
 
-          layer.on("mouseover", function (e) {
+          layer.on("click", function (e) {
             console.log("Mouseover object: ", complete_object);
 
             complete_object[disembark] = [layer.feature.id, layer.feature.id];
             //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
+            var event = new Event('update_popup');
+            var dispatch=()=>{document.querySelector(".leaflet-popup-pane").dispatchEvent(event)};
             ReactDOM.createRoot(container).render(
               <PivotContext.Provider
                 value={{
@@ -260,23 +258,7 @@ export function ReadFeature(props) {
                   layer,
                 }}
               >
-                <Grid>
-                  {layer.feature.properties.name +
-                    " " +
-                    layer.feature.geometry.coordinates}
-
-                  <div style={{ fontSize: "24px", color: "black" }}>
-                    <div>
-                      {/* only show if intraamerican, otherwise hidden */}
-                      {props.search_object.dataset[0] == 0 ? (
-                        ""
-                      ) : (
-                        <IntraTabs context={PivotContext} />
-                      )}
-                      {/* <Pivot context={PivotContext} /> */}
-                    </div>
-                  </div>
-                </Grid>
+                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.search_object.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates}/>  
               </PivotContext.Provider>
             );
 
@@ -284,7 +266,6 @@ export function ReadFeature(props) {
             //   maxWidth: "auto",
             // });
             markers.addLayer(layer).bindPopup(container, { maxWidth: "auto" });
-
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
@@ -298,6 +279,11 @@ export function ReadFeature(props) {
       // DrawLink(map, csv);
       drawUpdate(map, csv);
     }
+    document.querySelector(".leaflet-popup-pane").addEventListener("update_popup", function (event) {
+      var tagName = event.target.tagName,
+          popup = map._popup; 
+      popup.update();
+    }, true); // Capture the load event, because it does not bubble.
     let drawbox = L.rectangle(props.latlong, {
       color: "blue",
       weight: 5,

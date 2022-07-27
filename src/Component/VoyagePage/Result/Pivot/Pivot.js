@@ -16,14 +16,8 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Pivot(props) {
   const [width, height] = useWindowSize();
 
-  const {
-    complete_object,
-    set_complete_object,
-    disembark,
-    setDisembark,
-    isNormalize,
-  } = useContext(props.context);
-  //console.log(isNormalize === undefined);
+  const { complete_object, set_complete_object, disembark, setDisembark } =
+    useContext(props.context);
   //console.log(complete_object);
   // Responses
   const [rows, setRows] = useState([]);
@@ -77,12 +71,15 @@ function Pivot(props) {
         for (var i = 0; i < rows.length; i++) {
           rows[i][""] = row_name[i];
         }
-        if (isNormalize) {
-          rows.map((row) => {
-            Object.keys(row).map((e) => {
-              row[e] = Math.round(row[e] * 1000) / 10 + "%";
-            });
-          });
+        if ("normalize" in complete_object) {
+          rows.map((row) =>
+            Object.keys(row)
+              .filter((num) => num !== "")
+              .filter(
+                (num) => !isNaN(parseFloat(row[num])) && isFinite(row[num])
+              )
+              .map((e) => (row[e] = Math.round(row[e] * 1000) / 10 + "%"))
+          );
         }
         setRows(rows);
         //console.log("rows=",rows);
@@ -125,6 +122,12 @@ function Pivot(props) {
   // if (isLoading) {
   //   return <div className="spinner"></div>;
   // }
+
+  useEffect(() => {
+    if (props.dispatch) {
+      props.dispatch();
+    }
+  }, [rows, cols]);
 
   return (
     <div>
