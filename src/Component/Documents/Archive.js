@@ -8,9 +8,13 @@ import { init } from "universalviewer";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+
+import {
+    useWindowSize,
+  } from '@react-hook/window-size'
+
 
 function useUniversalViewer(ref, options) {
     const [uv, setUv] = useState();
@@ -43,29 +47,27 @@ const UV = ({ manifest, parentWidth }) => {
                     }}/>;
 };
 export default function Archive() {
+    const [width, height] = useWindowSize()
     const DocContext = React.createContext({});
     const [manifest, setManifest]= useState({});
-    const [title, setTitle] = useState(null);
-    const [image, setImage] = useState(null);
     const [open, setOpen] = useState(false);
-    const [item, setitem] = useState([{
-      title: "",
-      image: ""
-    }]);
-    const apiUrl = ["http://150.136.1.167/iiif/3/766","http://150.136.1.167/iiif/3/1353"]
+    const apiUrl = ["http://150.136.1.167/iiif/3/766",
+    "http://150.136.1.167/iiif/3/1353",
+    "http://150.136.1.167/iiif/3/1355",
+    "http://150.136.1.167/iiif/3/1357",
+    "http://150.136.1.167/iiif/3/1359",
+    "http://150.136.1.167/iiif/3/1361",
+    "http://150.136.1.167/iiif/3/1363",
+    "http://150.136.1.167/iiif/3/1365",
+    "http://150.136.1.167/iiif/3/1367",
+    "http://150.136.1.167/iiif/3/1369",
+    "http://150.136.1.167/iiif/3/1371",
+    "http://150.136.1.167/iiif/3/1373"]
     const [itemData, setData] = useState([])
     const handleOpen = (manifest) => {
       setOpen(true);
       setManifest(manifest)}
     const handleClose = () => setOpen(false);
-    const [linkdialogopen, setlinkdialogOpen] = useState(false);
-
-    // const handlelinkClickOpen = () => {
-    //   setlinkdialogOpen(true);
-    // };
-    const handlelinkClose = () => {
-      setlinkdialogOpen(false);
-    };
     const modalStyle = {
         position: "absolute",
         top: "50%",
@@ -91,18 +93,10 @@ export default function Archive() {
         }
         fetchData().catch(console.error);
       }, [])
-    console.log(itemData)
+    // console.log(itemData)
     return (
         <div>
-            {/* <Dialog
-              open={true}
-              onClose={handlelinkClose}
-              scroll="body"
-              aria-labelledby="scroll-dialog-title"
-              aria-describedby="scroll-dialog-description"
-              align="center"
-            > */}
-            <ImageList sx={{ width: 500, height: 450 }}>
+            <ImageList sx={{ width: width, height: height }} cols={5} gap={30} >
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
                   <img
@@ -126,7 +120,6 @@ export default function Archive() {
                 </ImageListItem>
               ))}
             </ImageList>
-            {/* </Dialog> */}
             <Modal
                 open={open}
                 onClose={handleClose}
