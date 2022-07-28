@@ -118,9 +118,9 @@ export default function Bar(props) {
     data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
 
-    console.log("option_field🍕", option.field)
-    console.log("element🍔",element)
-    console.log("agg_fn🥤", aggregation)
+    // console.log("option_value🍕", typeof(option.value))
+    // console.log("element🍔",element)
+    // console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
     return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
       method: "POST",
@@ -128,22 +128,13 @@ export default function Bar(props) {
       headers: {'Authorization':AUTH_TOKEN}
     }).then(res => res.json())
     .then(function (response) {
-        console.log("data", response)
+        // console.log("data", response)
         return Object.values(response)[0];
       })
     })
   
     const data = await Promise.all(promises)
-    console.log("🍔 data is ", data )
 
-  //   const plotMap = new Map();
-  //   plotMap.set()
-
-    
-  // const finalResult = yfieldArr.map((item, index) => item.map((value) => ({
-  //   ...value,
-  //   ...data[index],
-  //   })));
 
     // console.log("🐯", finalResult)
     let arr = []
@@ -232,16 +223,13 @@ export default function Bar(props) {
                 value={chips}
                 onChange={(event) => {
                     handleChange_chips(event, "value");
-                    // handleChange_y(event, "value");
                   }}
                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                 
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map((value) => (
-                        // console.log("🤔", value)
                       <Chip key={value} label= {options_flat[value].flatlabel} />
-                    //   <Chip key={value} label= {options_flat[value]} />
                     ))}
                   </Box>
                 )}
@@ -293,16 +281,22 @@ export default function Bar(props) {
             data={barData}
             layout={{
               width: width * 0.8,
-              title: `The ${aggregation} of ${
+              title: 
+              
+              chips.length !== 0 ?
+              `The ${aggregation} of ${
                 options_flat[option.field].flatlabel
-              } vs <br> ${options_flat[option.value].flatlabel} Bar Graph`,
+              } vs <br> ${options_flat[option.value].flatlabel} Bar Graph` :
+
+              `The ${aggregation} of ${
+                options_flat[option.field].flatlabel
+              } vs <br> empty y yield Bar Graph`,
+
               xaxis: {
                 title: { text: `${options_flat[option.field].flatlabel}` },
                 fixedrange: true,
               },
               yaxis: {
-                // title:
-                // {text:`${options_flat[option.value].flatlabel}`},
                 fixedrange: true,
               },
             }}

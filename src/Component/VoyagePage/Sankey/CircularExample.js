@@ -124,7 +124,10 @@ export default function SankeyExample(props) {
     nodePadding: 10,
     component: "Sankey",
     nodeData: {},
-    linkData: {},
+    linkData: {
+      source: "ini",
+      target: "ini",
+    },
   });
 
   const [optionSource, setOptionSource] = useState([
@@ -186,8 +189,8 @@ export default function SankeyExample(props) {
     {
     ...state,
     linkData: {
-      source: "",
-      target: "",
+      source: "ini",
+      target: "ini",
     },
   }));
 
@@ -198,7 +201,7 @@ export default function SankeyExample(props) {
   });
  }
 
- if(state.linkData.source && state.linkData.target){
+ if(state.linkData.source != "ini" && state.linkData.target != "ini"){
    return(
     <div>
 
