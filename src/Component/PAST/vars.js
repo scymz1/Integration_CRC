@@ -88,32 +88,6 @@ export const enslaver_var_list = {
             }
     
     },
-    "alias__transactions__transaction__voyage": {
-        "alias__transactions__transaction__voyage__voyage_itinerary": {
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_port_voyage_begin__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_region_voyage_begin__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_voyage_begin__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_of_slave_purchase__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_itinerary__imp_broad_region_slave_dis__geo_location__name": null,
-        },
-
-        "alias__transactions__transaction__voyage__voyage_ship": {
-            "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_place__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_ship__vessel_construction_region__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_ship__registered_place__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_ship__registered_region__geo_location__name": null,
-            "alias__transactions__transaction__voyage__voyage_ship__ship_name": null,
-        },
-
-        "alias__transactions__transaction__voyage__voyage_dates": {
-            "alias__transactions__transaction__voyage__voyage_dates__imp_voyage_began_yyyy": null,
-            "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy": null,
-        }
-    }
 }
 
 export const enslaved_default_list = [

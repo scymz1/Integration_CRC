@@ -70,7 +70,7 @@ function PieComponent() {
                 mode: "lines+markers",
               },
             ]}
-            layout={{width: width>800 ? width*0.55: width * 1, height: width>800 ? height*0.9: height * 0.8, title: "The sum of voyage : voyage outcome : Slaves Outcome : Outcome label vs <br> voyage : voyage slaves numbers : Total slaves embarked imputed * (slaximp)"}}
+            layout={{width: width>800 ? width*0.55: width * 1, height: width>800 ? height*0.9: height * 0.8, title: "Total enslaved people embarked (imputed) <br> by Voyage outcome for captives aboard"}}
             config={{responsive: true}}
           />
          </Grid>

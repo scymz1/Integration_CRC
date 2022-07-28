@@ -34,8 +34,7 @@ function reducer(state, { type, index }) {
 
 function TableModal(props) {
   const endpoint = props.endpoint;
-  const { open, setOpen, id, info } = useContext(props.context);
-  //console.log("here= ", id);
+  const { open, setOpen, id, setUVOpen, setUrl } = useContext(props.context);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -97,6 +96,12 @@ function TableModal(props) {
     dispatch({ type: "toggle", index: idxRelation[title] });
   };
 
+  // handle UV modal
+  const handleUV = (e, url) => {
+    setUrl(url);
+    setUVOpen(true);
+  };
+
   return (
     <div>
       <Modal
@@ -138,7 +143,6 @@ function TableModal(props) {
               <div key={title}>
                 <Accordion
                   expanded={state[idxRelation[title]]}
-                  // onClick={(event) => handleSingleExpansion(event, title)}
                   sx={{ margin: "5px" }}
                 >
                   <AccordionSummary
@@ -148,26 +152,93 @@ function TableModal(props) {
                     <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography component={"span"}>
-                      {skeleton[title].map((obj, key) => (
-                        <Grid container spacing={2} columns={16} key={key}>
-                          <Grid sx={{ fontWeight: "bold" }} item xs={8}>
-                            {options_flat[obj].flatlabel}
-                          </Grid>
-                          <Grid item xs={8}>
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  content[obj] !== null &&
-                                  typeof content[obj] === "object"
-                                    ? content[obj].join(" ")
-                                    : content[obj],
-                              }}
-                            />
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Typography>
+                    {content.length !== 0 && (
+                      <Typography component={"span"}>
+                        {skeleton[title].map((obj, key) => {
+                          if (
+                            obj === "voyage_sourceconnection__source__full_ref"
+                          ) {
+                            return (
+                              <Grid
+                                container
+                                spacing={2}
+                                columns={16}
+                                key={key}
+                              >
+                                <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                                  {options_flat[obj].flatlabel}
+                                </Grid>
+                                <Grid item xs={8}>
+                                  {Object.values(
+                                    content["voyage_sourceconnection"]
+                                  ).map((element, ref_key) => {
+                                    if (element["doc"] != null) {
+                                      return (
+                                        <div
+                                          onClick={(e) =>
+                                            handleUV(e, element["doc"]["url"])
+                                          }
+                                          key={"text_ref-" + ref_key}
+                                          style={{ color: "red" }}
+                                        >
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html:
+                                                "<b>" +
+                                                element["text_ref"] +
+                                                ":</b> <u>" +
+                                                element["source"]["full_ref"] +
+                                                "</u>",
+                                            }}
+                                          />
+                                        </div>
+                                      );
+                                    } else {
+                                      return (
+                                        <div
+                                          key={"text_ref-" + ref_key}
+                                          dangerouslySetInnerHTML={{
+                                            __html:
+                                              "<b>" +
+                                              element["text_ref"] +
+                                              ":</b> " +
+                                              element["source"]["full_ref"],
+                                          }}
+                                        />
+                                      );
+                                    }
+                                  })}
+                                </Grid>
+                              </Grid>
+                            );
+                          } else {
+                            return (
+                              <Grid
+                                container
+                                spacing={2}
+                                columns={16}
+                                key={key}
+                              >
+                                <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                                  {options_flat[obj].flatlabel}
+                                </Grid>
+                                <Grid item xs={8}>
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        typeof content[obj] === "object" &&
+                                        content[obj] != null
+                                          ? content[obj].join("<br>")
+                                          : content[obj],
+                                    }}
+                                  />
+                                </Grid>
+                              </Grid>
+                            );
+                          }
+                        })}
+                      </Typography>
+                    )}
                   </AccordionDetails>
                 </Accordion>
               </div>

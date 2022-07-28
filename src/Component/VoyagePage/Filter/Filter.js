@@ -31,7 +31,7 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType,  page, setPage} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
@@ -175,7 +175,7 @@ export default function Filter(props) {
                         <Typography color="#808B96">No Filter</Typography>
                     </Grid>
                 :
-                    labels.map((item, index) => {
+                    labels.slice(0).reverse().map((item, index) => {
                     return(
                       <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
                           <Grid item xs={10}>

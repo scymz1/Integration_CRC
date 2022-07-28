@@ -25,45 +25,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import * as options_flat from "./vars.json";
 import { styled } from "@mui/material/styles";
-// import { type } from "@testing-library/user-vent/dist/type";
-// import myJson from './sample.json';
-// console.log("🐢this is the myJson" + myJson);
-// var jp = require('jsonpath');
-// console.log("============================")
-// var names = jp.query(myJson, '$.features[*].properties.name');
-// console.log("🌸this is the names" + names);
-// var FormData = require('form-data');
-// var data = new FormData();
-// data.append('groupby_fields', 'voyage_itinerary__principal_port_of_slave_dis__geo_location__name');
-// data.append('groupby_fields', 'voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name');
-// data.append('value_field_tuple', 'voyage_slaves_numbers__imp_total_num_slaves_disembarked');
-// data.append('value_field_tuple', 'sum');
-// data.append('cachename', 'voyage_export');
 
-// var config = {
-//   method: 'post',
-//   url: 'https://voyages3-api.crc.rice.edu/voyage/crosstabs',
-//   headers: {
-//     ...data.getHeaders()
-//   },
-//   data : data
-// };
-
-// axios(config)
-// .then(function (response) {
-//   console.log(JSON.stringify(response.data));
-// })
-// .catch(function (error) {
-//   console.log(error);
-// });
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 export default function SankeyExample(props) {
   const { isLoading, error, data, refetch } = useQuery("", () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-       AUTH_TOKEN
-    );
+    myHeaders.append("Authorization", AUTH_TOKEN);
 
     var formdata = new FormData();
     formdata.append("groupby_fields", option.fieldTarget);
@@ -212,7 +179,27 @@ export default function SankeyExample(props) {
   if (isLoading) return "loading";
   if (error) return error.message;
 
-  return (
+ let resetHandClick = () =>{
+  setState( (state) => ({ ...state, highlightLinkIndexes: []}));
+  setState(
+    (state) => (
+    {
+    ...state,
+    linkData: {
+      source: "null",
+      target: "null",
+    },
+  }));
+
+  set_search_object({
+    ...search_object,
+    [option.fieldSource]: ["null"],
+    [option.fieldTarget]: ["null"],
+  });
+  
+ }
+
+  return ( 
     <div>
       {/* The button allows me to check what I have got right now - testing useage, not necessary */}
       {/* <Button onClick={()=>console.log("data:", data)}>print data</Button> */}
@@ -258,10 +245,19 @@ export default function SankeyExample(props) {
 
       </Select>
       </FormControl> */}
-      <Title>
-        <b>Aggregation Title</b>
-      </Title>
+
+      <Typography>
+        {`This path is from
+      ${_.get(state, ["linkData", "source", "name"])}
+       to
+      ${_.get(state, ["linkData", "target", "name"])}
+      `}
+      </Typography>
+
       <br />
+      <button onClick={() => resetHandClick()}>
+        Click to reload the Sankey and the Map!
+      </button>
       <br />
       <br />
       <svg
@@ -313,15 +309,10 @@ export default function SankeyExample(props) {
                           nodeData: {
                             name: node.name,
                           },
-                        },
+                        }
                         // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                        console.log("🫧", node.name)
+                        // console.log("🫧", node.name)
                       );
-
-                      // set_search_object({
-                      //   ...search_object,
-                      //   [option.fieldSource]: [node.name]
-                      // });
                     }}
                   />
 
@@ -354,28 +345,21 @@ export default function SankeyExample(props) {
                       state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
                     }
                     fill="none"
-                    onMouseOver={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [i] });
-                    }}
-                    onMouseOut={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [] });
-                    }}
+                    // onMouseOver={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [i] });
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [] });
+                    // }}
                     onClick={() => {
-                      setState(
-                        {
-                          ...state,
-                          linkData: {
-                            source: link.source,
-                            target: link.target,
-                          },
+                      state.highlightLinkIndexes.push(i);
+                      setState({
+                        ...state,
+                        linkData: {
+                          source: link.source,
+                          target: link.target,
                         },
-                        // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                        // console.log("🐷", state.linkData)
-                        console.log(
-                          "🐔",
-                          link.source.name + " to " + link.target.name
-                        )
-                      );
+                      });
 
                       set_search_object({
                         ...search_object,
@@ -391,7 +375,8 @@ export default function SankeyExample(props) {
         </Sankey>
       </svg>
 
-      <Card sx={{ maxWidth: 345 }}>
+      {/* The area to view the path and node inforamtion which has been clicked */}
+      {/* <Card sx={{ maxWidth: 345 }}>
         <Typography>{`Node is ${state.nodeData.name}`}</Typography>
 
         <Typography>
@@ -401,7 +386,7 @@ export default function SankeyExample(props) {
       ${_.get(state, ["linkData", "target", "name"])}
       `}
         </Typography>
-      </Card>
+      </Card> */}
     </div>
   );
 }

@@ -1,23 +1,35 @@
-import * as React from "react";
-import {useContext, useEffect, useState} from "react";
-import {PASTContext} from "../PASTApp";
-import {CircularProgress} from "@mui/material";
+import React, {useContext, useEffect, useState} from "react";
+import axios from "axios";
+import {Box, Button, Card, CardContent, Typography,Grid, Popover, CircularProgress} from "@mui/material";
+import {Link, useNavigate} from "react-router-dom";
+import {  useWindowSize } from '@react-hook/window-size';
 import Graph from "react-graph-vis";
 import _ from 'lodash';
+
+const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+
+const featuredPosts = {
+  title: "Data Visualization: Network Diagram",
+  date: "July 7, 2022",
+  description:
+    "The Network Diagrams shows relationships between selected enslaved people, enslavers (shippers, owners) and their corresponding voyages. For example, this Network shows connections between Henry Patrick and Hanson John who are on the same voyage from Alexandria to New Orleans. Click through to study more relationships among enslavers (shipper, consigner), enslaved people, and information about their relationships.",
+};
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 
-export default function Network(props) {
-  const {queryData, windowRef, setOpen, setId} = useContext(PASTContext);
+function Network(props) {
+  const {queryData, width} = props;
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
   const [data, setData] = useState([]);
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  console.log("aaaaa", queryData)
+  //console.log("aaaaa", queryData)
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
@@ -86,11 +98,12 @@ export default function Network(props) {
         data.forEach((item, index) => {
           //self
           const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "green")
-          self.font = {size: windowRef.current.offsetHeight * 0.03}
+          self.font = {size: width>800 ?width*0.55 * 0.03 : width*0.9*0.03}
+          //self.font = {size: windowRef.current.offsetHeight * 0.03}
           // slaves
           item.alias.forEach((alias) => {
             //transaction
-            alias.transactions.slice(0, 30).forEach((transaction) => {
+            alias.transactions.forEach((transaction) => {
               const transactionData = transaction.transaction
               if (transactionData.relation_type.relation_type === "transportation") {
                 tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "orange")
@@ -121,7 +134,8 @@ export default function Network(props) {
       data.forEach((item, index) => {
         //self
         const self = tmp.addNode(item.id, item.documented_name, "slave", "red")
-        self.font = {size: windowRef.current.offsetHeight * 0.03}
+        self.font = {size: width>800 ? width*0.55 * 0.03: width*0.9*0.03}
+        //self.font = {size: windowRef.current.offsetHeight * 0.03}
         //transaction
         item.transactions.forEach((transaction) => {
           const transactionData = transaction.transaction
@@ -198,7 +212,8 @@ export default function Network(props) {
   }, [myQueryData])
 
   useEffect(() => {
-    setHeight((0.7 * windowRef.current.offsetHeight).toString())
+    //setHeight((0.7 * windowRef.current.offsetHeight).toString())
+    setHeight((width>800 ?0.7 * width*0.55: 0.7*width*0.9).toString())
   }, [])
 
   // function updateQueryData(path, id) {
@@ -268,15 +283,15 @@ export default function Network(props) {
       const node = graph.nodes.find(e => e.id === nodeId[0])
       // console.log("click", node)
       if(node && node.type === "voyage"){
-        setOpen(true)
-        setId(nodeId[0])
+        //setOpen(true)
+        //setId(nodeId[0])
       }
     }
   };
 
   const options = {
     physics: {
-      enabled: true,
+      enabled: false
     },
     height: height
   };
@@ -299,4 +314,60 @@ export default function Network(props) {
         />}
     </div>
   )
+}
+
+
+export default function NetworkHome() {
+  const [width, height] = useWindowSize();
+  const [data, setData] = useState();
+
+  const [queryData, setQueryData] = useState({
+    slaves: [500002, 500003],
+    type: "slaves",
+    enslavers:[]
+  });
+
+  return (
+    <div>
+      <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
+        <Grid container>
+          {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
+          <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+            <Box sx={{height:height,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
+                  overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
+              <CardContent sx={{flex: "1 0 auto"}}>
+                <Button
+                  variant="text"
+                  style={{fontSize: "24px"}}
+                  component={Link}
+                  to="past"
+                >
+                Data Visualization - Network Diagrams
+                </Button>
+                <div>
+                  <CardContent>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {featuredPosts.date}
+                    </Typography>
+                    <Typography variant="subtitle1" paragraph>
+                      {featuredPosts.description}
+                    </Typography>
+                    {/* <Button variant="text" type="button" onClick={GotoVoyagePage}>
+                      Continue reading...
+                    </Button> */}
+                  </CardContent>
+                </div>
+              </CardContent>
+            </Box>
+          </Grid>
+          <Grid item sx={{width:width>800 ?"60%":"91%"}}>
+          {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
+            <CardContent sx={{flex: "1 0 auto"}}>
+              <Network queryData={queryData} width={width}/>
+            </CardContent>
+          </Grid>
+        </Grid>
+      </Card>
+    </div>
+  );
 }

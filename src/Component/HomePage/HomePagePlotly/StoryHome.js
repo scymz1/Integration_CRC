@@ -11,10 +11,10 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 const featuredPosts = {
-  title: "Data Visualization: Sankey Diagrams",
-  date: "July 7, 2022",
+  title: "Data Visualization: Story Card",
+  date: "July 26, 2022",
   description:
-    "The Sankey Diagrams shows relationships between several slaves chosen. For example, this sankey shows connections between Henry, Patrick Brown, Cesar, who are on the same itinerary from Alexandria to New Orleans. Click through to study more relationships among enslavers (shipper, consigner), slaves, and information about their voyages.",
+    "The Story Card shows life stories of the enslaved people. For example, this two cards show specific lifetime records of Corbit, Isam and Lambert, Joe. Click through to study more lifetime stories of the other enslaved people.",
 };
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
@@ -25,7 +25,7 @@ export default function StoryHome() {
   const [data, setData] = useState();
 
   const [queryData, setQueryData] = useState({
-    slaves: [500002, 500003],
+    slaves: [540102, 540103],
     type: "slaves",
     enslavers:[]
   });
@@ -54,7 +54,7 @@ export default function StoryHome() {
           method: "POST",
           body: queryData,
           headers: {'Authorization': auth_token}
-        }).then(res => res.json()).then(res => {console.log("aaaaaaaaaaa", res); return res[0];})
+        }).then(res => res.json()).then(res => {return res[0];})
       })
       const response = await Promise.all(promises)
       setData(response)
@@ -62,7 +62,7 @@ export default function StoryHome() {
     fetchData().catch(console.error);
   }, [])
 
-  useEffect(()=>{console.log("aaabbbcc", data);}, [data])
+  //useEffect(()=>{console.log("aaabbbcc", data);}, [data])
 
   return (
     <div>
@@ -70,7 +70,8 @@ export default function StoryHome() {
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
           <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
-            <Box sx={{height:height,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+            <Box sx={{height:height,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
+                  overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
                   variant="text"
@@ -78,7 +79,7 @@ export default function StoryHome() {
                   component={Link}
                   to="past"
                 >
-                Data Visualization - Sankey Diagrams
+                Data Visualization - Story Cards
                 </Button>
                 <div>
                   <CardContent>
@@ -96,7 +97,7 @@ export default function StoryHome() {
               </CardContent>
             </Box>
           </Grid>
-          <Grid item sx={{width:"60%"}}>
+          <Grid item sx={{width:width>800 ?"60%":width*0.9}}>
           {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
             <CardContent sx={{flex: "1 0 auto"}}>
               <Grid container >

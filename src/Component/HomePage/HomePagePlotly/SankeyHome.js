@@ -21,13 +21,14 @@ const featuredPosts = {
   title: "Data Visualization: Sankey Diagrams",
   date: "July 7, 2022",
   description:
-    "The Sankey Diagrams shows relationships between several slaves chosen. For example, this sankey shows connections between Henry, Patrick Brown, Cesar, who are on the same itinerary from Alexandria to New Orleans. Click through to study more relationships among enslavers (shipper, consigner), slaves, and information about their voyages.",
+    "The Sankey Diagrams shows relationships between several enslaved people. For example, this sankey shows connections between Henry, Patrick and Brown, Cesar, who are on the same voyage from Alexandria to New Orleans. Click through to study more relationships among enslavers (shipper, consigner), enslaved people, and information about their voyages.",
 };
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 function Sankey(props) {
+  const [width, height] = useWindowSize();
   const {setOpen, setInfo, setId, modal} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
@@ -109,7 +110,7 @@ function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    let new_CANVAS_WIDTH = 0.8 * 950;
+    let new_CANVAS_WIDTH = width>800 ?width*0.55:width*0.8;
     let new_CANVAS_HEIGHT = 0;
     let transLength = 0;
     let enslaverLength = 0;
@@ -317,14 +318,16 @@ function Sankey(props) {
     new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
 
     setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
-    setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    setCANVAS_WIDTH(width>800 ?width*0.5:width*0.8);
+    //setCANVAS_WIDTH(new_CANVAS_WIDTH);
     const tmpGraph = sankey()
       .nodeAlign(sankeyLeft)
       .nodeWidth(NODE_WIDTH)
       // .nodeheight(40)
       .extent([
         [30, 30],
-        [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+        [width>800 ?width*0.5:width*0.8, new_CANVAS_HEIGHT]
+        //[new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
       ])({nodes, links});
     setGraph(tmpGraph)
   }, [data]);
@@ -370,7 +373,8 @@ function Sankey(props) {
 
           <svg
             className="canvas"
-            width={CANVAS_WIDTH + 30}
+            width={width>800 ?width*0.5:width*0.8}
+            //width={CANVAS_WIDTH + 30}
             height={CANVAS_HEIGHT + 30}
           >
             {graph.nodes.map((node) => {
@@ -484,14 +488,14 @@ function SankeyHome() {
       <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
-          <Grid item sx={{width:"60%"}}>
+          <Grid item sx={{width:width>800 ?"60%":"90%"}}>
           {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
             <CardContent sx={{flex: "1 0 auto"}}>
               <Sankey />
             </CardContent>
           </Grid>
           <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
-            <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px'}} style={{backgroundColor: "#f1f1f1"}}>
+            <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
                   variant="text"
