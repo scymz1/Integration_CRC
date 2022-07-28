@@ -26,16 +26,11 @@ import Container from "@mui/material/Container";
 import * as options_flat from "./vars.json";
 import { styled } from "@mui/material/styles";
 
-
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 export default function SankeyExample(props) {
   const { isLoading, error, data, refetch } = useQuery("", () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-       AUTH_TOKEN
-    );
-
+    myHeaders.append("Authorization", AUTH_TOKEN);
 
     var formdata = new FormData();
     formdata.append("groupby_fields", option.fieldTarget);
@@ -184,63 +179,42 @@ export default function SankeyExample(props) {
   if (isLoading) return "loading";
   if (error) return error.message;
 
-  return (
+ let resetHandClick = () =>{
+  setState( (state) => ({ ...state, highlightLinkIndexes: []}));
+  setState(
+    (state) => (
+    {
+    ...state,
+    linkData: {
+      source: "",
+      target: "",
+    },
+  }));
+
+  set_search_object({
+    ...search_object,
+    [option.fieldSource]: ["null"],
+    [option.fieldTarget]: ["null"],
+  });
+ }
+
+ if(state.linkData.source && state.linkData.target){
+   return(
     <div>
-      {/* The button allows me to check what I have got right now - testing useage, not necessary */}
-      {/* <Button onClick={()=>console.log("data:", data)}>print data</Button> */}
 
-      {/* Dropdown meun which allows users to choose the groupby field. However, some of them are not prefect drawing since the huge density of data. So during developing just comments it but you might want to use it and check it.  */}
-      {/* <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Source Field</InputLabel>
-      <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={option.fieldSource}
-                            label="Source Field"
-                            onChange={(event) => {handleChange(event, "fieldSource")}}
-                            name="source"
-                        >
-                            {optionSource.map((option) => 
-                              // console.log("op_voyage", options_flat)
-                            (
-                                <MenuItem key={option} value={option}>
-                                     {options_flat[option].flatlabel}
-                                </MenuItem>
-                            )
-                            )}
+  <Typography>
+   {`This path is from
+ ${_.get(state, ["linkData", "source", "name"])}
+  to
+ ${_.get(state, ["linkData", "target", "name"])}
+ `}
+ </Typography>
 
-      </Select>
-      </FormControl>
 
-      <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Target Field</InputLabel>
-      <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={option.fieldTarget}
-                            label="Target Field"
-                            onChange={(event) => {handleChange(event, "fieldTarget")}}
-                            name="target"
-                        >
-                            {optionTarget.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                        {options_flat[option].flatlabel}
-                                </MenuItem>
-                            ))}
-
-      </Select>
-      </FormControl> */}
-
-      <Typography>
-          {`This path is from
-      ${_.get(state, ["linkData", "source", "name"])}
-       to
-      ${_.get(state, ["linkData", "target", "name"])}
-      `}
-        </Typography>
-
-      <br />
-      {/* <button onClick={this.setuseutate(this.state)}>Click to reload!</button> */}
+ <br />
+      <button onClick={() => resetHandClick()}>
+        Click to reload the Sankey and the Map!
+      </button>
       <br />
       <br />
       <svg
@@ -292,11 +266,10 @@ export default function SankeyExample(props) {
                           nodeData: {
                             name: node.name,
                           },
-                        },
+                        }
                         // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
                         // console.log("🫧", node.name)
                       );
-
                     }}
                   />
 
@@ -329,29 +302,26 @@ export default function SankeyExample(props) {
                       state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
                     }
                     fill="none"
-                    onMouseOver={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [i] });
-                    }}
-                    onMouseOut={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [] });
-                    }}
+                    // onMouseOver={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [i] });
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [] });
+                    // }}
                     onClick={() => {
-                      setState(
-                        {
-                          ...state,
-                          highlightLinkIndexes: [i],
-                          linkData: {
-                            source: link.source,
-                            target: link.target,
-                          },
+                      if (state.highlightLinkIndexes.length < 1) {
+                        state.highlightLinkIndexes.push(i);
+                        } else {
+                        state.highlightLinkIndexes.shift();
+                        }
+                      // state.highlightLinkIndexes.push(i);
+                      setState({
+                        ...state,
+                        linkData: {
+                          source: link.source,
+                          target: link.target,
                         },
-                        // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                        // console.log("🐷", state.linkData)
-                        // console.log(
-                        //   "🐔",
-                        //   link.source.name + " to " + link.target.name
-                        // )
-                      );
+                      });
 
                       set_search_object({
                         ...search_object,
@@ -367,7 +337,187 @@ export default function SankeyExample(props) {
         </Sankey>
       </svg>
 
-      <Card sx={{ maxWidth: 345 }}>
+</div>
+   )
+}
+
+  return ( 
+    <div>
+      {/* The button allows me to check what I have got right now - testing useage, not necessary */}
+      {/* <Button onClick={()=>console.log("data:", data)}>print data</Button> */}
+
+      {/* Dropdown meun which allows users to choose the groupby field. However, some of them are not prefect drawing since the huge density of data. So during developing just comments it but you might want to use it and check it.  */}
+      {/* <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Source Field</InputLabel>
+      <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={option.fieldSource}
+                            label="Source Field"
+                            onChange={(event) => {handleChange(event, "fieldSource")}}
+                            name="source"
+                        >
+                            {optionSource.map((option) => 
+                              // console.log("op_voyage", options_flat)
+                            (
+                                <MenuItem key={option} value={option}>
+                                     {options_flat[option].flatlabel}
+                                </MenuItem>
+                            )
+                            )}
+
+      </Select>
+      </FormControl>
+
+      <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Target Field</InputLabel>
+      <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={option.fieldTarget}
+                            label="Target Field"
+                            onChange={(event) => {handleChange(event, "fieldTarget")}}
+                            name="target"
+                        >
+                            {optionTarget.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                        {options_flat[option].flatlabel}
+                                </MenuItem>
+                            ))}
+
+      </Select>
+      </FormControl> */}
+
+     
+
+      <br />
+      <button onClick={() => resetHandClick()}>
+        Click to reload the Sankey and the Map!
+      </button>
+      <br />
+      <br />
+      <svg
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom}
+      >
+        <Sankey
+          top={margin.top}
+          left={margin.left}
+          data={data}
+          size={[width, height]}
+          nodeWidth={15}
+          nodePadding={state.nodePadding}
+          extent={[
+            [1, 1],
+            [width - 1, height - 6],
+          ]}
+        >
+          {/* nodes */}
+          {({ data }) => (
+            <Group>
+              {data.nodes.map((node, i) => (
+                // console.log(node,i),
+                <Group top={node.y0} left={node.x0} key={`node-${i}`}>
+                  <rect
+                    id={`rect-${i}`}
+                    width={Math.abs(node.x1 - node.x0)}
+                    height={Math.abs(node.y1 - node.y0)}
+                    fill={color(node.depth)}
+                    opacity={0.5}
+                    stroke="white"
+                    strokeWidth={1}
+                    onMouseOver={(e) => {
+                      setState({
+                        ...state,
+                        highlightLinkIndexes: [
+                          ...node.sourceLinks.map((l) => l.index),
+                          ...node.targetLinks.map((l) => l.index),
+                        ],
+                      });
+                    }}
+                    onMouseOut={(e) => {
+                      setState({ ...state, highlightLinkIndexes: [] });
+                    }}
+                    onClick={() => {
+                      setState(
+                        {
+                          ...state,
+                          nodeData: {
+                            name: node.name,
+                          },
+                        }
+                        // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                        // console.log("🫧", node.name)
+                      );
+                    }}
+                  />
+
+                  <Text
+                    x={18}
+                    y={(node.y1 - node.y0) / 2}
+                    verticalAnchor="middle"
+                    style={{
+                      font: "10px sans-serif",
+                    }}
+                  >
+                    {node.name}
+                  </Text>
+                </Group>
+              ))}
+
+              {/* Edges */}
+              <Group>
+                {data.links.map((link, i) => (
+                  <path
+                    key={`link-${i}`}
+                    d={path(link)}
+                    stroke="black"
+                    stroke={
+                      state.highlightLinkIndexes.includes(i) ? "red" : "black"
+                    }
+                    strokeWidth={Math.max(1, link.width)}
+                    // opacity={0.2}
+                    opacity={
+                      state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
+                    }
+                    fill="none"
+                    // onMouseOver={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [i] });
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [] });
+                    // }}
+                    onClick={() => {
+                      if (state.highlightLinkIndexes.length < 1) {
+                        state.highlightLinkIndexes.push(i);
+                        } else {
+                        state.highlightLinkIndexes.shift();
+                        }
+                   
+                      setState({
+                        ...state,
+                        linkData: {
+                          source: link.source,
+                          target: link.target,
+                        },
+                      });
+
+                      set_search_object({
+                        ...search_object,
+                        [option.fieldSource]: [link.source.name],
+                        [option.fieldTarget]: [link.target.name],
+                      });
+                    }}
+                  />
+                ))}
+              </Group>
+            </Group>
+          )}
+        </Sankey>
+      </svg>
+
+      {/* The area to view the path and node inforamtion which has been clicked */}
+      {/* <Card sx={{ maxWidth: 345 }}>
         <Typography>{`Node is ${state.nodeData.name}`}</Typography>
 
         <Typography>
@@ -377,7 +527,7 @@ export default function SankeyExample(props) {
       ${_.get(state, ["linkData", "target", "name"])}
       `}
         </Typography>
-      </Card>
+      </Card> */}
     </div>
   );
 }

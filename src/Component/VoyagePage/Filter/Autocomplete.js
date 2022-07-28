@@ -10,7 +10,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 export default function Auto(props) {
 
  const {labels} = React.useContext(AppContext)
-  const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
+  const {search_object, set_search_object, typeForTable,setPage} = React.useContext(props.context)
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
@@ -49,7 +49,7 @@ export default function Auto(props) {
         .then(result => {
             var newOptions = result[labels.option]
             setautocompleteOptions(newOptions) })
-            console.log(autocompleteOptions)
+            // console.log(autocompleteOptions)s
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
@@ -80,6 +80,7 @@ export default function Auto(props) {
       // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         setValue(oldArray => [newValue][0]);
+        setPage(0)
       }}
       // sx={{ width: 300 }}
       // renderOption = {
