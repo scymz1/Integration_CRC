@@ -23,6 +23,10 @@ function Pivot(props) {
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
 
+  if(props.complete_object){
+    complete_object = props.complete_object;
+  }
+
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
   // const [option, setOption] = useState({
@@ -46,7 +50,7 @@ function Pivot(props) {
   // Set rows
   useEffect(() => {
     var data = new FormData();
-    data.append("hierarchical", "False");
+    //data.append("hierarchical", "False");
     for (var property in complete_object) {
       if (property !== "groupby_fields") {
         // eslint-disable-next-line no-loop-func
@@ -92,7 +96,7 @@ function Pivot(props) {
   // Set columns
   useEffect(() => {
     var data = new FormData();
-    data.append("hierarchical", "False");
+    //data.append("hierarchical", "False");
     for (var property in complete_object) {
       if (property !== "groupby_fields") {
         // eslint-disable-next-line no-loop-func
