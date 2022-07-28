@@ -127,10 +127,10 @@ export default function Archive() {
         // .then(res => res.json())
         // .then(res=>setapiurl(res))
         // const response = await Promise.all(promises)
-        console.log(result)
+        // console.log(result)
         setapiurl(result)
       }
-        console.log(apiUrl) 
+        // console.log(apiUrl) 
         fetchData().catch(console.error);
       },[page,rowsPerPage])
 
@@ -146,7 +146,7 @@ export default function Archive() {
           })
           const response = await Promise.all(promises)
           setData(response)
-          console.log(itemData)
+          // console.log(itemData)
         }
         fetchData().catch(console.error);
       }, [apiUrl])
@@ -163,7 +163,7 @@ export default function Archive() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
             {/* {console.log(parseInt(width/300))} */}
-            <ImageList sx={{ width: width, height: height }} cols={5} gap={30} >
+            <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={30} >
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
                   <img
