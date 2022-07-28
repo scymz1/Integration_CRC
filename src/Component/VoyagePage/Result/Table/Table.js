@@ -507,7 +507,7 @@ function Table(props) {
                                             [].concat.apply([], row[k])
                                           ),
                                         ]
-                                          .join(" ")
+                                          .join("<br>")
                                           .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
                                     />
