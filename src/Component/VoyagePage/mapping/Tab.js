@@ -41,7 +41,6 @@ function TabPanel(props) {
 
 export default function IntraTabs(props) {
   const { complete_object, set_complete_object , disembark, setDisembark,layer} = useContext(props.context);
-  const [value, setValue] = React.useState('purchase');
   const TabContext = React.createContext({});
   const TabContext2 = React.createContext({});
 
@@ -58,7 +57,13 @@ export default function IntraTabs(props) {
   }
   delete complete_object2["value_field_tuple"];
   complete_object2["value_field_tuple"]=["voyage_slaves_numbers__imp_total_num_slaves_disembarked", "sum"];
-  console.log("afafdafd", complete_object2);
+  
+  const lat=layer._latlng.lat;
+  const lng=layer._latlng.lng;
+  console.log("afafdafd", lat, lng);
+  const embarkDisable=props.dataset==0?(lng<=-26||lat>=-5.51?true:false):false;
+  const disembarkDisable=props.dataset==0?(lng>=-26&&lat<=-5.51?true:false):false;
+  const [value, setValue] = React.useState(embarkDisable?'disembark':'purchase');
 
 
   const handleChange = (event,newValue) => {
@@ -84,22 +89,24 @@ export default function IntraTabs(props) {
         <div>
           <Box sx={{ width: '100%' }}>
             <Tabs value={value} onChange={handleChange}>
-            <Tab
-              value="purchase"
-              label={props.isRegion?"Region of embarkation":"Port of embarkation"}
-            />
-            <Tab value="disembark" label={props.isRegion?"Region of disembarkation":"Port of disembarkation"} />
+            {embarkDisable?null:<Tab value="purchase" label={props.isRegion?"Region of embarkation":"Port of embarkation"}/>}
+
+            {disembarkDisable?null:<Tab value="disembark" label={props.isRegion?"Region of disembarkation":"Port of disembarkation"} disabled={disembarkDisable}/>}
             </Tabs>
-            <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
-              <TabPanel context={TabContext} value={value} index={"purchase"}>
-                <Pivot context={TabContext} dispatch={props.dispatch}/> 
-              </TabPanel>
-            </TabContext.Provider>
-            <TabContext2.Provider value={{ complete_object: complete_object2, disembark, setDisembark,layer}}>
-              <TabPanel context={TabContext2} value={value} index={"disembark"}>
-                <Pivot context={TabContext2} dispatch={props.dispatch} /> 
-              </TabPanel>
-            </TabContext2.Provider>
+            {embarkDisable?null:
+              <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
+                <TabPanel context={TabContext} value={value} index={"purchase"}>
+                  <Pivot context={TabContext} dispatch={props.dispatch}/> 
+                </TabPanel>
+              </TabContext.Provider>
+            }
+            {disembarkDisable?null:
+              <TabContext2.Provider value={{ complete_object: complete_object2, disembark, setDisembark,layer}}>
+                <TabPanel context={TabContext2} value={value} index={"disembark"}>
+                  <Pivot context={TabContext2} dispatch={props.dispatch} /> 
+                </TabPanel>
+              </TabContext2.Provider>
+            }
           </Box>
         </div>
       </div>
