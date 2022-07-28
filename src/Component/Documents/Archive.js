@@ -82,25 +82,6 @@ export default function Archive() {
         // overflow: "scroll",
         maxHeight: 500,
       };
-    //   useEffect(() => {
-    //     let queryData = new FormData();
-    //     queryData.append("results_page", page + 1);
-    //     queryData.append("results_per_page", resPerPage);
-    //     for (var property in search_object) {
-    //       search_object[property].forEach((v) => {
-    //         queryData.append(property, v);
-    //       });
-    //     }
-    //     fetch(base_url + (typeForTable == "slaves" ? "past/enslaved/" : "past/enslavers/"), {
-    //         method: "POST",
-    //         body: queryData,
-    //         headers: {'Authorization': auth_token}
-    //       }).then(res => res.json()).then(res => {
-    //           //console.log("fetch res: ", res)
-    //           setGData(res);
-    //       })
-
-    // }, [page, resPerPage, typeForTable])
 
       useEffect(()=>{
         var data = new FormData();
@@ -124,13 +105,8 @@ export default function Archive() {
           headers: {'Authorization':AUTH_TOKEN}
         })
         const result = await res.json();
-        // .then(res => res.json())
-        // .then(res=>setapiurl(res))
-        // const response = await Promise.all(promises)
-        // console.log(result)
         setapiurl(result)
       }
-        // console.log(apiUrl) 
         fetchData().catch(console.error);
       },[page,rowsPerPage])
 
@@ -153,7 +129,6 @@ export default function Archive() {
     // console.log(itemData)
     return (
         <div>
-          {/* <button onClick={() => console.log("data",apiUrl)}>print</button> */}
             <TablePagination
               component="div"
               count={total}
@@ -162,7 +137,6 @@ export default function Archive() {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            {/* {console.log(parseInt(width/300))} */}
             <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={30} >
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
