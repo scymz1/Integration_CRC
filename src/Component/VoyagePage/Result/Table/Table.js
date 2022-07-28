@@ -21,7 +21,6 @@ import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { CircularProgress, Grid } from "@mui/material";
 import { useWindowSize } from "@react-hook/window-size";
-import Documents from "../../../Documents/Documents";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -30,6 +29,8 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Table(props) {
   const [width, height] = useWindowSize();
   const [isLoading, setLoading] = useState(false);
+
+  // handle table data response
   const [value, setValue] = useState([]);
 
   // Menu
@@ -37,7 +38,6 @@ function Table(props) {
     cols,
     checkbox,
     setOpen,
-    setInfo,
     setId,
     modal,
     options_flat,
@@ -59,25 +59,17 @@ function Table(props) {
     setField,
     direction,
     setDirection,
+    setUrl,
+    setUVOpen,
   } = useContext(props.context);
 
   // Force Re-render
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
-  // Pagination
-  // const [totalResultsCount, setTotalResultsCount] = useState(0);
-  // const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  // Sorting
-  // const [sortingReq, setSortingReq] = useState(false);
-  // const [field, setField] = useState([]);
-  // const [direction, setDirection] = useState("asc");
-
   useEffect(() => {
     setLoading(true);
-    setValue([]);
+    //setValue([]);
     var data = new FormData();
     data.append("hierarchical", "False");
     data.append("results_page", page + 1);
@@ -113,7 +105,7 @@ function Table(props) {
         setLoading(false);
       })
       .catch(function (error) {
-        // console.log(error);
+        console.log(error);
       });
   }, [
     page,
@@ -126,7 +118,6 @@ function Table(props) {
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    //console.log(typeForTable);
     if (typeForTable != null && typeForTable !== "voyage") {
       setChipData({});
       setQueryData({
@@ -135,7 +126,7 @@ function Table(props) {
         enslavers: [],
       });
     }
-  }, [typeForTable]);
+  }, [typeForTable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -176,12 +167,14 @@ function Table(props) {
     setDirection(direction === "asc" ? "desc" : "asc");
   };
 
+  // handle voyage modal & handle past chip
   const handleOpen = (event, info) => {
     if (modal) {
+      // voyage table
       setOpen(true);
-      setInfo(info);
       setId(info.id);
     } else if (info.number_enslaved > 0) {
+      // enslavers table
       const selectedIndex = queryData[typeForTable].indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
@@ -196,6 +189,7 @@ function Table(props) {
         type: "enslavers",
       });
     } else if (info.transactions.length !== 0) {
+      // enslaved table
       const selectedIndex = queryData[typeForTable].indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
@@ -212,11 +206,13 @@ function Table(props) {
     }
   };
 
+  // open voyage modal in enslaved table
   const handleCellOpen = (event, info) => {
     setOpen(true);
     setId(info.transactions__transaction__voyage__id[0]);
   };
 
+  // check if the checkbox is selected
   const isSelected = (name) => {
     if (checkbox) {
       return queryData[typeForTable].indexOf(name) !== -1;
@@ -224,16 +220,19 @@ function Table(props) {
     return false;
   };
 
+  // check if the string is numeric
   function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
+  // set a maximum on the number of the checkboxes selected
   const checkedMax = (value) => {
     const maxAllowed = 10;
     const checked = queryData[typeForTable];
     return checked.length >= maxAllowed && checked.indexOf(value) === -1;
   };
 
+  // create popover for enslaver alias in enslaved table
   const createPopover = (row) => {
     const people = row[
       "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -256,6 +255,7 @@ function Table(props) {
     return output;
   };
 
+  // popover event & open sankey modal in past table
   const handleSankeyOpen = (e, id, variety) => {
     setQueryData({
       ...queryData,
@@ -266,10 +266,12 @@ function Table(props) {
     e.stopPropagation();
   };
 
+  // set the element which is dragging
   const dragStart = (e, v) => {
     e.dataTransfer.setData("col_id", v);
   };
 
+  // exchange the columns when finish the drag
   const dragDrop = (e, v) => {
     e.preventDefault();
     var data = e.dataTransfer.getData("col_id");
@@ -277,6 +279,12 @@ function Table(props) {
     var dragIn = cols.indexOf(v);
     [cols[dragOut], cols[dragIn]] = [cols[dragIn], cols[dragOut]];
     forceUpdate();
+  };
+
+  // handle UV modal
+  const handleUV = (e, url) => {
+    setUrl(url);
+    setUVOpen(true);
   };
 
   if (isLoading) {
@@ -459,10 +467,20 @@ function Table(props) {
                                     ).map((element, ref_key) => {
                                       if (element["doc"] != null) {
                                         return (
-                                          <Documents
-                                            title={element["text_ref"]}
-                                            url={element["doc"]["url"]}
-                                          />
+                                          <Link
+                                            color="inherit"
+                                            component={ButtonLink}
+                                            key={"text_ref-" + ref_key}
+                                            style={{
+                                              color: "#f21b42",
+                                              textDecorationColor: "#f21b42",
+                                            }}
+                                            onClick={(e) =>
+                                              handleUV(e, element["doc"]["url"])
+                                            }
+                                          >
+                                            {element["text_ref"]}
+                                          </Link>
                                         );
                                       } else {
                                         return (
