@@ -43,7 +43,7 @@ var groupby_fields_port_name = [
 ];
 
 var value_field_tuple = [
-  "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
+  "voyage_slaves_numbers__imp_total_num_slaves_embarked",
   "sum",
 ];
 
@@ -180,6 +180,7 @@ export function ReadFeature(props) {
   // },[area])
 
   //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object", JSON.parse(JSON.stringify(complete_object)));
+  
 
   useEffect(() => {
     //console.log("UseEffect Complete Object: ", complete_object)
@@ -223,6 +224,7 @@ export function ReadFeature(props) {
       }
     };
 
+
     if (nodes) {
       // Add all features for drawing links (including waypoints to nodeslayers)
       L.geoJSON(nodes.features, {
@@ -254,7 +256,13 @@ export function ReadFeature(props) {
             delete temp[groupby_fields_region[1]];
             delete temp[groupby_fields_port[0]];
             delete temp[groupby_fields_port[1]];
-            complete_object[disembark] = [layer.feature.id, layer.feature.id];
+            if(isRegion){
+              complete_object[groupby_fields_region[0]] = [layer.feature.id, layer.feature.id];
+            }
+            else{
+              complete_object[groupby_fields_port[0]] = [layer.feature.id, layer.feature.id];
+            }
+            complete_object["dataset"]=props.search_object["dataset"]
             //set_complete_object({...temp, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             var event = new Event('update_popup');

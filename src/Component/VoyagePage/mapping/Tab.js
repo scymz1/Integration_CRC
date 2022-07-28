@@ -43,6 +43,22 @@ export default function IntraTabs(props) {
   const { complete_object, set_complete_object , disembark, setDisembark,layer} = useContext(props.context);
   const [value, setValue] = React.useState('purchase');
   const TabContext = React.createContext({});
+  const TabContext2 = React.createContext({});
+
+  const complete_object2=JSON.parse(JSON.stringify(complete_object));
+  delete complete_object2[groupby_fields_region[0]];
+  delete complete_object2[groupby_fields_region[1]];
+  delete complete_object2[groupby_fields_port[0]];
+  delete complete_object2[groupby_fields_port[1]];
+  if(props.isRegion){
+    complete_object2[groupby_fields_region[1]]=complete_object[groupby_fields_region[0]];
+  }
+  else{
+    complete_object2[groupby_fields_port[1]]=complete_object[groupby_fields_port[0]];
+  }
+  delete complete_object2["value_field_tuple"];
+  complete_object2["value_field_tuple"]=["voyage_slaves_numbers__imp_total_num_slaves_disembarked", "sum"];
+  console.log("afafdafd", complete_object2);
 
 
   const handleChange = (event,newValue) => {
@@ -60,9 +76,8 @@ export default function IntraTabs(props) {
 
   };
 
-
   return (
-    <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
+    
     <Grid>
       {props.title}
       <div style={{ fontSize: "24px", color: "black" }}>
@@ -71,21 +86,24 @@ export default function IntraTabs(props) {
             <Tabs value={value} onChange={handleChange}>
             <Tab
               value="purchase"
-              label="Port of embarkation"
+              label={props.isRegion?"Region of embarkation":"Port of embarkation"}
             />
-            <Tab value="disembark" label="Port of disembarkation" />
+            <Tab value="disembark" label={props.isRegion?"Region of disembarkation":"Port of disembarkation"} />
             </Tabs>
-            <TabPanel context={TabContext} value={value} index={"purchase"}>
-              <Pivot context={TabContext} dispatch={props.dispatch}/> 
-            </TabPanel>
-            <TabPanel context={TabContext} value={value} index={"disembark"}>
-              <Pivot context={TabContext} dispatch={props.dispatch}/> 
-            </TabPanel>
+            <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
+              <TabPanel context={TabContext} value={value} index={"purchase"}>
+                <Pivot context={TabContext} dispatch={props.dispatch}/> 
+              </TabPanel>
+            </TabContext.Provider>
+            <TabContext2.Provider value={{ complete_object: complete_object2, disembark, setDisembark,layer}}>
+              <TabPanel context={TabContext2} value={value} index={"disembark"}>
+                <Pivot context={TabContext2} dispatch={props.dispatch} /> 
+              </TabPanel>
+            </TabContext2.Provider>
           </Box>
         </div>
       </div>
     </Grid>
-  </TabContext.Provider>
   );
 }
 
