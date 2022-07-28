@@ -79,7 +79,7 @@ export default function Archive() {
         left: "50%",
         transform: "translate(-50%, -50%)",
         p: 4,
-        overflow: "scroll",
+        // overflow: "scroll",
         maxHeight: 500,
       };
     //   useEffect(() => {
