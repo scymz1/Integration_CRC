@@ -33,7 +33,7 @@ function PivotApp(props) {
   const [complete_object, set_complete_object] = useState(default_object);
   const [selected_object, set_selected_object] = useState(default_object);
 
-  console.log("Selected_value: ", selected_value)
+  // console.log("Selected_value: ", selected_value)
 
   // Options
   const [option, setOption] = useState({

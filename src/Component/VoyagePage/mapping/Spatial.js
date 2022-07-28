@@ -130,7 +130,9 @@ export function ReadFeature(props) {
       setIsLoading(true);
       setCsv(response.data.routes);
       setNodes(response.data.points);
-
+      
+      console.log("Nodes: ", response.data.points)
+      console.log("Routes: ", response.data.routes)
       //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);

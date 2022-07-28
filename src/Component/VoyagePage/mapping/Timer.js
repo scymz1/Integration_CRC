@@ -1,29 +1,42 @@
 import { useEffect, useState } from "react"
 
-export default function GetTimer(props) {
-    const [time, setTime] = useState();
-    const [isPlaying, setIsPlaying] = useState(false);
+export default ({ startTime, endTime, step, frequency }) => {
+	/** State hook of current time as a value in milliseconds */
+	const [time, setTime] = useState(startTime.valueOf())
 
-    useEffect(() => {
-        let interval
+	/** State hook representing whether timer is playing or not */
+	const [isPlaying, setIsPlaying] = useState(false)
 
-        if(isPlaying) {
-            interval = setInterval(() => {
-                setTime(time=>time+step)
-            }, 1000/frequency)
-        }
+	/** Effect hook that runs when state of isPlaying changes */
+	useEffect(() => {
+		let interval
 
-        return () => clearInterval(interval)
-    }, [isPlaying])
+		/** if the current state is playing.. */
+		if (isPlaying) {
+			/** set interval to run frequncy times every second */
+			interval = setInterval(() => {
+				/** increment the time by the step value */
+				setTime(time => time + step)
+			}, 1000 / frequency)
+		}
 
-    useEffect(() => {
-        if(time >= endTime){
-            setIsPlaying(false)
-        }
-    }, [time, endTime])
+		/** Cleanup effect by clearing interval */
+		return () => clearInterval(interval)
+	}, [isPlaying])
 
-    const updateTime = time => setTime(time)
+	/** Play function */
+	const play = () => setIsPlaying(true)
 
-    return {startTime, endTime, time, setTime, isPlaying, setIsPlaying, updateTime }
+	/** Stop function */
+	const stop = () => setIsPlaying(false)
 
+	/** Effect hook runs when time changes */
+	useEffect(() => {
+		/** if time is greater or equal to endTime, stop the timer from running */
+		if (time >= endTime.valueOf()) stop()
+	}, [time, endTime.valueOf()])
+
+	const updateTime = time => setTime(time.valueOf())
+
+	return { time: new Date(time), play, stop, updateTime, isPlaying, startTime, endTime }
 }
