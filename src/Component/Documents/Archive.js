@@ -51,6 +51,11 @@ const UV = ({ manifest, parentWidth }) => {
                         height: "50vh"
                     }}/>;
 };
+function curImage(src){
+  var arr1 = src.split("medium");
+  return arr1[0] + "square" + arr1[1];
+  
+}
 export default function Archive() {
     const [width, height] = useWindowSize()
     const DocContext = React.createContext({});
@@ -60,7 +65,7 @@ export default function Archive() {
     const [itemData, setData] = useState([])
 
     const [page, setPage] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(16);
     const [total, setTotal] = useState(0)
 
     const handleChangePage = (event, newPage) => {
@@ -118,7 +123,7 @@ export default function Archive() {
             return fetch(Object.values(uri), {
               method: "GET",
             }).then(res => res.json()).then(res => {
-              var dict = {"title": res.label.none[0], "image": res.thumbnail[0].id,"uri":uri}
+              var dict = {"title": res.label.none[0], "image": curImage(res.thumbnail[0].id),"uri":uri}
               return dict;
             })
           })
@@ -138,8 +143,13 @@ export default function Archive() {
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[16, 25, 36, 49, 64]}
             />
-            <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={20} >
+            <ImageList sx={{ width: width, height: (page + 1) * rowsPerPage > total ? 200: height }} cols={
+              (page + 1) * rowsPerPage > total ? 8 :
+              Math.sqrt(rowsPerPage)
+              } gap={30} >
+            {/* <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={20} > */}
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
                   <img
