@@ -101,23 +101,17 @@ export default function Bar(props) {
   useEffect(() => {
     setIsLoading(true);
     // var value = option.value;
-   
+   let yfieldArr = []
     const fetchData = async () => {
       const promises = chips.map( element => {
     var data = new FormData();
-
+     yfieldArr.push(element)
+    
     for (var property in search_object) {
       search_object[property].forEach((v) => {
         data.append(property, v);
       });
     }
-   // let newFetchData = {
-        //   x: Object.keys(response.data[value]),
-        //   y: Object.values(response.data[element]),
-        //   type: "bar",
-        //   name: `aggregation: ${aggregation} label: ${options_flat[option.value].flatlabel}`,
-        //   barmode: "group",
-        // }
    
     data.append("hierarchical", "False");
     data.append("groupby_fields", option.field);
@@ -125,7 +119,7 @@ export default function Bar(props) {
     data.append("agg_fn", aggregation);
 
     console.log("option_field🍕", option.field)
-    console.log("option_value🍔",element)
+    console.log("element🍔",element)
     console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
     return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
@@ -140,18 +134,30 @@ export default function Bar(props) {
     })
   
     const data = await Promise.all(promises)
-    console.log("💩", data)
+    console.log("🍔 data is ", data )
 
+  //   const plotMap = new Map();
+  //   plotMap.set()
 
+    
+  // const finalResult = yfieldArr.map((item, index) => item.map((value) => ({
+  //   ...value,
+  //   ...data[index],
+  //   })));
+
+    // console.log("🐯", finalResult)
     let arr = []
-    data.forEach( element =>{
-      arr.push({
-        x: Object.keys(element),
-        y: Object.values(element),
-        type: "bar",
-        name: `aggregation: ${aggregation} label: ${options_flat[option.value].flatlabel}`,
-        barmode: "group",
-      })
+    data.forEach( (dataElement,index) =>{
+      console.log("dataElement is ", dataElement)
+      console.log("🐒", )
+  
+        arr.push({
+          x: Object.keys(dataElement),
+          y: Object.values(dataElement),
+          type: "bar",
+          name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
+          barmode: "group",
+        })
     })
 
       setBarData(
