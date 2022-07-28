@@ -59,7 +59,7 @@ export default function Home() {
                     <Animated
                       animationIn="slideInLeft"
                       animationOut="fadeOut"
-                      animationInDelay= {300}
+                      animationInDelay= {600}
                       isVisible={isVisible}
                       animationInDuration = {1300}
                     >
