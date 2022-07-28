@@ -146,6 +146,7 @@ export default function Archive() {
           })
           const response = await Promise.all(promises)
           setData(response)
+          console.log(itemData)
         }
         fetchData().catch(console.error);
       }, [apiUrl])
@@ -161,6 +162,7 @@ export default function Archive() {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            {/* {console.log(parseInt(width/300))} */}
             <ImageList sx={{ width: width, height: height }} cols={5} gap={30} >
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
@@ -176,7 +178,7 @@ export default function Archive() {
                       <IconButton
                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                         aria-label={`info about ${item.title}`}
-                        onClick={() => handleOpen(item.uri)}
+                        onClick={() => handleOpen(item.uri.url)}
                       >
                         <InfoIcon />
                       </IconButton>
