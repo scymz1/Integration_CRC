@@ -29,7 +29,7 @@ export const AppContext = React.createContext();
 // const header = { "Authorization": process.env.REACT_APP_AUTHTOKEN }
 
 export default function Filter(props) {
-    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType} = useContext(props.context);
+    const {options_flat, search_object, set_search_object, drawerOpen, handleDrawerClose, nested_tree, dataSet, typeForTable, labels, setLabels, pageType,  page, setPage} = useContext(props.context);
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
