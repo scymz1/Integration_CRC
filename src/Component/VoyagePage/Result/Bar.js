@@ -148,8 +148,8 @@ export default function Bar(props) {
     // console.log("🐯", finalResult)
     let arr = []
     data.forEach( (dataElement,index) =>{
-      console.log("dataElement is ", dataElement)
-      console.log("🐒", )
+      // console.log("dataElement is ", dataElement)
+      // console.log("🐒", )
   
         arr.push({
           x: Object.keys(dataElement),
