@@ -16,6 +16,7 @@ import {
   } from '@react-hook/window-size'
 import axios from "axios";
 import { SettingsOverscanOutlined } from "@mui/icons-material";
+import { alpha } from "@mui/material";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -61,6 +62,7 @@ export default function Archive() {
     const [page, setPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [total, setTotal] = useState(0)
+
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
@@ -137,7 +139,7 @@ export default function Archive() {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={30} >
+            <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={20} >
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
                   <img
@@ -148,6 +150,9 @@ export default function Archive() {
                   />
                   <ImageListItemBar
                     title={item.title}
+                    sx ={{
+                      bgcolor: alpha('#549165',0.8)
+                    }}
                     actionIcon={
                       <IconButton
                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
