@@ -26,16 +26,11 @@ import Container from "@mui/material/Container";
 import * as options_flat from "./vars.json";
 import { styled } from "@mui/material/styles";
 
-
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 export default function SankeyExample(props) {
   const { isLoading, error, data, refetch } = useQuery("", () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-       AUTH_TOKEN
-    );
-
+    myHeaders.append("Authorization", AUTH_TOKEN);
 
     var formdata = new FormData();
     formdata.append("groupby_fields", option.fieldTarget);
@@ -184,7 +179,27 @@ export default function SankeyExample(props) {
   if (isLoading) return "loading";
   if (error) return error.message;
 
-  return (
+ let resetHandClick = () =>{
+  setState( (state) => ({ ...state, highlightLinkIndexes: []}));
+  setState(
+    (state) => (
+    {
+    ...state,
+    linkData: {
+      source: "null",
+      target: "null",
+    },
+  }));
+
+  set_search_object({
+    ...search_object,
+    [option.fieldSource]: ["null"],
+    [option.fieldTarget]: ["null"],
+  });
+  
+ }
+
+  return ( 
     <div>
       {/* The button allows me to check what I have got right now - testing useage, not necessary */}
       {/* <Button onClick={()=>console.log("data:", data)}>print data</Button> */}
@@ -232,15 +247,17 @@ export default function SankeyExample(props) {
       </FormControl> */}
 
       <Typography>
-          {`This path is from
+        {`This path is from
       ${_.get(state, ["linkData", "source", "name"])}
        to
       ${_.get(state, ["linkData", "target", "name"])}
       `}
-        </Typography>
+      </Typography>
 
       <br />
-      {/* <button onClick={this.setuseutate(this.state)}>Click to reload!</button> */}
+      <button onClick={() => resetHandClick()}>
+        Click to reload the Sankey and the Map!
+      </button>
       <br />
       <br />
       <svg
@@ -292,11 +309,10 @@ export default function SankeyExample(props) {
                           nodeData: {
                             name: node.name,
                           },
-                        },
+                        }
                         // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
                         // console.log("🫧", node.name)
                       );
-
                     }}
                   />
 
@@ -329,29 +345,21 @@ export default function SankeyExample(props) {
                       state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
                     }
                     fill="none"
-                    onMouseOver={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [i] });
-                    }}
-                    onMouseOut={(e) => {
-                      setState({ ...state, highlightLinkIndexes: [] });
-                    }}
+                    // onMouseOver={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [i] });
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [] });
+                    // }}
                     onClick={() => {
-                      setState(
-                        {
-                          ...state,
-                          highlightLinkIndexes: [i],
-                          linkData: {
-                            source: link.source,
-                            target: link.target,
-                          },
+                      state.highlightLinkIndexes.push(i);
+                      setState({
+                        ...state,
+                        linkData: {
+                          source: link.source,
+                          target: link.target,
                         },
-                        // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                        // console.log("🐷", state.linkData)
-                        // console.log(
-                        //   "🐔",
-                        //   link.source.name + " to " + link.target.name
-                        // )
-                      );
+                      });
 
                       set_search_object({
                         ...search_object,
@@ -367,7 +375,8 @@ export default function SankeyExample(props) {
         </Sankey>
       </svg>
 
-      <Card sx={{ maxWidth: 345 }}>
+      {/* The area to view the path and node inforamtion which has been clicked */}
+      {/* <Card sx={{ maxWidth: 345 }}>
         <Typography>{`Node is ${state.nodeData.name}`}</Typography>
 
         <Typography>
@@ -377,7 +386,7 @@ export default function SankeyExample(props) {
       ${_.get(state, ["linkData", "target", "name"])}
       `}
         </Typography>
-      </Card>
+      </Card> */}
     </div>
   );
 }
