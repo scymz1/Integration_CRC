@@ -1,4 +1,4 @@
-import {Grid, IconButton, AppBar, Toolbar, Drawer, Divider} from "@mui/material";
+import {Grid, Button, IconButton, AppBar, Toolbar, Drawer, Divider} from "@mui/material";
 import {useContext} from "react";
 // import {VoyageContext} from "../VoyageApp";
 
@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
@@ -20,8 +20,6 @@ import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
-
-import { Button } from '@mui/material';
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 // import { VoyageContext } from "../VoyageApp";
@@ -35,28 +33,23 @@ export default function Filter(props) {
     const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
-    // const [width, setWidth] = React.useState(12);
-    // const [margin, setMargin] = React.useState("10px");
-    // const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-    // Handle Drawer Open and Close
-    // const handleDrawerOpen = () => {
-    //     setDrawerOpen(!drawerOpen);
-    // };
-    // const handleDrawerClose = () => {
-    //     setDrawerOpen(!drawerOpen);
-    // };
 
     // Handle Full Screen
-    // console.log("length:", labels.length)
     const handleFullScreen = () =>{
         setFullScreen(!fullScreen);
         // setWidth(width === 12 ? 5:12);
         // setMargin(margin === "10px" ? "5px":"10px");
     };
 
+    // Handle Screen LR switch
     const handleSwitchScreen = () =>{
         setRightScreen(!rightScreen);
+    };
+
+    // Handle Filter Reset Action
+    const handleFilterReset = () =>{
+        set_search_object(dataSet==="0" ? {'dataset': ["0", "0"]}: {'dataset': ["1", "1"]});
+        setLabels([])
     };
 
     // Handle delete by removing the specified key
@@ -147,6 +140,9 @@ export default function Filter(props) {
         <Divider />
         <Grid container justifyContent="center" sx={{mb:"10px"}}> 
                 <Grid container item justifyContent={rightScreen?"flex-start":"flex-end"}>
+                    <IconButton onClick={handleFilterReset}>
+                        <RestartAltIcon />
+                    </IconButton>
                     <IconButton onClick={handleSwitchScreen}>
                         {rightScreen ? <SwitchLeftIcon /> : <SwitchRightIcon />}
                     </IconButton>
@@ -177,7 +173,7 @@ export default function Filter(props) {
                 :
                     labels.slice(0).reverse().map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px"}}>
+                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px",  mr:"10px"}}>
                           <Grid item xs={10}>
                               <Accordion>
                                   <AccordionSummary>
