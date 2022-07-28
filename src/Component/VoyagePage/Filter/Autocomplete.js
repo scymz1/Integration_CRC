@@ -49,7 +49,7 @@ export default function Auto(props) {
         .then(result => {
             var newOptions = result[labels.option]
             setautocompleteOptions(newOptions) })
-            console.log(autocompleteOptions)
+            // console.log(autocompleteOptions)s
       }
 
       fetchData(searchLabel,textInput).catch(console.error)
