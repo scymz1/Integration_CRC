@@ -51,7 +51,7 @@
     "react-sankey-chart": "^1.0.8",
     "react-scripts": "^5.0.1",
     "react-use-pagination": "^2.0.1",
-    "universalviewer": "^4.0.3",
+    "universalviewer": "^4.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

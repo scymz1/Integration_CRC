@@ -315,13 +315,9 @@ export default function SankeyExample(props) {
                           },
                         },
                         // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
-                        console.log("🫧", node.name)
+                        // console.log("🫧", node.name)
                       );
 
-                      // set_search_object({
-                      //   ...search_object,
-                      //   [option.fieldSource]: [node.name]
-                      // });
                     }}
                   />
 

@@ -9,28 +9,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-//import { VoyageContext } from "../../VoyageApp";
 import TablePagination from "@mui/material/TablePagination";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Checkbox from "@mui/material/Checkbox";
-//import * as options_flat from "../../../util/options.json";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-//import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import { CircularProgress, Grid } from "@mui/material";
 import { useWindowSize } from "@react-hook/window-size";
-// import {
-//   enslaved_default_list,
-//   enslaved_var_list,
-//   enslaver_default_list,
-//   enslaver_var_list,
-// } from "../../../PAST/vars";
-// import * as enslaved_labels from "../../../util/enslaved_options.json";
-// import * as enslaver_labels from "../../../util/enslaver_options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -39,19 +29,15 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Table(props) {
   const [width, height] = useWindowSize();
   const [isLoading, setLoading] = useState(false);
+
+  // handle table data response
   const [value, setValue] = useState([]);
-  //const { search_object } = useContext(VoyageContext);
 
   // Menu
   const {
     cols,
-    // setCols,
-    // setAll_options,
-    // setLabels,
-    // setEnslaver,
     checkbox,
     setOpen,
-    setInfo,
     setId,
     modal,
     options_flat,
@@ -73,25 +59,17 @@ function Table(props) {
     setField,
     direction,
     setDirection,
+    setUrl,
+    setUVOpen,
   } = useContext(props.context);
 
   // Force Re-render
   const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
 
-  // Pagination
-  // const [totalResultsCount, setTotalResultsCount] = useState(0);
-  // const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  // Sorting
-  // const [sortingReq, setSortingReq] = useState(false);
-  // const [field, setField] = useState([]);
-  // const [direction, setDirection] = useState("asc");
-
   useEffect(() => {
     setLoading(true);
-    setValue([]);
+    //setValue([]);
     var data = new FormData();
     data.append("hierarchical", "False");
     data.append("results_page", page + 1);
@@ -101,7 +79,7 @@ function Table(props) {
       var modified_field = direction === "asc" ? field : "-" + field;
       data.append("order_by", modified_field);
     }
-        
+
     for (var property in search_object) {
       // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
@@ -118,7 +96,6 @@ function Table(props) {
           return "voyage/";
       }
     })();
-    // console.log("table useEffect", endpoint, typeForTable, search_object, cols)
     axios
       .post("/" + endpoint, data)
       .then(function (response) {
@@ -128,7 +105,7 @@ function Table(props) {
         setLoading(false);
       })
       .catch(function (error) {
-        // console.log(error);
+        console.log(error);
       });
   }, [
     page,
@@ -141,7 +118,6 @@ function Table(props) {
   ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    //console.log(typeForTable);
     if (typeForTable != null && typeForTable !== "voyage") {
       setChipData({});
       setQueryData({
@@ -150,7 +126,7 @@ function Table(props) {
         enslavers: [],
       });
     }
-  }, [typeForTable]);
+  }, [typeForTable]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
@@ -161,8 +137,13 @@ function Table(props) {
       border: 0,
     },
     "&:hover": {
-      backgroundColor: "#389c90",
+      backgroundColor: "#85d4cb",
     },
+  }));
+
+  const ButtonLink = styled(Button)(({ theme }) => ({
+    textAlign: "left",
+    flexWrap: "wrap",
   }));
 
   const handleChangePage = (event, newPage) => {
@@ -186,17 +167,17 @@ function Table(props) {
     setDirection(direction === "asc" ? "desc" : "asc");
   };
 
+  // handle voyage modal & handle past chip
   const handleOpen = (event, info) => {
-    //console.log(info.id);
     if (modal) {
+      // voyage table
       setOpen(true);
-      setInfo(info);
       setId(info.id);
     } else if (info.number_enslaved > 0) {
+      // enslavers table
       const selectedIndex = queryData[typeForTable].indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
-          // console.log("chipData", chipData)
           chipData[info.id] = info.principal_alias;
         }
       } else {
@@ -207,18 +188,11 @@ function Table(props) {
         enslavers: Object.keys(chipData).map(Number),
         type: "enslavers",
       });
-      //console.log(queryData);
     } else if (info.transactions.length !== 0) {
-      //setOpen(true);
-      // setInfo(info);
-      //console.log(info.transactions__transaction__voyage__id[0]);
-      //setId(info.transactions__transaction__voyage__id[0]);
-      //console.log(info.documented_name);
-      //let selected = queryData[typeForTable];
+      // enslaved table
       const selectedIndex = queryData[typeForTable].indexOf(info.id);
       if (selectedIndex === -1) {
         if (!checkedMax(info.id)) {
-          // console.log("chipData", chipData)
           chipData[info.id] = info.documented_name;
         }
       } else {
@@ -232,26 +206,33 @@ function Table(props) {
     }
   };
 
+  // open voyage modal in enslaved table
   const handleCellOpen = (event, info) => {
     setOpen(true);
     setId(info.transactions__transaction__voyage__id[0]);
   };
 
+  // check if the checkbox is selected
   const isSelected = (name) => {
     if (checkbox) {
-      // console.log(queryData[typeForTable].indexOf(name));
       return queryData[typeForTable].indexOf(name) !== -1;
     }
     return false;
   };
 
+  // check if the string is numeric
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
+  // set a maximum on the number of the checkboxes selected
   const checkedMax = (value) => {
     const maxAllowed = 10;
-    //console.log(value);
     const checked = queryData[typeForTable];
     return checked.length >= maxAllowed && checked.indexOf(value) === -1;
   };
 
+  // create popover for enslaver alias in enslaved table
   const createPopover = (row) => {
     const people = row[
       "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
@@ -264,7 +245,6 @@ function Table(props) {
     const ids =
       row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
     const output = {};
-    //console.log(people,roles,ids)
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
         output[people[i]] = { roles: [], id: 0 };
@@ -272,12 +252,11 @@ function Table(props) {
       output[people[i]]["roles"].push(roles[i][0]);
       output[people[i]]["id"] = ids[i][0];
     }
-    //console.log(output);
     return output;
   };
 
+  // popover event & open sankey modal in past table
   const handleSankeyOpen = (e, id, variety) => {
-    // console.log(id);
     setQueryData({
       ...queryData,
       [variety]: id,
@@ -287,12 +266,12 @@ function Table(props) {
     e.stopPropagation();
   };
 
+  // set the element which is dragging
   const dragStart = (e, v) => {
-    //console.log(v);
     e.dataTransfer.setData("col_id", v);
-    //console.log(e.dataTransfer);
   };
 
+  // exchange the columns when finish the drag
   const dragDrop = (e, v) => {
     e.preventDefault();
     var data = e.dataTransfer.getData("col_id");
@@ -300,6 +279,12 @@ function Table(props) {
     var dragIn = cols.indexOf(v);
     [cols[dragOut], cols[dragIn]] = [cols[dragIn], cols[dragOut]];
     forceUpdate();
+  };
+
+  // handle UV modal
+  const handleUV = (e, url) => {
+    setUrl(url);
+    setUVOpen(true);
   };
 
   if (isLoading) {
@@ -331,14 +316,7 @@ function Table(props) {
                   <Tables sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        {checkbox && (
-                          <TableCell padding="checkbox">
-                            {/* <Checkbox
-                        color="primary"
-                      /> */}
-                          </TableCell>
-                        )}
-                        {/* {console.log(cols +"123")} */}
+                        {checkbox && <TableCell padding="checkbox"></TableCell>}
                         {cols.map((v, key) => (
                           <TableCell
                             style={{ color: "#389c90" }}
@@ -372,9 +350,7 @@ function Table(props) {
                           <StyledTableRow
                             key={row.id}
                             onClick={(event) => handleOpen(event, row)}
-                            //selected={isItemSelected}
                           >
-                            {/* {console.log(row)} */}
                             {checkbox &&
                               ((row.transactions != null &&
                                 row.transactions.length !== 0) ||
@@ -396,28 +372,13 @@ function Table(props) {
                                   row.number_enslaved > 0)
                               ) && <TableCell padding="checkbox"></TableCell>}
                             {cols.map((k, key) => {
-                              if (k === "gender") {
-                                if (row[k] === 1) {
-                                  return (
-                                    <TableCell key={"content-" + key}>
-                                      Male
-                                    </TableCell>
-                                  );
-                                } else if (row[k] === 2) {
-                                  return (
-                                    <TableCell key={"content-" + key}>
-                                      Female
-                                    </TableCell>
-                                  );
-                                } else {
-                                  return (
-                                    <TableCell key={"content-" + key}>
-                                      {row[k]}
-                                    </TableCell>
-                                  );
-                                }
+                              if (k === "gender" && isNumeric(row[k])) {
+                                return (
+                                  <TableCell key={"content-" + key}>
+                                    {row[k] === 1 ? "Male" : "Female"}
+                                  </TableCell>
+                                );
                               } else if (k === "number_enslaved") {
-                                //console.log([...new Set(row["alias__transactions__transaction__enslaved_person__enslaved__id"].flat(Infinity))]);
                                 return (
                                   <TableCell key={"content-" + key}>
                                     <Link
@@ -446,7 +407,6 @@ function Table(props) {
                                 "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
                               ) {
                                 const popover = createPopover(row);
-                                //console.log(popover);
                                 return (
                                   <TableCell key={"content-" + key}>
                                     <Stack direction="row" spacing={1}>
@@ -484,22 +444,60 @@ function Table(props) {
                                       variant="body2"
                                       onClick={(e) => {
                                         handleCellOpen(e, row);
-                                        // e.preventDefault();
                                         e.stopPropagation();
                                       }}
                                     >
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: [...new Set(row[k])].join(
-                                            ", "
-                                          ),
-                                        }}
-                                      />
+                                      {[...new Set(row[k])].join(", ")}
                                     </Link>
                                   </TableCell>
                                 );
+                              } else if (
+                                k ===
+                                "voyage_sourceconnection__source__full_ref"
+                              ) {
+                                return (
+                                  <TableCell
+                                    key={"content-" + key}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                    }}
+                                  >
+                                    {Object.values(
+                                      row["voyage_sourceconnection"]
+                                    ).map((element, ref_key) => {
+                                      if (element["doc"] != null) {
+                                        return (
+                                          <Link
+                                            color="inherit"
+                                            component={ButtonLink}
+                                            key={"text_ref-" + ref_key}
+                                            style={{
+                                              color: "#f21b42",
+                                              textDecorationColor: "#f21b42",
+                                            }}
+                                            onClick={(e) =>
+                                              handleUV(e, element["doc"]["url"])
+                                            }
+                                          >
+                                            {element["text_ref"]}
+                                          </Link>
+                                        );
+                                      } else {
+                                        return (
+                                          <Link
+                                            color="inherit"
+                                            component={ButtonLink}
+                                            key={"text_ref-" + ref_key}
+                                            style={{ textDecoration: "none" }}
+                                          >
+                                            {element["text_ref"]}
+                                          </Link>
+                                        );
+                                      }
+                                    })}
+                                  </TableCell>
+                                );
                               } else if (typeof row[k] === "object") {
-                                //console.log([...new Set([].concat.apply([], row[k]))]);
                                 return (
                                   <TableCell key={"content-" + key}>
                                     <div
@@ -516,14 +514,9 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else {
-                                // console.log(row[k]);
                                 return (
                                   <TableCell key={"content-" + key}>
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: row[k],
-                                      }}
-                                    />
+                                    {row[k]}
                                   </TableCell>
                                 );
                               }

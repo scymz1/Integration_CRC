@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { Grid } from "@mui/material";
 //import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import * as d3 from "d3";
@@ -109,7 +108,7 @@ export function ReadFeature(props) {
       setArea(disembark);
     }
   });
-  console.log("useEffect ~ complete_object", map.getZoom());
+  //console.log("useEffect ~ complete_object", map.getZoom());
 
   useEffect(() => {
     var data = new FormData();
@@ -131,9 +130,6 @@ export function ReadFeature(props) {
       setCsv(response.data.routes);
       setNodes(response.data.points);
       
-      console.log("Nodes: ", response.data.points)
-      console.log("Routes: ", response.data.routes)
-      //console.log("Repsonse:", response.data)
     });
   }, [props.search_object, groupby_fields]);
 
@@ -177,10 +173,7 @@ export function ReadFeature(props) {
   //    set_complete_object(complete_object)
   // },[area])
 
-  console.log(
-    "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object",
-    JSON.parse(JSON.stringify(complete_object))
-  );
+  //console.log("🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ area complete_object", JSON.parse(JSON.stringify(complete_object)));
 
   useEffect(() => {
     //console.log("UseEffect Complete Object: ", complete_object)
@@ -249,6 +242,7 @@ export function ReadFeature(props) {
           layer.on("click", function (e) {
             console.log("Mouseover object: ", complete_object);
 
+            console.log("On Click Disembark: ", disembark)
             complete_object[disembark] = [layer.feature.id, layer.feature.id];
             //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
@@ -264,23 +258,7 @@ export function ReadFeature(props) {
                   layer,
                 }}
               >
-                <Grid>
-                  {layer.feature.properties.name +
-                    " " +
-                    layer.feature.geometry.coordinates}
-
-                  <div style={{ fontSize: "24px", color: "black" }}>
-                    <div>
-                      {/* only show if intraamerican, otherwise hidden */}
-                      {props.search_object.dataset[0] == 0 ? (
-                        ""
-                      ) : (
-                        <IntraTabs context={PivotContext} dispatch={dispatch} />
-                      )}
-                      {/* <Pivot context={PivotContext} /> */}
-                    </div>
-                  </div>
-                </Grid>
+                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.search_object.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates}/>  
               </PivotContext.Provider>
             );
 

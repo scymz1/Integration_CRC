@@ -34,8 +34,7 @@ function reducer(state, { type, index }) {
 
 function TableModal(props) {
   const endpoint = props.endpoint;
-  const { open, setOpen, id, info } = useContext(props.context);
-  //console.log("here= ", id);
+  const { open, setOpen, id } = useContext(props.context);
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -138,7 +137,6 @@ function TableModal(props) {
               <div key={title}>
                 <Accordion
                   expanded={state[idxRelation[title]]}
-                  // onClick={(event) => handleSingleExpansion(event, title)}
                   sx={{ margin: "5px" }}
                 >
                   <AccordionSummary
