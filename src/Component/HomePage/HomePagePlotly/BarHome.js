@@ -108,7 +108,7 @@ function BarComponent() {
                 },
                 {type: "bar"},
               ]}
-              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "The sum of voyage : Ship : Imputed Ship Nationality : Name vs <br> enslaved in relation : enslavement relation : voyage : voyage slaves numbers : Total slaves embarked imputed * (slaximp)",
+              layout={{width: width>800 ? width*0.55: width * 0.9, height: height*0.9, title: "The sum of the total number (imputed) of enslaved people who were embarked on voyages <br> by The nationality of the ship",
               font: {
                 size: 8
               },

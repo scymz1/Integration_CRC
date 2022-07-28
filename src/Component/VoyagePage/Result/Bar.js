@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-
+import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,11 +15,10 @@ import { bar_x_vars, bar_y_vars } from "./vars";
 import { Grid, Paper } from "@mui/material";
 import * as options_flat from "../../util/options.json";
 import { useWindowSize } from "@react-hook/window-size";
-
-// import MultipleSelectChip from './MultipleSelectChip';
 import { useTheme } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -37,16 +36,15 @@ export default function Bar(props) {
     },
   };
 
-  function getStyles(name, plot_value, theme) {
+  function getStyles(name, chips, theme) {
     return {
       fontWeight:
-        plot_value.indexOf(name) === -1
+        chips.indexOf(name) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
   }
 // chip is used to change the box shape during each tiem we add information
-// plot 
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [width, height] = useWindowSize();
@@ -56,13 +54,14 @@ export default function Bar(props) {
   const [plot_value, setarry] = useState([]);
 
 
-  const [chips, setchips] = useState([bar_y_vars[1]]);
+  const [chips, setchips] = useState([bar_y_vars[5]]);
 
   const [option, setOption] = useState({
     field: bar_x_vars[0],
-    value: bar_y_vars[1],
+    value: bar_y_vars[5],
   });
   
+
   const [barData, setBarData] = useState([]);
 
   const [aggregation, setAgg] = React.useState("sum");
@@ -81,15 +80,7 @@ export default function Bar(props) {
   });
 }
 
-  const handleChange_y = (event, name) => {
-    //   console.log("🏈", event.target.value)
-    setOption({
-      ...option,
-      [name]: event.target.value[event.target.value.length - 1],
-    });
-  };
-
-  const handleChange_chips = (event) => {
+  const handleChange_chips = (event, name ) => {
     //   console.log("⚽️", "Chips changed")
     const {
         target: { value },
@@ -99,69 +90,92 @@ export default function Bar(props) {
         // On autofill we get a stringified value.
         typeof value === "string" ? value.split(",") : value
       );
+
+      setOption({
+        ...option,
+        [name]: event.target.value[event.target.value.length - 1],
+      });
   }
 
 
   useEffect(() => {
-    // console.log("🎾", option)
     setIsLoading(true);
-    // console.log("🎾",option)
-    //var group_by = option.field
-    var value = option.value;
-    //var agg = aggregation
-
+    // var value = option.value;
+   let yfieldArr = []
+    const fetchData = async () => {
+      const promises = chips.map( element => {
     var data = new FormData();
-    data.append("hierarchical", "False");
-
+     yfieldArr.push(element)
+    
     for (var property in search_object) {
-      //console.log("p",property)
-      //console.log('so', search_object[property])
-      // eslint-disable-next-line no-loop-func
       search_object[property].forEach((v) => {
         data.append(property, v);
-        // console.log("v", v);
       });
     }
-
+   
+    data.append("hierarchical", "False");
     data.append("groupby_fields", option.field);
-    data.append("groupby_fields", option.value);
+    data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
-    data.append("cachename", "voyage_export");
-    axios
-      .post(endpoint + "groupby", (data = data))
-      .then(function (response) {
-        console.log("response", response)
-        setarrx(Object.keys(response.data[value]));
-        // console.log("🚌",plot_value)
-        setarry(Object.values(response.data[value]));
-        // console.log("💩",plot_value)
 
-        setBarData([
-          ...barData,
-          {
-            x: Object.keys(response.data[value]),
-            y: Object.values(response.data[value]),
-            type: "bar",
-            name: `${options_flat[option.value].flatlabel}`,
-            barmode: "group",
-          },
-        ]);
-        setIsLoading(false)
+    console.log("option_field🍕", option.field)
+    console.log("element🍔",element)
+    console.log("agg_fn🥤", aggregation)
+    data.append("cachename", "voyage_export");
+    return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
+      method: "POST",
+      body: data,
+      headers: {'Authorization':AUTH_TOKEN}
+    }).then(res => res.json())
+    .then(function (response) {
+        console.log("data", response)
+        return Object.values(response)[0];
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+    })
+  
+    const data = await Promise.all(promises)
+    console.log("🍔 data is ", data )
+
+  //   const plotMap = new Map();
+  //   plotMap.set()
 
     
+  // const finalResult = yfieldArr.map((item, index) => item.map((value) => ({
+  //   ...value,
+  //   ...data[index],
+  //   })));
 
-    // console.log("😭",barData)
-  }, [option.field, option.value, aggregation, search_object]);
+    // console.log("🐯", finalResult)
+    let arr = []
+    data.forEach( (dataElement,index) =>{
+      // console.log("dataElement is ", dataElement)
+      // console.log("🐒", )
+  
+        arr.push({
+          x: Object.keys(dataElement),
+          y: Object.values(dataElement),
+          type: "bar",
+          name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
+          barmode: "group",
+        })
+    })
+
+      setBarData(
+       arr
+      )
+      }
+
+      setIsLoading(false)
+      fetchData().catch(console.error) 
+  
+  }, [ chips, option.field, aggregation, search_object]);
 
   if(isLoading) return;
 
   return (
     <div>
       <div>
+          <Button onClick={()=>console.log("🔥barData🔥:", barData)}>print data</Button>
         <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">X Field</InputLabel>
@@ -217,8 +231,8 @@ export default function Bar(props) {
                 multiple
                 value={chips}
                 onChange={(event) => {
-                    handleChange_chips(event);
-                    handleChange_y(event, "value");
+                    handleChange_chips(event, "value");
+                    // handleChange_y(event, "value");
                   }}
                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                 
