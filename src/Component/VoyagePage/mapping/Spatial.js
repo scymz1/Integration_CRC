@@ -50,10 +50,6 @@ var value_field_tuple = [
 var cachename = "voyage_maps";
 var dataset = [0, 0];
 var output_format = "geosankey";
-const diskey =
-  "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id";
-const embkey =
-  "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id";
 
 export const PivotContext = React.createContext({});
 var customIcon = L.divIcon({ className: "leaflet-div-icon2" });
@@ -62,6 +58,7 @@ L.Marker.prototype.options.icon = customIcon;
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegion, setIsRegion] = useState(true);
 
   const [csv, setCsv] = useState(null);
   const [nodes, setNodes] = useState(null);
@@ -72,7 +69,7 @@ export function ReadFeature(props) {
 
   // tab selection in popup
   const [disembark, setDisembark] = React.useState(
-    "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id"
+    "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__name"
   );
   const [area, setArea] = useState(groupby_fields_region[0]); // port or region
   const [complete_object, set_complete_object] = useState({
@@ -94,6 +91,8 @@ export function ReadFeature(props) {
   map.on("zoomend", function () {
     if (map.getZoom() < 8) {
       setGroupBy(groupby_fields_region);
+      setIsRegion(true);
+      setDisembark("voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id");
       set_complete_object({
         ...complete_object,
         groupby_fields: groupby_fields_region_name,
@@ -101,6 +100,8 @@ export function ReadFeature(props) {
       setArea(groupby_fields_region[0]);
     } else {
       setGroupBy(groupby_fields_port);
+      setIsRegion(false);
+      setDisembark("voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__id");
       set_complete_object({
         ...complete_object,
         groupby_fields: groupby_fields_port_name,
@@ -134,33 +135,37 @@ export function ReadFeature(props) {
   }, [props.search_object, groupby_fields]);
 
   // Update complete object based on tab selection in popup
-  useEffect(() => {
-    //selected disembark
-    if (disembark === diskey) {
-      //if currently search_object is embark
-      // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")
-      const res = delete Object.assign(complete_object, {
-        [diskey]: complete_object[embkey],
-      })[embkey];
-      // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
-      set_complete_object(complete_object);
-      //  console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
-      // }
-    } else {
-      //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
-      const res = delete Object.assign(complete_object, {
-        [embkey]: complete_object[diskey],
-      })[diskey];
-      // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
-      set_complete_object(complete_object);
-      //console.log("🚀 ~ file: Spatial.js ~ line 152 ~ useEffect ~ set_complete_object(complete_object)", set_complete_object(complete_object))
-    }
+  // useEffect(() => {
+  //   //selected disembark
+  //   if(isRegion==false){
+  //     var [embkey, diskey] = groupby_fields_port;
+  //   }
+  //   else{
+  //     var [embkey, diskey] = groupby_fields_region;
+  //   }
+  //   if (disembark === diskey) {
+  //     //if currently search_object is embark
+  //     // console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ DISEMBARK")
+  //     const res = delete Object.assign(complete_object, {
+  //       [diskey]: complete_object[embkey],
+  //     })[embkey];
+  //     // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+  //     set_complete_object(complete_object);
+  //     // }
+  //   } else {
+  //     //  console.log("🚀 ~ file: Spatial.js ~ line 95 ~ useEffect ~ EMBARK")
+  //     const res = delete Object.assign(complete_object, {
+  //       [embkey]: complete_object[diskey],
+  //     })[diskey];
+  //     // console.log("🚀 ~ file: Spatial.js ~ line 150 ~ useEffect ~ res", res)
+  //     set_complete_object(complete_object);
+  //   }
 
-    console.log(
-      "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",
-      JSON.parse(JSON.stringify(complete_object))
-    );
-  }, [disembark]);
+  //   console.log(
+  //     "🚀 ~ file: Spatial.js ~ line 176 ~ useEffect ~ complete_object",
+  //     JSON.parse(JSON.stringify(complete_object))
+  //   );
+  // }, [disembark]);
 
   // useEffect(() =>{
   //   let point = complete_object[area];
@@ -242,9 +247,17 @@ export function ReadFeature(props) {
           layer.on("click", function (e) {
             console.log("Mouseover object: ", complete_object);
 
-            console.log("On Click Disembark: ", disembark)
+            //complete_object[disembark] = [layer.feature.id, layer.feature.id];
+
+            console.log("OnClick Disembark: ", disembark)
+
+            const temp = complete_object;
+            delete temp[groupby_fields_region[0]];
+            delete temp[groupby_fields_region[1]];
+            delete temp[groupby_fields_port[0]];
+            delete temp[groupby_fields_port[1]];
             complete_object[disembark] = [layer.feature.id, layer.feature.id];
-            //set_complete_object({...complete_object, [disembark]:[layer.feature.id, layer.feature.id]})
+            //set_complete_object({...temp, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             var event = new Event('update_popup');
             var dispatch=()=>{document.querySelector(".leaflet-popup-pane").dispatchEvent(event)};
@@ -258,7 +271,7 @@ export function ReadFeature(props) {
                   layer,
                 }}
               >
-                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.search_object.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates}/>  
+                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.search_object.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates} isRegion={isRegion}/>  
               </PivotContext.Provider>
             );
 

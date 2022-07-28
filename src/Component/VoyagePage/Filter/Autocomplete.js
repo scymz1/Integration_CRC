@@ -56,11 +56,14 @@ export default function Auto(props) {
     },[search_object, textInput])
 
     React.useEffect(()=>{
-      if(value != '')
-        set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
-          ...search_object,
-          [searchLabel.option]: [value]
-        }));
+      if(value != ''){
+        value.map((m) => {
+          set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
+            ...search_object,
+            [searchLabel.option]: [m]
+          }));
+        })
+      }
 
     },[value])
 
