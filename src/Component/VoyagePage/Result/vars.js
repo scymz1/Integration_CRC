@@ -193,16 +193,7 @@ export var pivot_row_vars = [
   "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
   "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name",
   "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-  // "voyage_slaves_numbers__percentage_female",
-  // "voyage_slaves_numbers__percentage_male",
-  // "voyage_slaves_numbers__percentage_child",
-  // "voyage_slaves_numbers__imp_mortality_ratio",
-  // "voyage_slaves_numbers__imp_jamaican_cash_price",
-  // "voyage_slaves_numbers__imp_total_num_slaves_embarked",
-  // "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
-  // "voyage_ship__tonnage_mod",
   // "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-  // "voyage_dates__length_middle_passage_days",
 ];
 
 export var pivot_col_vars = [
@@ -216,19 +207,17 @@ export var pivot_col_vars = [
   "voyage_itinerary__imp_principal_region_slave_dis__geo_location__name",
   "voyage_itinerary__imp_broad_region_slave_dis__geo_location__name",
   "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name",
-  // "voyage_slaves_numbers__percentage_female",
-  // "voyage_slaves_numbers__percentage_male",
-  // "voyage_slaves_numbers__percentage_child",
-  // "voyage_slaves_numbers__imp_mortality_ratio",
-  // "voyage_slaves_numbers__imp_jamaican_cash_price",
-  // "voyage_slaves_numbers__imp_total_num_slaves_embarked",
-  // "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
-  // "voyage_ship__tonnage_mod",
   // "voyage_dates__imp_arrival_at_port_of_dis_yyyy",
-  // "voyage_dates__length_middle_passage_days",
 ];
 
 export var pivot_cell_vars = [
   "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
   "voyage_slaves_numbers__imp_total_num_slaves_embarked",
+  "voyage_slaves_numbers__percentage_female",
+  "voyage_slaves_numbers__percentage_male",
+  "voyage_slaves_numbers__percentage_child",
+  "voyage_slaves_numbers__imp_mortality_ratio",
+  // "voyage_slaves_numbers__imp_jamaican_cash_price", output: 92.0245.3272.3300.092.064.0100.0
+  // "voyage_ship__tonnage_mod", output: 92.0245.3272.3300.092.064.0100.0
+  "voyage_dates__length_middle_passage_days",
 ];
