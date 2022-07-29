@@ -52,8 +52,8 @@ function Sankey(props) {
   const handleOpen = (event, info, modal) => {
     if (modal) {
       // console.log("voyage id",info)
-      setOpen(true);
-      setId(info);
+      //setOpen(true);
+      //setId(info);
       // setId(info.id);
     }
   };
