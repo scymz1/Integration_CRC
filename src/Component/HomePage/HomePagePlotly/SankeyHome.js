@@ -111,7 +111,7 @@ function Sankey(props) {
   useEffect(() => {
     let new_CANVAS_WIDTH = width>800 ? width*0.50:width*0.8;
     let new_CANVAS_HEIGHT = CANVAS_HEIGHT;
-    let NODE_WIDTH = Math.round(new_CANVAS_WIDTH / 3 - 80);
+    let NODE_WIDTH = Math.max(120, Math.round(new_CANVAS_WIDTH / 3 - 80));
     let transLength = 0;
     let enslaverLength = 0;
     let nodes = [];
