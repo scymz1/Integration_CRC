@@ -54,7 +54,7 @@ export default function Gallery(props){
             method: "POST",
             body: queryData,
             headers: {'Authorization': auth_token}
-          }).then(res => setTotal(res.headers.get("total_results_count")));
+          }).then(res => setTotal(parseInt(res.headers.get("total_results_count"))));
     }, [search_object, typeForTable])
     
 
