@@ -213,7 +213,7 @@ export default function Bar(props) {
 
           {/* Multi-Selector */}
           <div>
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl fullWidth>
               <InputLabel id="demo-multiple-chip-label">
                 Multi-Selector Y-Feild
               </InputLabel>
@@ -221,11 +221,12 @@ export default function Bar(props) {
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
+                label="Multi-Selector Y-Feild"
                 value={chips}
                 onChange={(event) => {
                     handleChange_chips(event, "value");
                   }}
-                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                input={<OutlinedInput id="select-multiple-chip" label="Multi-Selector Y-Feild" />}
                 
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
