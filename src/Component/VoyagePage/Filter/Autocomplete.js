@@ -59,7 +59,7 @@ export default function Auto(props) {
       if(value != '')
         set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
           ...search_object,
-          [searchLabel.option]: [value]
+          [searchLabel.option]: value
         }));
 
     },[value])
@@ -67,7 +67,7 @@ export default function Auto(props) {
 //   const parsehtml = (inputarr) => {let arr =[]; inputarr.map(input => {arr.push(input.replace(/(<([^>]+)>)/gi, ""));})
 // return arr}
 
-  const parsehtml = (input) => {console.log("aaaaaaaaaa", input); return input.replace(/(<([^>]+)>)/gi, "")}
+  // const parsehtml = (input) => {return input.replace(/(<([^>]+)>)/gi, "")}
 
   return (
     <Autocomplete
@@ -75,11 +75,13 @@ export default function Auto(props) {
       autoHighlight
       multiple
       options={autocompleteOptions}
-      getOptionLabel={(option) => parsehtml(option)}
+      // getOptionLabel={(option) => parsehtml(option)}
       value={search_object[searchLabel.option] ? search_object[searchLabel.option] : autocompleteOptions[0]}
       // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
-        setValue(oldArray => [newValue][0]);
+        // setValue(oldArray => [newValue][0]);
+        setValue(newValue)
+        console.log(value)
         setPage(0)
       }}
       // sx={{ width: 300 }}
