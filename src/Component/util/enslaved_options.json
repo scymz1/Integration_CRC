@@ -10927,7 +10927,7 @@
   "transactions__transaction__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Short reference",
-    "flatlabel": "enslaved in relation : enslavement relation : source : Short reference"
+    "flatlabel": "Source Shourt Reference"
   },
   "transactions__transaction__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -21352,7 +21352,7 @@
   "transactions__transaction__text_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Text ref",
-    "flatlabel": "Text Ref"
+    "flatlabel": "Source Text Reference"
   },
   "transactions__enslaved": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",

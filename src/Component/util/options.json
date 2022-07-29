@@ -27,7 +27,7 @@
   "voyage_sourceconnection__text_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Text reference(citation)",
-    "flatlabel": "voyage sources connection : Text reference(citation)"
+    "flatlabel": "Documentary Sources"
   },
   "voyage_sourceconnection__source__source_type": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",
@@ -42,7 +42,7 @@
   "voyage_sourceconnection__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Short reference",
-    "flatlabel": "voyage sources connection : Source : Short reference"
+    "flatlabel": "Documentary Sources"
   },
   "voyage_sourceconnection__source__id": {
     "type": "<class 'rest_framework.fields.IntegerField'>",
