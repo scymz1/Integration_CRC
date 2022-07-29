@@ -239,18 +239,25 @@ function Table(props) {
     ]
       ? row[
           "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
-        ]
+        ].flat(Infinity)
       : [];
-    const roles = row["transactions__transaction__enslavers__role__role"];
-    const ids =
-      row["transactions__transaction__enslavers__enslaver_alias__identity__id"];
+    const roles = row["transactions__transaction__enslavers__role__role"]
+      ? row["transactions__transaction__enslavers__role__role"].flat(Infinity)
+      : [];
+    const ids = row[
+      "transactions__transaction__enslavers__enslaver_alias__identity__id"
+    ]
+      ? row[
+          "transactions__transaction__enslavers__enslaver_alias__identity__id"
+        ].flat(Infinity)
+      : [];
     const output = {};
     for (let i = 0; i < people.length; i++) {
       if (!(people[i] in output)) {
         output[people[i]] = { roles: [], id: 0 };
       }
-      output[people[i]]["roles"].push(roles[i][0]);
-      output[people[i]]["id"] = ids[i][0];
+      output[people[i]]["roles"].push(roles[i]);
+      output[people[i]]["id"] = ids[i];
     }
     return output;
   };
@@ -448,13 +455,14 @@ function Table(props) {
                                         e.stopPropagation();
                                       }}
                                     >
-                                      {[...new Set(row[k])].join(", ")}
+                                      {[...new Set(row[k])]
+                                        .filter((n) => n != null)
+                                        .join(", ")}
                                     </Link>
                                   </TableCell>
                                 );
                               } else if (
-                                k ===
-                                "voyage_sourceconnection__text_ref"
+                                k === "voyage_sourceconnection__text_ref"
                               ) {
                                 return (
                                   <TableCell
