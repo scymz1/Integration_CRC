@@ -40,7 +40,7 @@ export default function Story (props) {
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
   const {target, type, dynamic = false , remoteControl, dataChange, setChipData, slavery = "slaves", setData, data} = props;
-  const isMale = _.get(target, "gender", "1") != 0;
+  const isMale = _.get(target, "gender", "1") != 2;
   const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
   
   const slaverAlias = [];
@@ -49,35 +49,6 @@ export default function Story (props) {
   _.get(target, "alias", []).forEach(item => {
     if(item["alias"] !== null) slaverAlias.push(item["alias"]);
   })
-
-
-
-  // const onclick = () => {
-  //   // if(data.length == 0) setData([target])
-  //   // console.log("data: ", data)
-  //   if(slavery == "slaves"){
-  //     dataChange(preData =>({
-  //       enslavers:[...preData.enslavers],
-  //       slaves:[target["id"]],
-  //       type:"slaves"
-  //     }))
-  //   }else{
-  //     dataChange(preData =>({
-  //       enslavers:[target["id"]],
-  //       slaves:[...preData.slaves],
-  //       type:"enslavers"
-  //     }))
-  //   }
-
-  //   setChipData({
-  //     [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Slave")
-  //   })
-  //   if(data.length > 0)remoteControl();
-  // }
-
-
-
-
   const onclick = () => {
     if(slavery == "slaves"){
       dataChange(preData =>({
@@ -135,8 +106,8 @@ export default function Story (props) {
         <List dense = {true} disablePadding={true}>
           <ListItem  disablePadding={true}><ListItemText primary="Enslaved ID" secondary={_.get(target, "id", "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={(_.get(target, ["modern_name"], "No Record") == null) || (_.get(target, ["modern_name"], "No Record") == "") ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
-          <ListItem  disablePadding={true}><ListItemText primary="Sex" secondary={_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 0 ? "Female" : "No Record"}/></ListItem>
-          <ListItem  disablePadding={true}><ListItemText primary="Age" secondary={_.get(target, "age", "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Gender" secondary={_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 2 ? "Female" : "No Record"}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Age" secondary={_.get(target, ["age"], "No Record")}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Fate" secondary={_.get(target, ["captive_fate", "name"], "No Record")}/></ListItem>
         </List>
         {/* <Grid>Mordern Name: {_.get(target, ["modern_name"], "No Record")}</Grid>
