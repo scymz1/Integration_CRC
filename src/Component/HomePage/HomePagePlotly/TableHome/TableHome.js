@@ -45,7 +45,7 @@ function TableHome() {
               component={Link}
               to="voyage/Table"
             >
-              Data Visualization - Table Charts
+              Data Table
             </Button>
             <div>
               <CardContent>
