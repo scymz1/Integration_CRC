@@ -4,7 +4,7 @@ export const idxRelation = {
   Itinerary: 2,
   Dates: 3,
   "Captain and crew": 4,
-  Slave: 5,
+  Labor: 5,
   Source: 6,
 };
 
@@ -37,7 +37,7 @@ export const skeleton = {
   ],
   Dates: ["voyage_dates__imp_arrival_at_port_of_dis_yyyy"],
   "Captain and crew": ["voyage_captainconnection__captain__name"],
-  Slave: [
+  Labor: [
     "voyage_slaves_numbers__imp_total_num_slaves_embarked",
     "voyage_slaves_numbers__imp_total_num_slaves_disembarked",
     "voyage_slaves_numbers__imp_mortality_during_voyage",

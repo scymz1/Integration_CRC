@@ -88,7 +88,7 @@ export default function Gallery(props){
     }, [gData])
     
   return (
-    <div className = "storybackground" marginTop ={{ xs: 2, md: 2, lg:4 }} >
+    <div className = "storybackground" margintop ={{ xs: 2, md: 2, lg:4 }} >
       {/* <button onClick={() => console.log("gallery: ", gallery)}>print</button> */}
     <TablePagination
       component="div"
