@@ -200,7 +200,7 @@ export default function Network(props) {
       const {nodes: nodeId} = event;
       // console.log("nodeId" ,nodeId)
       const node = graph.nodes.find(e => e.id === nodeId[0])
-      switch (node.type) {
+      switch (node && node.type) {
         case "slave":
           setMyQueryData({
             ...myQueryData,
@@ -219,7 +219,6 @@ export default function Network(props) {
     },
 
     click: function (event) {
-
       const {nodes: nodeId} = event;
       const node = graph.nodes.find(e => e.id === nodeId[0])
       // console.log("click", node)
@@ -232,8 +231,8 @@ export default function Network(props) {
   useEffect(()=>{
     window.addEventListener('resize', ()=>setOption(
       {...options,
-        height: (0.75*window.innerHeight).toString(),
-        width: (0.95*window.innerWidth).toString(),
+        height: (0.75*windowRef.current.offsetHeight).toString(),
+        width: (0.95*windowRef.current.offsetWidth).toString(),
     }));
   }, [])
 
@@ -241,8 +240,8 @@ export default function Network(props) {
     physics: {
       enabled: true,
     },
-    height: (0.75*window.innerHeight).toString(),
-    width: (0.95*window.innerWidth).toString(),
+    height: (0.75*windowRef.current.offsetHeight).toString(),
+    width: (0.95*windowRef.current.offsetWidth).toString(),
   });
 
   return (
