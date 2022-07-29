@@ -83,7 +83,7 @@ function Pie (props) {
         data.append('groupby_fields', option.field)
         data.append('groupby_fields', option.value)
         data.append('agg_fn', aggregation)
-        data.append('cachename','voyage_export')
+        data.append('cachename','voyage_bar_and_donut_charts')
 
         axios.post(endpoint+'groupby', data=data)
             .then(function (response) {
