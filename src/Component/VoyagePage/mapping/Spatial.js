@@ -130,8 +130,7 @@ export function ReadFeature(props) {
       setIsLoading(true);
       setCsv(response.data.routes);
       setNodes(response.data.points);
-
-      //console.log("Repsonse:", response.data)
+      
     });
   }, [props.search_object, groupby_fields]);
 
@@ -251,6 +250,9 @@ export function ReadFeature(props) {
             console.log("Mouseover object: ", complete_object);
 
             //complete_object[disembark] = [layer.feature.id, layer.feature.id];
+
+            console.log("OnClick Disembark: ", disembark)
+
             const temp = complete_object;
             delete temp[groupby_fields_region[0]];
             delete temp[groupby_fields_region[1]];
@@ -284,7 +286,7 @@ export function ReadFeature(props) {
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
             //   maxWidth: "auto",
             // });
-            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto" });
+            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto", maxHeight: "auto" });
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
@@ -298,11 +300,13 @@ export function ReadFeature(props) {
       // DrawLink(map, csv);
       drawUpdate(map, csv);
     }
+
     document.querySelector(".leaflet-popup-pane").addEventListener("update_popup", function (event) {
       var tagName = event.target.tagName,
           popup = map._popup; 
       popup.update();
     }, true); // Capture the load event, because it does not bubble.
+
     let drawbox = L.rectangle(props.latlong, {
       color: "blue",
       weight: 5,
