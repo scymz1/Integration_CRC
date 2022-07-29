@@ -101,7 +101,7 @@ export default function PAST() {
       </Box>}
 
       {checked &&
-      <Box sx={{ display: 'flex' }}>
+      <Box>
         <Grow in={checked}>
           <div>
           <Gallery dataChange = {setQueryData} remoteControl = {handleClickOpen} setChipData = {setChipData} data = {data} setData = {setData}/>
