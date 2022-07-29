@@ -124,7 +124,10 @@ export default function SankeyExample(props) {
     nodePadding: 10,
     component: "Sankey",
     nodeData: {},
-    linkData: {},
+    linkData: {
+      source: "ini",
+      target: "ini",
+    },
   });
 
   const [optionSource, setOptionSource] = useState([
@@ -186,8 +189,8 @@ export default function SankeyExample(props) {
     {
     ...state,
     linkData: {
-      source: "null",
-      target: "null",
+      source: "ini",
+      target: "ini",
     },
   }));
 
@@ -196,8 +199,150 @@ export default function SankeyExample(props) {
     [option.fieldSource]: ["null"],
     [option.fieldTarget]: ["null"],
   });
-  
  }
+
+ if(state.linkData.source != "ini" && state.linkData.target != "ini"){
+   return(
+    <div>
+
+  <Typography>
+   {`This path is from
+ ${_.get(state, ["linkData", "source", "name"])}
+  to
+ ${_.get(state, ["linkData", "target", "name"])}
+ `}
+ </Typography>
+
+
+ <br />
+      <button onClick={() => resetHandClick()}>
+        Click to reload the Sankey and the Map!
+      </button>
+      <br />
+      <br />
+      <svg
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom}
+      >
+        <Sankey
+          top={margin.top}
+          left={margin.left}
+          data={data}
+          size={[width, height]}
+          nodeWidth={15}
+          nodePadding={state.nodePadding}
+          extent={[
+            [1, 1],
+            [width - 1, height - 6],
+          ]}
+        >
+          {/* nodes */}
+          {({ data }) => (
+            <Group>
+              {data.nodes.map((node, i) => (
+                // console.log(node,i),
+                <Group top={node.y0} left={node.x0} key={`node-${i}`}>
+                  <rect
+                    id={`rect-${i}`}
+                    width={Math.abs(node.x1 - node.x0)}
+                    height={Math.abs(node.y1 - node.y0)}
+                    fill={color(node.depth)}
+                    opacity={0.5}
+                    stroke="white"
+                    strokeWidth={1}
+                    onMouseOver={(e) => {
+                      setState({
+                        ...state,
+                        highlightLinkIndexes: [
+                          ...node.sourceLinks.map((l) => l.index),
+                          ...node.targetLinks.map((l) => l.index),
+                        ],
+                      });
+                    }}
+                    onMouseOut={(e) => {
+                      setState({ ...state, highlightLinkIndexes: [] });
+                    }}
+                    onClick={() => {
+                      setState(
+                        {
+                          ...state,
+                          nodeData: {
+                            name: node.name,
+                          },
+                        }
+                        // console.log("source:"+link.source + " | target:"+link.target + " | value:"+ link.value )
+                        // console.log("🫧", node.name)
+                      );
+                    }}
+                  />
+
+                  <Text
+                    x={18}
+                    y={(node.y1 - node.y0) / 2}
+                    verticalAnchor="middle"
+                    style={{
+                      font: "10px sans-serif",
+                    }}
+                  >
+                    {node.name}
+                  </Text>
+                </Group>
+              ))}
+
+              {/* Edges */}
+              <Group>
+                {data.links.map((link, i) => (
+                  <path
+                    key={`link-${i}`}
+                    d={path(link)}
+                    stroke="black"
+                    stroke={
+                      state.highlightLinkIndexes.includes(i) ? "red" : "black"
+                    }
+                    strokeWidth={Math.max(1, link.width)}
+                    // opacity={0.2}
+                    opacity={
+                      state.highlightLinkIndexes.includes(i) ? 0.5 : 0.15
+                    }
+                    fill="none"
+                    // onMouseOver={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [i] });
+                    // }}
+                    // onMouseOut={(e) => {
+                    //   setState({ ...state, highlightLinkIndexes: [] });
+                    // }}
+                    onClick={() => {
+                      if (state.highlightLinkIndexes.length < 1) {
+                        state.highlightLinkIndexes.push(i);
+                        } else {
+                        state.highlightLinkIndexes.shift();
+                        }
+                      // state.highlightLinkIndexes.push(i);
+                      setState({
+                        ...state,
+                        linkData: {
+                          source: link.source,
+                          target: link.target,
+                        },
+                      });
+
+                      set_search_object({
+                        ...search_object,
+                        [option.fieldSource]: [link.source.name],
+                        [option.fieldTarget]: [link.target.name],
+                      });
+                    }}
+                  />
+                ))}
+              </Group>
+            </Group>
+          )}
+        </Sankey>
+      </svg>
+
+</div>
+   )
+}
 
   return ( 
     <div>
@@ -246,13 +391,7 @@ export default function SankeyExample(props) {
       </Select>
       </FormControl> */}
 
-      <Typography>
-        {`This path is from
-      ${_.get(state, ["linkData", "source", "name"])}
-       to
-      ${_.get(state, ["linkData", "target", "name"])}
-      `}
-      </Typography>
+     
 
       <br />
       <button onClick={() => resetHandClick()}>
@@ -352,7 +491,12 @@ export default function SankeyExample(props) {
                     //   setState({ ...state, highlightLinkIndexes: [] });
                     // }}
                     onClick={() => {
-                      state.highlightLinkIndexes.push(i);
+                      if (state.highlightLinkIndexes.length < 1) {
+                        state.highlightLinkIndexes.push(i);
+                        } else {
+                        state.highlightLinkIndexes.shift();
+                        }
+                   
                       setState({
                         ...state,
                         linkData: {

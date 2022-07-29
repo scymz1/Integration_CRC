@@ -157,7 +157,7 @@
   "alias__transactions__transaction__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Short reference",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : source : Short reference"
+    "flatlabel": "Documentary Sources on Enslavement"
   },
   "alias__transactions__transaction__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -5457,7 +5457,7 @@
   "alias__transactions__transaction__text_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Text ref",
-    "flatlabel": "identity : enslaver in relation : enslavement relation : Text ref"
+    "flatlabel": "Documentary Sources on Enslavement"
   },
   "alias__transactions__role": {
     "type": "table",
@@ -5512,7 +5512,7 @@
   "enslaver_sources__source__short_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Short reference",
-    "flatlabel": "enslaver identity source connection : Source : Short reference"
+    "flatlabel": "Documentary Sources on Enslaver"
   },
   "enslaver_sources__source__full_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
@@ -5532,7 +5532,7 @@
   "enslaver_sources__text_ref": {
     "type": "<class 'rest_framework.fields.CharField'>",
     "label": "Text ref",
-    "flatlabel": "enslaver identity source connection : Text ref"
+    "flatlabel": "Documentary Sources on Enslaver"
   },
   "enslaver_sources__identity": {
     "type": "<class 'rest_framework.relations.PrimaryKeyRelatedField'>",

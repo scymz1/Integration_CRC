@@ -107,7 +107,7 @@ export default function MapBoundingBox(props){
             
             <MapContainer center={position} zoom={2.5} minZoom={2.2} style={{ height: "100vh", zIndex: 0}}>
                 <LayersControl position="bottomleft">
-                    <BaseLayer name="modern country border (old map)">
+                    {/* <BaseLayer name="modern country border (old map)">
                         <TileLayer
                             url={normal_old}
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
@@ -131,8 +131,8 @@ export default function MapBoundingBox(props){
                             url={noBorder}
                             attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
                         />
-                    </BaseLayer>
-                    <BaseLayer checked name="no country border">
+                    </BaseLayer> */}
+                    <BaseLayer checked name="mapping specialists">
                         <TileLayer
                             url={mapping_specialists}
                             attribution="mapping_specialists"

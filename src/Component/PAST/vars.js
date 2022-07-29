@@ -16,9 +16,9 @@ export const enslaver_default_list = [
     // "alias__transactions__transaction__date_yyyy",
     // "alias__transactions__transaction__voyage__voyage_dates__imp_arrival_at_port_of_dis_yyyy",
     // "alias__transactions__transaction__place__geo_location__name",
-    // "enslaver_sources__source__full_ref",
     // "enslaver_sources__text_ref",
-    "alias__transactions__transaction__source__full_ref",
+    // "enslaver_sources__text_ref",
+    "alias__transactions__transaction__source__short_ref",
 ]
 export const enslaver_var_list = {
     "id": {
@@ -46,8 +46,8 @@ export const enslaver_var_list = {
         "last_active_year": null,
     },
 
-    "enslaver_sources__source__full_ref": {
-        "enslaver_sources__source__full_ref": null,
+    "alias__transactions__transaction__source__short_ref": {
+        "alias__transactions__transaction__source__short_ref": null,
     },
     
     "alias__transactions__transaction": {
@@ -56,7 +56,7 @@ export const enslaver_var_list = {
         "alias__transactions__transaction__date_yyyy": null,
         "alias__transactions__role__role":null,
 
-        "alias__transactions__transaction__source__full_ref": null,
+        // "alias__transactions__transaction__text_ref": null,
 
         
         },
@@ -108,7 +108,7 @@ export const enslaved_default_list = [
     // "transactions__transaction__place__geo_location__name",
     "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias",
     //"transactions__transaction__enslavers__role__role",
-    // "transactions__transaction__source__full_ref",
+    // "transactions__transaction__text_ref",
     "transactions__transaction__voyage__id"
 ];
 
@@ -160,7 +160,7 @@ export const enslaved_var_list = {
         "transactions__transaction__place__geo_location__name": null,
         "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias": null,
         "transactions__transaction__enslavers__role__role": null,
-        "transactions__transaction__source__full_ref": null,
+        "transactions__transaction__text_ref": null,
     },
 
     "transactions__transaction__voyage": {

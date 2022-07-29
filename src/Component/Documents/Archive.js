@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
-import { Button, Modal, Box, Container, Avatar, ListItem,Dialog } from "@mui/material";
-import ResponsiveAppBar from "../NavBar";
-
+import { Button, Modal, Box, Container, Avatar, ListItem,Dialog,TablePagination} from "@mui/material";
 import "universalviewer/dist/esm/index.css";
 import { init } from "universalviewer";
 
@@ -14,8 +12,13 @@ import InfoIcon from '@mui/icons-material/Info';
 import {
     useWindowSize,
   } from '@react-hook/window-size'
+import axios from "axios";
+import { SettingsOverscanOutlined } from "@mui/icons-material";
+import { alpha } from "@mui/material";
 
-
+const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function useUniversalViewer(ref, options) {
     const [uv, setUv] = useState();
   
@@ -46,24 +49,30 @@ const UV = ({ manifest, parentWidth }) => {
                         height: "50vh"
                     }}/>;
 };
+function curImage(src){
+  var arr1 = src.split("medium");
+  return arr1[0] + "square" + arr1[1];
+  
+}
 export default function Archive() {
     const [width, height] = useWindowSize()
-    const DocContext = React.createContext({});
     const [manifest, setManifest]= useState({});
     const [open, setOpen] = useState(false);
-    const apiUrl = ["http://150.136.1.167/iiif/3/766",
-    "http://150.136.1.167/iiif/3/1353",
-    "http://150.136.1.167/iiif/3/1355",
-    "http://150.136.1.167/iiif/3/1357",
-    "http://150.136.1.167/iiif/3/1359",
-    "http://150.136.1.167/iiif/3/1361",
-    "http://150.136.1.167/iiif/3/1363",
-    "http://150.136.1.167/iiif/3/1365",
-    "http://150.136.1.167/iiif/3/1367",
-    "http://150.136.1.167/iiif/3/1369",
-    "http://150.136.1.167/iiif/3/1371",
-    "http://150.136.1.167/iiif/3/1373"]
+    const [apiUrl,setapiurl] = useState([])
     const [itemData, setData] = useState([])
+
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(16);
+    const [total, setTotal] = useState(0)
+
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
+
     const handleOpen = (manifest) => {
       setOpen(true);
       setManifest(manifest)}
@@ -74,29 +83,70 @@ export default function Archive() {
         left: "50%",
         transform: "translate(-50%, -50%)",
         p: 4,
-        overflow: "scroll",
+        // overflow: "scroll",
         maxHeight: 500,
       };
-      
+
+      useEffect(()=>{
+        var data = new FormData();
+        fetch('https://voyages3-api.crc.rice.edu/docs/',{
+          method: 'POST',
+          body: data,
+          headers: {'Authorization':AUTH_TOKEN}
+        }).then(res=>setTotal(parseInt(res.headers.get("total_results_count"))));
+      },[])
+
+      useEffect(()=>{
+        const fetchData = async () => {
+        var data = new FormData();
+        data.append("hierarchical", "False");
+        data.append("selected_fields", 'url');
+        data.append("results_per_page", rowsPerPage);
+        data.append("results_page", page + 1);
+        const res = await fetch('https://voyages3-api.crc.rice.edu/docs/',{
+          method: 'POST',
+          body: data,
+          headers: {'Authorization':AUTH_TOKEN}
+        })
+        const result = await res.json();
+        setapiurl(result)
+      }
+        fetchData().catch(console.error);
+      },[page,rowsPerPage])
+
       useEffect(() => {
         const fetchData = async ()=> {
           const promises = apiUrl.map(uri => {
-            return fetch(uri, {
+            return fetch(Object.values(uri), {
               method: "GET",
             }).then(res => res.json()).then(res => {
-              var dict = {"title": res.label.none[0], "image": res.thumbnail[0].id,"uri":uri}
+              var dict = {"title": res.label.none[0], "image": curImage(res.thumbnail[0].id),"uri":uri}
               return dict;
             })
           })
           const response = await Promise.all(promises)
           setData(response)
+          // console.log(itemData)
         }
         fetchData().catch(console.error);
-      }, [])
+      }, [apiUrl])
     // console.log(itemData)
     return (
         <div>
-            <ImageList sx={{ width: width, height: height }} cols={5} gap={30} >
+            <TablePagination
+              component="div"
+              count={total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[16, 25, 36, 49, 64]}
+            />
+            <ImageList sx={{ width: width, height: (page + 1) * rowsPerPage > total ? 200: height }} cols={
+              (page + 1) * rowsPerPage > total ? 8 :
+              Math.sqrt(rowsPerPage)
+              } gap={30} >
+            {/* <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={20} > */}
               {itemData.map((item) => (
                 <ImageListItem key={item.image}>
                   <img
@@ -107,11 +157,14 @@ export default function Archive() {
                   />
                   <ImageListItemBar
                     title={item.title}
+                    sx ={{
+                      bgcolor: alpha('#549165',0.8)
+                    }}
                     actionIcon={
                       <IconButton
                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                         aria-label={`info about ${item.title}`}
-                        onClick={() => handleOpen(item.uri)}
+                        onClick={() => handleOpen(item.uri.url)}
                       >
                         <InfoIcon />
                       </IconButton>
