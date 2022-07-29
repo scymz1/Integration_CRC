@@ -89,6 +89,7 @@ function Scatter (props) {
             })
             .catch(function (error) {
                 console.log(error);
+                alert("undefined combination")
             });
 
     }, [option.field, option.value, aggregation, search_object]);
@@ -201,7 +202,6 @@ function Scatter (props) {
                     }}}
 
                     config={{responsive: true}}
-                    
                 />
             </Grid>
             </div>

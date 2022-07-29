@@ -138,8 +138,8 @@ export default function Bar(props) {
 
     let arr = []
     data.forEach( (dataElement,index) =>{
-      console.log("🐔 dataElement is ", dataElement)
-      console.log("type", typeof(Object.values(dataElement)[0]))
+      // console.log("🐔 dataElement is ", dataElement)
+      // console.log("type", typeof(Object.values(dataElement)[0]))
       if(dataElement === 'false'){
         alert("undefined combination")
       }
