@@ -99,7 +99,7 @@ export const columnOptions = {
   {
     'voyage_ship__guns_mounted': null,
     'voyage_ship__imputed_nationality__name': null,
-    'voyage_ship__nationality_ship': null,
+    // 'voyage_ship__nationality_ship': null,
     'voyage_ship__registered_place__geo_location__name': null,
     'voyage_ship__registered_year': null,
     'voyage_ship__rig_of_vessel__name': null,
