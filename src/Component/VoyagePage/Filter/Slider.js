@@ -120,7 +120,7 @@ export default function GetSlider(props) {
     }else{
       //console.log("range selection legit", value)
     }
-
+    setPage(0)
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
@@ -152,7 +152,7 @@ export default function GetSlider(props) {
                   setValue([value[1] - 1 < range[0] ? range[0] : value[1] - 1 , value[1]]);
                   temp = value[1] - 1 < range[0] ? range[0] : value[1] - 1
                 } 
-
+                setPage(0)
                 set_search_object({
                   ...search_object,
                   [varName]: [temp, value[1]]
