@@ -14,7 +14,7 @@ export default function Auto(props) {
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
-
+  
   const [value, setValue] = React.useState([]);
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
@@ -55,19 +55,23 @@ export default function Auto(props) {
       fetchData(searchLabel,textInput).catch(console.error)
     },[search_object, textInput])
 
-    React.useEffect(()=>{
-      if(value != '')
-        set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
-          ...search_object,
-          [searchLabel.option]: value
-        }));
+    // React.useEffect(()=>{
+    //   if(value != ''){
+    //     // value.map((m) => {
+    //       set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
+    //         ...search_object,
+    //         [searchLabel.option]: value
+    //       }));
+    //     // })
+    //   }
 
-    },[value])
+    // },[value])
 
 //   const parsehtml = (inputarr) => {let arr =[]; inputarr.map(input => {arr.push(input.replace(/(<([^>]+)>)/gi, ""));})
 // return arr}
 
   // const parsehtml = (input) => {return input.replace(/(<([^>]+)>)/gi, "")}
+
 
   return (
     <Autocomplete
@@ -80,8 +84,11 @@ export default function Auto(props) {
       // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         // setValue(oldArray => [newValue][0]);
-        setValue(newValue)
-        console.log(value)
+        
+        set_search_object(search_object=>({                     // <---------- UPDATE SEARCH OBJECT
+          ...search_object,
+          [searchLabel.option]: newValue
+        }))
         setPage(0)
       }}
       // sx={{ width: 300 }}
