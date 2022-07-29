@@ -24,12 +24,9 @@ const base_url = process.env.REACT_APP_BASEURL;
 function Network(props) {
   const {queryData, width} = props;
   const [graph, setGraph] = useState(null);
-  const [height, setHeight] = useState("300");
-  const [data, setData] = useState([]);
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  //console.log("aaaaa", queryData)
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
@@ -211,47 +208,12 @@ function Network(props) {
     fetchData().catch(console.error);
   }, [myQueryData])
 
-  useEffect(() => {
-    //setHeight((0.7 * windowRef.current.offsetHeight).toString())
-    setHeight((width>800 ?0.7 * width*0.55: 0.7*width*0.9).toString())
-  }, [])
-
-  // function updateQueryData(path, id) {
-  //   let formdata = new FormData();
-  //   formdata.append(path, id);
-  //   formdata.append(path, id);
-  //   const endpoint = (() => {
-  //     switch (myQueryData.type) {
-  //       case "slaves":
-  //         return "past/enslaved/"
-  //       case "enslavers":
-  //         return "past/enslavers/"
-  //     }
-  //   })()
-  //   fetch(base_url + endpoint, {
-  //     method: 'POST',
-  //     headers: {'Authorization': auth_token},
-  //     body: formdata,
-  //   }).then(response => response.json()).then(res => {
-  //     const targets = []
-  //     res.forEach((slave => {
-  //       if (!targets.find(e => e === slave.id))
-  //         targets.push(slave.id)
-  //     }))
-  //     // console.log("targets", targets)
-  //     setMyQueryData({
-  //       type: "slaves",
-  //       slaves: targets
-  //     })
-  //   })
-  // }
-
   const events = {
     doubleClick: function (event) {
       const {nodes: nodeId} = event;
       // console.log("nodeId" ,nodeId)
       const node = graph.nodes.find(e => e.id === nodeId[0])
-      switch (node.type) {
+      switch (node && node.type) {
         case "slave":
           setMyQueryData({
             ...myQueryData,
@@ -289,12 +251,21 @@ function Network(props) {
     }
   };
 
-  const options = {
+  useEffect(()=>{
+    setOption(
+      {...options,
+        height: (width>800 ?width*0.35: width*0.9).toString().toString(),
+        width: (width>800 ?width*0.55: width*0.9).toString().toString(),
+      })
+  }, [width])
+
+  const [options, setOption] = useState({
     physics: {
-      enabled: false
+      enabled: true,
     },
-    height: height
-  };
+    height: (width>800 ?width*0.40: width*0.9).toString(),
+    width: (width>800 ?width*0.55: width*0.9).toString(),
+  });
 
   return (
     <div>

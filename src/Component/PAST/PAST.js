@@ -118,6 +118,7 @@ export default function PAST() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
+        sx={{width: "100%", height: "100%"}}
         ref={windowRef}
       >
         <AppBar sx={{ position: 'relative', background: 'white'}}>
