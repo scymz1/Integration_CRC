@@ -85,7 +85,7 @@ export default function Network(props) {
         // console.log("data", data)
         data.forEach((item, index) => {
           //self
-          const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "green")
+          const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "#1ee893")
           self.font = {size: windowRef.current.offsetHeight * 0.03}
           // slaves
           item.alias.forEach((alias) => {
@@ -93,19 +93,19 @@ export default function Network(props) {
             alias.transactions.slice(0, 30).forEach((transaction) => {
               const transactionData = transaction.transaction
               if (transactionData.relation_type.relation_type === "transportation") {
-                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "orange")
+                tmp.addNode(transactionData.voyage, `Voyage: ${transactionData.voyage}`, "voyage", "#f2f7a6")
                 tmp.link(transactionData.voyage, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
-                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "red")
+                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "#ffaca3")
                   tmp.link(slave.enslaved.id, transactionData.voyage, "")
                 })
               } else if (transactionData.relation_type.relation_type === "transaction") {
-                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "orange")
+                tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "#f2f7a6")
                 tmp.link(transactionData.id, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
-                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "red")
+                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "#ffaca3")
                   tmp.link(slave.enslaved.id, transactionData.id, "")
                 })
               }
@@ -120,13 +120,13 @@ export default function Network(props) {
       //slave
       data.forEach((item, index) => {
         //self
-        const self = tmp.addNode(item.id, item.documented_name, "slave", "red")
+        const self = tmp.addNode(item.id, item.documented_name, "slave", "#ffaca3")
         self.font = {size: windowRef.current.offsetHeight * 0.03}
         //transaction
         item.transactions.forEach((transaction) => {
           const transactionData = transaction.transaction
           if (transactionData.relation_type.relation_type === "transportation") {
-            tmp.addNode(transactionData.voyage.id, `Voyage: ${transactionData.voyage.id}`, "voyage", "orange")
+            tmp.addNode(transactionData.voyage.id, `Voyage: ${transactionData.voyage.id}`, "voyage", "#f2f7a6")
             tmp.link(item.id, transactionData.voyage.id, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
         to ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "No Data")} 
         at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
@@ -135,12 +135,12 @@ export default function Network(props) {
             if (enslavers) {
               enslavers.forEach((enslaver) => {
                 // console.log("enslaver", enslaver.enslaver_alias.id)
-                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "green")
+                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "#1ee893")
                 tmp.link(transactionData.voyage.id, enslaver.enslaver_alias.id, enslaver.role.role)
               })
             }
           } else if (transactionData.relation_type.relation_type === "transaction") {
-            tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "orange")
+            tmp.addNode(transactionData.id, `transaction: ${transactionData.id}`, "transaction", "#f2f7a6")
             tmp.link(item.id, transactionData.id, `sold in ${_.get(transactionData, ["place", "geo_location", "name"], "No Data")} 
           for ${_.get(transactionData, ["amount"], "No Data")}
           on ${_.get(transactionData, ["date"], "No Data")}`)
@@ -149,7 +149,7 @@ export default function Network(props) {
             if (enslavers) {
               enslavers.forEach((enslaver) => {
                 // console.log("enslaver", enslaver.enslaver_alias.id)
-                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "green")
+                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "#1ee893")
                 tmp.link(transactionData.id, enslaver.enslaver_alias.id, enslaver.role.role)
               })
             }
@@ -177,7 +177,7 @@ export default function Network(props) {
           item.transactions.forEach((transaction, transactionIndex) => {
             slaveOnSameVoyage[dataIndex][transactionIndex].forEach((slave) => {
               // console.log("slave", slave.id)
-              tmp.addNode(slave.id, slave.documented_name, "slave", "red")
+              tmp.addNode(slave.id, slave.documented_name, "slave", "#ffaca3")
               if (item.id !== slave.id) {
                 if (transaction.transaction.relation_type.relation_type === "transportation") {
                   tmp.link(transaction.transaction.voyage.id, slave.id, "peer")
