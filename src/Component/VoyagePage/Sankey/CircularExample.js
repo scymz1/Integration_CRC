@@ -194,11 +194,16 @@ export default function SankeyExample(props) {
     },
   }));
 
-  set_search_object({
-    ...search_object,
-    [option.fieldSource]: ["null"],
-    [option.fieldTarget]: ["null"],
-  });
+  let newObject = {...search_object}
+  delete newObject[option.fieldSource]
+  delete newObject[option.fieldTarget]
+  set_search_object(newObject);
+
+  // set_search_object({
+  //   ...search_object,
+  //   [option.fieldSource]: ["null"],
+  //   [option.fieldTarget]: ["null"],
+  // });
  }
 
  if(state.linkData.source != "ini" && state.linkData.target != "ini"){
@@ -312,25 +317,34 @@ export default function SankeyExample(props) {
                     //   setState({ ...state, highlightLinkIndexes: [] });
                     // }}
                     onClick={() => {
+                      console.log("💩", state.highlightLinkIndexes.length)
                       if (state.highlightLinkIndexes.length < 1) {
                         state.highlightLinkIndexes.push(i);
+                        // console.log(state.highlightLinkIndexes.length)
+                        setState({
+                          ...state,
+                          linkData: {
+                            source: link.source,
+                            target: link.target,
+                          },
+                        });
+                        set_search_object({
+                          ...search_object,
+                          [option.fieldSource]: [link.source.name],
+                          [option.fieldTarget]: [link.target.name],
+                        });
+  
                         } else {
                         state.highlightLinkIndexes.shift();
+
+                        let newObject = {...search_object}
+                        delete newObject[option.fieldSource]
+                        delete newObject[option.fieldTarget]
+                        set_search_object(newObject);
                         }
                       // state.highlightLinkIndexes.push(i);
-                      setState({
-                        ...state,
-                        linkData: {
-                          source: link.source,
-                          target: link.target,
-                        },
-                      });
-
-                      set_search_object({
-                        ...search_object,
-                        [option.fieldSource]: [link.source.name],
-                        [option.fieldTarget]: [link.target.name],
-                      });
+                      
+                     
                     }}
                   />
                 ))}
@@ -390,8 +404,6 @@ export default function SankeyExample(props) {
 
       </Select>
       </FormControl> */}
-
-     
 
       <br />
       <button onClick={() => resetHandClick()}>
@@ -491,25 +503,35 @@ export default function SankeyExample(props) {
                     //   setState({ ...state, highlightLinkIndexes: [] });
                     // }}
                     onClick={() => {
+                     
+                     
                       if (state.highlightLinkIndexes.length < 1) {
                         state.highlightLinkIndexes.push(i);
+                        // console.log("🚀", state.highlightLinkIndexes.length)
+                        setState({
+                          ...state,
+                          linkData: {
+                            source: link.source,
+                            target: link.target,
+                          },
+                        });
+  
+                        set_search_object({
+                          ...search_object,
+                          [option.fieldSource]: [link.source.name],
+                          [option.fieldTarget]: [link.target.name],
+                        });
                         } else {
-                        state.highlightLinkIndexes.shift();
+                          state.highlightLinkIndexes.shift();
+                          // console.log("💩", state.highlightLinkIndexes.length)
+
+                          let newObject = {...search_object}
+                          delete newObject[option.fieldSource]
+                          delete newObject[option.fieldTarget]
+                          set_search_object(newObject);
                         }
                    
-                      setState({
-                        ...state,
-                        linkData: {
-                          source: link.source,
-                          target: link.target,
-                        },
-                      });
-
-                      set_search_object({
-                        ...search_object,
-                        [option.fieldSource]: [link.source.name],
-                        [option.fieldTarget]: [link.target.name],
-                      });
+                      
                     }}
                   />
                 ))}
