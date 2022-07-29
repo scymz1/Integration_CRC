@@ -72,7 +72,6 @@ export default function Auto(props) {
 
   // const parsehtml = (input) => {return input.replace(/(<([^>]+)>)/gi, "")}
 
-  console.log("Search object: ", search_object)
 
   return (
     <Autocomplete
