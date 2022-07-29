@@ -67,7 +67,7 @@ export default function Auto(props) {
 //   const parsehtml = (inputarr) => {let arr =[]; inputarr.map(input => {arr.push(input.replace(/(<([^>]+)>)/gi, ""));})
 // return arr}
 
-  const parsehtml = (input) => {return input.replace(/(<([^>]+)>)/gi, "")}
+  const parsehtml = (input) => {console.log("aaaaaaaaaa", input); return input.replace(/(<([^>]+)>)/gi, "")}
 
   return (
     <Autocomplete

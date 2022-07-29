@@ -61,6 +61,9 @@ export default function Voyage() {
       case "Pivot":
         setValue(4);
         break;
+      case "Map":
+        setValue(5);
+        break;
       default:
         setValue(0);
     }
