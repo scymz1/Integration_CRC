@@ -14,7 +14,7 @@ export default function Auto(props) {
   const { index } = React.useContext(ComponentContext)
 
   const searchLabel = labels[index];
-
+  
   const [value, setValue] = React.useState([]);
   const [textInput, setTestInput] = React.useState("");
   const [autocompleteOptions, setautocompleteOptions] = React.useState([]);

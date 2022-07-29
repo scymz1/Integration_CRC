@@ -30,7 +30,7 @@ function modifyName(rawName){
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
 
-    const {labels, setLabels} = React.useContext(AppContext)
+    const {labels, setLabels, test} = React.useContext(AppContext)
     const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
     const curLabel = labels[index];
 

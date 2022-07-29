@@ -269,7 +269,6 @@ const Map = () => {
     const map = useMapEvents({
       click: (e) => {
 
-
         // L.timeDimension().addTo(map);
         // L.control.timeDimension().addTo(map);
         // drawUpdate(map, json.routes)
@@ -287,7 +286,10 @@ const Map = () => {
           points.push(route[0][1])
         })
 
+        var svg = d3.select(map.getPanes().overlayPane).append("svg")
         var width = 960, height = 500;
+        
+        // define projection
         var projection = d3.geo.conicConformal()
                                 .rotate([98, 0])
                                 .center([0, 38])
@@ -295,40 +297,73 @@ const Map = () => {
                                 .scale(1000) // Change to 300 to zoom out
                                 .translate([width / 2, height / 2]);
 
-        var path = d3.geo.path()
-            .projection(projection);
-        
-        var svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height);
+        // var transform = d3.geo.transform({point, projectPoint});
+        // var path = d3.geo.path().projection(transform);
 
+        // project
+        var path = d3.geo.path()
+            .projection(projection);   
+
+        // define line property
         var line = d3.svg.line()
             .interpolate("cardinal-closed")
             .x(function(d) { return projection(d)[0]; })
             .y(function(d) { return projection(d)[1]; });
 
-        // svg.append("g")
-        //     .attr("class", "land")
-        //   .selectAll("path")
-        //     .data(topojson.feature(us, us.objects.state_pol).features) 
-        //   .enter().append("path")
-        //     .attr("class", function(d) {return d.id})
-        //     .attr("d", path)
+        // 
+        svg.append("g")
+            .attr("class", "land")
+          // .selectAll("path")
+          //   .data(topojson.feature(us, us.objects.state_pol).features) 
+          .enter().append("path")
+            .attr("class", function(d) {return d.id})
+            .attr("d", path)
         
+        // define path from points
         var linepath = svg.append("path")
             .data([points])
             .attr("d", line)
             .attr('class', 'journey');
       
+        // append circles to points
         svg.selectAll(".point")
             .data(points)
           .enter().append("circle")
             .attr("r", 8)
             .attr("transform", function(d) { return "translate(" + projection(d) + ")"; });
       
+        // define circle transformation
         var circle = svg.append("circle")
             .attr("r", 19)
             .attr("transform", "translate(" + projection(points[0]) + ")");
+
+        transition();
+
+
+
+        function transition() {
+          circle.transition()
+              .duration(10000)
+              .attrTween("transform", translateAlong(linepath.node()))
+              .each("end", transition);
+        }
+
+
+        function translateAlong(path) {
+          var l = path.getTotalLength();
+          return function(d, i, a) {
+            return function(t) {
+              var p = path.getPointAtLength(t * l);
+              return "translate(" + p.x + "," + p.y + ")";
+            };
+          };
+        }
+
+        function projectPoint(x, y) {
+          var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+          this.stream.point(point.x, point.y);
+        }
+
       },
 
     });
