@@ -13,11 +13,12 @@ export default function Network(props) {
   const {queryData, windowRef, setOpen, setId} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [height, setHeight] = useState("300");
-  const [data, setData] = useState([]);
+  const [width, setWidth] = useState("300");
+  // const [data, setData] = useState([]);
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  console.log("aaaaa", queryData)
+  // console.log("aaaaa", queryData)
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
@@ -197,9 +198,11 @@ export default function Network(props) {
     fetchData().catch(console.error);
   }, [myQueryData])
 
-  useEffect(() => {
-    setHeight((0.7 * windowRef.current.offsetHeight).toString())
-  }, [])
+  // useEffect(() => {
+  //   console.log(windowRef.current.offsetWidth, windowRef.current.offsetHeight)
+  //   setHeight((0.7*windowRef.current.offsetHeight).toString())
+  //   setWidth((0.9*windowRef.current.offsetWidth).toString())
+  // }, [windowRef.current.offsetWidth, windowRef.current.offsetHeight])
 
   // function updateQueryData(path, id) {
   //   let formdata = new FormData();
@@ -273,13 +276,20 @@ export default function Network(props) {
       }
     }
   };
-
-  const options = {
+  useEffect(()=>{
+    window.addEventListener('resize', ()=>setOption(
+      {...options,
+        height: (0.75*window.innerHeight).toString(),
+        width: (0.95*window.innerWidth).toString(),
+    }));
+  }, [])
+  const [options, setOption] = useState({
     physics: {
       enabled: true,
     },
-    height: height
-  };
+    height: (0.75*window.innerHeight).toString(),
+    width: (0.95*window.innerWidth).toString(),
+  });
 
   return (
     <div>
