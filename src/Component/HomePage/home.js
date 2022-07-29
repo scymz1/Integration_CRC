@@ -54,14 +54,15 @@ export default function Home() {
           <List>
             {sample.map((label, index) => (
               <ListItem key={index}>
-                <TrackVisibility partialVisibility>
+                <TrackVisibility offset={200}>
                   {({isVisible}) => (
                     <Animated
                       animationIn="slideInLeft"
                       animationOut="fadeOut"
-                      animationInDelay= {600}
                       isVisible={isVisible}
-                      animationInDuration = {1300}
+                      animationInDelay= {400}
+                      animationOutDelay= {500}
+                      animationOutDuration = {3000}
                     >
                       {label}
                       <Divider/>

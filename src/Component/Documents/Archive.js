@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { Button, Modal, Box, Container, Avatar, ListItem,Dialog,TablePagination} from "@mui/material";
-import ResponsiveAppBar from "../NavBar";
-
 import "universalviewer/dist/esm/index.css";
 import { init } from "universalviewer";
 
@@ -58,13 +56,12 @@ function curImage(src){
 }
 export default function Archive() {
     const [width, height] = useWindowSize()
-    const DocContext = React.createContext({});
     const [manifest, setManifest]= useState({});
     const [open, setOpen] = useState(false);
     const [apiUrl,setapiurl] = useState([])
     const [itemData, setData] = useState([])
 
-    const [page, setPage] = React.useState(1);
+    const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(16);
     const [total, setTotal] = useState(0)
 
