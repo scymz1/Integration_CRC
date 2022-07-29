@@ -99,6 +99,8 @@ export default function Filter(props) {
     }
   }
 
+  console.log("Search Object: ", search_object)
+  
     return (
     <AppContext.Provider
         value={{

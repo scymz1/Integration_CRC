@@ -72,8 +72,8 @@ export const columnOptions = {
     },
   },
 
-  "voyage_sourceconnection__source__full_ref": {
-    'voyage_sourceconnection__source__full_ref': null,
+  "voyage_sourceconnection__text_ref": {
+    'voyage_sourceconnection__text_ref': null,
   },
 
 

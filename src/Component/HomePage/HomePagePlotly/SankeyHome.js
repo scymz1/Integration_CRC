@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from "react";
-// import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
 import {Box, Button, Card, CardContent, Typography,Grid, Popover, CircularProgress} from "@mui/material";
@@ -33,7 +32,7 @@ function Sankey(props) {
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
   const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
-  const NODE_WIDTH = 140;
+  const [NODE_WIDTH, setNODE_WIDTH] = useState(140);
   const MIN_NODE_HEIGHT = 80;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,8 +109,9 @@ function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    let new_CANVAS_WIDTH = width>800 ?width*0.55:width*0.8;
-    let new_CANVAS_HEIGHT = 0;
+    let new_CANVAS_WIDTH = width>800 ? width*0.50:width*0.8;
+    let new_CANVAS_HEIGHT = CANVAS_HEIGHT;
+    let NODE_WIDTH = Math.round(new_CANVAS_WIDTH / 3 - 80);
     let transLength = 0;
     let enslaverLength = 0;
     let nodes = [];
@@ -318,19 +318,18 @@ function Sankey(props) {
     new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
 
     setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
-    setCANVAS_WIDTH(width>800 ?width*0.5:width*0.8);
+    setCANVAS_WIDTH(new_CANVAS_WIDTH);
     //setCANVAS_WIDTH(new_CANVAS_WIDTH);
     const tmpGraph = sankey()
       .nodeAlign(sankeyLeft)
       .nodeWidth(NODE_WIDTH)
       // .nodeheight(40)
       .extent([
-        [30, 30],
-        [width>800 ?width*0.5:width*0.8, new_CANVAS_HEIGHT]
-        //[new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+        [15, 15],
+        [new_CANVAS_WIDTH+15, new_CANVAS_HEIGHT+15]
       ])({nodes, links});
     setGraph(tmpGraph)
-  }, [data]);
+  }, [data, width]);
 
   function renderStory(node) {
     // if(node.type === "enslaved")
@@ -373,8 +372,7 @@ function Sankey(props) {
 
           <svg
             className="canvas"
-            width={width>800 ?width*0.5:width*0.8}
-            //width={CANVAS_WIDTH + 30}
+            width={CANVAS_WIDTH + 30}
             height={CANVAS_HEIGHT + 30}
           >
             {graph.nodes.map((node) => {
@@ -488,13 +486,13 @@ function SankeyHome() {
       <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
-          <Grid item sx={{width:width>800 ?"60%":"90%"}}>
+          <Grid item sx={{width:"60%"}}>
           {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
             <CardContent sx={{flex: "1 0 auto"}}>
               <Sankey />
             </CardContent>
           </Grid>
-          <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+          <Grid item sx={{maxWidth: width>800 ? "40%": "100%"}}>
             <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
