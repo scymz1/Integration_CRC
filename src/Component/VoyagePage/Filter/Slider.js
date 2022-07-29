@@ -13,6 +13,8 @@ import {
 
 import {ComponentContext} from "./ComponentFac"
 import { control } from 'leaflet';
+import { SecurityUpdateGood } from '@mui/icons-material';
+import { set } from 'lodash';
 const base_url = process.env.REACT_APP_BASEURL;
 
 const demoLabel = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -30,8 +32,8 @@ function modifyName(rawName){
 export default function GetSlider(props) {
   const { index } = React.useContext(ComponentContext)
 
-    const {labels, setLabels, test} = React.useContext(AppContext)
-    const {search_object, set_search_object, typeForTable} = React.useContext(props.context)
+    const {labels, setLabels} = React.useContext(AppContext)
+    const {search_object, set_search_object, typeForTable, setPage} = React.useContext(props.context)
     const curLabel = labels[index];
 
     const varName = curLabel["option"];
@@ -77,7 +79,7 @@ export default function GetSlider(props) {
 
   function handleCommittedChange(event, newValue) {
     //setValue(newValue); 
-
+    setPage(0)
     set_search_object({                     // <---------- UPDATE SEARCH OBJECT
       ...search_object,
       [varName]: [value[0], value[1]]
@@ -185,7 +187,7 @@ export default function GetSlider(props) {
                   temp = value[0] + 1 < range[1] ? value[0] + 1 : range[1]
                   setValue([value[0], value[0] + 1 < range[1] ? value[0] + 1 : range[1]]);
                 }
-
+                setPage(0)
                 set_search_object({
                   ...search_object,
                   [varName]: [value[0], temp]

@@ -309,6 +309,7 @@ function Table(props) {
                   count={totalResultsCount}
                   page={page}
                   onPageChange={handleChangePage}
+                  rowsPerPageOptions={[10, 15, 20, 25]}
                   rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
@@ -507,7 +508,7 @@ function Table(props) {
                                             [].concat.apply([], row[k])
                                           ),
                                         ]
-                                          .join(" ")
+                                          .join("<br>")
                                           .replaceAll("</p>,<p>", "</p><p>"),
                                       }}
                                     />
