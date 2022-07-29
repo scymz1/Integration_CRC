@@ -12,13 +12,10 @@ const base_url = process.env.REACT_APP_BASEURL;
 export default function Network(props) {
   const {queryData, windowRef, setOpen, setId} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
-  const [height, setHeight] = useState("300");
-  const [width, setWidth] = useState("300");
-  // const [data, setData] = useState([]);
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  // console.log("aaaaa", queryData)
+
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
@@ -198,42 +195,6 @@ export default function Network(props) {
     fetchData().catch(console.error);
   }, [myQueryData])
 
-  // useEffect(() => {
-  //   console.log(windowRef.current.offsetWidth, windowRef.current.offsetHeight)
-  //   setHeight((0.7*windowRef.current.offsetHeight).toString())
-  //   setWidth((0.9*windowRef.current.offsetWidth).toString())
-  // }, [windowRef.current.offsetWidth, windowRef.current.offsetHeight])
-
-  // function updateQueryData(path, id) {
-  //   let formdata = new FormData();
-  //   formdata.append(path, id);
-  //   formdata.append(path, id);
-  //   const endpoint = (() => {
-  //     switch (myQueryData.type) {
-  //       case "slaves":
-  //         return "past/enslaved/"
-  //       case "enslavers":
-  //         return "past/enslavers/"
-  //     }
-  //   })()
-  //   fetch(base_url + endpoint, {
-  //     method: 'POST',
-  //     headers: {'Authorization': auth_token},
-  //     body: formdata,
-  //   }).then(response => response.json()).then(res => {
-  //     const targets = []
-  //     res.forEach((slave => {
-  //       if (!targets.find(e => e === slave.id))
-  //         targets.push(slave.id)
-  //     }))
-  //     // console.log("targets", targets)
-  //     setMyQueryData({
-  //       type: "slaves",
-  //       slaves: targets
-  //     })
-  //   })
-  // }
-
   const events = {
     doubleClick: function (event) {
       const {nodes: nodeId} = event;
@@ -247,12 +208,6 @@ export default function Network(props) {
             slaves: nodeId
           })
           break;
-        // case "transaction":
-        //   updateQueryData("transactions__transaction__id", node.id)
-        //   break;
-        // case "voyage":
-        //   updateQueryData("transactions__transaction__voyage__id", node.id)
-        //   break;
         case "enslaver":
           setMyQueryData({
             ...myQueryData,
@@ -260,8 +215,6 @@ export default function Network(props) {
             enslavers: nodeId
           })
           break;
-          // updateQueryData("transactions__transaction__enslavers__enslaver_alias__id", node.id);
-          // break;
       }
     },
 
@@ -283,6 +236,7 @@ export default function Network(props) {
         width: (0.95*window.innerWidth).toString(),
     }));
   }, [])
+
   const [options, setOption] = useState({
     physics: {
       enabled: true,
