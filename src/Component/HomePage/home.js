@@ -20,10 +20,15 @@ import NetworkHome from "./HomePagePlotly/NetworkHome";
 //     mode: 'dark',
 //   },
 // });
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
 
 export default function Home() {
   const HomeContext = React.createContext({});
+  const [width, height] = useWindowSize()
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -42,7 +47,7 @@ export default function Home() {
     });
   }, []);
   const dataSet = "0";
-  const sample = [ <NetworkHome/>, <SankeyHome/>, <StoryHome/>, <ScatterComponent/>, <BarComponent/>,  <PieComponent/>, < TableHome/>];
+  const sample = [<SankeyHome/>, <StoryHome/>, <ScatterComponent/>, <BarComponent/>,  <PieComponent/>, < TableHome/>];
   return (
     // <ThemeProvider theme={darkTheme}>
       <div>
@@ -50,11 +55,11 @@ export default function Home() {
           <ResponsiveAppBar context={HomeContext}/>
         </HomeContext.Provider>
         <Container maxWidth={false}>
-        
+          <NetworkHome/>
           <List>
             {sample.map((label, index) => (
               <ListItem key={index}>
-                <TrackVisibility offset={200}>
+                <TrackVisibility offset={width<800?1200:200}>
                   {({isVisible}) => (
                     <Animated
                       animationIn="slideInLeft"

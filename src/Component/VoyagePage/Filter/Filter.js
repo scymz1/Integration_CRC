@@ -111,7 +111,7 @@ export default function Filter(props) {
       }}
     >
     {drawerOpen ?
-        <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, margintop:"64px"}}>
+        <AppBar position="fixed" color={color} elevation={0} style={{zIndex:3, marginTop:"64px"}}>
             <Toolbar>
                     <Grid container direction="row" spacing={1}>
                         {
