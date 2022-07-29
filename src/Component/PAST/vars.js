@@ -18,7 +18,7 @@ export const enslaver_default_list = [
     // "alias__transactions__transaction__place__geo_location__name",
     // "enslaver_sources__text_ref",
     // "enslaver_sources__text_ref",
-    "alias__transactions__transaction__text_ref",
+    "alias__transactions__transaction__source__short_ref",
 ]
 export const enslaver_var_list = {
     "id": {
@@ -46,8 +46,8 @@ export const enslaver_var_list = {
         "last_active_year": null,
     },
 
-    "enslaver_sources__text_ref": {
-        "enslaver_sources__text_ref": null,
+    "alias__transactions__transaction__source__short_ref": {
+        "alias__transactions__transaction__source__short_ref": null,
     },
     
     "alias__transactions__transaction": {
@@ -56,7 +56,7 @@ export const enslaver_var_list = {
         "alias__transactions__transaction__date_yyyy": null,
         "alias__transactions__role__role":null,
 
-        "alias__transactions__transaction__text_ref": null,
+        // "alias__transactions__transaction__text_ref": null,
 
         
         },
