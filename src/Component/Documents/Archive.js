@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
-import { Button, Modal, Box, Container, Avatar, ListItem,Dialog,TablePagination} from "@mui/material";
+import { Button, Modal, Box, Container, Avatar, ListItem,Dialog,TablePagination, CardMedia, Typography, Grid, Link } from "@mui/material";
 import "universalviewer/dist/esm/index.css";
 import { init } from "universalviewer";
 
@@ -8,6 +8,9 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 import {
     useWindowSize,
@@ -131,6 +134,7 @@ export default function Archive() {
         fetchData().catch(console.error);
       }, [apiUrl])
     // console.log(itemData)
+
     return (
         <div>
             <TablePagination
@@ -142,37 +146,71 @@ export default function Archive() {
               onRowsPerPageChange={handleChangeRowsPerPage}
               rowsPerPageOptions={[16, 25, 36, 49, 64]}
             />
-            <ImageList sx={{ width: width, height: (page + 1) * rowsPerPage > total ? 200: height }} cols={
-              (page + 1) * rowsPerPage > total ? 8 :
-              Math.sqrt(rowsPerPage)
-              } gap={30} >
+            <Grid  container spacing={{ xs: 2, md: 2, lg:2}} padding={{ xs: 4, md: 3, lg:4 }}>
             {/* <ImageList sx={{ width: width, height: height }} cols={parseInt(width/300)} gap={20} > */}
               {itemData.map((item) => (
-                <ImageListItem key={item.image}>
-                  <img
-                    src={`${item.image}?w=248&fit=crop&auto=format`}
-                    srcSet={`${item.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={item.title}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    title={item.title}
-                    sx ={{
-                      bgcolor: alpha('#549165',0.8)
-                    }}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                        aria-label={`info about ${item.title}`}
-                        onClick={() => handleOpen(item.uri.url)}
-                      >
-                        <InfoIcon />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
+                  <Grid item xs={12} sm={6} md={4} lg={3} width="40vh" >
+                      <Box sx={{ position: 'relative' }} >
+                        <LazyLoadImage
+                          effect="blur"
+                          src={item.image}
+                          width='100%'
+                          height="100%"
+                        />
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            width: '100%',
+                            height:{xs:"2em", sm:"2.7em"},
+                            // bgcolor: 'rgba(0, 0, 0, 0.54)',
+                            bgcolor: "rgba(123,139,111, 0.7)",
+                            // padding: '10px',
+                            // py: {xs: 0, md: '0.4em', lg:'0.2em'},
+                            margin: '0',
+                            fontStyle: 'italic',
+                            textAlign: "center",
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          
+                        >
+                          {/* <Typography variant="h4.Heading">Title</Typography> */}
+                          <Typography variant="body3"color="#FFFFFF" component={Link} underline="hover">
+                            <Link href="#" underline="hover" color="#FFFFFF" onClick={() => handleOpen(item.uri.url)}>{item.title}</Link>
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                // <ImageListItem key={item.image}>
+                //   <LazyLoadImage
+                //     src={`${item.image}?w=248&fit=crop&auto=format`}
+                //     srcSet={`${item.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                //     alt={item.title}
+                //     loading="lazy"
+                //     effect="blur"
+                //   />
+                //   <ImageListItemBar
+                //     title={item.title}
+                //     sx ={{
+                //       bgcolor: alpha('#549165',0.8)
+                //     }}
+                //     actionIcon={
+                //       <IconButton
+                //         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                //         aria-label={`info about ${item.title}`}
+                //         onClick={() => handleOpen(item.uri.url)}
+                //       >
+                //         <InfoIcon />
+                //       </IconButton>
+                //     }
+                //   />
+                // </ImageListItem>
               ))}
-            </ImageList>
+            </Grid>
+
             <Modal
                 open={open}
                 onClose={handleClose}
