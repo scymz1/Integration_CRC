@@ -403,16 +403,20 @@ export default function Sankey(props) {
   useEffect(() => {
     let new_CANVAS_WIDTH = width*0.80;
     let new_NODE_WIDTH = Math.max(120, Math.round(new_CANVAS_WIDTH / 3 - 80));
+    
     setCANVAS_WIDTH(new_CANVAS_WIDTH);
     setNODE_WIDTH(new_NODE_WIDTH)
-    
-    const tmpGraph = sankey()
-      .nodeAlign(sankeyLeft)
-      .nodeWidth(new_NODE_WIDTH)
-      .extent([
-        [30, 30],
-        [new_CANVAS_WIDTH, CANVAS_HEIGHT]
-      ])({nodes, links});
+    const tmpGraph = graph !== null ?
+          sankey()
+              .nodeAlign(sankeyLeft)
+              .nodeWidth(new_NODE_WIDTH)
+              .extent([
+                [30, 30],
+                [new_CANVAS_WIDTH, CANVAS_HEIGHT]
+              ])({nodes, links})
+        :
+          null
+          setGraph(tmpGraph)
   }, [width])
 
   function renderStory(node) {
