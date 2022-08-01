@@ -11,7 +11,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 export default function Network(props) {
-  const {queryData, windowRef, setOpen, setId} = useContext(PASTContext);
+  const {queryData, setOpen, setId} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
@@ -85,7 +85,7 @@ export default function Network(props) {
         data.forEach((item, index) => {
           //self
           const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "#1ee893")
-          self.font = {size: windowRef.current.offsetHeight * 0.03}
+          self.font = {size: height * 0.03}
           // slaves
           item.alias.forEach((alias) => {
             //transaction
@@ -120,7 +120,7 @@ export default function Network(props) {
       data.forEach((item, index) => {
         //self
         const self = tmp.addNode(item.id, item.documented_name, "slave", "#ffaca3")
-        self.font = {size: windowRef.current.offsetHeight * 0.03}
+        self.font = {size: height * 0.03}
         //transaction
         item.transactions.forEach((transaction) => {
           const transactionData = transaction.transaction
