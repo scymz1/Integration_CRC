@@ -122,9 +122,9 @@ export default function Bar(props) {
     data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
 
-    console.log("option_value🍕", typeof(option.value))
-    console.log("element🍔",element)
-    console.log("agg_fn🥤", aggregation)
+    // console.log("option_value🍕", typeof(option.value))
+    // console.log("element🍔",element)
+    // console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
     return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
       method: "POST",
@@ -145,9 +145,9 @@ export default function Bar(props) {
   
     const data = await Promise.all(promises)
     // setDataFlow([...dataFlow, data[data.length - 1]])
-    console.log("🐯data is ", data)
+    // console.log("🐯data is ", data)
     // console.log("🐷", typeof(data))
-   console.log("😷",chips)
+  //  console.log("😷",chips)
     if (Object.values(data).indexOf('false') > -1) {
       window.alert(`Sorry, this combination can't work:`);
       window.location.reload(true);
