@@ -4,6 +4,7 @@ import {PASTContext} from "../PASTApp";
 import {CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
 import _ from 'lodash';
+import {useWindowSize} from "@react-hook/window-size";
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
@@ -15,7 +16,7 @@ export default function Network(props) {
   const [myQueryData, setMyQueryData] = useState({...queryData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-
+  const [width, height] = useWindowSize()
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
@@ -229,10 +230,11 @@ export default function Network(props) {
     }
   };
   useEffect(()=>{
+    console.log(height)
     window.addEventListener('resize', ()=>setOption(
       {...options,
-        height: (0.75*windowRef.current.offsetHeight).toString(),
-        width: (0.95*windowRef.current.offsetWidth).toString(),
+        height: (0.75*height).toString(),
+        width: (0.95*width).toString(),
     }));
   }, [])
 
@@ -240,8 +242,8 @@ export default function Network(props) {
     physics: {
       enabled: true,
     },
-    height: (0.75*windowRef.current.offsetHeight).toString(),
-    width: (0.95*windowRef.current.offsetWidth).toString(),
+    height: (0.75*height).toString(),
+    width: (0.95*width).toString(),
   });
 
   return (
