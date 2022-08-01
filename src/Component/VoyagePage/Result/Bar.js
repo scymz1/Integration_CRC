@@ -19,6 +19,8 @@ import { useTheme } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { ConstructionOutlined } from "@mui/icons-material";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -64,6 +66,8 @@ export default function Bar(props) {
 
   const [aggregation, setAgg] = React.useState("sum");
 
+  const [alert, setAlert] = useState("")
+
   // console.log("🏀", barData)
 
   const handleChange_agg = (event) => {
@@ -98,8 +102,10 @@ export default function Bar(props) {
 
   useEffect(() => {
     setIsLoading(true);
+    setAlert("")
     // var value = option.value;
    let yfieldArr = []
+   let currentData ={}
     const fetchData = async () => {
       const promises = chips.map( element => {
     var data = new FormData();
@@ -125,24 +131,30 @@ export default function Bar(props) {
       body: data,
       headers: {'Authorization':AUTH_TOKEN}
     }).then(res => res.json())
+    
     .then(function (response) {
-        // console.log("data", response)
+        console.log("data", response)
         return Object.values(response)[0];
       })
+      .catch((err) => {
+        window.alert(`Sorry, this combination can't work: ${err}`);
+        window.location.reload(true);
+      });
+     
     })
   
     const data = await Promise.all(promises)
     // setDataFlow([...dataFlow, data[data.length - 1]])
-    // console.log("🐯data is ", data)
-    // console.log("🐒dataFlow is ", dataFlow)
+    console.log("🐯data is ", data)
 
     let arr = []
     data.forEach( (dataElement,index) =>{
       // console.log("🐔 dataElement is ", dataElement)
       // console.log("type", typeof(Object.values(dataElement)[0]))
-      if(dataElement === 'false'){
-        alert("undefined combination")
-      }
+      // if(dataElement === 'false'){
+      //   window.alert(`Sorry, this combination can't work` );
+      //   window.location.reload(true);
+      // }
         arr.push({
           x: Object.keys(dataElement),
           y: Object.values(dataElement),
@@ -161,6 +173,8 @@ export default function Bar(props) {
       fetchData().catch(console.error) 
   
   }, [ chips, option.field, aggregation, search_object]);
+
+
 
   if(isLoading) return;
 
