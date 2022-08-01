@@ -8,16 +8,18 @@ import './styles.css'
 import _ from 'lodash';
 
 import Story from "./Story";
+import { useWindowSize } from '@react-hook/window-size';
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
+  const [width, height] = useWindowSize();
   const {windowRef, setOpen, setInfo, setId, modal, queryData} = useContext(PASTContext);
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
   const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
-  const NODE_WIDTH = 140;
+  const [NODE_WIDTH, setNODE_WIDTH] = useState(140);
   const MIN_NODE_HEIGHT = 80;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,8 +28,10 @@ export default function Sankey(props) {
       case "slaves": return "past/enslaved/"
       case "enslavers": return "past/enslavers/"
     }
-  }
-  // const [open, setOpen] = React.useState(false);
+  };
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
+  
   const handleOpen = (event, info, modal) => {
     if (modal) {
       // console.log("voyage id",info)
@@ -36,7 +40,6 @@ export default function Sankey(props) {
       // setId(info.id);
     }
   };
-  // const handleClose = () => setOpen(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popOpen, setPopOpen] = React.useState(null);
   const handlePopoverOpen = (event, node) => {
@@ -88,12 +91,14 @@ export default function Sankey(props) {
   }, [queryData])
 
   useEffect(() => {
-    let new_CANVAS_WIDTH = 0.8 * windowRef.current.offsetWidth;
-    let new_CANVAS_HEIGHT = 0;
+    let new_CANVAS_WIDTH = width*0.80;
+    let new_NODE_WIDTH = Math.max(120, Math.round(new_CANVAS_WIDTH / 3 - 80));
+
     let transLength = 0;
     let enslaverLength = 0;
     let nodes = [];
     let links = [];
+    
     if(isLoading) return;
     if (queryData.type === "enslavers") {
       data.forEach((item) => {
@@ -378,20 +383,41 @@ export default function Sankey(props) {
       // console.log(node.id,node.information)
     })
 
-    new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
+    let new_CANVAS_HEIGHT = Math.max(data.length, transLength, enslaverLength) * MIN_NODE_HEIGHT;
 
+    setNodes(nodes);
+    setLinks(links);
     setCANVAS_HEIGHT(new_CANVAS_HEIGHT);
     setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    setNODE_WIDTH(new_NODE_WIDTH)
     const tmpGraph = sankey()
-      .nodeAlign(sankeyLeft)
-      .nodeWidth(NODE_WIDTH)
-      // .nodeheight(40)
-      .extent([
-        [30, 30],
-        [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
-      ])({nodes, links});
+        .nodeAlign(sankeyLeft)
+        .nodeWidth(new_NODE_WIDTH)
+        .extent([
+          [30, 30],
+          [new_CANVAS_WIDTH, new_CANVAS_HEIGHT]
+        ])({nodes, links});
     setGraph(tmpGraph)
   }, [data]);
+
+  useEffect(() => {
+    let new_CANVAS_WIDTH = width*0.80;
+    let new_NODE_WIDTH = Math.max(120, Math.round(new_CANVAS_WIDTH / 3 - 80));
+    
+    setCANVAS_WIDTH(new_CANVAS_WIDTH);
+    setNODE_WIDTH(new_NODE_WIDTH)
+    const tmpGraph = graph !== null ?
+          sankey()
+              .nodeAlign(sankeyLeft)
+              .nodeWidth(new_NODE_WIDTH)
+              .extent([
+                [30, 30],
+                [new_CANVAS_WIDTH, CANVAS_HEIGHT]
+              ])({nodes, links})
+        :
+          null
+          setGraph(tmpGraph)
+  }, [width])
 
   function renderStory(node) {
     // if(node.type === "enslaved")

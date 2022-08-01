@@ -387,29 +387,36 @@ function Table(props) {
                                   </TableCell>
                                 );
                               } else if (k === "number_enslaved") {
-                                return (
-                                  <TableCell key={"content-" + key}>
-                                    <Link
-                                      component="button"
-                                      variant="body2"
-                                      onClick={(e) =>
-                                        handleSankeyOpen(
-                                          e,
-                                          [
-                                            ...new Set(
-                                              row[
-                                                "alias__transactions__transaction__enslaved_person__enslaved__id"
-                                              ].flat(Infinity)
-                                            ),
-                                          ],
-                                          "slaves"
-                                        )
-                                      }
-                                    >
+                                if (isNumeric(row[k]) && Number(row[k]) <= 30) {
+                                  return (
+                                    <TableCell key={"content-" + key}>
+                                      <div
+                                        style={{ color: "blue" }}
+                                        onClick={(e) =>
+                                          handleSankeyOpen(
+                                            e,
+                                            [
+                                              ...new Set(
+                                                row[
+                                                  "alias__transactions__transaction__enslaved_person__enslaved__id"
+                                                ].flat(Infinity)
+                                              ),
+                                            ],
+                                            "slaves"
+                                          )
+                                        }
+                                      >
+                                        <u>{row[k]}</u>
+                                      </div>
+                                    </TableCell>
+                                  );
+                                } else {
+                                  return (
+                                    <TableCell key={"content-" + key}>
                                       {row[k]}
-                                    </Link>
-                                  </TableCell>
-                                );
+                                    </TableCell>
+                                  );
+                                }
                               } else if (
                                 k ===
                                 "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
