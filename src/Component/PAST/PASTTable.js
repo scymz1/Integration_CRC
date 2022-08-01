@@ -20,9 +20,11 @@ import {
   enslaver_default_list,
   enslaver_var_list,
 } from "./vars";
+import { useWindowSize } from "@react-hook/window-size";
 
 export const ColContext = React.createContext({});
 export default function PASTTable(props) {
+  const [width, height] = useWindowSize();
   const [cols, setCols] = React.useState(enslaved_default_list);
   const [labels, setLabels] = React.useState(enslaved_labels);
   const [all_options, setAll_options] = React.useState(enslaved_var_list);
@@ -157,15 +159,18 @@ export default function PASTTable(props) {
         {((typeForTable === "slaves" && queryData.slaves.length !== 0) ||
           (typeForTable === "enslavers" &&
             queryData.enslavers.length !== 0)) && (
+            <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+          <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
           <Card
             sx={{
-              width: 800,
-              //display: "flex",
-              //justifyContent: "center",
-              //flexWrap: "wrap",
-              //listStyle: "none",
-              // gap: 0.5,
-              m: 1,
+              width: width > 700 ? width * 0.5 : width,
+              mt: 3
             }}
           >
             <CardHeader
@@ -207,6 +212,8 @@ export default function PASTTable(props) {
               </Grid>
             </CardContent>
           </Card>
+          </Grid>
+          </Grid>
         )}
         <Table context={ColContext} handleClickOpen={props.handleClickOpen} />
         <Modal context={ColContext} endpoint="voyage/" />
