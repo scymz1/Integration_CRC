@@ -28,9 +28,12 @@ import { styled } from '@mui/system';
 // import { Key } from '@mui/icons-material';
 // import nameConcat from '../../../util/nameConcat';
 import {Container} from "@mui/material";
+import { useWindowSize } from "@react-hook/window-size";
 
 
 export default function ColSelector11(props) {
+    const [width, height] = useWindowSize();
+
     const { cols, setCols, columnOptions, options_flat } = useContext(props.context)
     // const [chipData, setChipData] = React.useState([]);
     // React.useEffect(() => {
@@ -146,45 +149,47 @@ export default function ColSelector11(props) {
                 component="ul"
             > */}
             <Container maxWidth={false}>    
-            <Grid container spacing={1} >
-                <Grid item xs={2} sx={{width:"20%"}}>
-                    <TreeView
-                        aria-label="option menu"
-                        defaultCollapseIcon={<ExpandMoreIcon />}
-                        defaultExpandIcon={<ChevronRightIcon />}
-                    >
-                        
-                        <Button
-                            variant="contained"
-                            size="large"
-                            color="grey"
-                            onClick={handleClick}
+            {/* <Grid container spacing={1} > */}
+            <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+            >
+                <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
+                    <Grid container item>
+                        <TreeView
+                            aria-label="option menu"
+                            defaultCollapseIcon={<ExpandMoreIcon />}
+                            defaultExpandIcon={<ChevronRightIcon />}
                         >
-                            {"Column Selector"}
+                            
+                            <Button
+                                variant="contained"
+                                size="large"
+                                color="grey"
+                                onClick={handleClick}
+                            >
+                                {"Column Selector"}
 
-                        </Button>
-                        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                            {/* {renderTree(hierFalse2True(columnOptions),"")} */}
-                            {renderTree(columnOptions, "")}
-                        </Menu>
-                    </TreeView>
-                </Grid>
-                {/* </Grid>
-            <Grid container spacing = {2}> */}
-                <Grid container item xs={9} sx={{minWidth:400}}>
-                    {/* {cols.map((col) => {
-                        setChipData([...chipData, { key: col, label: options_flat[col].flatlabel }])
-                    })} */}
-                    {cols.map((data) => {
-                        return (
-                            <ListItem key={data} style={{ listStyleType: 'none' }}>
-                                <Chip
-                                    label={options_flat[data].flatlabel}
-                                    onDelete={data === 'id' ? undefined : handleDelete(data)}
-                                />
-                            </ListItem>
-                        );
-                    })}
+                            </Button>
+                            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                                {/* {renderTree(hierFalse2True(columnOptions),"")} */}
+                                {renderTree(columnOptions, "")}
+                            </Menu>
+                        </TreeView>
+                        {cols.map((data) => {
+                            return (
+                                <ListItem key={data} style={{ listStyleType: 'none' }}>
+                                    <Chip
+                                        label={options_flat[data].flatlabel}
+                                        onDelete={data === 'id' ? undefined : handleDelete(data)}
+                                    />
+                                </ListItem>
+                            );
+                        })}
+                    </Grid>
                 </Grid>
             </Grid>
             </Container>
