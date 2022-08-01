@@ -133,28 +133,31 @@ export default function Bar(props) {
     }).then(res => res.json())
     
     .then(function (response) {
-        console.log("data", response)
+        console.log("🔥data", response)
         return Object.values(response)[0];
       })
-      .catch((err) => {
-        window.alert(`Sorry, this combination can't work: ${err}`);
-        window.location.reload(true);
-      });
+      // .catch((err) => {
+      //   window.alert(`Sorry, this combination can't work: ${err}`);
+      //   window.location.reload(true);
+      // });
      
     })
   
     const data = await Promise.all(promises)
     // setDataFlow([...dataFlow, data[data.length - 1]])
     console.log("🐯data is ", data)
-
+    // console.log("🐷", typeof(data))
+   console.log("😷",chips)
+    if (Object.values(data).indexOf('false') > -1) {
+      window.alert(`Sorry, this combination can't work:`);
+      window.location.reload(true);
+   }
+   
     let arr = []
+
     data.forEach( (dataElement,index) =>{
       // console.log("🐔 dataElement is ", dataElement)
       // console.log("type", typeof(Object.values(dataElement)[0]))
-      // if(dataElement === 'false'){
-      //   window.alert(`Sorry, this combination can't work` );
-      //   window.location.reload(true);
-      // }
         arr.push({
           x: Object.keys(dataElement),
           y: Object.values(dataElement),
@@ -163,6 +166,8 @@ export default function Bar(props) {
           barmode: "group",
         })
     })
+
+ 
 
       setBarData(
        arr
