@@ -133,7 +133,7 @@ export default function Bar(props) {
     }).then(res => res.json())
     
     .then(function (response) {
-        console.log("🔥data", response)
+        // console.log("🔥data", response)
         return Object.values(response)[0];
       })
       // .catch((err) => {
@@ -147,11 +147,9 @@ export default function Bar(props) {
     // setDataFlow([...dataFlow, data[data.length - 1]])
     // console.log("🐯data is ", data)
     // console.log("🐷", typeof(data))
-  //  console.log("😷",chips)
-    if (Object.values(data).indexOf('false') > -1) {
-      window.alert(`Sorry, this combination can't work:`);
-      window.location.reload(true);
-   }
+   console.log("😷",chips)
+   console.log(typeof(chips))
+    
    
     let arr = []
 
@@ -167,8 +165,22 @@ export default function Bar(props) {
         })
     })
 
- 
+    var str="";
 
+    str = arr.map(function(elem){
+    return elem.name;
+    }).join("\n");
+    console.log("🐲",str);
+
+    if (Object.values(data).indexOf('false') > -1) {
+      window.alert(`Sorry, this combination can't work:
+            ${str}
+      `);
+      window.location.reload(true);
+   }
+    console.log("arr value🎫", arr[0].name)
+
+    let stringError = 
       setBarData(
        arr
       )
