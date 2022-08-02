@@ -30,9 +30,21 @@ export default function Navbar(props) {
           <ToggleButton sx={{background: "#ab47bc"}} value={"1"} >Intra-American</ToggleButton>
         </ToggleButtonGroup>
 
-        <Link to={"/refactor/voyage"} style={{ textDecoration: "none" }}>
+        <Link to={"/voyage"} style={{ textDecoration: "none" }}>
           <Button sx={{color: "white"}}>
-            Past
+            Voyages
+          </Button>
+        </Link>
+        <Link to={"/documents"} style={{ textDecoration: "none" }}>
+          <Button
+            sx={{
+              my: 2,
+              color: "white",
+              display: "block",
+              position: "right",
+            }}
+          >
+            Documents
           </Button>
         </Link>
       </Toolbar>
