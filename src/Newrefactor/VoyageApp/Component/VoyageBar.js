@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
 import Plot from "react-plotly.js";
-import { Button } from "@mui/material";
+import {FormControlLabel, Grid, RadioGroup} from "@mui/material";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { FormControlLabel, RadioGroup } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
-import { bar_x_vars, bar_y_vars } from "../var";
-import { Grid, Paper } from "@mui/material";
+import {bar_x_vars, bar_y_vars} from "../var";
 import * as options_flat from "../options.json";
-import { useWindowSize } from "@react-hook/window-size";
-import { useTheme } from "@mui/material/styles";
+import {useWindowSize} from "@react-hook/window-size";
+import {useTheme} from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { ConstructionOutlined } from "@mui/icons-material";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -46,12 +43,13 @@ export default function Bar(props) {
           : theme.typography.fontWeightMedium,
     };
   }
+
 // chip is used to change the box shape during each tiem we add information
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [width, height] = useWindowSize();
 //   const { search_object, endpoint } = React.useContext(props.context);
-  const {filter_object, dataset} = props;
+  const {filter_object, set_filter_object, dataset} = props.state;
 
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
@@ -78,27 +76,27 @@ export default function Bar(props) {
 
   const handleChange_x = (event, name) => {
     // console.log("🏈", event.target.value)
-  setOption({
-    ...option,
-    [name]: event.target.value,
-  });
-}
+    setOption({
+      ...option,
+      [name]: event.target.value,
+    });
+  }
 
-  const handleChange_chips = (event, name ) => {
+  const handleChange_chips = (event, name) => {
     //   console.log("⚽️", "Chips changed")
     const {
-        target: { value },
-      } = event;
-      
-      setchips(
-        // On autofill we get a stringified value.
-        typeof value === "string" ? value.split(",") : value
-      );
+      target: {value},
+    } = event;
 
-      setOption({
-        ...option,
-        [name]: event.target.value[event.target.value.length - 1],
-      });
+    setchips(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+
+    setOption({
+      ...option,
+      [name]: event.target.value[event.target.value.length - 1],
+    });
   }
 
   let tempstr = ""
@@ -107,53 +105,54 @@ export default function Bar(props) {
     setIsLoading(true);
     setAlert(false)
     // var value = option.value;
-   let yfieldArr = []
-   let currentData ={}
+    let yfieldArr = []
+    let currentData = {}
     const fetchData = async () => {
-      const promises = chips.map( element => {
-    var data = new FormData();
-     yfieldArr.push(element)
-    
-    // for (var property in search_object) {
-    //   search_object[property].forEach((v) => {
-    //     data.append(property, v);
-    //   });
-    // }
-   
-    data.append("hierarchical", "False");
-    data.append("groupby_fields", option.field);
-    data.append("groupby_fields", element);
-    data.append("agg_fn", aggregation);
+      const promises = chips.map(element => {
+        var data = new FormData();
+        yfieldArr.push(element)
 
-    // console.log("option_value🍕", typeof(option.value))
-    // console.log("element🍔",element)
-    // console.log("agg_fn🥤", aggregation)
-    data.append("cachename", "voyage_export");
-    return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
-      method: "POST",
-      body: data,
-      headers: {'Authorization':AUTH_TOKEN}
-    }).then(res => res.json())
-    
-    .then(function (response) {
-        // console.log("🔥data", response)
-        return Object.values(response)[0];
+        // for (var property in search_object) {
+        //   search_object[property].forEach((v) => {
+        //     data.append(property, v);
+        //   });
+        // }
+
+        data.append("hierarchical", "False");
+        data.append("groupby_fields", option.field);
+        data.append("groupby_fields", element);
+        data.append("agg_fn", aggregation);
+        data.append("dataset", dataset);
+        data.append("dataset", dataset);
+        // console.log("option_value🍕", typeof(option.value))
+        // console.log("element🍔",element)
+        // console.log("agg_fn🥤", aggregation)
+        data.append("cachename", "voyage_export");
+        return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby', {
+          method: "POST",
+          body: data,
+          headers: {'Authorization': AUTH_TOKEN}
+        }).then(res => res.json())
+
+          .then(function (response) {
+            // console.log("🔥data", response)
+            return Object.values(response)[0];
+          })
       })
-    })
-  
-    const data = await Promise.all(promises)
-    // setDataFlow([...dataFlow, data[data.length - 1]])
-    // console.log("🐯data is ", data)
-    // console.log("🐷", typeof(data))
-   console.log("😷",chips)
-   console.log(typeof(chips))
-    
-   
-    let arr = []
 
-    data.forEach( (dataElement,index) =>{
-      // console.log("🐔 dataElement is ", dataElement)
-      // console.log("type", typeof(Object.values(dataElement)[0]))
+      const data = await Promise.all(promises)
+      // setDataFlow([...dataFlow, data[data.length - 1]])
+      // console.log("🐯data is ", data)
+      // console.log("🐷", typeof(data))
+      console.log("😷", chips)
+      console.log(typeof (chips))
+
+
+      let arr = []
+
+      data.forEach((dataElement, index) => {
+        // console.log("🐔 dataElement is ", dataElement)
+        // console.log("type", typeof(Object.values(dataElement)[0]))
         arr.push({
           x: Object.keys(dataElement),
           y: Object.values(dataElement),
@@ -161,53 +160,53 @@ export default function Bar(props) {
           name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
           barmode: "group",
         })
-    })
+      })
 
-    tempstr = arr.map(function(elem){
+      tempstr = arr.map(function (elem) {
         return elem.name;
-    }).join("\n");
+      }).join("\n");
 
-    setStr(tempstr)
+      setStr(tempstr)
 
-    if (Object.values(data).indexOf('false') > -1) {
-      // window.alert(`Sorry, this combination can't work:
-      //       ${str}
-      // `);
-      // window.location.reload(true);
-      setAlert(true)
-   }
-
-    // console.log("arr value🎫", arr[0].name)
-      setBarData(
-       arr
-      )
+      if (Object.values(data).indexOf('false') > -1) {
+        // window.alert(`Sorry, this combination can't work:
+        //       ${str}
+        // `);
+        // window.location.reload(true);
+        setAlert(true)
       }
 
-      setIsLoading(false)
-      fetchData().catch(console.error) 
-  }, [ chips, option.field, aggregation, filter_object]);
+      // console.log("arr value🎫", arr[0].name)
+      setBarData(
+        arr
+      )
+    }
+
+    setIsLoading(false)
+    fetchData().catch(console.error)
+  }, [chips, option.field, aggregation, filter_object, dataset]);
 
 
   console.log("str🍌", str)
 
   const alertBar = () => {
-    if(showAlert){
+    if (showAlert) {
       return <Alert severity="error">
-      <AlertTitle>Error</AlertTitle>
-      Sorry, this combination can't work: {str}
-    </Alert>
-    }else{
-        return ""
+        <AlertTitle>Error</AlertTitle>
+        Sorry, this combination can't work: {str}
+      </Alert>
+    } else {
+      return ""
     }
-   }
+  }
 
-  if(isLoading) return;
+  if (isLoading) return;
 
   return (
     <div>
       <div>
-          {/* <Button onClick={()=>console.log("🔥barData🔥:", barData)}>print data</Button> */}
-        <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7 }}>
+        {/* <Button onClick={()=>console.log("🔥barData🔥:", barData)}>print data</Button> */}
+        <Box sx={{maxWidth: width > 500 ? width * 0.9 : width * 0.7}}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">X Field</InputLabel>
             <Select
@@ -228,7 +227,7 @@ export default function Bar(props) {
             </Select>
           </FormControl>
         </Box>
-        <Box sx={{ maxWidth: width > 500 ? width * 0.9 : width * 0.7, my: 2 }}>
+        <Box sx={{maxWidth: width > 500 ? width * 0.9 : width * 0.7, my: 2}}>
           {/* <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Y Field</InputLabel>
             <Select
@@ -263,14 +262,14 @@ export default function Bar(props) {
                 label="Multi-Selector Y-Feild"
                 value={chips}
                 onChange={(event) => {
-                    handleChange_chips(event, "value");
-                  }}
-                input={<OutlinedInput id="select-multiple-chip" label="Multi-Selector Y-Feild" />}
-                
+                  handleChange_chips(event, "value");
+                }}
+                input={<OutlinedInput id="select-multiple-chip" label="Multi-Selector Y-Feild"/>}
+
                 renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                     {selected.map((value) => (
-                      <Chip key={value} label= {options_flat[value].flatlabel} />
+                      <Chip key={value} label={options_flat[value].flatlabel}/>
                     ))}
                   </Box>
                 )}
@@ -282,11 +281,11 @@ export default function Bar(props) {
                     value={option}
                     style={getStyles(option, plot_value, theme)}
                   >
-                      {/* the flatlabel */}
-                     {options_flat[option].flatlabel}
+                    {/* the flatlabel */}
+                    {options_flat[option].flatlabel}
 
-                     {/* merely the label */}
-                     {/* {option} */}
+                    {/* merely the label */}
+                    {/* {option} */}
                   </MenuItem>
                 ))}
               </Select>
@@ -307,10 +306,10 @@ export default function Bar(props) {
             row
           >
             {/* {toTestEmpty()} */}
-            <FormControlLabel value="sum" control={<Radio />} label="Sum" />
+            <FormControlLabel value="sum" control={<Radio/>} label="Sum"/>
             <FormControlLabel
               value="mean"
-              control={<Radio />}
+              control={<Radio/>}
               label="Average"
             />
           </RadioGroup>
@@ -324,26 +323,26 @@ export default function Bar(props) {
             data={barData}
             layout={{
               width: width * 0.8,
-              title: 
-              
-              chips.length !== 0 ?
-              `The ${aggregation} of ${
-                options_flat[option.field].flatlabel
-              } vs <br> ${options_flat[option.value].flatlabel} Bar Graph` :
+              title:
 
-              `The ${aggregation} of ${
-                options_flat[option.field].flatlabel
-              } vs <br> empty y yield Bar Graph`,
+                chips.length !== 0 ?
+                  `The ${aggregation} of ${
+                    options_flat[option.field].flatlabel
+                  } vs <br> ${options_flat[option.value].flatlabel} Bar Graph` :
+
+                  `The ${aggregation} of ${
+                    options_flat[option.field].flatlabel
+                  } vs <br> empty y yield Bar Graph`,
 
               xaxis: {
-                title: { text: `${options_flat[option.field].flatlabel}` },
+                title: {text: `${options_flat[option.field].flatlabel}`},
                 fixedrange: true,
               },
               yaxis: {
                 fixedrange: true,
               },
             }}
-            config={{ responsive: true }}
+            config={{responsive: true}}
           />
         </Grid>
       </div>
