@@ -25,7 +25,7 @@ root.render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>}/>
-            <Route path="voyage" element={<VoyageApp/>}/>
+            <Route path="voyage" element={<VoyagePage/>}/>
             <Route path="voyage/:id" element={<VoyageApp/>}/>
             <Route path="home2" element={<Home2/>}/>
             <Route path="past" element={<PASTApp/>}/>
