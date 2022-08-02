@@ -12,7 +12,8 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
 import SwitchRightIcon from '@mui/icons-material/SwitchRight';
-import ComponentFac from './ComponentFac'
+import ComponentFac from './ComponentFac';
+import FilterSelector from './FilterSelector'
 
 export default function Filter(props) {
 
@@ -69,7 +70,7 @@ export default function Filter(props) {
                             {
                                 Object.keys(variables_tree).map((key) => {
                                     return (
-                                        <Cascading state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat }} />
+                                        <FilterSelector state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat}} />
                                     )
                                 })
                             }
