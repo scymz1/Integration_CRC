@@ -26,6 +26,8 @@ root.render(
             <Route path="voyage/:id" element={<VoyageApp/>}/>
             <Route path="home2" element={<Home2/>}/>
             <Route path="past" element={<PASTApp/>}/>
+            <Route path="past/enslaved" element={<SlavePage/>}/>
+            <Route path="past/enslaver" element={<EnslaverPage/>}/>
             <Route path="/geo/routes" element={<>
               <div><Map/>
               </div>
