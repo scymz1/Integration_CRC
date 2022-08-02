@@ -66,7 +66,8 @@ export default function Bar(props) {
 
   const [aggregation, setAgg] = React.useState("sum");
 
-  const [alert, setAlert] = useState("")
+  const [showAlert, setAlert] = useState(false);
+  const [str, setStr] = useState("")
 
   // console.log("🏀", barData)
 
@@ -99,10 +100,11 @@ export default function Bar(props) {
       });
   }
 
+  let tempstr = ""
 
   useEffect(() => {
     setIsLoading(true);
-    setAlert("")
+    setAlert(false)
     // var value = option.value;
    let yfieldArr = []
    let currentData ={}
@@ -136,11 +138,6 @@ export default function Bar(props) {
         // console.log("🔥data", response)
         return Object.values(response)[0];
       })
-      // .catch((err) => {
-      //   window.alert(`Sorry, this combination can't work: ${err}`);
-      //   window.location.reload(true);
-      // });
-     
     })
   
     const data = await Promise.all(promises)
@@ -165,22 +162,21 @@ export default function Bar(props) {
         })
     })
 
-    var str="";
-
-    str = arr.map(function(elem){
-    return elem.name;
+    tempstr = arr.map(function(elem){
+        return elem.name;
     }).join("\n");
-    console.log("🐲",str);
+
+    setStr(tempstr)
 
     if (Object.values(data).indexOf('false') > -1) {
-      window.alert(`Sorry, this combination can't work:
-            ${str}
-      `);
-      window.location.reload(true);
+      // window.alert(`Sorry, this combination can't work:
+      //       ${str}
+      // `);
+      // window.location.reload(true);
+      setAlert(true)
    }
-    console.log("arr value🎫", arr[0].name)
 
-    let stringError = 
+    // console.log("arr value🎫", arr[0].name)
       setBarData(
        arr
       )
@@ -188,10 +184,21 @@ export default function Bar(props) {
 
       setIsLoading(false)
       fetchData().catch(console.error) 
-  
   }, [ chips, option.field, aggregation, search_object]);
 
 
+  console.log("str🍌", str)
+
+  const alertBar = () => {
+    if(showAlert){
+      return <Alert severity="error">
+      <AlertTitle>Error</AlertTitle>
+      Sorry, this combination can't work: {str}
+    </Alert>
+    }else{
+        return ""
+    }
+   }
 
   if(isLoading) return;
 
@@ -307,6 +314,7 @@ export default function Bar(props) {
             />
           </RadioGroup>
         </FormControl>
+        {alertBar()}
       </div>
 
       <div>
