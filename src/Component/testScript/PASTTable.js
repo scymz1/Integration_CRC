@@ -12,21 +12,12 @@ import { enslaved_default_list } from "../PAST/vars";
 import * as options_flat from "../util/enslaved_options.json";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 
-function CustomPagination() {
-  const apiRef = useGridApiContext();
-  const page = useGridSelector(apiRef, gridPageSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
-  return (
-    <Pagination
-      color="primary"
-      count={pageCount}
-      page={page + 1}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
-  );
-}
 
 export default function PASTTable(props) {
   const {
@@ -51,7 +42,53 @@ export default function PASTTable(props) {
       });
     });
     return result;
-  }, [enslaved_default_list]);
+  }, [enslaved_default_list])
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
+
+  
+  function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+    const handleChange = (event) => {
+      setPagination({...pagination, rowsPerPage:event.target.value});
+    };
+
+    return (
+      <Stack direction="row" spacing={2}>
+        <Item>
+          Rows Per column: &nbsp;&nbsp;
+          <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={pagination.rowsPerPage}
+              label="Age"
+              onChange={handleChange}
+              
+          >
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={15}>15</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={25}>25</MenuItem>
+          </Select>
+        </Item>
+        <Item>
+          <Pagination
+            color="primary"
+            count={pageCount}
+            page={page + 1}
+            onChange={(event, value) => apiRef.current.setPage(value - 1)}
+          />
+        </Item>
+      </Stack>
+    );
+  }
   const [columns, setColumns] = useState(defaultColumns);
 
   return (
@@ -68,7 +105,7 @@ export default function PASTTable(props) {
       // componentsProps={{}}
       pagination
       paginationMode="server"
-      // rowsPerPageOptions={[10, 20, 50]}
+      rowsPerPageOptions={[10, 20, 50]}
       page={pagination.currPage}
       pageSize={pagination.rowsPerPage}
       onPageChange={(newPage) => {
