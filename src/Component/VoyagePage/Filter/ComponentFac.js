@@ -1,7 +1,4 @@
-// import './App.css';
-import axios, { Axios } from 'axios';
 import { Component, useContext } from 'react';
-// import { render } from '@testing-library/react';
 import Auto from './Autocomplete';
 import Slider from "./Slider"
 import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
@@ -19,8 +16,7 @@ import {
   ListItemText,
   Card, CardContent, CardHeader, Box, Paper, Chip, TextField
 } from '@mui/material';
-// import Request from './request';
-// import { getValue } from '@testing-library/user-event/dist/utils';
+
 export const ComponentContext = React.createContext();
 
 // <ComponentFac params={item} index={index} />
