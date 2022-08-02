@@ -20,6 +20,7 @@ import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 
 import ComponentFac from './ComponentFac';
 import Cascading from './Cascading'
+import { InsertEmoticonOutlined } from "@mui/icons-material";
 
 // import {autocomplete_text_fields, obj_autocomplete_text_fields, menu_label} from './var'
 // import { VoyageContext } from "../VoyageApp";
@@ -70,7 +71,7 @@ export default function Filter(props) {
             delete newObject[varName];
         }
         set_search_object(newObject); 
-        setLabels(labels.filter((e)=>e.option!==varName))
+        setLabels((labels) => labels.filter((e) => e.option !== varName));
     };
 
   const color = (() =>{
@@ -175,19 +176,21 @@ export default function Filter(props) {
                 :
                     labels.map((item, index) => {
                     return(
-                      <Grid container key={'grid-' + index} xs={fullScreen?5:12} sx={{mb:"5px",  mr:"10px"}}>
+                      <Grid container key={'container'+item.option} xs={fullScreen?5:12} sx={{mb:"5px",  mr:"10px"}}>
                           <Grid item xs={10}>
-                              <Accordion>
-                                  <AccordionSummary>
-                                      <Typography>{options_flat[item.option].flatlabel}</Typography>
+                                {/* <Typography key={'typo'+item.option} >{options_flat[item.option].flatlabel}</Typography>
+                                <ComponentFac key={'compFac'+item.option} params={item} index={index} context={props.context}/> */}
+                              <Accordion key={'accord'+item.option}>
+                                  <AccordionSummary key={'accordSum'+item.option}>
+                                      <Typography key={'typo'+item.option}>{options_flat[item.option].flatlabel}</Typography>
                                   </AccordionSummary>
-                                  <AccordionDetails>
-                                      <ComponentFac params={item} index={index} context={props.context}/>
+                                  <AccordionDetails key={'accordDetail'+item.option}>
+                                      <ComponentFac key={'compFac'+item.option} params={item} index={index} context={props.context}/>
                                   </AccordionDetails>
                               </Accordion>
                           </Grid>
-                          <Grid item xs={2}>
-                              <IconButton onClick={()=>{handleDelete(item)}}>
+                          <Grid key={'item'+item.option} item xs={2}>
+                              <IconButton key={'icon'+item.option} onClick={()=>{handleDelete(item)}}>
                                   <RemoveCircleOutlineIcon />
                               </IconButton>
                           </Grid>
