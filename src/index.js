@@ -13,7 +13,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import {theme} from "./Theme";
 import SlavePage from "./Component/testScript/SlavePage";
 import EnslaverPage from "./Component/testScript/EnslaverPage";
+
 import VoyagePage from "./Newrefactor/VoyageApp/VoyagePage";
+import DocumentPage from "./Newrefactor/DocumentsApp/DocumentPage";
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -25,6 +27,7 @@ root.render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>}/>
+            {/* <Route path="voyage" element={<VoyageApp/>}/> */}
             <Route path="voyage" element={<VoyagePage/>}/>
             <Route path="voyage/:id" element={<VoyageApp/>}/>
             <Route path="home2" element={<Home2/>}/>
@@ -37,7 +40,8 @@ root.render(
               <div>
                 {/* <SankeyExample width={960} height={500}/> */}
               </div></>}/>
-            <Route path="documents" element={<DocumentsApp/>}/>
+            {/* <Route path="documents" element={<DocumentsApp/>}/> */}
+            <Route path="documents" element={<DocumentPage/>}/>
             <Route path="optionSelector" element={<OptionSelector/>}/>
             <Route path="refactor/voyage" element={<VoyagePage/>}/>
           </Routes>
