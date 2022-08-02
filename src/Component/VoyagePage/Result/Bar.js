@@ -163,8 +163,8 @@ export default function Bar(props) {
     })
 
     tempstr = arr.map(function(elem){
-        return elem.name;
-    }).join("\n");
+        return ' --- ' + elem.name ;
+    }).join("\n\r");
 
     setStr(tempstr)
 
@@ -193,7 +193,8 @@ export default function Bar(props) {
     if(showAlert){
       return <Alert severity="error">
       <AlertTitle>Error</AlertTitle>
-      Sorry, this combination can't work: {str}
+      Sorry, these particular variables don't graph well together: 
+      {str}
     </Alert>
     }else{
         return ""
