@@ -5,6 +5,9 @@ import axios from "axios";
 import PASTTable from "./PASTTable";
 import {enslaved_default_list} from "../PAST/vars";
 import * as options_flat from "../util/enslaved_options.json";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+//import { Typography } from '@mui/material';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -19,6 +22,11 @@ export default function SlavePage(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({currPage: 0, rowsPerPage:20})
   const [dataList, setDataList] = useState([]);
+  const [rowPerPage, setrowPerPage] = useState(10);
+
+  const handleChange = (event) => {
+    setPagination({...pagination, rowsPerPage:event.target.value});
+  };
 
   useEffect(()=>{
     console.log("fetching...", pagination)
@@ -41,6 +49,19 @@ export default function SlavePage(props) {
     <div style={{height: "100%"}}>
       <ResponsiveAppBar state={{pageType: "slave", search_object, set_search_object}}/>
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
+      Rows Per column: &nbsp;&nbsp;
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={pagination.rowsPerPage}
+          label="Age"
+          onChange={handleChange}
+      >
+        <MenuItem value={10}>10</MenuItem>
+        <MenuItem value={15}>15</MenuItem>
+        <MenuItem value={20}>20</MenuItem>
+        <MenuItem value={25}>25</MenuItem>
+      </Select>
       <PASTTable state={{dataList, totalRows, pagination, setPagination, isLoading, set_search_object}}/>
     </div>
   )
