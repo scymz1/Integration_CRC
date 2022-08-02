@@ -23,11 +23,11 @@ export default function Navbar(props) {
         <ToggleButtonGroup
           value={dataset}
           exclusive
-          onChange={(event) => {setDataset(event.target.value)}}
+          onChange={(event) => {console.log(event.target.value); setDataset(event.target.value)}}
           size={"small"}
         >
-          <ToggleButton sx={{background: "#42a5f5"}} value={0} >Trans-Atlantic</ToggleButton>
-          <ToggleButton sx={{background: "#ab47bc"}} value={1} >Intra-American</ToggleButton>
+          <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
+          <ToggleButton sx={{background: "#ab47bc"}} value={"1"} >Intra-American</ToggleButton>
         </ToggleButtonGroup>
 
         <Link to={"/refactor/voyage"} style={{ textDecoration: "none" }}>
@@ -35,16 +35,6 @@ export default function Navbar(props) {
             Past
           </Button>
         </Link>
-        <div>
-          <Drawer
-            elevation={10}
-            anchor={"left"}
-            open={true}
-            onClose={()=>{}}
-          >
-            asdsa
-          </Drawer>
-        </div>
       </Toolbar>
     </AppBar>
   )
