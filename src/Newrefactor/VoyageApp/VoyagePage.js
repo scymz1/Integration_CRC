@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Box, Tab, Tabs} from "@mui/material";
 import VoyageScatter from "./Component/VoyageScatter";
+import Navbar from "../CommonComponent/NavBar";
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -18,12 +19,13 @@ function TabPanel(props) {
 export default function VoyagePage() {
   const [filter_object, set_filter_object] = useState({});
   const [dataset, setDataset] = useState(0);
-  const state = {filter_object, set_filter_object, dataset};
+  const state = {filter_object, set_filter_object, dataset, setDataset, pageType: "voyage"};
 
   const [value, setValue] = useState(0);
 
   return (
     <div>
+      <Navbar state={state}/>
       <Box sx={{ flexGrow: 1, display: 'flex', height: "100%" }}>
         <Tabs
           orientation="vertical"
