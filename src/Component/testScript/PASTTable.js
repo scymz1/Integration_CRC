@@ -1,9 +1,26 @@
-import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector} from "@mui/x-data-grid";
 import {LinearProgress} from "@mui/material";
 import {useMemo, useState} from "react";
 import {enslaved_default_list} from "../PAST/vars";
 import * as options_flat from "../util/enslaved_options.json";
 import Cell from "./Cell";
+import Pagination from "@mui/material/Pagination";
+
+
+function CustomPagination() {
+  const apiRef = useGridApiContext();
+  const page = useGridSelector(apiRef, gridPageSelector);
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <Pagination
+      color="primary"
+      count={pageCount}
+      page={page + 1}
+      onChange={(event, value) => apiRef.current.setPage(value - 1)}
+    />
+  );
+}
 
 export default function PASTTable(props) {
   const {dataList,totalRows, pagination, setPagination, isLoading, set_search_object} = props.state
@@ -26,11 +43,12 @@ export default function PASTTable(props) {
       components={{
         LoadingOverlay: LinearProgress,
         Toolbar: GridToolbar,
+        Pagination: CustomPagination
       }}
       // componentsProps={{}}
       pagination
       paginationMode="server"
-      rowsPerPageOptions={[10, 20, 50]}
+      // rowsPerPageOptions={[10, 20, 50]}
       page={pagination.currPage}
       pageSize={pagination.rowsPerPage}
       onPageChange={(newPage) => {
