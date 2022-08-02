@@ -19,7 +19,7 @@ import {
     useWindowSize,
   } from '@react-hook/window-size'
 
-  import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 
@@ -111,7 +111,8 @@ function Pie (props) {
         if(showAlert){
           return <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
-          Sorry, these particular variables don't graph well together:
+          <AlertTitle>Sorry, these particular variables don't graph well together:</AlertTitle> 
+          <AlertTitle>The {aggregation} of {options_flat[option.field].flatlabel}, {options_flat[option.value].flatlabel} Pie Graph</AlertTitle> 
         </Alert>
         }else{
             return ""

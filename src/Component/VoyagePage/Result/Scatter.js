@@ -121,10 +121,11 @@ function Scatter (props) {
 
     const alertBar = () => {
         if(showAlert){
-          return <Alert severity="error">
-          <AlertTitle>Error</AlertTitle>
-          Sorry, these particular variables don't graph well together: {str}
-        </Alert>
+            return <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>Sorry, these particular variables don't graph well together:</AlertTitle> 
+            <AlertTitle>The {aggregation} of {options_flat[option.field].flatlabel}, {options_flat[option.value].flatlabel} Pie Graph</AlertTitle> 
+          </Alert>
         }else{
             return ""
         }
