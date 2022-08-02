@@ -11,6 +11,8 @@ import DocumentsApp from "./Component/Documents/DocumentsApp";
 import Map from './Component/VoyagePage/mapping/Map2';
 import { ThemeProvider } from '@mui/material/styles';
 import {theme} from "./Theme";
+import SlavePage from "./Component/testScript/SlavePage";
+import EnslaverPage from "./Component/testScript/EnslaverPage";
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +28,8 @@ root.render(
             <Route path="voyage/:id" element={<VoyageApp/>}/>
             <Route path="home2" element={<Home2/>}/>
             <Route path="past" element={<PASTApp/>}/>
+            <Route path="past/enslaved" element={<SlavePage/>}/>
+            <Route path="past/enslaver" element={<EnslaverPage/>}/>
             <Route path="/geo/routes" element={<>
               <div><Map/>
               </div>
