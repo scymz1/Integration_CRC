@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import {Box, Tab, Tabs} from "@mui/material";
 import VoyageScatter from "./Component/VoyageScatter";
+import VoyageBar from "./Component/VoyageBar";
+import VoyagePie from "./Component/VoyagePie";
 import Navbar from "../CommonComponent/NavBar";
 
 function TabPanel(props) {
@@ -45,10 +47,10 @@ export default function VoyagePage() {
           <VoyageScatter state={state}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Bar
+          <VoyageBar state={state}/>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Pie
+          <VoyagePie state={state}/>    
         </TabPanel>
         <TabPanel value={value} index={3}>
          Table
