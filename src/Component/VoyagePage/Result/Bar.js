@@ -19,6 +19,8 @@ import { useTheme } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { ConstructionOutlined } from "@mui/icons-material";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -64,6 +66,9 @@ export default function Bar(props) {
 
   const [aggregation, setAgg] = React.useState("sum");
 
+  const [showAlert, setAlert] = useState(false);
+  const [str, setStr] = useState("")
+
   // console.log("🏀", barData)
 
   const handleChange_agg = (event) => {
@@ -95,11 +100,14 @@ export default function Bar(props) {
       });
   }
 
+  let tempstr = ""
 
   useEffect(() => {
     setIsLoading(true);
+    setAlert(false)
     // var value = option.value;
    let yfieldArr = []
+   let currentData ={}
     const fetchData = async () => {
       const promises = chips.map( element => {
     var data = new FormData();
@@ -116,17 +124,18 @@ export default function Bar(props) {
     data.append("groupby_fields", element);
     data.append("agg_fn", aggregation);
 
-    console.log("option_value🍕", typeof(option.value))
-    console.log("element🍔",element)
-    console.log("agg_fn🥤", aggregation)
+    // console.log("option_value🍕", typeof(option.value))
+    // console.log("element🍔",element)
+    // console.log("agg_fn🥤", aggregation)
     data.append("cachename", "voyage_export");
     return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
       method: "POST",
       body: data,
       headers: {'Authorization':AUTH_TOKEN}
     }).then(res => res.json())
+    
     .then(function (response) {
-        // console.log("data", response)
+        // console.log("🔥data", response)
         return Object.values(response)[0];
       })
     })
@@ -134,15 +143,16 @@ export default function Bar(props) {
     const data = await Promise.all(promises)
     // setDataFlow([...dataFlow, data[data.length - 1]])
     // console.log("🐯data is ", data)
-    // console.log("🐒dataFlow is ", dataFlow)
-
+    // console.log("🐷", typeof(data))
+   console.log("😷",chips)
+   console.log(typeof(chips))
+    
+   
     let arr = []
+
     data.forEach( (dataElement,index) =>{
       // console.log("🐔 dataElement is ", dataElement)
       // console.log("type", typeof(Object.values(dataElement)[0]))
-      if(dataElement === 'false'){
-        alert("undefined combination")
-      }
         arr.push({
           x: Object.keys(dataElement),
           y: Object.values(dataElement),
@@ -152,6 +162,21 @@ export default function Bar(props) {
         })
     })
 
+    tempstr = arr.map(function(elem){
+        return elem.name;
+    }).join("\n");
+
+    setStr(tempstr)
+
+    if (Object.values(data).indexOf('false') > -1) {
+      // window.alert(`Sorry, this combination can't work:
+      //       ${str}
+      // `);
+      // window.location.reload(true);
+      setAlert(true)
+   }
+
+    // console.log("arr value🎫", arr[0].name)
       setBarData(
        arr
       )
@@ -159,8 +184,21 @@ export default function Bar(props) {
 
       setIsLoading(false)
       fetchData().catch(console.error) 
-  
   }, [ chips, option.field, aggregation, search_object]);
+
+
+  console.log("str🍌", str)
+
+  const alertBar = () => {
+    if(showAlert){
+      return <Alert severity="error">
+      <AlertTitle>Error</AlertTitle>
+      Sorry, this combination can't work: {str}
+    </Alert>
+    }else{
+        return ""
+    }
+   }
 
   if(isLoading) return;
 
@@ -213,7 +251,7 @@ export default function Bar(props) {
 
           {/* Multi-Selector */}
           <div>
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl fullWidth>
               <InputLabel id="demo-multiple-chip-label">
                 Multi-Selector Y-Feild
               </InputLabel>
@@ -221,11 +259,12 @@ export default function Bar(props) {
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
+                label="Multi-Selector Y-Feild"
                 value={chips}
                 onChange={(event) => {
                     handleChange_chips(event, "value");
                   }}
-                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                input={<OutlinedInput id="select-multiple-chip" label="Multi-Selector Y-Feild" />}
                 
                 renderValue={(selected) => (
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -275,6 +314,7 @@ export default function Bar(props) {
             />
           </RadioGroup>
         </FormControl>
+        {alertBar()}
       </div>
 
       <div>

@@ -15,6 +15,7 @@ import Grow from '@mui/material/Grow';
 import Gallery from "./Gallery.js"
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import TocIcon from '@mui/icons-material/Toc';
+import { useWindowSize } from "@react-hook/window-size";
 
 function TabPanel(props) {
   const {children, value, index} = props;
@@ -36,6 +37,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 export default function PAST() {
+  const [width, height] = useWindowSize();
   const [value, setValue] = useState(0);
   const [dialogopen, setdialogOpen] = useState(false);
   const { windowRef, typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet, data, setQueryData, setChipData, chipData,
@@ -80,13 +82,22 @@ export default function PAST() {
 
       <Filter context={PASTContext}/>
       {drawerOpen ? <Toolbar />: null}
-      <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{ ml: 3, mt:3, mb:5, mr: 1 }}>
-        Table
-      </Button>
-      <a> </a>
-      <Button variant="contained" endIcon={<DashboardCustomizeIcon />} size="large" color="grey" onClick={() => handleChange("story")} sx={{ mt:3, mb:5}}>
-      Stories
-      </Button>
+      <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+        <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
+          <Button variant="contained" startIcon={<TocIcon/>} size="large" color="grey" onClick={() => handleChange("table")} sx={{mt:3, mb:3, mr: 1 }}>
+            Table
+          </Button>
+          <Button variant="contained" endIcon={<DashboardCustomizeIcon />} size="large" color="grey" onClick={() => handleChange("story")} sx={{ mt:3, mb:3}}>
+          Stories
+          </Button>
+        </Grid>
+      </Grid>
 
       {/*for fading/growing effect, you have to wrap all things in an div*/}
       {!checked && 
@@ -118,6 +129,7 @@ export default function PAST() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
+        sx={{width: "100%", height: "100%"}}
         ref={windowRef}
       >
         <AppBar sx={{ position: 'relative', background: 'white'}}>
