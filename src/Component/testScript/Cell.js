@@ -1,7 +1,22 @@
-import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+
+export default function Cell(props) {
+  const { row, field } = props;
+  switch (field) {
+    case "gender":
+      return genderCell(row[field]);
+    case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
+      return aliasCell(row);
+    case "transactions__transaction__voyage__id":
+      return voyageIdCell(row[field]);
+    case typeof row[field] === "object":
+      return objectCell(row[field]);
+    default:
+      return row[field];
+  }
+}
 
 // check if the string is numeric
 function isNumeric(n) {
@@ -38,37 +53,56 @@ const createPopover = (row) => {
   return output;
 };
 
-export default function Cell(props) {
-  const { row, field } = props;
-  switch (field) {
-    case "id":
-      return <Button onClick={() => alert(row.id)}>{row.id}</Button>;
-    case "gender":
-      if (isNumeric(row.gender)) {
-        return <div>{row.gender === 1 ? "Male" : "Female"}</div>;
-      }
-      return row.gender;
-    case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-      const popover = createPopover(row);
-      return(
-      <Stack direction="row" spacing={1}>
-        {Object.keys(popover).map((name, key) => (
-          <Tooltip
-            key={"tooltip-" + key}
-            arrow
-            title={popover[name]["roles"].join(", ")}
-            placement="top"
-          >
-            <Chip
-              label={name}
-              // onClick={(e) =>
-              //   handleSankeyOpen(e, [popover[name]["id"]], "enslavers")
-              // }
-            />
-          </Tooltip>
-        ))}
-      </Stack>)
-    default:
-      return row[field];
+// gender cell
+function genderCell(gender) {
+  if (isNumeric(gender)) {
+    return gender === 1 ? "Male" : "Female";
   }
+  return gender;
+}
+
+// alias cell
+function aliasCell(row) {
+  const popover = createPopover(row);
+  return (
+    <Stack direction="row" spacing={1}>
+      {Object.keys(popover).map((name, key) => (
+        <Tooltip
+          key={"tooltip-" + key}
+          arrow
+          title={popover[name]["roles"].join(", ")}
+          placement="top"
+        >
+          <Chip
+            label={name}
+            // onClick={(e) =>
+            //   handleSankeyOpen(e, [popover[name]["id"]], "enslavers")
+            // }
+          />
+        </Tooltip>
+      ))}
+    </Stack>
+  );
+}
+
+// voyage id cell
+function voyageIdCell(ids) {
+  return (
+    <div style={{ color: "blue" }}>
+      <u>{[...new Set(ids)].filter((n) => n != null).join(", ")}</u>
+    </div>
+  );
+}
+
+// object cell
+function objectCell(obj) {
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: [...new Set([].concat.apply([], obj))]
+          .join("<br>")
+          .replaceAll("</p>,<p>", "</p><p>"),
+      }}
+    />
+  );
 }

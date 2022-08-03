@@ -64,7 +64,7 @@ export default function PASTTable(props) {
 
     return (
       <Stack direction="row" spacing={2}>
-        <Item>
+        <div sx={{ border: 0 }}>
           Rows Per column: &nbsp;&nbsp;
           <Select
             labelId="demo-simple-select-label"
@@ -72,21 +72,22 @@ export default function PASTTable(props) {
             value={pagination.rowsPerPage}
             label="Age"
             onChange={handleChange}
+            style={{ height: 30 }}
           >
             <MenuItem value={10}>10</MenuItem>
             <MenuItem value={15}>15</MenuItem>
             <MenuItem value={20}>20</MenuItem>
             <MenuItem value={25}>25</MenuItem>
           </Select>
-        </Item>
-        <Item>
+        </div>
+        <div>
           <Pagination
             color="primary"
             count={pageCount}
             page={page + 1}
             onChange={(event, value) => apiRef.current.setPage(value - 1)}
           />
-        </Item>
+        </div>
       </Stack>
     );
   }
