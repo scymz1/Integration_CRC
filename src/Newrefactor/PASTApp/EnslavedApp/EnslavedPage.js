@@ -139,11 +139,11 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{ height: "100%" }}>
-      <NavBar state={{ pageType: "slave", dataset, setDataset }} />
       <ColSelector state={{ cols, setCols, variables_tree, options_flat }} />
-      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
+      <NavBar state={{ pageType: "enslaved", dataset, setDataset }} />
       <Table
         state={{
+          pageType: "enslaved",
           dataList,
           pagination,
           setPagination,
