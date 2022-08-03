@@ -50,14 +50,14 @@ function Cascading(props) {
                             {options_flat[key].flatlabel}
                         </MenuItem>
                         : containsOnly(nodes[key])
-                            ? renderTree(nodes[key], key)
+                            ? renderTree(nodes[key])
                             : <NestedMenuItem
                                 key={key}
                                 label={options_flat[key].flatlabel}
                                 parentMenuOpen={open}
                                 onClick={handleClose}
                             >
-                                {renderTree(nodes[key], key)}
+                                {renderTree(nodes[key])}
                             </NestedMenuItem>
                     : null
             )
@@ -84,7 +84,8 @@ function Cascading(props) {
                         {renderTree(variables_tree[key])}
                     </Menu>
                 </TreeView>
-                : <Button
+                : 
+                <Button
                     variant="text"
                     onClick={() => handleOptionClick(key)}
                     style={{ maxWidth: '280px', maxHeight: '30px', color: "#fff" }}

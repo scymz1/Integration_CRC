@@ -15,7 +15,7 @@ const Input = styled(MuiInput)`
 export default function GetSlider(props) {
 
 
-    const {filter_obj, set_filter_obj, key, pageType} = props.state;
+    const {key, filter_obj, set_filter_obj, options_flat, pageType} = props.state;
 
     const [range, setRange] = React.useState([0, 0])
     const [value, setValue] = React.useState([range[0] / 2, range[1] / 2])
@@ -52,10 +52,10 @@ export default function GetSlider(props) {
 
 
     function handleCommittedChange(event, newValue) {
-        setPage(0)
+        // setPage(0)
         set_filter_obj({
             ...filter_obj,
-            [varName]: [value[0], value[1]]
+            [key]: [value[0], value[1]]
         });
         setValue(newValue);
     }
@@ -96,7 +96,7 @@ export default function GetSlider(props) {
 
         set_filter_obj({                     // <---------- UPDATE FILTER OBJECT
             ...filter_obj,
-            [varName]: [value[0], value[1]]
+            [key]: [value[0], value[1]]
         });
     });
 
@@ -126,7 +126,7 @@ export default function GetSlider(props) {
 
                             set_filter_obj({
                                 ...filter_obj,
-                                [varName]: [temp, value[1]]
+                                [key]: [temp, value[1]]
                             })
                         }
                     }}
@@ -158,10 +158,10 @@ export default function GetSlider(props) {
                                 temp = value[0] + 1 < range[1] ? value[0] + 1 : range[1]
                                 setValue([value[0], value[0] + 1 < range[1] ? value[0] + 1 : range[1]]);
                             }
-                            setPage(0)
+                            // setPage(0)
                             set_filter_obj({
                                 ...filter_obj,
-                                [varName]: [value[0], temp]
+                                [key]: [value[0], temp]
                             })
                         }
                     }}
