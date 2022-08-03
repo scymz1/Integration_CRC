@@ -9,9 +9,8 @@ import {
 } from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 //import { voyage_default_list } from "../../Util/tableVars";
-import ColSelector from "../../CommonComponent/ColumnSelector";
-import { enslaved_default_list, enslaved_var_list as variables_tree } from "./var";
-import * as options_flat from "./options.json";
+import ColSelector from '../../CommonComponent/ColumnSelector'
+import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -29,6 +28,57 @@ export default function EnslavedPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  // const {variables_tree, options_flat, dataset, filter_object} = props.state;
+  const [cols, setCols] = useState(enslaved_default_list);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
+  const lengths = useMemo(()=>{
+    var temp={};
+    dataList.forEach((row)=>{
+      for (const [key, value] of Object.entries(row)) {
+        switch(key){
+          case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
+            var curlength=value?value.length*200:200;
+            temp[key]=temp[key]?Math.max(temp[key], curlength):curlength;
+            break;
+          case "gender":
+            temp[key]=80;
+          default:
+            var curlength=0
+            //console.log("abdc", key, typeof(value))
+            if(typeof(value)==="number"){
+              curlength=value.toString().length*20;
+            }
+            else if(typeof(value)==="string"){
+              curlength=value.length*10;
+            }
+            // console.log("abdc", key, curlength, typeof(temp[key])!=="undefined", temp[key])
+            temp[key]=temp[key]? Math.max(temp[key], curlength):curlength;
+            break;
+        };
+      }
+    })
+    cols.forEach((column) => {console.log(column, temp[column])})
+    //console.log("temp", temp);
+    return temp;
+  }, [dataList]);
+  const defaultColumns = useMemo(() => {
+    const result = [];
+    cols.forEach((column) => {
+      result.push({
+        field: column,
+        headerName: options_flat[column].flatlabel,
+        renderCell: Cell,
+        //minWidth: 160,
+        //flex: 1,
+        //flex: lengths[column],
+        minWidth: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length*8.8, //options_flat[column].flatlabel.length*8.8, 100),
+        maxWidth: 1000,
+      });
+    });
+    return result;
+  }, [cols, lengths]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -67,7 +117,10 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{height: "100%"}}>
-      <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
+      {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
+      <NavBar state={state}/>
+      <Filter state={state2}/>
+      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
         state={{
           pageType: "enslaved",
