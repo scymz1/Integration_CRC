@@ -12,6 +12,8 @@ import { enslaved_default_list } from "../PAST/vars";
 import * as options_flat from "../util/enslaved_options.json";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 function CustomPagination() {
   const apiRef = useGridApiContext();
@@ -46,8 +48,10 @@ export default function PASTTable(props) {
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        flex: options_flat[column].flatlabel.length * 6,
+        //minWidth: 160,
+        //flex: 1,
         minWidth: options_flat[column].flatlabel.length * 6 + 100,
+        maxWidth:300,
       });
     });
     return result;
@@ -55,32 +59,35 @@ export default function PASTTable(props) {
   const [columns, setColumns] = useState(defaultColumns);
 
   return (
-    <DataGrid
-      columns={columns}
-      rows={dataList}
-      rowCount={totalRows}
-      loading={isLoading}
-      components={{
-        LoadingOverlay: LinearProgress,
-        Toolbar: GridToolbar,
-        Pagination: CustomPagination,
-      }}
-      // componentsProps={{}}
-      pagination
-      paginationMode="server"
-      // rowsPerPageOptions={[10, 20, 50]}
-      page={pagination.currPage}
-      pageSize={pagination.rowsPerPage}
-      onPageChange={(newPage) => {
-        setPagination({ ...pagination, currPage: newPage });
-      }}
-      onPageSizeChange={(newPageSize) => {
-        setPagination({ ...pagination, rowsPerPage: newPageSize });
-      }}
-      sortingMode="server" //sortModel={sortModel}
-      onSortModelChange={(newSortModel) => {
-        setSortModel(newSortModel);
-      }}
-    />
+    <div style={{ width: "100%" }}>
+      <DataGrid
+        autoHeight={true}
+        columns={columns}
+        rows={dataList}
+        rowCount={totalRows}
+        loading={isLoading}
+        components={{
+          LoadingOverlay: LinearProgress,
+          Toolbar: GridToolbar,
+          Pagination: CustomPagination,
+        }}
+        // componentsProps={{}}
+        pagination
+        paginationMode="server"
+        // rowsPerPageOptions={[10, 20, 50]}
+        page={pagination.currPage}
+        pageSize={pagination.rowsPerPage}
+        onPageChange={(newPage) => {
+          setPagination({ ...pagination, currPage: newPage });
+        }}
+        onPageSizeChange={(newPageSize) => {
+          setPagination({ ...pagination, rowsPerPage: newPageSize });
+        }}
+        sortingMode="server" //sortModel={sortModel}
+        onSortModelChange={(newSortModel) => {
+          setSortModel(newSortModel);
+        }}
+      />
+    </div>
   );
 }
