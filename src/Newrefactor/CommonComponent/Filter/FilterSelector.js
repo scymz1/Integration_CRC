@@ -50,14 +50,14 @@ function Cascading(props) {
                             {options_flat[key].flatlabel}
                         </MenuItem>
                         : containsOnly(nodes[key])
-                            ? renderTree(nodes[key], key)
+                            ? renderTree(nodes[key])
                             : <NestedMenuItem
                                 key={key}
                                 label={options_flat[key].flatlabel}
                                 parentMenuOpen={open}
                                 onClick={handleClose}
                             >
-                                {renderTree(nodes[key], key)}
+                                {renderTree(nodes[key])}
                             </NestedMenuItem>
                     : null
             )
