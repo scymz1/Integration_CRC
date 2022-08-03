@@ -35,10 +35,21 @@ export default function Navbar(props) {
           <ToggleButton sx={{background: "#42a5f5"}} value={"0"} >Trans-Atlantic</ToggleButton>
           <ToggleButton sx={{background: "#ab47bc"}} value={"1"} >Intra-American</ToggleButton>
         </ToggleButtonGroup>
-
         <Link to={"/voyage"} style={{ textDecoration: "none" }}>
           <Button sx={{color: "white"}}>
             Voyages
+          </Button>
+        </Link>
+        <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
+          <Button
+            sx={{
+              my: 2,
+              color: "white",
+              display: "block",
+              position: "right",
+            }}
+          >
+            PAST
           </Button>
         </Link>
         <Link to={"/documents"} style={{ textDecoration: "none" }}>

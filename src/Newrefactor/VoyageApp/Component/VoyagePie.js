@@ -31,7 +31,7 @@ function Pie(props) {
   // const {
   //     search_object, endpoint
   // } = React.useContext(props.context)
-  const {filter_object, set_filter_object, dataset} = props.state;
+  const {filter_object, dataset} = props.state;
   const [plot_field, setarrx] = useState([])
   const [plot_value, setarry] = useState([])
 
@@ -67,15 +67,17 @@ function Pie(props) {
     data.append('hierarchical', 'False');
     data.append("dataset", dataset);
     data.append("dataset", dataset);
-    // for(var property in search_object) {
-    //     //console.log("p",property)
-    //     //console.log('so', search_object[property])
-    //     // eslint-disable-next-line no-loop-func
-    //     search_object[property].forEach((v)=>{
-    //         data.append(property, v)
-    //         //console.log("v", v)
-    //     })
-    // }
+    for(var property in filter_object) {
+        //console.log("p",property)
+        //console.log('so', search_object[property])
+        // eslint-disable-next-line no-loop-func
+        filter_object[property].forEach((v)=>{
+          if(v.length != 0){
+            data.append(property, v)
+          }
+            //console.log("v", v)
+        })
+    }
 
 
     data.append('groupby_fields', option.field)
