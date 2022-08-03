@@ -3,13 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
-import {
-  enslaved_var_list as variables_tree,
-  enslaved_default_list,
-} from "./var";
-import Cell from "../../CommonComponent/Table/Cell";
-//import { voyage_default_list } from "../../Util/tableVars";
-import ColSelector from "../../CommonComponent/ColumnSelector";
 import { enslaved_default_list, enslaved_var_list as variables_tree } from "./var";
 import * as options_flat from "./options.json";
 
@@ -29,6 +22,7 @@ export default function EnslavedPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  const [selectedData, setSelectedData] = useState([]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
