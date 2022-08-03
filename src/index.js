@@ -15,6 +15,7 @@ import VoyagePage from "./Newrefactor/VoyageApp/VoyagePage";
 import DocumentPage from "./Newrefactor/DocumentsApp/DocumentPage";
 import EnslavedPage from "./Newrefactor/PASTApp/EnslavedApp/EnslavedPage";
 import EnslaverPage from "./Newrefactor/PASTApp/EnslaverApp/EnslaverPage";
+import HomePage from "./Newrefactor/HomeApp/HomePage"
 
 const queryClient = new QueryClient()
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -25,7 +26,7 @@ root.render(
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<HomePage/>}/>
             {/* <Route path="voyage" element={<VoyageApp/>}/> */}
             {/* <Route path="voyage" element={<VoyagePage/>}/> */}
             <Route path="voyage/:id" element={<VoyageApp/>}/>

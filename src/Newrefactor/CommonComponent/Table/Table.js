@@ -30,6 +30,7 @@ export default function Table(props) {
     setSortModel,
     isLoading,
     set_filter_object,
+    checkbox, //queryData, setSelectedData,
     default_list,
     variables_tree,
     options_flat,
@@ -149,6 +150,7 @@ export default function Table(props) {
           Toolbar: CustomToolbar,
           Pagination: CustomPagination,
         }}
+        checkboxSelection={checkbox}
         pagination
         paginationMode="server"
         // rowsPerPageOptions={[10, 20, 50]}
