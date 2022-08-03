@@ -4,18 +4,23 @@ import {
   gridPageCountSelector,
   gridPageSelector,
   useGridApiContext,
-  useGridSelector,
+  useGridSelector, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarExport,
 } from "@mui/x-data-grid";
-import { LinearProgress } from "@mui/material";
+import {Button, LinearProgress} from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
+import {Link} from "react-router-dom";
+import * as React from "react";
+import TableChartIcon from '@mui/icons-material/TableChart';
+import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 
 export default function Table(props) {
   const {
+    pageType,
     enableSelect,
     dataList,
     pagination,
@@ -66,6 +71,27 @@ export default function Table(props) {
     );
   }
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <Button variant="contained" startIcon={<DashboardCustomizeIcon />} onClick={()=>{}}>
+          Gallary
+        </Button>
+        <GridToolbarColumnsButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+        {pageType === "enslaver"?
+          <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon/>}>Enslaved</Button>
+          </Link>:
+          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon/>}>Enslaver</Button>
+          </Link>
+        }
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <div style={{ width: "100%" }}>
       <DataGrid
@@ -76,7 +102,7 @@ export default function Table(props) {
         loading={isLoading}
         components={{
           LoadingOverlay: LinearProgress,
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar,
           Pagination: CustomPagination,
         }}
         // componentsProps={{}}
