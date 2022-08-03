@@ -64,7 +64,11 @@ export default function Filter(props) {
     return (
         <div>
             {drawerOpen ?
-                <AppBar position="fixed" color={color} elevation={0} style={{ zIndex: 3, marginTop: "64px" }}>
+                <AppBar position="fixed" 
+                    // color={color} 
+                    elevation={0} 
+                    style={{ zIndex: 3, marginTop: "64px" }}
+                >
                     <Toolbar>
                         <Grid container direction="row" spacing={1}>
                             {
@@ -103,7 +107,10 @@ export default function Filter(props) {
                     </Grid>
                     {
                         pageType == 'voyage' ?
-                            <Button variant="contained" color={color} onClick={OpenBoundingBoxFilter}>
+                            <Button variant="contained" 
+                                    // color={color} 
+                                    // onClick={OpenBoundingBoxFilter}
+                            >
                                 <Typography color="white">Add Visual Filter</Typography>
                             </Button> : null
                     }

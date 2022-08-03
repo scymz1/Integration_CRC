@@ -64,7 +64,7 @@ export default function Auto(props) {
                     ...filter_obj,
                     [key]: newValue
                 }))
-                setPage(0)
+                // setPage(0)
             }}
 
             renderInput={(params) => {

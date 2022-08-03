@@ -6,6 +6,8 @@ import VoyagePie from "./Component/VoyagePie";
 import Navbar from "../CommonComponent/NavBar";
 import {useWindowSize} from "@react-hook/window-size";
 
+import Filter from "../CommonComponent/Filter/Filter"
+
 function TabPanel(props) {
   const { children, value, index } = props;
   const [width, height] = useWindowSize()
@@ -27,6 +29,7 @@ export default function VoyagePage() {
   return (
     <div>
       <Navbar state={state}/>
+      <Filter state={state}/>
       <Box sx={{ flexGrow: 1, display: 'flex', height: "100%" }}>
         <Tabs
           orientation="vertical"
