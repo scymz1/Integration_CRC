@@ -83,7 +83,9 @@ export default function EnslaverPage(props) {
           filter_object,
           set_filter_object,
           isLoading,
-          defaultColumns,
+          default_list: enslaver_default_list,
+          var_list: enslaver_var_list,
+          options_flat,
         }}
       />
     </div>

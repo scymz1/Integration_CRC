@@ -4,11 +4,12 @@ import Stack from "@mui/material/Stack";
 
 export default function Cell(props) {
   const { row, field } = props;
+
   switch (field) {
     case "gender":
       return genderCell(row[field]);
     case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-      return aliasCell(row);
+      return aliasCell(row, props);
     case "transactions__transaction__voyage__id":
       return voyageIdCell(row[field]);
     case typeof row[field] === "object":
@@ -22,6 +23,17 @@ export default function Cell(props) {
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
+// popover event & open sankey modal in past table
+const handleSankeyOpen = (e, id, variety, props) => {
+  props.setSelectedData({
+    ...props.selectedData,
+    [variety]: id,
+    type: variety,
+  });
+  props.handleDialogOpen();
+  e.stopPropagation();
+};
 
 // create popover for enslaver alias in enslaved table
 const createPopover = (row) => {
@@ -62,7 +74,7 @@ function genderCell(gender) {
 }
 
 // alias cell
-function aliasCell(row) {
+function aliasCell(row, props) {
   const popover = createPopover(row);
   return (
     <Stack direction="row" spacing={1}>
@@ -75,9 +87,9 @@ function aliasCell(row) {
         >
           <Chip
             label={name}
-            // onClick={(e) =>
-            //   handleSankeyOpen(e, [popover[name]["id"]], "enslavers")
-            // }
+            onClick={(e) =>
+              handleSankeyOpen(e, [popover[name]["id"]], "enslavers", props)
+            }
           />
         </Tooltip>
       ))}
