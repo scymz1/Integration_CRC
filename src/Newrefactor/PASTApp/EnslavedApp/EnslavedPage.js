@@ -9,7 +9,7 @@ import {
   enslaved_default_list,
 } from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
-import Filter from "../../CommonComponent/Filter/Filter"
+import Filter from "../../CommonComponent/Filter/Filter";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -17,7 +17,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 const endpoint = "past/enslaved/";
 
 export default function EnslavedPage(props) {
-  const [dataset, setDataset] = useState(0);
+  const [dataset, setDataset] = useState(1);
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -31,8 +31,24 @@ export default function EnslavedPage(props) {
   // const {variables_tree, options_flat, dataset, filter_object} = props.state;
   const [cols, setCols] = useState(enslaved_default_list);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
-  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
+  const state = {
+    dataset,
+    setDataset,
+    drawerOpen,
+    setDrawerOpen,
+    pageType: "enslaved",
+  };
+  const state2 = {
+    filter_obj: filter_object,
+    set_filter_obj: set_filter_object,
+    dataset,
+    setDataset,
+    drawerOpen,
+    setDrawerOpen,
+    pageType: "enslaved",
+    options_flat,
+    variables_tree,
+  };
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -45,12 +61,15 @@ export default function EnslavedPage(props) {
     queryData.append("dataset", dataset);
     queryData.append("dataset", dataset);
     if (sortModel.length !== 0) {
-      sortModel.map((field) => {
-        if (field.sort === "asc") {
-          queryData.append("order_by", field.field);
-        } else if (field.sort === "desc") {
-          queryData.append("order_by", "-" + field.field);
-        }
+      sortModel.map((field) =>
+        field.sort === "asc"
+          ? queryData.append("order_by", field.field)
+          : queryData.append("order_by", "-" + field.field)
+      );
+    }
+    for (const property in filter_object) {
+      filter_object[property].forEach((v) => {
+        queryData.append(property, v);
       });
     }
     axios.post("/" + endpoint, queryData).then((res) => {
@@ -70,11 +89,10 @@ export default function EnslavedPage(props) {
   ]);
 
   return (
-    <div style={{height: "100%"}}>
+    <div style={{ height: "100%" }}>
       {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
-      <NavBar state={state}/>
-      <Filter state={state2}/>
-      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
+      <NavBar state={state} />
+      <Filter state={state2} />
       <Table
         state={{
           pageType: "enslaved",
