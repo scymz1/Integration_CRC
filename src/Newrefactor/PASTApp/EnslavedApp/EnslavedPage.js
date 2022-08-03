@@ -84,22 +84,22 @@ export default function EnslavedPage(props) {
     //console.log("fetching...", pagination);
     setIsLoading(true);
     setDataList([]);
-    let selectedData = new FormData();
-    selectedData.append("hierarchical", "False");
-    selectedData.append("results_page", pagination.currPage + 1);
-    selectedData.append("results_per_page", pagination.rowsPerPage);
-    selectedData.append("dataset", dataset);
-    selectedData.append("dataset", dataset);
+    let queryData = new FormData();
+    queryData.append("hierarchical", "False");
+    queryData.append("results_page", pagination.currPage + 1);
+    queryData.append("results_per_page", pagination.rowsPerPage);
+    queryData.append("dataset", dataset);
+    queryData.append("dataset", dataset);
     if (sortModel.length !== 0) {
       sortModel.map((field) => {
         if (field.sort === "asc") {
-          selectedData.append("order_by", field.field);
+          queryData.append("order_by", field.field);
         } else if (field.sort === "desc") {
-          selectedData.append("order_by", "-" + field.field);
+          queryData.append("order_by", "-" + field.field);
         }
       });
     }
-    axios.post("/" + endpoint, selectedData).then((res) => {
+    axios.post("/" + endpoint, queryData).then((res) => {
       setPagination({
         ...pagination,
         totalRows: Number(res.headers.total_results_count),
