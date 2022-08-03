@@ -17,7 +17,7 @@ export default function Navbar(props) {
         <Icon>
           <img src={logo} height={30} width={60} />
         </Icon>
-        <Typography variant="h5" sx={{ flexGrow: 1, fontFamily: "monospace",letterSpacing: ".3rem",}}>
+        <Typography variant="h5" href="/" sx={{ flexGrow: 1, fontFamily: "monospace",letterSpacing: ".3rem",}}>
           Voyages
         </Typography>
         
