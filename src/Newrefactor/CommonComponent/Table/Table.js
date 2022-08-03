@@ -17,6 +17,7 @@ import {Link} from "react-router-dom";
 import * as React from "react";
 import TableChartIcon from '@mui/icons-material/TableChart';
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
+import ColSelector from "./ColumnSelector";
 
 export default function Table(props) {
   const {
@@ -29,10 +30,52 @@ export default function Table(props) {
     setSortModel,
     isLoading,
     set_filter_object,
-    defaultColumns,
     checkbox, //queryData, setSelectedData,
+    default_list,
+    variables_tree,
+    options_flat,
   } = props.state;
-  //const [columns, setColumns] = useState(defaultColumns);
+
+  const lengths = useMemo(()=>{
+    var temp={};
+    dataList.forEach((row)=>{
+      for (const [key, value] of Object.entries(row)) {
+        switch(key){
+          case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
+            var curlength=value?value.length*200:200;
+            temp[key]=temp[key]?Math.max(temp[key], curlength):curlength;
+            break;
+          case "gender":
+            temp[key]=80;
+          default:
+            var curlength=0
+            if(typeof(value)==="number"){
+              curlength=value.toString().length*20;
+            }
+            else if(typeof(value)==="string"){
+              curlength=value.length*10;
+            }
+            temp[key]=temp[key]? Math.max(temp[key], curlength):curlength;
+            break;
+        };
+      }
+    })
+    return temp;
+  }, [dataList]);
+  const defaultColumns = useMemo(() => {
+    const result = [];
+    default_list.forEach((column) => {
+      result.push({
+        field: column,
+        headerName: options_flat[column].flatlabel,
+        renderCell: (props) => Cell({...props}),
+        flex: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length,
+        minWidth: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length*8.8,
+      });
+    });
+    return result;
+  }, [default_list]);
+  const [columns, setColumns] = useState(defaultColumns);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -75,10 +118,11 @@ export default function Table(props) {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
+
         <Button variant="contained" startIcon={<DashboardCustomizeIcon />} onClick={()=>{}}>
           Gallary
         </Button>
-        <GridToolbarColumnsButton />
+        <ColSelector state={{cols: columns, setCols: setColumns, variables_tree, options_flat}}/>
         <GridToolbarDensitySelector />
         <GridToolbarExport />
         {pageType === "enslaver"?
@@ -97,7 +141,7 @@ export default function Table(props) {
     <div style={{ width: "100%" }}>
       <DataGrid
         autoHeight={true}
-        columns={defaultColumns}
+        columns={columns}
         rows={dataList}
         rowCount={pagination.totalRows}
         loading={isLoading}
@@ -107,7 +151,6 @@ export default function Table(props) {
           Pagination: CustomPagination,
         }}
         checkboxSelection={checkbox}
-        // componentsProps={{}}
         pagination
         paginationMode="server"
         // rowsPerPageOptions={[10, 20, 50]}
