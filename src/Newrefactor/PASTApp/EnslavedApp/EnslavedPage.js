@@ -3,8 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
-import { enslaved_default_list, enslaved_var_list as variables_tree } from "./var";
 import * as options_flat from "./options.json";
+import {
+  enslaved_var_list as variables_tree,
+  enslaved_default_list,
+} from "./var";
+import Cell from "../../CommonComponent/Table/Cell";
+import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -23,6 +28,11 @@ export default function EnslavedPage(props) {
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
   const [selectedData, setSelectedData] = useState([]);
+  // const {variables_tree, options_flat, dataset, filter_object} = props.state;
+  const [cols, setCols] = useState(enslaved_default_list);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -61,7 +71,10 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{height: "100%"}}>
-      <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
+      {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
+      <NavBar state={state}/>
+      <Filter state={state2}/>
+      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
         state={{
           pageType: "enslaved",
