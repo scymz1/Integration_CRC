@@ -2,9 +2,10 @@ import {useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
 import * as options_flat from "./options.json";
-import {enslaver_default_list, enslaver_var_list} from "./var";
+import {enslaver_var_list as variables_tree,enslaver_default_list} from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 import NavBar from "../../CommonComponent/NavBar";
+import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -22,6 +23,24 @@ export default function EnslaverPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaver"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaver", options_flat, variables_tree}
+  const defaultColumns = useMemo(() => {
+    const result = [];
+    enslaver_default_list.forEach((column) => {
+      result.push({
+        field: column,
+        headerName: options_flat[column].flatlabel,
+        renderCell: Cell,
+        //minWidth: 160,
+        //flex: 1,
+        minWidth: options_flat[column].flatlabel.length * 6 + 100,
+        maxWidth: 300,
+      });
+    });
+    return result;
+  }, [enslaver_default_list]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -49,7 +68,9 @@ export default function EnslaverPage(props) {
 
   return (
     <div style={{height: "100%"}}>
-      <NavBar state={{pageType: "enslaver", dataset, setDataset}}/>
+      <NavBar state={state}/>
+      <Filter state={state2}/>
+      {/* <NavBar state={{pageType: "enslaver", dataset, setDataset}}/> */}
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
         state={{
