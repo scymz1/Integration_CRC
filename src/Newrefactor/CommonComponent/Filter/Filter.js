@@ -14,6 +14,7 @@ import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
 import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 import ComponentFac from './ComponentFac';
 import FilterSelector from './FilterSelector'
+import BoundingBoxFilter from "../../../Component/VoyagePage/mapping/BoundingBoxFilter";
 
 export default function Filter(props) {
 
@@ -54,6 +55,15 @@ export default function Filter(props) {
         }
         set_filter_obj(temp)
     };
+    const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
+    const OpenBoundingBoxFilter = ()=>{
+        return (
+        <AccordionDetails >
+            <BoundingBoxFilter  state={{key, filter_obj, set_filter_obj, options_flat, pageType, dataset}}/>
+       </AccordionDetails>
+        )
+     
+      }
 
     // const OpenBoundingBoxFilter = (event) => {
     //     if (!labels.some(e => e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")) {
@@ -110,7 +120,7 @@ export default function Filter(props) {
                         pageType == 'voyage' ?
                             <Button variant="contained" 
                                     // color={color} 
-                                    // onClick={OpenBoundingBoxFilter}
+                                    onClick={OpenBoundingBoxFilter}
                             >
                                 <Typography color="white">Add Visual Filter</Typography>
                             </Button> : null

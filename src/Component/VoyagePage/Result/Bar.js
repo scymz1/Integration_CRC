@@ -67,7 +67,7 @@ export default function Bar(props) {
   const [aggregation, setAgg] = React.useState("sum");
 
   const [showAlert, setAlert] = useState(false);
-  const [str, setStr] = useState("")
+  // const [str, setStr] = useState("")
 
   // console.log("🏀", barData)
 
@@ -100,8 +100,6 @@ export default function Bar(props) {
       });
   }
 
-  let tempstr = ""
-
   useEffect(() => {
     setIsLoading(true);
     setAlert(false)
@@ -127,7 +125,7 @@ export default function Bar(props) {
     // console.log("option_value🍕", typeof(option.value))
     // console.log("element🍔",element)
     // console.log("agg_fn🥤", aggregation)
-    data.append("cachename", "voyage_export");
+    data.append("cachename", "voyage_bar_and_donut_charts");
     return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
       method: "POST",
       body: data,
@@ -136,16 +134,34 @@ export default function Bar(props) {
     
     .then(function (response) {
         // console.log("🔥data", response)
+
+      //  Object.values(response).forEach(val => {
+      //     if (Number.isNaN(val)) {
+      //       val = 0;
+      //     }
+      //   });
+
+      // JSON.stringify(Object.values(response), (name, val) => typeof(val) === 'number' && (isNaN(val) || !isFinite(val)) ? val.toString() : val)
         return Object.values(response)[0];
       })
     })
   
     const data = await Promise.all(promises)
+
+       //  Convert NaN to 0
+    // NaN cause the error: SyntaxError: Unexpected token N in JSON
+    Object.values(data).forEach(val => {
+      if (Number.isNaN(val)) {
+        val = 0;
+      }
+    });
+ 
+   
     // setDataFlow([...dataFlow, data[data.length - 1]])
     // console.log("🐯data is ", data)
     // console.log("🐷", typeof(data))
-   console.log("😷",chips)
-   console.log(typeof(chips))
+  //  console.log("😷",chips)
+  //  console.log(typeof(chips))
     
    
     let arr = []
@@ -162,11 +178,11 @@ export default function Bar(props) {
         })
     })
 
-    tempstr = arr.map(function(elem){
-        return elem.name;
-    }).join("\n");
+    // tempstr = arr.map(function(elem){
+    //     return elem.name ;
+    // }).join("\n\r");
 
-    setStr(tempstr)
+    // setStr(tempstr)
 
     if (Object.values(data).indexOf('false') > -1) {
       // window.alert(`Sorry, this combination can't work:
@@ -187,13 +203,19 @@ export default function Bar(props) {
   }, [ chips, option.field, aggregation, search_object]);
 
 
-  console.log("str🍌", str)
+  // console.log("str🍌", str)
+// console.log("🍌", barData)
+// barData.map((index) =>{
+//   console.log("🍎", index.name)
+//   console.log("🍊", typeof(index.name))
+// })
 
   const alertBar = () => {
     if(showAlert){
       return <Alert severity="error">
       <AlertTitle>Error</AlertTitle>
-      Sorry, this combination can't work: {str}
+      Sorry, these particular variables don't graph well together: 
+      {barData.map(index => <AlertTitle>{index.name}</AlertTitle>)}
     </Alert>
     }else{
         return ""
