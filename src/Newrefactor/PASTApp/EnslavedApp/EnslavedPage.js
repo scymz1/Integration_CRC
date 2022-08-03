@@ -8,7 +8,6 @@ import * as options_flat from "./options.json";
 import Cell from "../../CommonComponent/Table/Cell";
 //import { voyage_default_list } from "../../Util/tableVars";
 import ColSelector from '../../CommonComponent/ColumnSelector'
-import {columnOptions} from "../../Util/tableVars"
 import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
