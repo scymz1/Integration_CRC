@@ -26,6 +26,7 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
+
 export default function Bar(props) {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
