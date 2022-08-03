@@ -30,6 +30,7 @@ export default function Table(props) {
     isLoading,
     set_filter_object,
     defaultColumns,
+    checkbox, //queryData, setSelectedData,
   } = props.state;
   //const [columns, setColumns] = useState(defaultColumns);
 
@@ -105,6 +106,7 @@ export default function Table(props) {
           Toolbar: CustomToolbar,
           Pagination: CustomPagination,
         }}
+        checkboxSelection={checkbox}
         // componentsProps={{}}
         pagination
         paginationMode="server"
