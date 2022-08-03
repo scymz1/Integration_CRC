@@ -3,10 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
-import {
-  enslaved_var_list as variables_tree,
-  enslaved_default_list,
-} from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 //import { voyage_default_list } from "../../Util/tableVars";
 import ColSelector from "../../CommonComponent/ColumnSelector";
