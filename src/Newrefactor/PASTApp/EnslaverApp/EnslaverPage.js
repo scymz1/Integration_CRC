@@ -84,7 +84,7 @@ export default function EnslaverPage(props) {
           set_filter_object,
           isLoading,
           default_list: enslaver_default_list,
-          var_list: variables_tree,
+          variables_tree,
           options_flat,
         }}
       />
