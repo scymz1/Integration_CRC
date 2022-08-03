@@ -2,23 +2,12 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import { Button, Modal, Box, Container, Avatar, ListItem,Dialog,TablePagination, CardMedia, Typography, Grid, Link } from "@mui/material";
 import "universalviewer/dist/esm/index.css";
 import { init } from "universalviewer";
-
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
-import {
-    useWindowSize,
-  } from '@react-hook/window-size'
+import {useWindowSize} from '@react-hook/window-size'
 import axios from "axios";
 import { SettingsOverscanOutlined } from "@mui/icons-material";
 import { alpha } from "@mui/material";
-
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
