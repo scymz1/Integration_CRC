@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MenuItem } from '@mui/material';
-import Chip from '@mui/material/Chip';
 import { NestedMenuItem } from '../../Util/NestedMenuItem';
 import ExpandMoreIcon from '@mui/icons-material/ArrowRightAlt';
 import ChevronRightIcon from '@mui/icons-material/ArrowRightAlt';
@@ -8,9 +7,8 @@ import { Button, Grid } from '@mui/material';
 import { TreeView } from '@mui/lab';
 import { Menu } from '@mui/material';
 import { styled } from '@mui/system';
-import { Container } from "@mui/material";
 import { useWindowSize } from "@react-hook/window-size";
-
+import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 
 export default function ColSelector(props) {
     const [width, height] = useWindowSize();
@@ -39,8 +37,11 @@ export default function ColSelector(props) {
     }
 
     const handleOptionClick = (option) => {
-        if (cols.includes(option) === false) {
-            setCols([...cols, option])
+        console.log("click", option, options_flat[option].flatlabel)
+        if (!cols.find(e=>e.field === option)) {
+            setCols([...cols, {
+                field: option,
+                headerName: options_flat[option].flatlabel,}])
         }
         handleClose();
     }
@@ -75,49 +76,17 @@ export default function ColSelector(props) {
 
     return (
         <div>
-            <Container maxWidth={false}>
-                <Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
+            <Button startIcon={<ViewWeekIcon/>} onClick={handleClick}>Columns</Button>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                <TreeView
+                  aria-label="option menu"
+                  defaultCollapseIcon={<ExpandMoreIcon />}
+                  defaultExpandIcon={<ChevronRightIcon />}
                 >
-                    <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
-                        <Grid container item>
-                            <TreeView
-                                aria-label="option menu"
-                                defaultCollapseIcon={<ExpandMoreIcon />}
-                                defaultExpandIcon={<ChevronRightIcon />}
-                            >
+                    {renderTree(variables_tree)}
+                </TreeView>
 
-                                <Button
-                                    variant="contained"
-                                    size="large"
-                                    color="grey"
-                                    onClick={handleClick}
-                                >
-                                    {"Column Selector"}
-
-                                </Button>
-                                <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                                    {renderTree(variables_tree)}
-                                </Menu>
-                            </TreeView>
-                            {cols.map((data) => {
-                                return (
-                                    <ListItem key={data} style={{ listStyleType: 'none' }}>
-                                        <Chip
-                                            label={options_flat[data].flatlabel}
-                                            onDelete={data === 'id' ? undefined : handleDelete(data)}
-                                        />
-                                    </ListItem>
-                                );
-                            })}
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Container>
+            </Menu>
         </div>
     );
 }

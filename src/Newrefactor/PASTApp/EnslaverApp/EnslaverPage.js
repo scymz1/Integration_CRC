@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
 import * as options_flat from "./options.json";
-import {enslaver_default_list} from "./var";
+import {enslaver_default_list, enslaver_var_list} from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 import NavBar from "../../CommonComponent/NavBar";
 
@@ -22,21 +22,6 @@ export default function EnslaverPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
-  const defaultColumns = useMemo(() => {
-    const result = [];
-    enslaver_default_list.forEach((column) => {
-      result.push({
-        field: column,
-        headerName: options_flat[column].flatlabel,
-        renderCell: Cell,
-        //minWidth: 160,
-        //flex: 1,
-        minWidth: options_flat[column].flatlabel.length * 6 + 100,
-        maxWidth: 300,
-      });
-    });
-    return result;
-  }, [enslaver_default_list]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -77,7 +62,9 @@ export default function EnslaverPage(props) {
           filter_object,
           set_filter_object,
           isLoading,
-          defaultColumns,
+          default_list: enslaver_default_list,
+          var_list: enslaver_var_list,
+          options_flat,
         }}
       />
     </div>

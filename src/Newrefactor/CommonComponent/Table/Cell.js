@@ -4,6 +4,7 @@ import Stack from "@mui/material/Stack";
 
 export default function Cell(props) {
   const { row, field } = props;
+
   switch (field) {
     case "gender":
       return genderCell(row[field]);
