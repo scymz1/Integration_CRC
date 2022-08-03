@@ -47,6 +47,7 @@ export default function Auto(props) {
         fetch(base_url+endpoint+"autocomplete", requestOptions)
         .then(response => response.json())
         .then(result => {
+            console.log("In autocomplete: ", labels.option)
             var newOptions = result[labels.option]
             setautocompleteOptions(newOptions) })
             // console.log(autocompleteOptions)s
@@ -81,6 +82,7 @@ export default function Auto(props) {
       options={autocompleteOptions}
       // getOptionLabel={(option) => parsehtml(option)}
       value={search_object[searchLabel.option] ? search_object[searchLabel.option] : autocompleteOptions[0]}
+      isOptionEqualToValue={() => true}
       // value={autocompleteOptions[0]}
       onChange={(event, newValue) => {
         // setValue(oldArray => [newValue][0]);

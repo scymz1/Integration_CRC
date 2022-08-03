@@ -5,8 +5,6 @@ import axios from "axios";
 import PASTTable from "./PASTTable";
 import { enslaved_default_list } from "../PAST/vars";
 import * as options_flat from "../util/enslaved_options.json";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 //import { Typography } from '@mui/material';
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -26,9 +24,6 @@ export default function SlavePage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
-  const handleChange = (event) => {
-    setPagination({ ...pagination, rowsPerPage: event.target.value });
-  };
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -55,23 +50,9 @@ export default function SlavePage(props) {
   }, [pagination, search_object, sortModel]);
 
   return (
-    <div style={{ height: "100%" }}>
-      <ResponsiveAppBar
-        state={{ pageType: "slave", search_object, set_search_object }}
-      />
-      Rows Per column: &nbsp;&nbsp;
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={pagination.rowsPerPage}
-        label="Age"
-        onChange={handleChange}
-      >
-        <MenuItem value={10}>10</MenuItem>
-        <MenuItem value={15}>15</MenuItem>
-        <MenuItem value={20}>20</MenuItem>
-        <MenuItem value={25}>25</MenuItem>
-      </Select>
+    <div style={{height: "100%"}}>
+      <ResponsiveAppBar state={{pageType: "slave", search_object, set_search_object}}/>
+      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <PASTTable
         state={{
           dataList,
