@@ -33,7 +33,7 @@ export default function Auto(props) {
             var requestOptions = {
                 method: 'POST',
                 headers: header,
-                // body: formdata,
+                body: formdata,
                 redirect: 'follow'
             };
 

@@ -6,7 +6,11 @@ import VoyagePie from "./Component/VoyagePie";
 import Navbar from "../CommonComponent/NavBar";
 import {useWindowSize} from "@react-hook/window-size";
 
+import * as options_flat from '../Util/options.json'
+import {columnOptions} from "../Util/tableVars"
+
 import Filter from "../CommonComponent/Filter/Filter"
+
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -22,14 +26,16 @@ export default function VoyagePage() {
   const [filter_object, set_filter_object] = useState({});
   const [dataset, setDataset] = useState("0");
   const state = {filter_object, set_filter_object, dataset, setDataset, pageType: "voyage"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, pageType: "voyage", options_flat, variables_tree: columnOptions, drawerOpen: true}
 
   const [value, setValue] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+
   return (
     <div>
       <Navbar state={state}/>
-      <Filter state={state}/>
+      <Filter state={state2}/>
       <Box sx={{ flexGrow: 1, display: 'flex', height: "100%" }}>
         <Tabs
           orientation="vertical"
