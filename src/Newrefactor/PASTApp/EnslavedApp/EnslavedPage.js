@@ -9,8 +9,9 @@ import {
 } from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 //import { voyage_default_list } from "../../Util/tableVars";
-import ColSelector from '../../CommonComponent/ColumnSelector'
+// import ColSelector from '../../CommonComponent/ColumnSelector'
 import Filter from "../../CommonComponent/Filter/Filter"
+import * as options_flat from "./options.json"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -31,6 +32,7 @@ export default function EnslavedPage(props) {
   // const {variables_tree, options_flat, dataset, filter_object} = props.state;
   const [cols, setCols] = useState(enslaved_default_list);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedData,setSelectedData] = useState([]);
   const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
   const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
   const lengths = useMemo(()=>{
