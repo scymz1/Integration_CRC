@@ -8,6 +8,8 @@ import * as options_flat from "./options.json";
 import Cell from "../../CommonComponent/Table/Cell";
 //import { voyage_default_list } from "../../Util/tableVars";
 import ColSelector from '../../CommonComponent/ColumnSelector'
+import {columnOptions} from "../../Util/tableVars"
+import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -27,7 +29,9 @@ export default function EnslavedPage(props) {
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
   // const {variables_tree, options_flat, dataset, filter_object} = props.state;
   const [cols, setCols] = useState(enslaved_default_list);
-
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
   const lengths = useMemo(()=>{
     var temp={};
     dataList.forEach((row)=>{
@@ -103,8 +107,9 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{height: "100%"}}>
-      <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/>
-      <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
+      {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
+      <NavBar state={state}/>
+      <Filter state={state2}/>
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
         state={{
