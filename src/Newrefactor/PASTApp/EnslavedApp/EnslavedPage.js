@@ -64,7 +64,7 @@ export default function EnslavedPage(props) {
         //minWidth: 160,
         //flex: 1,
         //flex: lengths[column],
-        minWidth: Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]), //options_flat[column].flatlabel.length*8.8, 100),
+        minWidth: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length*8.8, //options_flat[column].flatlabel.length*8.8, 100),
         maxWidth: 1000,
       });
     });
