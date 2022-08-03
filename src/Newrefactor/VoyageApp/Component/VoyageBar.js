@@ -49,7 +49,7 @@ export default function Bar(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [width, height] = useWindowSize();
 //   const { search_object, endpoint } = React.useContext(props.context);
-  const {filter_object, set_filter_object, dataset} = props.state;
+  const {filter_object, dataset} = props.state;
 
   const [plot_field, setarrx] = useState([]);
   const [plot_value, setarry] = useState([]);
@@ -112,11 +112,13 @@ export default function Bar(props) {
         var data = new FormData();
         yfieldArr.push(element)
 
-        // for (var property in search_object) {
-        //   search_object[property].forEach((v) => {
-        //     data.append(property, v);
-        //   });
-        // }
+        for (var property in filter_object) {
+          filter_object[property].forEach((v) => {
+            if(v.length != 0){
+              data.append(property, v);
+            }
+          });
+        }
 
         data.append("hierarchical", "False");
         data.append("groupby_fields", option.field);

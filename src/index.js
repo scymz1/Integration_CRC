@@ -27,7 +27,7 @@ root.render(
           <Routes>
             <Route path="/" element={<Home/>}/>
             {/* <Route path="voyage" element={<VoyageApp/>}/> */}
-            <Route path="voyage" element={<VoyagePage/>}/>
+            {/* <Route path="voyage" element={<VoyagePage/>}/> */}
             <Route path="voyage/:id" element={<VoyageApp/>}/>
             <Route path="home2" element={<Home2/>}/>
             <Route path="past" element={<PASTApp/>}/>
@@ -40,9 +40,9 @@ root.render(
             {/* <Route path="documents" element={<DocumentsApp/>}/> */}
             <Route path="documents" element={<DocumentPage/>}/>
             <Route path="optionSelector" element={<OptionSelector/>}/>
-            <Route path="refactor/voyage" element={<VoyagePage/>}/>
-            <Route path="refactor/past/enslaved" element={<EnslavedPage/>}/>
-            <Route path="refactor/past/enslaver" element={<EnslaverPage/>}/>
+            <Route path="voyage" element={<VoyagePage/>}/>
+            <Route path="past/enslaved" element={<EnslavedPage/>}/>
+            <Route path="past/enslaver" element={<EnslaverPage/>}/>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

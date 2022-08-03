@@ -4,20 +4,24 @@ import {
   gridPageCountSelector,
   gridPageSelector,
   useGridApiContext,
-  useGridSelector,
+  useGridSelector, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarExport,
 } from "@mui/x-data-grid";
-import { LinearProgress } from "@mui/material";
+import {Button, LinearProgress} from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
+import {Link} from "react-router-dom";
+import * as React from "react";
+import TableChartIcon from '@mui/icons-material/TableChart';
+import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 
-export default function PASTTable(props) {
+export default function Table(props) {
   const {
+    pageType,
+    enableSelect,
     dataList,
     pagination,
     setPagination,
@@ -28,14 +32,6 @@ export default function PASTTable(props) {
     defaultColumns,
   } = props.state;
   //const [columns, setColumns] = useState(defaultColumns);
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -75,6 +71,27 @@ export default function PASTTable(props) {
     );
   }
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <Button variant="contained" startIcon={<DashboardCustomizeIcon />} onClick={()=>{}}>
+          Gallary
+        </Button>
+        <GridToolbarColumnsButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+        {pageType === "enslaver"?
+          <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon/>}>Enslaved</Button>
+          </Link>:
+          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon/>}>Enslaver</Button>
+          </Link>
+        }
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <div style={{ width: "100%" }}>
       <DataGrid
@@ -85,7 +102,7 @@ export default function PASTTable(props) {
         loading={isLoading}
         components={{
           LoadingOverlay: LinearProgress,
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar,
           Pagination: CustomPagination,
         }}
         // componentsProps={{}}

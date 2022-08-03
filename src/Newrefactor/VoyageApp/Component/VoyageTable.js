@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { voyage_default_list } from "../../../../Component/VoyagePage/Result/Table/tableVars"
-import ColSelector from "../../../CommonComponent/ColumnSelector"
+// import { voyage_default_list } from "../../../../Component/VoyagePage/Result/Table/tableVars"
+// import ColSelector from "../../../CommonComponent/ColumnSelector"
 
 
 export default function VoyageTable(props) {
