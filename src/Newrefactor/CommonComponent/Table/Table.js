@@ -4,18 +4,22 @@ import {
   gridPageCountSelector,
   gridPageSelector,
   useGridApiContext,
-  useGridSelector, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarExport,
+  useGridSelector,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarDensitySelector,
+  GridToolbarExport,
 } from "@mui/x-data-grid";
-import {Button, LinearProgress} from "@mui/material";
+import { Button, LinearProgress } from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as React from "react";
-import TableChartIcon from '@mui/icons-material/TableChart';
+import TableChartIcon from "@mui/icons-material/TableChart";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
 
@@ -29,36 +33,35 @@ export default function Table(props) {
     setSortModel,
     isLoading,
     set_filter_object,
-    checkbox, //queryData, setSelectedData,
+    checkbox,
     default_list,
     variables_tree,
     options_flat,
   } = props.state;
 
-  const lengths = useMemo(()=>{
-    var temp={};
-    dataList.forEach((row)=>{
+  const lengths = useMemo(() => {
+    var temp = {};
+    dataList.forEach((row) => {
       for (const [key, value] of Object.entries(row)) {
-        switch(key){
+        switch (key) {
           case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-            var curlength=value?value.length*200:200;
-            temp[key]=temp[key]?Math.max(temp[key], curlength):curlength;
+            var curlength = value ? value.length * 200 : 200;
+            temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
             break;
           case "gender":
-            temp[key]=80;
+            temp[key] = 80;
           default:
-            var curlength=0
-            if(typeof(value)==="number"){
-              curlength=value.toString().length*20;
+            var curlength = 0;
+            if (typeof value === "number") {
+              curlength = value.toString().length * 20;
+            } else if (typeof value === "string") {
+              curlength = value.length * 10;
             }
-            else if(typeof(value)==="string"){
-              curlength=value.length*10;
-            }
-            temp[key]=temp[key]? Math.max(temp[key], curlength):curlength;
+            temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
             break;
-        };
+        }
       }
-    })
+    });
     return temp;
   }, [dataList]);
   const defaultColumns = useMemo(() => {
@@ -67,9 +70,19 @@ export default function Table(props) {
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
-        renderCell: (props) => Cell({...props}),
-        flex: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length,
-        minWidth: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length*8.8,
+        renderCell: (props) => Cell({ ...props }),
+        flex: lengths[column]
+          ? Math.max(
+              options_flat[column].flatlabel.length * 8.8,
+              lengths[column]
+            )
+          : options_flat[column].flatlabel.length,
+        minWidth: lengths[column]
+          ? Math.max(
+              options_flat[column].flatlabel.length * 8.8,
+              lengths[column]
+            )
+          : options_flat[column].flatlabel.length * 8.8,
       });
     });
     return result;
@@ -117,21 +130,32 @@ export default function Table(props) {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-
-        <Button variant="contained" startIcon={<DashboardCustomizeIcon />} onClick={()=>{}}>
+        <Button
+          variant="contained"
+          startIcon={<DashboardCustomizeIcon />}
+          onClick={() => {}}
+        >
           Gallary
         </Button>
-        <ColSelector state={{cols: columns, setCols: setColumns, variables_tree, options_flat}}/>
+        <ColSelector
+          state={{
+            cols: columns,
+            setCols: setColumns,
+            variables_tree,
+            options_flat,
+          }}
+        />
         <GridToolbarDensitySelector />
         <GridToolbarExport />
-        {pageType === "enslaver"?
+        {pageType === "enslaver" ? (
           <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon/>}>Enslaved</Button>
-          </Link>:
-          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon/>}>Enslaver</Button>
+            <Button startIcon={<TableChartIcon />}>Enslaved</Button>
           </Link>
-        }
+        ) : (
+          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon />}>Enslaver</Button>
+          </Link>
+        )}
       </GridToolbarContainer>
     );
   }
@@ -152,7 +176,6 @@ export default function Table(props) {
         checkboxSelection={checkbox}
         pagination
         paginationMode="server"
-        // rowsPerPageOptions={[10, 20, 50]}
         page={pagination.currPage}
         pageSize={pagination.rowsPerPage}
         onPageChange={(newPage) => {
@@ -161,7 +184,7 @@ export default function Table(props) {
         onPageSizeChange={(newPageSize) => {
           setPagination({ ...pagination, rowsPerPage: newPageSize });
         }}
-        sortingMode="server" //sortModel={sortModel}
+        sortingMode="server"
         onSortModelChange={(newSortModel) => {
           setSortModel(newSortModel);
         }}
