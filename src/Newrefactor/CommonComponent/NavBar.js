@@ -26,10 +26,13 @@ export default function Navbar(props) {
           Voyages
         </Typography>
         
+        {pageType !== "home" ? 
         <IconButton aria-label="open drawer" onClick={()=>setDrawerOpen(!drawerOpen)}>
           <FilterAlt sx={{ color: "white" }} />
           <Typography sx={{ color: "white" }}>Filter</Typography>
-        </IconButton>
+        </IconButton>:
+                null}
+        
 
         {pageType !== "enslaver"?
           <ToggleButtonGroup
