@@ -17,7 +17,7 @@ import FilterSelector from './FilterSelector'
 
 export default function Filter(props) {
 
-    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, handleDrawerClose, pageType, dataset } = props.state
+    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state
 
 
     const [menuPosition, setMenuPosition] = React.useState(null);
@@ -68,7 +68,7 @@ export default function Filter(props) {
                 <AppBar position="fixed" 
                     // color={color} 
                     elevation={0} 
-                    style={{ zIndex: 3, marginTop: "64px" }}
+                    style={{ zIndex: 3, marginTop: "68px" }}
                 >
                     <Toolbar>
                         <Grid container direction="row" spacing={1}>
@@ -132,19 +132,19 @@ export default function Filter(props) {
                         :
                         Object.keys(filter_obj).map((key) => {
                             return (
-                                <Grid container key={key} xs={fullScreen ? 5 : 12} sx={{ mb: "5px", mr: "10px" }}>
-                                    <Grid item xs={10}>
-                                        <Accordion>
-                                            <AccordionSummary>
-                                                <Typography>{options_flat[key].flatlabel}</Typography>
+                                <Grid container key={'container'+key} xs={fullScreen ? 5 : 12} sx={{ mb: "5px", mr: "10px" }}>
+                                    <Grid item key={'item1'+key} xs={10}>
+                                        <Accordion key={'accord'+key}>
+                                            <AccordionSummary key={'accordSum'+key}>
+                                                <Typography key={'typo'+key}>{options_flat[key].flatlabel}</Typography>
                                             </AccordionSummary>
-                                            <AccordionDetails>
-                                                <ComponentFac state={{ filter_obj, set_filter_obj, options_flat, pageType, key }} />
+                                            <AccordionDetails key={'accordDet'+key}>
+                                                <ComponentFac key={'compFac'+key} state={{ filter_obj, set_filter_obj, options_flat, pageType, key }} />
                                             </AccordionDetails>
                                         </Accordion>
                                     </Grid>
-                                    <Grid item xs={2}>
-                                        <IconButton onClick={() => { handleDelete(key) }}>
+                                    <Grid item key={'item2'+key} xs={2}>
+                                        <IconButton key={'iconB'+key} onClick={() => { handleDelete(key) }}>
                                             <RemoveCircleOutlineIcon />
                                         </IconButton>
                                     </Grid>
@@ -155,11 +155,14 @@ export default function Filter(props) {
                 </Grid>
                 <Divider />
                 <Grid container item justifyContent={rightScreen ? "flex-start" : "flex-end"}>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={()=>setDrawerOpen(!drawerOpen)}>
                         {rightScreen ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
                 </Grid>
             </Drawer>
+            {drawerOpen ?
+                <Toolbar />
+                : null}
         </div>
 
     )
