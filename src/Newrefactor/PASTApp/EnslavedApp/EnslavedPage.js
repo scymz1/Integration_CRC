@@ -3,9 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
-import { enslaved_default_list } from "./var";
+import {enslaved_var_list as variables_tree, enslaved_default_list } from "./var";
 import * as options_flat from "./options.json";
 import Cell from "../../CommonComponent/Table/Cell";
+//import { voyage_default_list } from "../../Util/tableVars";
+import ColSelector from '../../CommonComponent/ColumnSelector'
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -23,6 +25,8 @@ export default function EnslavedPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  // const {variables_tree, options_flat, dataset, filter_object} = props.state;
+  const [cols, setCols] = useState(enslaved_default_list);
 
   const lengths = useMemo(()=>{
     var temp={};
@@ -50,13 +54,13 @@ export default function EnslavedPage(props) {
         };
       }
     })
-    enslaved_default_list.forEach((column) => {console.log(column, temp[column])})
+    cols.forEach((column) => {console.log(column, temp[column])})
     //console.log("temp", temp);
     return temp;
   }, [dataList]);
   const defaultColumns = useMemo(() => {
     const result = [];
-    enslaved_default_list.forEach((column) => {
+    cols.forEach((column) => {
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
@@ -64,12 +68,12 @@ export default function EnslavedPage(props) {
         //minWidth: 160,
         //flex: 1,
         //flex: lengths[column],
-        minWidth: Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]), //options_flat[column].flatlabel.length*8.8, 100),
+        minWidth: lengths[column]?Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]):options_flat[column].flatlabel.length*8.8, //options_flat[column].flatlabel.length*8.8, 100),
         maxWidth: 1000,
       });
     });
     return result;
-  }, [enslaved_default_list, lengths]);
+  }, [cols, lengths]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -99,6 +103,7 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{height: "100%"}}>
+      <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/>
       <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
