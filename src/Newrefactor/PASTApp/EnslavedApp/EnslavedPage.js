@@ -33,8 +33,10 @@ export default function EnslavedPage(props) {
             var curlength=value?value.length*200:200;
             temp[key]=temp[key]?Math.max(temp[key], curlength):curlength;
             break;
+          case "gender":
+            temp[key]=80;
           default:
-            var curlength=250
+            var curlength=0
             //console.log("abdc", key, typeof(value))
             if(typeof(value)==="number"){
               curlength=value.toString().length*20;
@@ -61,8 +63,8 @@ export default function EnslavedPage(props) {
         renderCell: Cell,
         //minWidth: 160,
         //flex: 1,
-        flex: lengths[column],
-        minWidth: Math.max(options_flat[column].flatlabel.length*8.8, 100),
+        //flex: lengths[column],
+        minWidth: Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]), //options_flat[column].flatlabel.length*8.8, 100),
         maxWidth: 1000,
       });
     });
