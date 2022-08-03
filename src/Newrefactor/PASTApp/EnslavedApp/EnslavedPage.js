@@ -2,10 +2,10 @@ import NavBar from "../../CommonComponent/NavBar";
 import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import PASTTable from "../Component/PASTTable";
+import Table from "../../CommonComponent/Table/Table";
 import { enslaved_default_list } from "./var";
 import * as options_flat from "./options.json";
-import Cell from "../../../Component/testScript/Cell";
+import Cell from "../../CommonComponent/Table/Cell";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -47,6 +47,8 @@ export default function EnslavedPage(props) {
     queryData.append("hierarchical", "False");
     queryData.append("results_page", pagination.currPage + 1);
     queryData.append("results_per_page", pagination.rowsPerPage);
+    queryData.append("dataset", dataset);
+    queryData.append("dataset", dataset);
     if (sortModel.length !== 0) {
       sortModel.map((field) => {
         if (field.sort === "asc") {
@@ -61,13 +63,13 @@ export default function EnslavedPage(props) {
       setDataList(res.data);
       setIsLoading(false);
     });
-  }, [pagination.currPage, pagination.rowsPerPage, filter_object, sortModel]);
+  }, [pagination.currPage, pagination.rowsPerPage, filter_object, sortModel, dataset]);
 
   return (
     <div style={{height: "100%"}}>
       <NavBar state={{pageType: "slave", dataset, setDataset}}/>
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
-      <PASTTable
+      <Table
         state={{
           dataList,
           pagination,

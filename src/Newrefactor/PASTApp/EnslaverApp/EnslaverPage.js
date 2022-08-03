@@ -1,9 +1,9 @@
 import {useEffect, useMemo, useState} from "react";
 import axios from "axios";
-import PASTTable from "../Component/PASTTable";
+import Table from "../../CommonComponent/Table/Table";
 import * as options_flat from "./options.json";
 import {enslaver_default_list} from "./var";
-import Cell from "../../../Component/testScript/Cell";
+import Cell from "../../CommonComponent/Table/Cell";
 import NavBar from "../../CommonComponent/NavBar";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -66,7 +66,7 @@ export default function EnslaverPage(props) {
     <div style={{height: "100%"}}>
       <NavBar state={{pageType: "slave", dataset, setDataset}}/>
       {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
-      <PASTTable
+      <Table
         state={{
           dataList,
           pagination,
