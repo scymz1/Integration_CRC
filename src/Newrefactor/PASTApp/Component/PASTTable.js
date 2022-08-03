@@ -27,7 +27,7 @@ export default function PASTTable(props) {
     set_filter_object,
     defaultColumns,
   } = props.state;
-  const [columns, setColumns] = useState(defaultColumns);
+  //const [columns, setColumns] = useState(defaultColumns);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -79,7 +79,7 @@ export default function PASTTable(props) {
     <div style={{ width: "100%" }}>
       <DataGrid
         autoHeight={true}
-        columns={columns}
+        columns={defaultColumns}
         rows={dataList}
         rowCount={pagination.totalRows}
         loading={isLoading}
