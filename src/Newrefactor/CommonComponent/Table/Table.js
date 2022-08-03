@@ -26,7 +26,7 @@ export default function Table(props) {
     set_filter_object,
     defaultColumns,
   } = props.state;
-  const [columns, setColumns] = useState(defaultColumns);
+  //const [columns, setColumns] = useState(defaultColumns);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -70,7 +70,7 @@ export default function Table(props) {
     <div style={{ width: "100%" }}>
       <DataGrid
         autoHeight={true}
-        columns={columns}
+        columns={defaultColumns}
         rows={dataList}
         rowCount={pagination.totalRows}
         loading={isLoading}

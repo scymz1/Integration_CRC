@@ -28,7 +28,7 @@ axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
 function Scatter(props) {
   const [width, height] = useWindowSize()
-  const {filter_object, set_filter_object, dataset} = props.state;
+  const {filter_object, dataset} = props.state;
   // const {
   //     search_object, endpoint
   // } = React.useContext(props.context)
@@ -62,15 +62,18 @@ function Scatter(props) {
     data.append("dataset", dataset);
     data.append("dataset", dataset);
     // //console.log("sb",search_object)
-    // for(var property in filter_object) {
-    //     //console.log("p",property)
-    //     //console.log('so', search_object[property])
-    //     // eslint-disable-next-line no-loop-func
-    //     filter_object[property].forEach((v)=>{
-    //         data.append(property, v)
-    //         //console.log("v", v)
-    //     })
-    // }
+    for(var property in filter_object) {
+        //console.log("p",property)
+        //console.log('so', search_object[property])
+        // eslint-disable-next-line no-loop-func
+        filter_object[property].forEach((v)=>{
+          if(v.length != 0){
+
+            data.append(property, v)
+          }
+            //console.log("v", v)
+        })
+    }
 
     data.append('groupby_fields', option.field)
     data.append('groupby_fields', option.value)

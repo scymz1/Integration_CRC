@@ -23,6 +23,37 @@ export default function EnslavedPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+
+  const lengths = useMemo(()=>{
+    var temp={};
+    dataList.forEach((row)=>{
+      for (const [key, value] of Object.entries(row)) {
+        switch(key){
+          case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
+            var curlength=value?value.length*200:200;
+            temp[key]=temp[key]?Math.max(temp[key], curlength):curlength;
+            break;
+          case "gender":
+            temp[key]=80;
+          default:
+            var curlength=0
+            //console.log("abdc", key, typeof(value))
+            if(typeof(value)==="number"){
+              curlength=value.toString().length*20;
+            }
+            else if(typeof(value)==="string"){
+              curlength=value.length*10;
+            }
+            // console.log("abdc", key, curlength, typeof(temp[key])!=="undefined", temp[key])
+            temp[key]=temp[key]? Math.max(temp[key], curlength):curlength;
+            break;
+        };
+      }
+    })
+    enslaved_default_list.forEach((column) => {console.log(column, temp[column])})
+    //console.log("temp", temp);
+    return temp;
+  }, [dataList]);
   const defaultColumns = useMemo(() => {
     const result = [];
     enslaved_default_list.forEach((column) => {
@@ -32,12 +63,13 @@ export default function EnslavedPage(props) {
         renderCell: Cell,
         //minWidth: 160,
         //flex: 1,
-        minWidth: options_flat[column].flatlabel.length * 6 + 100,
-        maxWidth: 300,
+        //flex: lengths[column],
+        minWidth: Math.max(options_flat[column].flatlabel.length*8.8, lengths[column]), //options_flat[column].flatlabel.length*8.8, 100),
+        maxWidth: 1000,
       });
     });
     return result;
-  }, [enslaved_default_list]);
+  }, [enslaved_default_list, lengths]);
 
   useEffect(() => {
     //console.log("fetching...", pagination);
