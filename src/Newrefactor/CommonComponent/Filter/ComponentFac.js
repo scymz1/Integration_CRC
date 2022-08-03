@@ -1,6 +1,6 @@
 import Auto from './Autocomplete';
 import Slider from "./Slider"
-import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
+// import BoundingBoxFilter from "../mapping/BoundingBoxFilter";
 
 import * as React from 'react';
 import { Chip } from '@mui/material';
