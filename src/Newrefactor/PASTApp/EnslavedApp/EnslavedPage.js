@@ -147,9 +147,9 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      <Button onClick={handleDialogOpen}>
-        View Connections
-      </Button>
+      {/*<Button onClick={handleDialogOpen}>*/}
+      {/*  View Connections*/}
+      {/*</Button>*/}
       <Table
         state={{
           pageType: "enslaved",
