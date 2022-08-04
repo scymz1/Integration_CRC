@@ -13,7 +13,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
   const [width, height] = useWindowSize();
-  const {selectedData,endpoint} = props.state
+  const {selectedData} = props.state
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
   const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
@@ -57,6 +57,12 @@ export default function Sankey(props) {
 
   useEffect(() => {
     setIsLoading(true)
+    const endpoint = (() => {
+        switch (selectedData.type) {
+          case "enslaved": return "past/enslaved/"
+          case "enslaver": return "past/enslavers/"
+        }
+      })();
     const targets = (() => {
         switch (selectedData.type) {
           case "enslaved": return selectedData.enslaved

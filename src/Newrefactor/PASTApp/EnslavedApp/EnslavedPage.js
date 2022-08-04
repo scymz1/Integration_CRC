@@ -94,7 +94,7 @@ export default function EnslavedPage(props) {
     options_flat,
     variables_tree,
   };
-  const state_graph = {selectedData,endpoint}
+  const state_graph = {selectedData}
   // view connections & click popover & click number_slaved
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -147,10 +147,6 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      <Button onClick={() => console.log(selectedData)}>
-        {" "}
-        Show Selected People
-      </Button>
       <Button onClick={handleDialogOpen}>
         View Connections
       </Button>
