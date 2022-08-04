@@ -117,8 +117,8 @@ export function ReadFeature(props) {
         data.append(property, v);
       });
     }
-    data.append("dataset", props.dataset[0]);
-    data.append("dataset", props.dataset[0]);
+    data.append("dataset", props.dataset);
+    data.append("dataset", props.dataset);
     data.append("groupby_fields", groupby_fields[0]);
     data.append("groupby_fields", groupby_fields[1]);
     data.append("value_field_tuple", value_field_tuple[0]);
@@ -268,19 +268,10 @@ export function ReadFeature(props) {
             //set_complete_object({...temp, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             var event = new Event('update_popup');
+            const state={complete_object, set_complete_object, disembark, setDisembark, layer}
             var dispatch=()=>{document.querySelector(".leaflet-popup-pane").dispatchEvent(event)};
             ReactDOM.createRoot(container).render(
-              <PivotContext.Provider
-                value={{
-                  complete_object,
-                  set_complete_object,
-                  disembark,
-                  setDisembark,
-                  layer,
-                }}
-              >
-                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates} isRegion={isRegion}/>  
-              </PivotContext.Provider>
+                <IntraTabs state={state} dispatch={dispatch} dataset={props.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates} isRegion={isRegion}/>  
             );
 
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
