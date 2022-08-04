@@ -212,7 +212,7 @@ export default function Table(props) {
           checkboxSelection={checkbox}
           keepNonExistentRowsSelected
           onSelectionModelChange={(newSelectionModel) => {
-            if (newSelectionModel.length <= 10) {
+            if (pageType !== "voyage" && newSelectionModel.length <= 10) {
               // set the maximum number of the selected people
               setSelectionModel(newSelectionModel);
               setSelectedData({
