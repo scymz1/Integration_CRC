@@ -214,8 +214,8 @@ export default function Table(props) {
             setSelectionModel(newSelectionModel);
             setSelectedData({
               ...selectedData,
-              type: "slaves",
-              slaves: newSelectionModel,
+              type: pageType,
+              [pageType]: newSelectionModel,
             });
           }
         }}
