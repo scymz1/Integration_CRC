@@ -40,7 +40,7 @@ export default function Table(props) {
     selectedData,
     setSelectedData,
     handleDialogOpen,
-    handleGallery
+    handleGallery,
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
@@ -48,38 +48,46 @@ export default function Table(props) {
   const [voyageOpen, setVoyageOpen] = useState(false);
   const [voyageId, setVoyageId] = useState(0);
 
-  const var_list = useMemo(()=>{
-    let result = []
-    const buildVarList = (node)=>{
-      Object.keys(node).forEach((key)=>{
-        if(node[key]){
-          buildVarList(node[key])
-        }else{
-          result.push(key)
+  const var_list = useMemo(() => {
+    let result = [];
+    const buildVarList = (node) => {
+      Object.keys(node).forEach((key) => {
+        if (node[key]) {
+          buildVarList(node[key]);
+        } else {
+          result.push(key);
         }
-      })
-    }
-    buildVarList(variables_tree)
-    return result
-  }, [variables_tree])
+      });
+    };
+    buildVarList(variables_tree);
+    return result;
+  }, [variables_tree]);
 
-  const columns = useMemo(()=>{
+  const columns = useMemo(() => {
     const result = [];
     const colVisModel = {};
     var_list.forEach((column) => {
       console.log();
-      colVisModel[column] = !!default_list.find(e => e === column);
+      colVisModel[column] = !!default_list.find((e) => e === column);
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        minWidth: 10 * (dataList.length === 0 ? 1 : Math.max(...dataList.map(e=>e[column]? e[column].toString().length: 0), options_flat[column].flatlabel.length)),
+        minWidth:
+          10 *
+          (dataList.length === 0
+            ? 1
+            : Math.max(
+                ...dataList.map((e) =>
+                  e[column] ? e[column].toString().length : 0
+                ),
+                options_flat[column].flatlabel.length
+              )),
       });
     });
     setColumnVisibilityModel(colVisModel);
     return result;
-  }, [dataList])
-
+  }, [dataList]);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -119,8 +127,8 @@ export default function Table(props) {
     );
   }
 
-  const PastToolbar = ()=>
-    (<GridToolbarContainer>
+  const PastToolbar = () => (
+    <GridToolbarContainer>
       <Stack direction={"row"} spacing={1}>
         <Button
           variant="contained"
@@ -140,7 +148,9 @@ export default function Table(props) {
           state={{
             columnVisibilityModel,
             setColumnVisibilityModel,
-            variables_tree, options_flat,}}
+            variables_tree,
+            options_flat,
+          }}
         />
         <GridToolbarDensitySelector />
         <GridToolbarExport />
@@ -154,20 +164,23 @@ export default function Table(props) {
           </Link>
         )}
       </Stack>
-    </GridToolbarContainer>)
+    </GridToolbarContainer>
+  );
 
-  const VoyageToolbar = ()=>
-    (<GridToolbarContainer>
+  const VoyageToolbar = () => (
+    <GridToolbarContainer>
       <ColSelector
         state={{
           columnVisibilityModel,
           setColumnVisibilityModel,
           variables_tree,
-          options_flat,}}
+          options_flat,
+        }}
       />
       <GridToolbarDensitySelector />
       <GridToolbarExport />
-    </GridToolbarContainer>)
+    </GridToolbarContainer>
+  );
 
   return (
     <TableContext.Provider
@@ -215,7 +228,10 @@ export default function Table(props) {
           checkboxSelection={checkbox}
           keepNonExistentRowsSelected
           onSelectionModelChange={(newSelectionModel) => {
-            if (pageType !== "voyage" && newSelectionModel.length <= 10) {
+            if (pageType === "voyage") {
+              setVoyageId(newSelectionModel[0]);
+              setVoyageOpen(true);
+            } else if (newSelectionModel.length <= 10) {
               // set the maximum number of the selected people
               setSelectionModel(newSelectionModel);
               setSelectedData({
