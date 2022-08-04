@@ -27,7 +27,6 @@ export default function Cell(props) {
       type: variety,
     });
     handleDialogOpen();
-    console.log(id);
     e.stopPropagation();
   };
 
