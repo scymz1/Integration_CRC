@@ -16,7 +16,7 @@ import Sankey from "../Component/Sankey"
 import Network from '../Component/Network'
 // import Story from './RelationGraph/Story'
 import Grow from '@mui/material/Grow';
-// import Gallery from "./Gallery.js"
+import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import TocIcon from '@mui/icons-material/Toc';
 import { useWindowSize } from "@react-hook/window-size";
@@ -103,6 +103,11 @@ export default function EnslavedPage(props) {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+  const [checked, setChecked] = useState(false);
+  const state_gallery = {filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,dataList,setDataList}
+  function handleGallery(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -150,7 +155,14 @@ export default function EnslavedPage(props) {
       <Button onClick={handleDialogOpen}>
         View Connections
       </Button>
-      <Table
+      {!checked && 
+      <Box>
+        <Grow
+        in={!checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 500 } : {})}
+        >
+          <div><Table
         state={{
           pageType: "enslaved",
           dataList,
@@ -173,8 +185,21 @@ export default function EnslavedPage(props) {
           setSelectedData,
           setDialogOpen,
           handleDialogOpen,
+          handleGallery
         }}
-      />
+      /></div>
+        </Grow>
+      </Box>}
+
+      {checked &&
+      <Box>
+        <Grow in={checked}>
+          <div>
+          <Gallery state={state_gallery}/>
+          </div>
+        </Grow>
+      </Box>}
+      
        <Dialog
         fullScreen
         open={dialogOpen}
