@@ -22,7 +22,6 @@ import ColSelector from "./ColumnSelector";
 export default function Table(props) {
   const {
     pageType,
-    enableSelect,
     dataList,
     pagination,
     setPagination,

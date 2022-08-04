@@ -3,11 +3,13 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
-import Cell from "../../CommonComponent/Table/Cell";
-//import { voyage_default_list } from "../../Util/tableVars";
-import ColSelector from "../../CommonComponent/ColumnSelector";
-import { enslaved_default_list, enslaved_var_list as variables_tree } from "./var";
 import * as options_flat from "./options.json";
+import {
+  enslaved_var_list as variables_tree,
+  enslaved_default_list,
+} from "./var";
+import Cell from "../../CommonComponent/Table/Cell";
+import Filter from "../../CommonComponent/Filter/Filter"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -25,27 +27,33 @@ export default function EnslavedPage(props) {
   });
   const [dataList, setDataList] = useState([]);
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  const [selectedData, setSelectedData] = useState([]);
+  // const {variables_tree, options_flat, dataset, filter_object} = props.state;
+  const [cols, setCols] = useState(enslaved_default_list);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved"};
+  const state2 = {filter_obj: filter_object, set_filter_obj: set_filter_object, dataset, setDataset, drawerOpen, setDrawerOpen, pageType: "enslaved", options_flat, variables_tree}
 
   useEffect(() => {
     //console.log("fetching...", pagination);
     setIsLoading(true);
     setDataList([]);
-    let selectedData = new FormData();
-    selectedData.append("hierarchical", "False");
-    selectedData.append("results_page", pagination.currPage + 1);
-    selectedData.append("results_per_page", pagination.rowsPerPage);
-    selectedData.append("dataset", dataset);
-    selectedData.append("dataset", dataset);
+    let queryData = new FormData();
+    queryData.append("hierarchical", "False");
+    queryData.append("results_page", pagination.currPage + 1);
+    queryData.append("results_per_page", pagination.rowsPerPage);
+    queryData.append("dataset", dataset);
+    queryData.append("dataset", dataset);
     if (sortModel.length !== 0) {
       sortModel.map((field) => {
         if (field.sort === "asc") {
-          selectedData.append("order_by", field.field);
+          queryData.append("order_by", field.field);
         } else if (field.sort === "desc") {
-          selectedData.append("order_by", "-" + field.field);
+          queryData.append("order_by", "-" + field.field);
         }
       });
     }
-    axios.post("/" + endpoint, selectedData).then((res) => {
+    axios.post("/" + endpoint, queryData).then((res) => {
       setPagination({
         ...pagination,
         totalRows: Number(res.headers.total_results_count),
@@ -63,7 +71,10 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{height: "100%"}}>
-      <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
+      {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
+      <NavBar state={state}/>
+      <Filter state={state2}/>
+      {/*<Button onClick={()=>console.log(dataList)}>Print Data</Button>*/}
       <Table
         state={{
           pageType: "enslaved",
