@@ -30,6 +30,8 @@ export default function VoyageTable(props) {
     queryData.append("hierarchical", "False");
     queryData.append("results_page", pagination.currPage + 1);
     queryData.append("results_per_page", pagination.rowsPerPage);
+    queryData.append("dataset", dataset);
+    queryData.append("dataset", dataset);
     if (sortModel.length !== 0) {
       sortModel.map((field) =>
         field.sort === "asc"
@@ -50,7 +52,13 @@ export default function VoyageTable(props) {
       setDataList(res.data);
       setIsLoading(false);
     }); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.currPage, pagination.rowsPerPage, filter_object, sortModel]);
+  }, [
+    pagination.currPage,
+    pagination.rowsPerPage,
+    filter_object,
+    sortModel,
+    dataset,
+  ]);
 
   return (
     <div style={{ height: "100%" }}>
