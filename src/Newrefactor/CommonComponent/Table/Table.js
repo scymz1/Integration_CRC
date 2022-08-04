@@ -98,7 +98,9 @@ export default function Table(props) {
     return result;
   }, [default_list, lengths]);
   const [columns, setColumns] = useState(defaultColumns);
-  //React.useEffect(()=>{setColumns(defaultColumns)}, [defaultColumns]);
+  React.useEffect(() => {
+    setColumns(defaultColumns);
+  }, [defaultColumns]);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -139,6 +141,23 @@ export default function Table(props) {
   }
 
   function CustomToolbar() {
+    console.log(pageType);
+    if (pageType === "voyage") {
+      return (
+        <GridToolbarContainer>
+          <ColSelector
+            state={{
+              cols: columns,
+              setCols: setColumns,
+              variables_tree,
+              options_flat,
+            }}
+          />
+          <GridToolbarDensitySelector />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      );
+    }
     return (
       <GridToolbarContainer>
         <Button
