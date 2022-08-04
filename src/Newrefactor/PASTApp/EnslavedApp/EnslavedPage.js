@@ -1,92 +1,145 @@
-// import NavBar from "../../CommonComponent/NavBar";
-// import { useEffect, useMemo, useState } from "react";
+import NavBar from "../../CommonComponent/NavBar";
+import { useEffect, useMemo, useState } from "react";
 // import Button from "@mui/material/Button";
-// import axios from "axios";
-// import Table from "../../CommonComponent/Table/Table";
-// import {
-//   enslaved_var_list as variables_tree,
-//   enslaved_default_list,
-// } from "./var";
-// import Cell from "../../CommonComponent/Table/Cell";
-// //import { voyage_default_list } from "../../Util/tableVars";
-// import ColSelector from "../../CommonComponent/ColumnSelector";
-// import { enslaved_default_list, enslaved_var_list as variables_tree } from "./var";
-// import * as options_flat from "./options.json";
+import axios from "axios";
+import Table from "../../CommonComponent/Table/Table";
+import * as options_flat from "./options.json";
+import {
+  enslaved_var_list as variables_tree,
+  enslaved_default_list,
+} from "./var";
+import Filter from "../../CommonComponent/Filter/Filter";
+import Button from "@mui/material/Button";
 
-// const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
-// axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
-// axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
-// const endpoint = "past/enslaved/";
+const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
+axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+const endpoint = "past/enslaved/";
 
-// export default function EnslavedPage(props) {
-//   const [dataset, setDataset] = useState(0);
-//   const [filter_object, set_filter_object] = useState({});
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [pagination, setPagination] = useState({
-//     currPage: 0,
-//     rowsPerPage: 10,
-//     totalRows: 0,
-//   });
-//   const [dataList, setDataList] = useState([]);
-//   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+export default function EnslavedPage(props) {
+  const [dataset, setDataset] = useState(1);
+  const [filter_object, set_filter_object] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [cols, setCols] = useState(enslaved_default_list);
+  // data response
+  const [dataList, setDataList] = useState([]);
+  // pagination
+  const [pagination, setPagination] = useState({
+    currPage: 0,
+    rowsPerPage: 10,
+    totalRows: 0,
+  });
+  // sorting
+  const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  // sankey modal
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState({
+    slaves: [],
+    type: "slaves",
+    enslavers: [],
+  });
 
-//   useEffect(() => {
-//     //console.log("fetching...", pagination);
-//     setIsLoading(true);
-//     setDataList([]);
-//     let selectedData = new FormData();
-//     selectedData.append("hierarchical", "False");
-//     selectedData.append("results_page", pagination.currPage + 1);
-//     selectedData.append("results_per_page", pagination.rowsPerPage);
-//     selectedData.append("dataset", dataset);
-//     selectedData.append("dataset", dataset);
-//     if (sortModel.length !== 0) {
-//       sortModel.map((field) => {
-//         if (field.sort === "asc") {
-//           selectedData.append("order_by", field.field);
-//         } else if (field.sort === "desc") {
-//           selectedData.append("order_by", "-" + field.field);
-//         }
-//       });
-//     }
-//     axios.post("/" + endpoint, selectedData).then((res) => {
-//       setPagination({
-//         ...pagination,
-//         totalRows: Number(res.headers.total_results_count),
-//       });
-//       setDataList(res.data);
-//       setIsLoading(false);
-//     });
-//   }, [
-//     pagination.currPage,
-//     pagination.rowsPerPage,
-//     filter_object,
-//     sortModel,
-//     dataset,
-//   ]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const state = {
+    dataset,
+    setDataset,
+    drawerOpen,
+    setDrawerOpen,
+    pageType: "enslaved",
+  };
+  const state2 = {
+    filter_obj: filter_object,
+    set_filter_obj: set_filter_object,
+    dataset,
+    setDataset,
+    drawerOpen,
+    setDrawerOpen,
+    pageType: "enslaved",
+    options_flat,
+    variables_tree,
+  };
 
-//   return (
-//     <div style={{height: "100%"}}>
-//       <NavBar state={{pageType: "enslaved", dataset, setDataset}}/>
-//       <Table
-//         state={{
-//           pageType: "enslaved",
-//           dataList,
-//           pagination,
-//           setPagination,
-//           sortModel,
-//           setSortModel,
-//           filter_object,
-//           set_filter_object,
-//           isLoading,
-//           checkbox: true,
-//           selectedData,
-//           setSelectedData,
-//           default_list: enslaved_default_list,
-//           variables_tree,
-//           options_flat,
-//         }}
-//       />
-//     </div>
-//   );
-// }
+  // view connections & click popover & click number_slaved
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  useEffect(() => {
+    //console.log("fetching...", pagination);
+    setIsLoading(true);
+    setDataList([]);
+    let queryData = new FormData();
+    queryData.append("hierarchical", "False");
+    queryData.append("results_page", pagination.currPage + 1);
+    queryData.append("results_per_page", pagination.rowsPerPage);
+    queryData.append("dataset", dataset);
+    queryData.append("dataset", dataset);
+    if (sortModel.length !== 0) {
+      sortModel.map((field) =>
+        field.sort === "asc"
+          ? queryData.append("order_by", field.field)
+          : queryData.append("order_by", "-" + field.field)
+      );
+    }
+    for (const property in filter_object) {
+      filter_object[property].forEach((v) => {
+        queryData.append(property, v);
+      });
+    }
+    axios.post("/" + endpoint, queryData).then((res) => {
+      setPagination({
+        ...pagination,
+        totalRows: Number(res.headers.total_results_count),
+      });
+      setDataList(res.data);
+      setIsLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    pagination.currPage,
+    pagination.rowsPerPage,
+    filter_object,
+    sortModel,
+    dataset,
+  ]);
+
+  return (
+    <div style={{ height: "100%" }}>
+      <NavBar state={state} />
+      <Filter state={state2} />
+      <Button onClick={() => console.log(selectedData)}>
+        {" "}
+        Show Selected People
+      </Button>
+      <Table
+        state={{
+          pageType: "enslaved",
+          dataList,
+          isLoading,
+          checkbox: true,
+          default_list: enslaved_default_list,
+          variables_tree,
+          options_flat,
+          // pagination
+          pagination,
+          setPagination,
+          // sorting
+          sortModel,
+          setSortModel,
+          // filter object
+          filter_object,
+          set_filter_object,
+          // selected ids
+          selectedData,
+          setSelectedData,
+          setDialogOpen,
+          handleDialogOpen,
+        }}
+      />
+    </div>
+  );
+}
