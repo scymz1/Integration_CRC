@@ -153,6 +153,28 @@ export default function Cell(props) {
     );
   }
 
+  // text ref cell
+  function textRefCell(row) {
+    return Object.values(row["voyage_sourceconnection"]).map(
+      (element, ref_key) => {
+        if (element["doc"] != null) {
+          return (
+            <div
+              style={{
+                color: "#f21b42",
+              }}
+              onClick={(e) => console.log(element["text_ref"])} //handleUV(e, element["doc"]["url"])
+            >
+              <u>{element["text_ref"]}</u>
+            </div>
+          );
+        } else {
+          return element["text_ref"];
+        }
+      }
+    );
+  }
+
   if (field === "gender") {
     // enslaved
     return genderCell(row[field]);
@@ -168,6 +190,9 @@ export default function Cell(props) {
   } else if (field === "number_enslaved") {
     // enslaver
     return numberEnslavedCell(row);
+  } else if (field === "voyage_sourceconnection__text_ref") {
+    // voyage
+    return textRefCell(row);
   } else if (typeof row[field] === "object") {
     return objectCell(row[field]);
   } else {
