@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Pivot from "../pivot";
+import Pivot from "../Pivot";
 import { Grid } from "@mui/material";
 
 // const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" 
