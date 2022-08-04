@@ -142,7 +142,6 @@ export default function Table(props) {
   }
 
   function CustomToolbar() {
-    console.log(pageType);
     if (pageType === "voyage") {
       return (
         <GridToolbarContainer>
