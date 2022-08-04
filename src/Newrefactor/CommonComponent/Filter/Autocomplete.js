@@ -57,7 +57,7 @@ export default function Auto(props) {
             multiple
             options={autocompleteOptions}
             value={filter_obj[key] ? filter_obj[key] : autocompleteOptions[0]}
-            isOptionEqualToValue={() => true}
+            // isOptionEqualToValue={() => true}
             onChange={(event, newValue) => {
 
                 set_filter_obj(filter_obj => ({                     
