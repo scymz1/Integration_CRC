@@ -16,7 +16,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Pivot(props) {
   const [width, height] = useWindowSize();
 
-  const { complete_object, set_complete_object } = props.state
+  const { complete_object, set_complete_object, dataset } = props.state
 
   //console.log(complete_object);
   // Responses
@@ -60,6 +60,9 @@ function Pivot(props) {
         });
       }
     }
+    data.append("dataset", dataset);
+    data.append("dataset", dataset);
+
     data.append("groupby_fields", complete_object["groupby_fields"][1]);
     data.append("groupby_fields", complete_object["groupby_fields"][0]);
     // data.append("value_field_tuple", option.cell);
@@ -91,7 +94,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object, props.disembark]);
+  }, [complete_object, props.disembark, dataset]);
 
   // Set columns
   useEffect(() => {
@@ -107,6 +110,9 @@ function Pivot(props) {
     }
     data.append("groupby_fields", complete_object["groupby_fields"][0]);
     data.append("groupby_fields", complete_object["groupby_fields"][1]);
+    data.append("dataset", dataset);
+    data.append("dataset", dataset);
+
     // data.append("value_field_tuple", option.cell);
     // data.append("value_field_tuple", aggregation);
     // data.append("cachename", "voyage_export");
@@ -121,7 +127,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object, props.disembark]);
+  }, [complete_object, props.disembark, dataset]);
 
   // if (isLoading) {
   //   return <div className="spinner"></div>;
