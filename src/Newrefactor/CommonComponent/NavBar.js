@@ -19,50 +19,50 @@ import { useMemo } from "react";
 import {switchTheme} from "../../Theme";
 
 export default function Navbar(props) {
-  const { dataset, setDataset, pageType, drawerOpen, setDrawerOpen } =
-    props.state;
+  const { dataset, setDataset, pageType, drawerOpen, setDrawerOpen } = props.state;
   
-    const color = (() =>{
-      if(pageType === "voyage") {
-        if(dataset==="0") {
-          return "voyageTrans"
-        }else{
-          return "voyageIntra"
-        }
+    const color = useMemo(() =>{
+      // console.log("color", pageType, dataset)
+      const a = [1, 2];
+      console.log(a.find(node => node === 1))
+      if(pageType === "enslaver") {
+        return "success"
       }
       if(dataset==="0") {
         return "primary"
       }else{
         return "secondary"
       }
-    })()
-  
+
+    }, [pageType, dataset])
+
   return (
     <AppBar position="sticky" color={color} elevation={0} style={{ zIndex: 3 }}>
       <Toolbar>
-        <Icon>
-          <img src={logo} height={30} width={60} />
-        </Icon>
-        <Typography
-          variant="h5"
-          noWrap
-          href="/"
-          component="a"
-          sx={{
-            flexGrow: 1,
-            fontFamily: "monospace",
-            fontWeight: 700,
-            letterSpacing: ".3rem",
-            color: "white",
-            textDecoration: "none",
-          }}
-        >
-          Voyages
-        </Typography>
+        <div style={{flexGrow:1}}>
+          <Typography
+            variant="h5"
+            noWrap
+            href="/"
+            component="a"
+            sx={{
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "white",
+              textDecoration: "none",
+            }}
+          >
+            <Icon>
+              <img src={logo} height={30} width={60} />
+            </Icon>
+            {pageType.toUpperCase()}
+          </Typography>
+        </div>
+
 
         <ThemeProvider theme={switchTheme}>
-            <Stack spacing={4} direction={"row"} justifyContent="flex-end"
-                   alignItems="flex-end" sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Stack spacing={4} direction={"row"} sx={{ flexGrow: 1}}>
         {pageType !== "home" ? (
           <IconButton
             aria-label="open drawer"
@@ -79,7 +79,6 @@ export default function Navbar(props) {
             value={dataset}
             exclusive
             onChange={(event) => {
-              console.log(event.target.value);
               setDataset(event.target.value);
             }}
             sx={{background: dataset === "0" ? "#42a5f5" : "#ab47bc"}}
@@ -99,30 +98,15 @@ export default function Navbar(props) {
         <Link to={"/voyage"} style={{ textDecoration: "none" }}>
           <Button sx={{ color: "white" }}>Voyages</Button>
         </Link>
+
         <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-          <Button
-            sx={{
-              my: 2,
-              color: "white",
-              display: "block",
-              position: "right",
-            }}
-          >
-            PAST
-          </Button>
+          <Button sx={{color: "white",}}>PAST</Button>
         </Link>
+
         <Link to={"/documents"} style={{ textDecoration: "none" }}>
-          <Button
-            sx={{
-              my: 2,
-              color: "white",
-              display: "block",
-              position: "right",
-            }}
-          >
-            Documents
-          </Button>
+          <Button sx={{color: "white",}}>Documents</Button>
         </Link>
+
       </Toolbar>
     </AppBar>
   );

@@ -46,6 +46,21 @@ export default function Table(props) {
   const [voyageOpen, setVoyageOpen] = useState(false);
   const [voyageId, setVoyageId] = useState(0);
 
+  const var_list = useMemo(()=>{
+    let result = []
+    const buildVarList = (node)=>{
+      Object.keys(node).forEach((key)=>{
+        if(node[key]){
+          buildVarList(node[key])
+        }else{
+          result.push(key)
+        }
+      })
+    }
+    buildVarList(variables_tree)
+    return result
+  }, [variables_tree])
+
   const lengths = useMemo(() => {
     var temp = {};
     dataList.forEach((row) => {
