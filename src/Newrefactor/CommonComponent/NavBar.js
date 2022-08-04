@@ -22,9 +22,6 @@ export default function Navbar(props) {
   const { dataset, setDataset, pageType, drawerOpen, setDrawerOpen } = props.state;
   
     const color = useMemo(() =>{
-      // console.log("color", pageType, dataset)
-      const a = [1, 2];
-      console.log(a.find(node => node === 1))
       if(pageType === "enslaver") {
         return "success"
       }
@@ -33,7 +30,6 @@ export default function Navbar(props) {
       }else{
         return "secondary"
       }
-
     }, [pageType, dataset])
 
   return (
