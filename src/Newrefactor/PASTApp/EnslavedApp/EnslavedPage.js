@@ -67,8 +67,8 @@ export default function EnslavedPage(props) {
   // sorting
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
   // sankey modal
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [value, setValue] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedData, setSelectedData] = useState({
     enslaved: [],
     type: "enslaved",

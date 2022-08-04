@@ -22,7 +22,14 @@ export default function Network(props) {
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
-    const targets = selectedData.slaves
+    const targets = (() => {
+        switch (myQueryData.type) {
+          case "enslaved":
+            return myQueryData.enslaved
+          case "enslaver":
+            return myQueryData.enslaver
+        }
+      })()
     const fetchData = async () => {
       const promises = targets.map(target => {
         let selected = new FormData();
@@ -36,8 +43,8 @@ export default function Network(props) {
       })
       const data = await Promise.all(promises)
       setTitle(data.map((item, index) => index === data.length - 1 ?
-        (myQueryData.type === "slaves"? item.documented_name : item.principal_alias) :
-        (myQueryData.type === "slaves"? item.documented_name : item.principal_alias) + " & "))
+        (myQueryData.type === "enslaved"? item.documented_name : item.principal_alias) :
+        (myQueryData.type === "enslaved"? item.documented_name : item.principal_alias) + " & "))
       let tmp = {
         nodes: [],
         edges: [],
@@ -67,7 +74,7 @@ export default function Network(props) {
       };
       setIsLoading(true)
       //enslavers
-      if (myQueryData.type === "enslavers") {
+      if (myQueryData.type === "enslaver") {
         // console.log("data", data)
         data.forEach((item, index) => {
           //self
