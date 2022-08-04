@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, List} from "@mui/material";
+import { Box, Button, Divider, List} from "@mui/material";
 import Navbar from "../CommonComponent/NavBar";
 import Container from "@mui/material/Container";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -22,6 +22,8 @@ import {
   useWindowSize,
 } from '@react-hook/window-size'
 import ArchiveHome from "./ArchiveHome";
+import SankeyComponent from "./Component/SankeySample";
+import NetworkComponent from "./Component/NetworkSample";
 
 
 export default function Home() {
@@ -36,13 +38,14 @@ export default function Home() {
 
   const dataset = "0";
   const state = { dataset, pageType: "home" };
-  const sample = [<BarComponent />, <PieComponent />, <PieComponent />, <PieComponent />, <PieComponent />];
+  const sample = [<SankeyComponent/>, <BarComponent />, <PieComponent />, <ScatterComponent/>];
   return (
     <div>
       <Navbar state={state} />
       <Container maxWidth={false} >
         <List>
-              <ScatterComponent /> 
+              <NetworkComponent/>
+              <Divider/>
               <ArchiveHome components={sample} scrollPosition={window.scrollY}/>
         </List>
         <Box display="flex"
