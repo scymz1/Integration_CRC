@@ -11,7 +11,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 export default function Network(props) {
-  const {selectedData,endpoint} = props.state
+  const {selectedData} = props.state
   const [graph, setGraph] = useState(null);
   const [myQueryData, setMyQueryData] = useState({...selectedData});
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +22,14 @@ export default function Network(props) {
   useEffect(() => {
     // console.log("myQueryData", myQueryData)
     setIsLoading(true)
+    const endpoint = (() => {
+        switch (myQueryData.type) {
+          case "enslaved":
+            return "past/enslaved/"
+          case "enslaver":
+            return "past/enslavers/"
+        }
+      })()
     const targets = (() => {
         switch (myQueryData.type) {
           case "enslaved":
@@ -244,11 +252,6 @@ export default function Network(props) {
     <div>
       <h1>Relation
         between: {title}</h1>
-      {/*<Button onClick={()=>console.log("data:", data)}>print data</Button>*/}
-      {/*<Button onClick={()=>console.log("graph:", graph)}>print graph</Button>*/}
-      {/*<Button onClick={()=>console.log("graph:", myQueryData)}>print myQueryData</Button>*/}
-      {/*<Button onClick={()=>console.log("dataSet:", props.dataSet)}>print dataSet</Button>*/}
-      {/*<Button onClick={()=>props.setDataSet(1)}>change dataSet</Button>*/}
       {isLoading ?
         <CircularProgress/> :
         <Graph

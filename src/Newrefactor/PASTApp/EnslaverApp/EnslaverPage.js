@@ -93,7 +93,7 @@ export default function EnslaverPage(props) {
     options_flat,
     variables_tree,
   };
-  const state_graph = {selectedData,endpoint}
+  const state_graph = {selectedData}
   // const defaultColumns = useMemo(() => {
   //   const result = [];
   //   enslaver_default_list.forEach((column) => {
@@ -153,10 +153,6 @@ export default function EnslaverPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      <Button onClick={() => console.log(selectedData)}>
-        {" "}
-        Show Selected People
-      </Button>
       <Button onClick={handleDialogOpen}>
         View Connections
       </Button>
