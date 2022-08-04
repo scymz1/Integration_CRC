@@ -73,7 +73,7 @@ export default function Filter(props) {
     const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
     const OpenBoundingBoxFilter = ()=>{
         return (
-        <AccordionDetails >
+        <AccordionDetails key={'accordDet'+key}>
             <BoundingBoxFilter  state={{key, filter_obj, set_filter_obj, options_flat, pageType, dataset}}/>
        </AccordionDetails>
         )
@@ -90,18 +90,18 @@ export default function Filter(props) {
     return (
         <div>
             {drawerOpen ?
-                <AppBar position="fixed" 
-                    // color={color} 
+                <AppBar key="menu_appbar"
+                    position="fixed" 
+                    color={color} 
                     elevation={0} 
-                    color={color}
                     style={{ zIndex: 3, marginTop: "68px" }}
                 >
-                    <Toolbar>
-                        <Grid container direction="row" spacing={1}>
+                    <Toolbar key="menu_toolbar">
+                        <Grid container key="menu_items" direction="row" spacing={1}>
                             {
                                 Object.keys(variables_tree).map((key) => {
                                     return (
-                                        <FilterSelector state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat}} />
+                                        <FilterSelector key={"menu_items_"+key} state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat}} />
                                     )
                                 })
                             }
@@ -110,6 +110,7 @@ export default function Filter(props) {
                 </AppBar>
                 : null}
             <Drawer
+                key="filter_drawer"
                 className={"Selected Fields Drawer"}
                 variant="persistent"
                 anchor={rightScreen ? "right" : "left"}
@@ -120,7 +121,7 @@ export default function Filter(props) {
                 <Toolbar />
                 <Toolbar />
                 <Divider />
-                <Grid container justifyContent="center" sx={{ mb: "10px" }}>
+                <Grid container key="top_grid" justifyContent="center" sx={{ mb: "10px" }}>
                     <Grid container item justifyContent={rightScreen ? "flex-start" : "flex-end"}>
                         <IconButton onClick={handleFilterReset}>
                             <RestartAltIcon />
@@ -146,19 +147,20 @@ export default function Filter(props) {
                 <Grid
                     container
                     item
-                    rowSpacing={2} columnSpacing={0.5}
+                    key="main_grid"
                     direction="row"
+                    rowSpacing={1} columnSpacing={0.5}
                     justifyContent="center"
-                    sx={{ mt: "10px"}}
+                    sx={{ mt:"5px", mb:"15px"}}
                 >
                     {Object.keys(filter_obj).length === 0 ?
-                        <Grid container item justifyContent="center" sx={{ mb: "20px" }}>
+                        <Grid container item key="empty_filter" justifyContent="center">
                             <Typography color="#808B96">No Filter</Typography>
                         </Grid>
                         :
                         Object.keys(filter_obj).map((key) => {
                             return (
-                                <Grid container key={'container'+key} xs={fullScreen ? 5 : 10} sx={{ mb: "10px"}}>
+                                <Grid container item key={'container'+key} xs={fullScreen ? 5 : 10}>
                                     <Grid item key={'item1'+key} xs={10}>
                                         <Accordion key={'accord'+key}>
                                             <AccordionSummary key={'accordSum'+key}>
