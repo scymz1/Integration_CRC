@@ -220,6 +220,7 @@ export default function Table(props) {
           }
         }}
         selectionModel={selectionModel}
+        style={{zIndex:0}}
       />
       {voyageOpen && (
         <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
