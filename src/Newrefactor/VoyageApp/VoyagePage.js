@@ -4,6 +4,7 @@ import VoyageScatter from "./Component/VoyageScatter";
 import VoyageBar from "./Component/VoyageBar";
 import VoyagePie from "./Component/VoyagePie";
 import Navbar from "../CommonComponent/NavBar";
+import PivotTable from "./Component/PivotTable";
 import {useWindowSize} from "@react-hook/window-size";
 
 import * as options_flat from '../Util/options.json'
@@ -63,7 +64,7 @@ export default function VoyagePage() {
          Table
         </TabPanel>
         <TabPanel value={value} index={4}>
-          Pivot
+          <PivotTable state={state}/>
         </TabPanel>
         <TabPanel value={value} index={5}>
           Map

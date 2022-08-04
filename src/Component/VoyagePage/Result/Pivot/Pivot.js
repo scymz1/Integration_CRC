@@ -27,6 +27,8 @@ function Pivot(props) {
     complete_object = props.complete_object;
   }
 
+  console.log("Disembark: ", disembark)
+
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
   // const [option, setOption] = useState({
