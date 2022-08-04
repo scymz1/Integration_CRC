@@ -24,6 +24,8 @@ import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
 
+export const TableContext = React.createContext({});
+
 export default function Table(props) {
   const {
     pageType,
@@ -78,15 +80,7 @@ export default function Table(props) {
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
-        renderCell: (props) =>
-          Cell({
-            ...props,
-            selectedData: selectedData,
-            setSelectedData: setSelectedData,
-            handleDialogOpen: handleDialogOpen,
-            setVoyageOpen: setVoyageOpen,
-            setVoyageId: setVoyageId,
-          }),
+        renderCell: Cell,
         // flex: lengths[column]
         //   ? Math.max(
         //       options_flat[column].flatlabel.length * 8.8,
@@ -178,54 +172,64 @@ export default function Table(props) {
   }
 
   return (
-    <div style={{ width: "100%" }}>
-      <DataGrid
-        autoHeight={true}
-        columns={columns}
-        rows={dataList}
-        rowCount={pagination.totalRows}
-        loading={isLoading}
-        components={{
-          LoadingOverlay: LinearProgress,
-          Toolbar: CustomToolbar,
-          Pagination: CustomPagination,
-        }}
-        // pagination
-        pagination
-        paginationMode="server"
-        page={pagination.currPage}
-        pageSize={pagination.rowsPerPage}
-        onPageChange={(newPage) => {
-          setPagination({ ...pagination, currPage: newPage });
-        }}
-        onPageSizeChange={(newPageSize) => {
-          setPagination({ ...pagination, rowsPerPage: newPageSize });
-        }}
-        // sorting
-        sortingMode="server"
-        onSortModelChange={(newSortModel) => {
-          setSortModel(newSortModel);
-        }}
-        // checkbox
-        checkboxSelection={checkbox}
-        keepNonExistentRowsSelected
-        onSelectionModelChange={(newSelectionModel) => {
-          if (newSelectionModel.length <= 10) {
-            // set the maximum number of the selected people
-            setSelectionModel(newSelectionModel);
-            setSelectedData({
-              ...selectedData,
-              type: pageType,
-              [pageType]: newSelectionModel,
-            });
-          }
-        }}
-        selectionModel={selectionModel}
-        style={{zIndex:0}}
-      />
-      {voyageOpen && (
-        <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
-      )}
-    </div>
+    <TableContext.Provider
+      value={{
+        selectedData,
+        setSelectedData,
+        handleDialogOpen,
+        setVoyageOpen,
+        setVoyageId,
+      }}
+    >
+      <div style={{ width: "100%" }}>
+        <DataGrid
+          autoHeight={true}
+          columns={columns}
+          rows={dataList}
+          rowCount={pagination.totalRows}
+          loading={isLoading}
+          components={{
+            LoadingOverlay: LinearProgress,
+            Toolbar: CustomToolbar,
+            Pagination: CustomPagination,
+          }}
+          // pagination
+          pagination
+          paginationMode="server"
+          page={pagination.currPage}
+          pageSize={pagination.rowsPerPage}
+          onPageChange={(newPage) => {
+            setPagination({ ...pagination, currPage: newPage });
+          }}
+          onPageSizeChange={(newPageSize) => {
+            setPagination({ ...pagination, rowsPerPage: newPageSize });
+          }}
+          // sorting
+          sortingMode="server"
+          onSortModelChange={(newSortModel) => {
+            setSortModel(newSortModel);
+          }}
+          // checkbox
+          checkboxSelection={checkbox}
+          keepNonExistentRowsSelected
+          onSelectionModelChange={(newSelectionModel) => {
+            if (newSelectionModel.length <= 10) {
+              // set the maximum number of the selected people
+              setSelectionModel(newSelectionModel);
+              setSelectedData({
+                ...selectedData,
+                type: pageType,
+                [pageType]: newSelectionModel,
+              });
+            }
+          }}
+          selectionModel={selectionModel}
+          style={{ zIndex: 0 }}
+        />
+        {voyageOpen && (
+          <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
+        )}
+      </div>
+    </TableContext.Provider>
   );
 }
