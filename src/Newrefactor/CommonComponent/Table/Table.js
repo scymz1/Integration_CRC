@@ -14,7 +14,7 @@ import { Button, LinearProgress } from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
@@ -29,14 +29,16 @@ export default function Table(props) {
     dataList,
     pagination,
     setPagination,
-    sortModel,
     setSortModel,
     isLoading,
-    set_filter_object,
+    //set_filter_object,
     checkbox,
     default_list,
     variables_tree,
     options_flat,
+    selectedData,
+    setSelectedData,
+    handleDialogOpen,
   } = props.state;
 
   const lengths = useMemo(() => {
@@ -70,7 +72,13 @@ export default function Table(props) {
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
-        renderCell: (props) => Cell({ ...props }),
+        renderCell: (props) =>
+          Cell({
+            ...props,
+            selectedData: selectedData,
+            setSelectedData: setSelectedData,
+            handleDialogOpen: handleDialogOpen,
+          }),
         flex: lengths[column]
           ? Math.max(
               options_flat[column].flatlabel.length * 8.8,
