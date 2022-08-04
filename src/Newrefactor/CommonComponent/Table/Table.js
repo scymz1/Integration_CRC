@@ -98,7 +98,7 @@ export default function Table(props) {
     return result;
   }, [default_list, lengths]);
   const [columns, setColumns] = useState(defaultColumns);
-  //React.useEffect(()=>{setColumns(defaultColumns)}, [defaultColumns]);
+  React.useEffect(()=>{setColumns(defaultColumns)}, [defaultColumns]);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
