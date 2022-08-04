@@ -100,7 +100,7 @@ export default function Filter(props) {
     }
   }
 
-//   console.log("Search Object: ", search_object)
+  console.log("Search Object: ", search_object)
   
     return (
     <AppContext.Provider

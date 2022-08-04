@@ -212,7 +212,7 @@ function PivotApp(props) {
       </div>
       <div>
         <PivotContext.Provider
-          value={{ complete_object, set_complete_object }}
+          value={{ complete_object, set_complete_object}}
         >
           <Pivot context={PivotContext} />
         </PivotContext.Provider>

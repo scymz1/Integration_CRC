@@ -10,9 +10,13 @@ function ComponentFac(props) {
     const {filter_obj, set_filter_obj, options_flat, pageType, key, dataset} = props.state
 
     switch (options_flat[key].type) {
-        case "<class 'rest_framework.fields.IntegerField'>" || "<class 'rest_framework.fields.DecimalField'>":
+        case "<class 'rest_framework.fields.IntegerField'>":
             return (
-                    <Slider state={{key, filter_obj, set_filter_obj, options_flat, pageType}} />
+                <Slider state={{key, filter_obj, set_filter_obj, options_flat, pageType}} />
+            );
+        case "<class 'rest_framework.fields.DecimalField'>":
+            return (
+                <Slider state={{key, filter_obj, set_filter_obj, options_flat, pageType}} />
             );
         case "<class 'rest_framework.fields.BooleanField'>":
             return <Chip label={
