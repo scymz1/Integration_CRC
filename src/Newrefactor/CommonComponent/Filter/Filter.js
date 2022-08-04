@@ -14,7 +14,7 @@ import SwitchLeftIcon from '@mui/icons-material/SwitchLeft';
 import SwitchRightIcon from '@mui/icons-material/SwitchRight';
 import ComponentFac from './ComponentFac';
 import FilterSelector from './FilterSelector'
-import BoundingBoxFilter from "../../../Component/VoyagePage/mapping/BoundingBoxFilter";
+import BoundingBoxFilter from "../../VoyageApp/Component/BoundingBoxFilter";
 
 export default function Filter(props) {
 
@@ -22,6 +22,8 @@ export default function Filter(props) {
 
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
+
+    const [openBoundingBox, setOpenBoundingBox] = React.useState(false);
 
     // Handle Full Screen and Exit
     const handleFullScreen = () => {
@@ -78,7 +80,7 @@ export default function Filter(props) {
        </AccordionDetails>
         )
      
-      }
+    }
 
     // const OpenBoundingBoxFilter = (event) => {
     //     if (!labels.some(e => e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")) {
@@ -133,14 +135,38 @@ export default function Filter(props) {
                             {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </Grid>
+                    
                     {
                         pageType == 'voyage' ?
                             <Button variant="contained" 
                                     color={color} 
-                                    onClick={OpenBoundingBoxFilter}
+                                    onClick={
+                                        // OpenBoundingBoxFilter
+                                        () => { setOpenBoundingBox(true) }
+                                    }
                             >
                                 <Typography color="white">Add Visual Filter</Typography>
-                            </Button> : null
+                            </Button> 
+                            
+                            : null
+                    }
+                    {
+                        openBoundingBox ? 
+                        // variables_for_map.map(key => {
+
+                            // return (
+                                <Accordion>
+                                    <AccordionSummary>
+                                        <Typography key={'typo'}>{"Select Location"}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails >
+                                        {/* <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} /> */}
+                                        Bounding Box Here
+                                    </AccordionDetails>
+                                </Accordion>
+                                // )
+                        // })
+                            : null
                     }
                 </Grid>
                 <Divider />
@@ -166,8 +192,8 @@ export default function Filter(props) {
                                             <AccordionSummary key={'accordSum'+key}>
                                                 <Typography key={'typo'+key}>{options_flat[key].flatlabel}</Typography>
                                             </AccordionSummary>
-                                            <AccordionDetails key={'accordDet'+key}>
-                                                <ComponentFac key={'compFac'+key} state={{ filter_obj, set_filter_obj, options_flat, pageType, key }} />
+                                            <AccordionDetails key={'accordDet' + key}>
+                                                <ComponentFac key={'compFac' + key} state={{ filter_obj, set_filter_obj, options_flat, pageType, key }} />
                                             </AccordionDetails>
                                         </Accordion>
                                     </Grid>
@@ -183,7 +209,7 @@ export default function Filter(props) {
                 </Grid>
                 <Divider />
                 <Grid container item justifyContent={rightScreen ? "flex-start" : "flex-end"}>
-                    <IconButton onClick={()=>setDrawerOpen(!drawerOpen)}>
+                    <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
                         {rightScreen ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
                 </Grid>
