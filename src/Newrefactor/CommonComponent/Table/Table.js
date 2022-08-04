@@ -42,6 +42,7 @@ export default function Table(props) {
     selectedData,
     setSelectedData,
     handleDialogOpen,
+    handleGallery
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
@@ -163,7 +164,7 @@ export default function Table(props) {
         <Button
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
-          onClick={() => {}}
+          onClick={() => handleGallery("story")}
         >
           Gallary
         </Button>
