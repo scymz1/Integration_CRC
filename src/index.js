@@ -42,8 +42,8 @@ root.render(
             <Route path="documents" element={<DocumentPage/>}/>
             <Route path="optionSelector" element={<OptionSelector/>}/>
             <Route path="voyage" element={<VoyagePage/>}/>
-            {/* <Route path="past/enslaved" element={<EnslavedPage/>}/> */}
-            {/* <Route path="past/enslaver" element={<EnslaverPage/>}/> */}
+            <Route path="past/enslaved" element={<EnslavedPage/>}/>
+            <Route path="past/enslaver" element={<EnslaverPage/>}/>
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
