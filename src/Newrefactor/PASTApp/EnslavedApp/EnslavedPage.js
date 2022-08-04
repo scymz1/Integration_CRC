@@ -1,6 +1,6 @@
 import NavBar from "../../CommonComponent/NavBar";
 import { useEffect, useMemo, useState } from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
 import * as options_flat from "./options.json";
@@ -8,7 +8,6 @@ import {
   enslaved_var_list as variables_tree,
   enslaved_default_list,
 } from "./var";
-import Cell from "../../CommonComponent/Table/Cell";
 import Filter from "../../CommonComponent/Filter/Filter";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -20,16 +19,25 @@ export default function EnslavedPage(props) {
   const [dataset, setDataset] = useState(1);
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [cols, setCols] = useState(enslaved_default_list);
+  // data response
+  const [dataList, setDataList] = useState([]);
+  // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
     rowsPerPage: 10,
     totalRows: 0,
   });
-  const [dataList, setDataList] = useState([]);
+  // sorting
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
-  const [selectedData, setSelectedData] = useState([]);
-  // const {variables_tree, options_flat, dataset, filter_object} = props.state;
-  const [cols, setCols] = useState(enslaved_default_list);
+  // sankey modal
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedData, setSelectedData] = useState({
+    slaves: [],
+    type: "slaves",
+    enslavers: [],
+  });
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const state = {
     dataset,
@@ -48,6 +56,15 @@ export default function EnslavedPage(props) {
     pageType: "enslaved",
     options_flat,
     variables_tree,
+  };
+
+  // view connections & click popover & click number_slaved
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   useEffect(() => {
@@ -80,6 +97,7 @@ export default function EnslavedPage(props) {
       setDataList(res.data);
       setIsLoading(false);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     pagination.currPage,
     pagination.rowsPerPage,
@@ -90,26 +108,31 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{ height: "100%" }}>
-      {/* <ColSelector state={{ cols, setCols, variables_tree, options_flat}}/> */}
       <NavBar state={state} />
       <Filter state={state2} />
       <Table
         state={{
           pageType: "enslaved",
           dataList,
-          pagination,
-          setPagination,
-          sortModel,
-          setSortModel,
-          filter_object,
-          set_filter_object,
           isLoading,
           checkbox: true,
-          selectedData,
-          setSelectedData,
           default_list: enslaved_default_list,
           variables_tree,
           options_flat,
+          // pagination
+          pagination,
+          setPagination,
+          // sorting
+          sortModel,
+          setSortModel,
+          // filter object
+          filter_object,
+          set_filter_object,
+          // selected ids
+          selectedData,
+          setSelectedData,
+          setDialogOpen,
+          handleDialogOpen,
         }}
       />
     </div>

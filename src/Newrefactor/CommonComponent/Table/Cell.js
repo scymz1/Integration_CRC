@@ -31,6 +31,7 @@ const handleSankeyOpen = (e, id, variety, props) => {
     type: variety,
   });
   props.handleDialogOpen();
+  console.log(id);
   e.stopPropagation();
 };
 
