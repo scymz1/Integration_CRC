@@ -9,6 +9,7 @@ import {
   enslaved_default_list,
 } from "./var";
 import Filter from "../../CommonComponent/Filter/Filter";
+import Button from "@mui/material/Button";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -110,6 +111,10 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
+      <Button onClick={() => console.log(selectedData)}>
+        {" "}
+        Show Selected People
+      </Button>
       <Table
         state={{
           pageType: "enslaved",

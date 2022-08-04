@@ -10,7 +10,7 @@ export default function Cell(props) {
     case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
       return aliasCell(row, props);
     case "transactions__transaction__voyage__id":
-      return voyageIdCell(row[field]);
+      return voyageIdCell(row[field], props);
     case typeof row[field] === "object":
       return objectCell(row[field]);
     default:
@@ -33,6 +33,13 @@ const handleSankeyOpen = (e, id, variety, props) => {
   props.handleDialogOpen();
   console.log(id);
   e.stopPropagation();
+};
+
+// open voyage modal in enslaved table
+const handleVoyageOpen = (event, id, props) => {
+  props.setVoyageOpen(true);
+  props.setVoyageId(id);
+  event.stopPropagation();
 };
 
 // create popover for enslaver alias in enslaved table
@@ -98,9 +105,14 @@ function aliasCell(row, props) {
 }
 
 // voyage id cell
-function voyageIdCell(ids) {
+function voyageIdCell(ids, props) {
   return (
-    <div style={{ color: "blue" }}>
+    <div
+      style={{ color: "blue" }}
+      onClick={(e) => {
+        handleVoyageOpen(e, ids[0], props);
+      }}
+    >
       <u>{[...new Set(ids)].filter((n) => n != null).join(", ")}</u>
     </div>
   );
