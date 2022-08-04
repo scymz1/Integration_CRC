@@ -10,7 +10,6 @@ import {
 } from "./var";
 import Cell from "../../CommonComponent/Table/Cell";
 import Filter from "../../CommonComponent/Filter/Filter"
-import * as options_flat from "./options.json"
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
