@@ -25,6 +25,7 @@ function isNumeric(n) {
 
 // popover event & open sankey modal in past table
 const handleSankeyOpen = (e, id, variety, props) => {
+  console.log(props.selectedData);
   props.setSelectedData({
     ...props.selectedData,
     [variety]: id,
@@ -95,7 +96,7 @@ function aliasCell(row, props) {
           <Chip
             label={name}
             onClick={(e) =>
-              handleSankeyOpen(e, [popover[name]["id"]], "enslavers", props)
+              handleSankeyOpen(e, [popover[name]["id"]], "enslaver", props)
             }
           />
         </Tooltip>
