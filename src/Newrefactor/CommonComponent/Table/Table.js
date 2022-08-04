@@ -23,6 +23,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
+import HubIcon from "@mui/icons-material/Hub";
 
 export const TableContext = React.createContext({});
 
@@ -46,62 +47,42 @@ export default function Table(props) {
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
   const [voyageOpen, setVoyageOpen] = useState(false);
   const [voyageId, setVoyageId] = useState(0);
 
-  const lengths = useMemo(() => {
-    var temp = {};
-    dataList.forEach((row) => {
-      for (const [key, value] of Object.entries(row)) {
-        switch (key) {
-          case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-            var curlength = value ? value.length * 200 : 200;
-            temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
-            break;
-          case "gender":
-            temp[key] = 80;
-          default:
-            var curlength = 0;
-            if (typeof value === "number") {
-              curlength = value.toString().length * 20;
-            } else if (typeof value === "string") {
-              curlength = value.length * 10;
-            }
-            temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
-            break;
+  const var_list = useMemo(()=>{
+    let result = []
+    const buildVarList = (node)=>{
+      Object.keys(node).forEach((key)=>{
+        if(node[key]){
+          buildVarList(node[key])
+        }else{
+          result.push(key)
         }
-      }
-    });
-    return temp;
-  }, [dataList]);
+      })
+    }
+    buildVarList(variables_tree)
+    return result
+  }, [variables_tree])
 
-  const defaultColumns = useMemo(() => {
+  const columns = useMemo(()=>{
     const result = [];
-    default_list.forEach((column) => {
+    const colVisModel = {};
+    var_list.forEach((column) => {
+      console.log();
+      colVisModel[column] = !!default_list.find(e => e === column);
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        // flex: lengths[column]
-        //   ? Math.max(
-        //       options_flat[column].flatlabel.length * 8.8,
-        //       lengths[column]
-        //     )
-        //   : options_flat[column].flatlabel.length,
-        minWidth: lengths[column]
-          ? Math.max(
-              options_flat[column].flatlabel.length * 8.8,
-              lengths[column]
-            )
-          : options_flat[column].flatlabel.length * 8.8,
+        minWidth: 10 * (dataList.length === 0 ? 1 : Math.max(...dataList.map(e=>e[column]? e[column].toString().length: 0), options_flat[column].flatlabel.length)),
       });
     });
+    setColumnVisibilityModel(colVisModel);
     return result;
-  }, [default_list, lengths]);
-  const [columns, setColumns] = useState(defaultColumns);
-  React.useEffect(() => {
-    setColumns(defaultColumns);
-  }, [defaultColumns]);
+  }, [dataList])
+
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -145,14 +126,14 @@ export default function Table(props) {
     if (pageType === "voyage") {
       return (
         <GridToolbarContainer>
-          <ColSelector
-            state={{
-              cols: columns,
-              setCols: setColumns,
-              variables_tree,
-              options_flat,
-            }}
-          />
+          {/*<ColSelector*/}
+          {/*  state={{*/}
+          {/*    cols: columns,*/}
+          {/*    setCols: setColumns,*/}
+          {/*    variables_tree,*/}
+          {/*    options_flat,*/}
+          {/*  }}*/}
+          {/*/>*/}
           <GridToolbarDensitySelector />
           <GridToolbarExport />
         </GridToolbarContainer>
@@ -160,32 +141,41 @@ export default function Table(props) {
     }
     return (
       <GridToolbarContainer>
-        <Button
-          variant="contained"
-          startIcon={<DashboardCustomizeIcon />}
-          onClick={() => handleGallery("story")}
-        >
-          Gallary
-        </Button>
-        <ColSelector
-          state={{
-            cols: columns,
-            setCols: setColumns,
-            variables_tree,
-            options_flat,
-          }}
-        />
-        <GridToolbarDensitySelector />
-        <GridToolbarExport />
-        {pageType === "enslaver" ? (
-          <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon />}>Enslaved</Button>
-          </Link>
-        ) : (
-          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon />}>Enslaver</Button>
-          </Link>
-        )}
+        <Stack direction={"row"} spacing={1}>
+          <Button
+            variant="contained"
+            startIcon={<DashboardCustomizeIcon />}
+            onClick={() => {}}
+          >
+            Gallary
+          </Button>
+          <Button
+            startIcon={<HubIcon />}
+            // variant="outlined"
+            onClick={handleDialogOpen}
+          >
+            Connections
+          </Button>
+          {/*<ColSelector*/}
+          {/*  state={{*/}
+          {/*    cols: columns,*/}
+          {/*    setCols: setColumns,*/}
+          {/*    variables_tree,*/}
+          {/*    options_flat,*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <GridToolbarDensitySelector />
+          <GridToolbarExport />
+          {pageType === "enslaver" ? (
+            <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
+              <Button startIcon={<TableChartIcon />}>Enslaved</Button>
+            </Link>
+          ) : (
+            <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
+              <Button startIcon={<TableChartIcon />}>Enslaver</Button>
+            </Link>
+          )}
+        </Stack>
       </GridToolbarContainer>
     );
   }
@@ -204,6 +194,7 @@ export default function Table(props) {
         <DataGrid
           autoHeight={true}
           columns={columns}
+          columnVisibilityModel={columnVisibilityModel}
           rows={dataList}
           rowCount={pagination.totalRows}
           loading={isLoading}

@@ -54,11 +54,11 @@ function TabPanel(props) {
 }
 
 export default function EnslavedPage(props) {
-  const [width, height] = useWindowSize();
-  const [dataset, setDataset] = useState(1);
+  const [dataset, setDataset] = useState("1");
+  // const [width, height] = useWindowSize();
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [cols, setCols] = useState(enslaved_default_list);
+  // const [cols, setCols] = useState(enslaved_default_list);
   // data response
   const [dataList, setDataList] = useState([]);
   // pagination
@@ -155,9 +155,6 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      <Button onClick={handleDialogOpen}>
-        View Connections
-      </Button>
       {!checked && 
       <Box>
         <Grow
