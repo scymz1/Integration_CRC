@@ -26,6 +26,7 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
+
 export default function Bar(props) {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -105,56 +106,49 @@ export default function Bar(props) {
     setAlert(false)
     // var value = option.value;
    let yfieldArr = []
-   let currentData ={}
     const fetchData = async () => {
-      const promises = chips.map( element => {
-    var data = new FormData();
+      var data = new FormData();
+      data.append("groupby_fields", option.field);
+      data.append("agg_fn", aggregation);
+      // data.append("hierarchical", "False");
+      data.append("cachename", "voyage_bar_and_donut_charts");
+      for (var property in search_object) {
+        search_object[property].forEach((v) => {
+          data.append(property, v);
+        });
+      }
+
+
+    chips.map( (element) => {
      yfieldArr.push(element)
-    
-    for (var property in search_object) {
-      search_object[property].forEach((v) => {
-        data.append(property, v);
-      });
-    }
-   
-    data.append("hierarchical", "False");
-    data.append("groupby_fields", option.field);
-    data.append("groupby_fields", element);
-    data.append("agg_fn", aggregation);
-
-    // console.log("option_value🍕", typeof(option.value))
-    // console.log("element🍔",element)
-    // console.log("agg_fn🥤", aggregation)
-    data.append("cachename", "voyage_bar_and_donut_charts");
-    return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
-      method: "POST",
-      body: data,
-      headers: {'Authorization':AUTH_TOKEN}
-    }).then(res => res.json())
-    
-    .then(function (response) {
-        // console.log("🔥data", response)
-
-      //  Object.values(response).forEach(val => {
-      //     if (Number.isNaN(val)) {
-      //       val = 0;
-      //     }
-      //   });
-
-      // JSON.stringify(Object.values(response), (name, val) => typeof(val) === 'number' && (isNaN(val) || !isFinite(val)) ? val.toString() : val)
-        return Object.values(response)[0];
-      })
-    })
   
-    const data = await Promise.all(promises)
+    data.append("groupby_fields", element);
+    })
 
+    const promises = () =>{
+      return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
+        method: "POST",
+        body: data,
+        headers: {'Authorization':AUTH_TOKEN}
+      }).then(res => res.json())
+      .then(function (response) {
+        console.log("🔥data", response)
+
+        return Object.values(response);
+      })
+    }
+
+  
+    const dataGet = await Promise.all(promises)
+
+    console.log("🐻", dataGet[dataGet.length - 1])
        //  Convert NaN to 0
     // NaN cause the error: SyntaxError: Unexpected token N in JSON
-    Object.values(data).forEach(val => {
-      if (Number.isNaN(val)) {
-        val = 0;
-      }
-    });
+    // Object.values(data).forEach(val => {
+    //   if (Number.isNaN(val)) {
+    //     val = 0;
+    //   }
+    // });
  
    
     // setDataFlow([...dataFlow, data[data.length - 1]])
@@ -166,7 +160,7 @@ export default function Bar(props) {
    
     let arr = []
 
-    data.forEach( (dataElement,index) =>{
+    dataGet[dataGet.length - 1].forEach( (dataElement,index) =>{
       // console.log("🐔 dataElement is ", dataElement)
       // console.log("type", typeof(Object.values(dataElement)[0]))
         arr.push({
