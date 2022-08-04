@@ -135,17 +135,20 @@ export default function Filter(props) {
                             {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </Grid>
+                    
                     {
                         pageType == 'voyage' ?
                             <Button variant="contained" 
                                     color={color} 
                                     onClick={
                                         // OpenBoundingBoxFilter
-                                        setOpenBoundingBox(true)
+                                        () => { setOpenBoundingBox(true) }
                                     }
                             >
                                 <Typography color="white">Add Visual Filter</Typography>
-                            </Button> : null
+                            </Button> 
+                            
+                            : null
                     }
                     {
                         openBoundingBox ? 

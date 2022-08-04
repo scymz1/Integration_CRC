@@ -1,4 +1,4 @@
-import Pivot from "./Pivot";
+import Pivot from "./pivot";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -204,7 +204,7 @@ function PivotTable(props) {
             </div>
             <div>
 
-                {/* <Pivot state={{ complete_object, set_complete_object, dataset }} /> */}
+                <Pivot state={{ complete_object, set_complete_object, dataset }} />
 
             </div>
         </div>
