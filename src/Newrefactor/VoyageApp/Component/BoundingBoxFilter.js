@@ -10,8 +10,8 @@ import 'leaflet-area-select';
 import AreaSelect from "./AreaSelect";
 import axios from 'axios';
 // import { ReadFeature } from "./Spatial.js"
-// import map_icon from "../mapping/map_icon.png";
-
+import map_icon from "../Component/mapping/map_icon.png";
+import emb_icon from "../Component/mapping/emb_icon.png"
 import { Typography, Box, Modal } from '@mui/material';
 
 const { BaseLayer } = LayersControl;
@@ -37,7 +37,6 @@ export default function BoundingBoxFilter(props) {
 
     const [latlong, setlatlong] = useState([[0, 0], [0, 0]]);
 
-    console.log("Key: ", key)
 
     useEffect(() => {
         var out;
@@ -91,68 +90,67 @@ export default function BoundingBoxFilter(props) {
         p: 4,
     };
 
-    return(
-        <div>{key}</div>
-    )
-    // return (
-    //     <div>
-    //         <img src={map_icon} alt="map icon" style={{ width: "100%", height: "60px" }} onClick={handleOpen} />
-    //         <Modal
-    //             open={open}
-    //             onClose={handleClose}
-    //             aria-labelledby="modal-modal-title"
-    //             aria-describedby="modal-modal-description"
-    //         >
-    //             <Box sx={style}>
-    //                 <Typography id="modal-modal-title" variant="h6" component="h2">
-    //                     Select filter by bounding box
-    //                 </Typography>
-    //                 <Button variant="contained" color="grey" startIcon={<Avatar src={emb_icon} size="20" />} value='disembarkation' onClick={setSelectMode(true)}>
-    //                     Select Area
-    //                 </Button>
 
-    //                 <br /> <br />
-    //                 <MapContainer zoom={2.5} minZoom={2.2} style={{ height: "75vh", zIndex: 0 }}>
-    //                     <LayersControl position="bottomleft">
-    //                         <BaseLayer name="modern country border (old map)">
-    //                             <TileLayer
-    //                                 url={normal_old}
-    //                                 attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-    //                             />
-    //                         </BaseLayer>
-    //                         <BaseLayer checked name="no country border (old map)">
-    //                             <TileLayer
-    //                                 url={noBorder_old}
-    //                                 attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-    //                             />
-    //                         </BaseLayer>
-    //                         <BaseLayer name="modern country border">
-    //                             <TileLayer
-    //                                 url={normal}
-    //                                 attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-    //                             />
-    //                         </BaseLayer>
-    //                         <BaseLayer checked name="no country border">
-    //                             <TileLayer
-    //                                 url={noBorder}
-    //                                 attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
-    //                             />
-    //                         </BaseLayer>
-    //                         <BaseLayer checked name="no country border">
-    //                             <TileLayer
-    //                                 url={mapping_specialists}
-    //                                 attribution="mapping_specialists"
-    //                             />
-    //                         </BaseLayer>
-    //                     </LayersControl>
-    //                     {/* <ReadFeature search_object={filter_obj} radio={radioOptions} filter={true} latlong={latlong} /> */}
+    return (
+        <div>
+            <img src={map_icon} alt="map icon" style={{ width: "100%", height: "60px" }} onClick={handleOpen} />
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Select filter by bounding box
+                    </Typography>
+                    <Button variant="contained" color="grey" startIcon={<Avatar src={emb_icon} size="20" />} value='disembarkation' onClick={() => { setSelectMode(true) }}>
+                        Select Area
+                    </Button>
 
-    //                     <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
-    //                         onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={setSelectMode} latlong={latlong} setlatlong={setlatlong} />
+                    <br /> <br />
+                    <MapContainer zoom={2.5} minZoom={2.2} style={{ height: "75vh", zIndex: 0 }}>
+                        <LayersControl position="bottomleft">
+                            <BaseLayer name="modern country border (old map)">
+                                <TileLayer
+                                    url={normal_old}
+                                    attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                                />
+                            </BaseLayer>
+                            <BaseLayer checked name="no country border (old map)">
+                                <TileLayer
+                                    url={noBorder_old}
+                                    attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                                />
+                            </BaseLayer>
+                            <BaseLayer name="modern country border">
+                                <TileLayer
+                                    url={normal}
+                                    attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                                />
+                            </BaseLayer>
+                            <BaseLayer checked name="no country border">
+                                <TileLayer
+                                    url={noBorder}
+                                    attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>"
+                                />
+                            </BaseLayer>
+                            <BaseLayer checked name="no country border">
+                                <TileLayer
+                                    url={mapping_specialists}
+                                    attribution="mapping_specialists"
+                                />
+                            </BaseLayer>
+                        </LayersControl>
+                        
+                        {/* <ReadFeature search_object={filter_obj} radio={radioOptions} filter={true} latlong={latlong} /> */}
 
-    //                 </MapContainer>
-    //             </Box>
-    //         </Modal>
-    //     </div>
-    // );
+                        <AreaSelect onChangelongitude1={onChangelongitude1} onChangelongitude2={onChangelongitude2}
+                            onChangelatitude1={onChangelatitude1} onChangelatitude2={onChangelatitude2} selectMode={selectMode} SetselectMode={setSelectMode} latlong={latlong} setlatlong={setlatlong} />
+
+                    </MapContainer>
+                </Box>
+            </Modal>
+        </div>
+    );
 }
