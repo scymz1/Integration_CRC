@@ -17,6 +17,7 @@ function Pivot(props) {
   const [width, height] = useWindowSize();
 
   const { complete_object, set_complete_object, dataset } = props.state
+  console.log("pivot complete object", complete_object)
 
   //console.log(complete_object);
   // Responses

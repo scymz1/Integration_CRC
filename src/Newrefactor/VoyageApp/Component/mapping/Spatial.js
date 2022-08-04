@@ -264,7 +264,7 @@ export function ReadFeature(props) {
             else{
               complete_object[groupby_fields_port[0]] = [layer.feature.id, layer.feature.id];
             }
-            complete_object["dataset"]=props.search_object["dataset"]
+            //complete_object["dataset"]=[props.dataset, props.dataset]
             //set_complete_object({...temp, [disembark]:[layer.feature.id, layer.feature.id]})
             const container = L.DomUtil.create("div");
             var event = new Event('update_popup');
@@ -279,7 +279,7 @@ export function ReadFeature(props) {
                   layer,
                 }}
               >
-                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.search_object.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates} isRegion={isRegion}/>  
+                <IntraTabs context={PivotContext} dispatch={dispatch} dataset={props.dataset[0]} title={layer.feature.properties.name +" " +layer.feature.geometry.coordinates} isRegion={isRegion}/>  
               </PivotContext.Provider>
             );
 
