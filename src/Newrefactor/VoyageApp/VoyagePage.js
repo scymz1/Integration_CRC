@@ -3,6 +3,7 @@ import {Box, Tab, Tabs} from "@mui/material";
 import VoyageScatter from "./Component/VoyageScatter";
 import VoyageBar from "./Component/VoyageBar";
 import VoyagePie from "./Component/VoyagePie";
+import MapBoundingBox from "./Component/VoyageMap"
 import Navbar from "../CommonComponent/NavBar";
 import PivotTable from "./Component/PivotTable";
 import {useWindowSize} from "@react-hook/window-size";
@@ -67,7 +68,7 @@ export default function VoyagePage() {
           <PivotTable state={state}/>
         </TabPanel>
         <TabPanel value={value} index={5}>
-          Map
+          <MapBoundingBox state={state}/>
         </TabPanel>
       </Box>
     </div>

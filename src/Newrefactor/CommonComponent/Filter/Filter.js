@@ -18,15 +18,14 @@ import BoundingBoxFilter from "../../VoyageApp/Component/BoundingBoxFilter";
 
 export default function Filter(props) {
 
-    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state
+    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state;
 
-
-    const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
 
     const [openBoundingBox, setOpenBoundingBox] = React.useState(false);
-    const variables_for_map = ['voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name'];
+
+    // Handle Full Screen and Exit
     const handleFullScreen = () => {
         setFullScreen(!fullScreen);
     };
@@ -58,22 +57,30 @@ export default function Filter(props) {
         set_filter_obj(temp)
     };
 
+    const color = (() =>{
+        if(pageType === "voyage") {
+          if(dataset==="0") {
+            return "voyageTrans"
+          }else{
+            return "voyageIntra"
+          }
+        }
+        if(dataset==="0") {
+          return "primary"
+        }else{
+          return "secondary"
+        }
+      })()
 
-    // const OpenBoundingBoxFilter = ()=>{
-
-
-    //     return (
-    // <Accordion>
-    //     <AccordionSummary>
-    //         <Typography key={'typo'+key}>{"Select Location"}</Typography>
-    //     </AccordionSummary>
-    //     <AccordionDetails >
-    //         <BoundingBoxFilter  state={{key, filter_obj, set_filter_obj, options_flat, pageType, dataset}}/>
-    //     </AccordionDetails>
-    // </Accordion>
-    //     )
-
-    //   }
+    const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
+    const OpenBoundingBoxFilter = ()=>{
+        return (
+        <AccordionDetails key={'accordDet'+key}>
+            <BoundingBoxFilter  state={{key, filter_obj, set_filter_obj, options_flat, pageType, dataset}}/>
+       </AccordionDetails>
+        )
+     
+    }
 
     // const OpenBoundingBoxFilter = (event) => {
     //     if (!labels.some(e => e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")) {
@@ -85,17 +92,18 @@ export default function Filter(props) {
     return (
         <div>
             {drawerOpen ?
-                <AppBar position="fixed"
-                    // color={color} 
-                    elevation={0}
+                <AppBar key="menu_appbar"
+                    position="fixed" 
+                    color={color} 
+                    elevation={0} 
                     style={{ zIndex: 3, marginTop: "68px" }}
                 >
-                    <Toolbar>
-                        <Grid container direction="row" spacing={1}>
+                    <Toolbar key="menu_toolbar">
+                        <Grid container key="menu_items" direction="row" spacing={1}>
                             {
                                 Object.keys(variables_tree).map((key) => {
                                     return (
-                                        <FilterSelector state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat }} />
+                                        <FilterSelector key={"menu_items_"+key} state={{ key, filter_obj, set_filter_obj, variables_tree, options_flat}} />
                                     )
                                 })
                             }
@@ -104,6 +112,7 @@ export default function Filter(props) {
                 </AppBar>
                 : null}
             <Drawer
+                key="filter_drawer"
                 className={"Selected Fields Drawer"}
                 variant="persistent"
                 anchor={rightScreen ? "right" : "left"}
@@ -114,7 +123,7 @@ export default function Filter(props) {
                 <Toolbar />
                 <Toolbar />
                 <Divider />
-                <Grid container justifyContent="center" sx={{ mb: "10px" }}>
+                <Grid container key="top_grid" justifyContent="center" sx={{ mb: "10px" }}>
                     <Grid container item justifyContent={rightScreen ? "flex-start" : "flex-end"}>
                         <IconButton onClick={handleFilterReset}>
                             <RestartAltIcon />
@@ -128,29 +137,32 @@ export default function Filter(props) {
                     </Grid>
                     {
                         pageType == 'voyage' ?
-                            <Button variant="contained"
-                                // color={color} 
-                                onClick={() => setOpenBoundingBox(true)}
+                            <Button variant="contained" 
+                                    color={color} 
+                                    onClick={
+                                        // OpenBoundingBoxFilter
+                                        setOpenBoundingBox(true)
+                                    }
                             >
                                 <Typography color="white">Add Visual Filter</Typography>
                             </Button> : null
                     }
                     {
                         openBoundingBox ? 
-                        variables_for_map.map(key => {
+                        // variables_for_map.map(key => {
 
-                            return (
+                            // return (
                                 <Accordion>
                                     <AccordionSummary>
                                         <Typography key={'typo'}>{"Select Location"}</Typography>
                                     </AccordionSummary>
                                     <AccordionDetails >
-                                        <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} />
+                                        {/* <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} /> */}
                                         Bounding Box Here
                                     </AccordionDetails>
                                 </Accordion>
-                                )
-                        })
+                                // )
+                        // })
                             : null
                     }
                 </Grid>
@@ -158,31 +170,32 @@ export default function Filter(props) {
                 <Grid
                     container
                     item
-                    rowSpacing={2} columnSpacing={0.5}
+                    key="main_grid"
                     direction="row"
+                    rowSpacing={1} columnSpacing={0.5}
                     justifyContent="center"
-                    sx={{ mt: "10px", mb: "10px", ml: "10px" }}
+                    sx={{ mt:"5px", mb:"15px"}}
                 >
                     {Object.keys(filter_obj).length === 0 ?
-                        <Grid container item justifyContent="center" sx={{ mb: "15px", mr: "10px" }}>
+                        <Grid container item key="empty_filter" justifyContent="center">
                             <Typography color="#808B96">No Filter</Typography>
                         </Grid>
                         :
                         Object.keys(filter_obj).map((key) => {
                             return (
-                                <Grid container key={'container' + key} xs={fullScreen ? 5 : 12} sx={{ mb: "5px", mr: "10px" }}>
-                                    <Grid item key={'item1' + key} xs={10}>
-                                        <Accordion key={'accord' + key}>
-                                            <AccordionSummary key={'accordSum' + key}>
-                                                <Typography key={'typo' + key}>{options_flat[key].flatlabel}</Typography>
+                                <Grid container item key={'container'+key} xs={fullScreen ? 5 : 10}>
+                                    <Grid item key={'item1'+key} xs={10}>
+                                        <Accordion key={'accord'+key}>
+                                            <AccordionSummary key={'accordSum'+key}>
+                                                <Typography key={'typo'+key}>{options_flat[key].flatlabel}</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails key={'accordDet' + key}>
                                                 <ComponentFac key={'compFac' + key} state={{ filter_obj, set_filter_obj, options_flat, pageType, key }} />
                                             </AccordionDetails>
                                         </Accordion>
                                     </Grid>
-                                    <Grid item key={'item2' + key} xs={2}>
-                                        <IconButton key={'iconB' + key} onClick={() => { handleDelete(key) }}>
+                                    <Grid item key={'item2'+key} align="center" xs={2}>
+                                        <IconButton key={'iconB'+key} onClick={() => { handleDelete(key) }}>
                                             <RemoveCircleOutlineIcon />
                                         </IconButton>
                                     </Grid>

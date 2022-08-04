@@ -16,8 +16,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 function Pivot(props) {
   const [width, height] = useWindowSize();
 
-  const { complete_object, set_complete_object, disembark, setDisembark } =
-    useContext(props.context);
+  const { complete_object, set_complete_object } = props.state
 
   //console.log(complete_object);
   // Responses
@@ -27,8 +26,6 @@ function Pivot(props) {
   if(props.complete_object){
     complete_object = props.complete_object;
   }
-
-  console.log("Disembark: ", disembark)
 
   // Options
   // const [aggregation, setAgg] = React.useState("sum");
@@ -94,7 +91,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object, disembark]);
+  }, [complete_object, props.disembark]);
 
   // Set columns
   useEffect(() => {
@@ -124,7 +121,7 @@ function Pivot(props) {
       .catch(function (error) {
         console.log(error);
       });
-  }, [complete_object, disembark]);
+  }, [complete_object, props.disembark]);
 
   // if (isLoading) {
   //   return <div className="spinner"></div>;
