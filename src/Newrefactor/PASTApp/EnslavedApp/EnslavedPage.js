@@ -34,9 +34,9 @@ export default function EnslavedPage(props) {
   // sankey modal
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedData, setSelectedData] = useState({
-    slaves: [],
-    type: "slaves",
-    enslavers: [],
+    enslaved: [],
+    type: "enslaved",
+    enslaver: [],
   });
 
   const [drawerOpen, setDrawerOpen] = useState(false);

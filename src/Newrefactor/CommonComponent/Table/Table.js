@@ -215,12 +215,13 @@ export default function Table(props) {
             setSelectionModel(newSelectionModel);
             setSelectedData({
               ...selectedData,
-              type: "slaves",
-              slaves: newSelectionModel,
+              type: pageType,
+              [pageType]: newSelectionModel,
             });
           }
         }}
         selectionModel={selectionModel}
+        style={{zIndex:0}}
       />
       {voyageOpen && (
         <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
