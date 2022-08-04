@@ -1,12 +1,10 @@
 import {
   DataGrid,
-  GridToolbar,
   gridPageCountSelector,
   gridPageSelector,
   useGridApiContext,
   useGridSelector,
   GridToolbarContainer,
-  GridToolbarColumnsButton,
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid";
@@ -35,7 +33,6 @@ export default function Table(props) {
     setPagination,
     setSortModel,
     isLoading,
-    //set_filter_object,
     checkbox,
     default_list,
     variables_tree,
@@ -122,63 +119,55 @@ export default function Table(props) {
     );
   }
 
-  function CustomToolbar() {
-    if (pageType === "voyage") {
-      return (
-        <GridToolbarContainer>
-          {/*<ColSelector*/}
-          {/*  state={{*/}
-          {/*    cols: columns,*/}
-          {/*    setCols: setColumns,*/}
-          {/*    variables_tree,*/}
-          {/*    options_flat,*/}
-          {/*  }}*/}
-          {/*/>*/}
-          <GridToolbarDensitySelector />
-          <GridToolbarExport />
-        </GridToolbarContainer>
-      );
-    }
-    return (
-      <GridToolbarContainer>
-        <Stack direction={"row"} spacing={1}>
-          <Button
-            variant="contained"
-            startIcon={<DashboardCustomizeIcon />}
-            onClick={() => {}}
-          >
-            Gallary
-          </Button>
-          <Button
-            startIcon={<HubIcon />}
-            // variant="outlined"
-            onClick={handleDialogOpen}
-          >
-            Connections
-          </Button>
-          {/*<ColSelector*/}
-          {/*  state={{*/}
-          {/*    cols: columns,*/}
-          {/*    setCols: setColumns,*/}
-          {/*    variables_tree,*/}
-          {/*    options_flat,*/}
-          {/*  }}*/}
-          {/*/>*/}
-          <GridToolbarDensitySelector />
-          <GridToolbarExport />
-          {pageType === "enslaver" ? (
-            <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-              <Button startIcon={<TableChartIcon />}>Enslaved</Button>
-            </Link>
-          ) : (
-            <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
-              <Button startIcon={<TableChartIcon />}>Enslaver</Button>
-            </Link>
-          )}
-        </Stack>
-      </GridToolbarContainer>
-    );
-  }
+  const PastToolbar = ()=>
+    (<GridToolbarContainer>
+      <Stack direction={"row"} spacing={1}>
+        <Button
+          variant="contained"
+          startIcon={<DashboardCustomizeIcon />}
+          onClick={() => {}}
+        >
+          Gallary
+        </Button>
+        <Button
+          startIcon={<HubIcon />}
+          // variant="outlined"
+          onClick={handleDialogOpen}
+        >
+          Connections
+        </Button>
+        <ColSelector
+          state={{
+            columnVisibilityModel,
+            setColumnVisibilityModel,
+            variables_tree, options_flat,}}
+        />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+        {pageType === "enslaver" ? (
+          <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon />}>Enslaved</Button>
+          </Link>
+        ) : (
+          <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
+            <Button startIcon={<TableChartIcon />}>Enslaver</Button>
+          </Link>
+        )}
+      </Stack>
+    </GridToolbarContainer>)
+
+  const VoyageToolbar = ()=>
+    (<GridToolbarContainer>
+      <ColSelector
+        state={{
+          columnVisibilityModel,
+          setColumnVisibilityModel,
+          variables_tree,
+          options_flat,}}
+      />
+      <GridToolbarDensitySelector />
+      <GridToolbarExport />
+    </GridToolbarContainer>)
 
   return (
     <TableContext.Provider
@@ -200,7 +189,7 @@ export default function Table(props) {
           loading={isLoading}
           components={{
             LoadingOverlay: LinearProgress,
-            Toolbar: CustomToolbar,
+            Toolbar: pageType === "voyage" ? VoyageToolbar : PastToolbar,
             Pagination: CustomPagination,
           }}
           // pagination
