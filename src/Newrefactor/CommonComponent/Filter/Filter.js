@@ -18,13 +18,12 @@ import BoundingBoxFilter from "../../../Component/VoyagePage/mapping/BoundingBox
 
 export default function Filter(props) {
 
-    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state
+    const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state;
 
-
-    const [menuPosition, setMenuPosition] = React.useState(null);
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
 
+    // Handle Full Screen and Exit
     const handleFullScreen = () => {
         setFullScreen(!fullScreen);
     };
@@ -55,6 +54,22 @@ export default function Filter(props) {
         }
         set_filter_obj(temp)
     };
+
+    const color = (() =>{
+        if(pageType === "voyage") {
+          if(dataset==="0") {
+            return "voyageTrans"
+          }else{
+            return "voyageIntra"
+          }
+        }
+        if(dataset==="0") {
+          return "primary"
+        }else{
+          return "secondary"
+        }
+      })()
+
     const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
     const OpenBoundingBoxFilter = ()=>{
         return (
@@ -78,6 +93,7 @@ export default function Filter(props) {
                 <AppBar position="fixed" 
                     // color={color} 
                     elevation={0} 
+                    color={color}
                     style={{ zIndex: 3, marginTop: "68px" }}
                 >
                     <Toolbar>
@@ -119,7 +135,7 @@ export default function Filter(props) {
                     {
                         pageType == 'voyage' ?
                             <Button variant="contained" 
-                                    // color={color} 
+                                    color={color} 
                                     onClick={OpenBoundingBoxFilter}
                             >
                                 <Typography color="white">Add Visual Filter</Typography>
@@ -133,16 +149,16 @@ export default function Filter(props) {
                     rowSpacing={2} columnSpacing={0.5}
                     direction="row"
                     justifyContent="center"
-                    sx={{ mt: "10px", mb: "10px", ml: "10px" }}
+                    sx={{ mt: "10px"}}
                 >
                     {Object.keys(filter_obj).length === 0 ?
-                        <Grid container item justifyContent="center" sx={{ mb: "15px", mr: "10px" }}>
+                        <Grid container item justifyContent="center" sx={{ mb: "20px" }}>
                             <Typography color="#808B96">No Filter</Typography>
                         </Grid>
                         :
                         Object.keys(filter_obj).map((key) => {
                             return (
-                                <Grid container key={'container'+key} xs={fullScreen ? 5 : 12} sx={{ mb: "5px", mr: "10px" }}>
+                                <Grid container key={'container'+key} xs={fullScreen ? 5 : 10} sx={{ mb: "10px"}}>
                                     <Grid item key={'item1'+key} xs={10}>
                                         <Accordion key={'accord'+key}>
                                             <AccordionSummary key={'accordSum'+key}>
@@ -153,7 +169,7 @@ export default function Filter(props) {
                                             </AccordionDetails>
                                         </Accordion>
                                     </Grid>
-                                    <Grid item key={'item2'+key} xs={2}>
+                                    <Grid item key={'item2'+key} align="center" xs={2}>
                                         <IconButton key={'iconB'+key} onClick={() => { handleDelete(key) }}>
                                             <RemoveCircleOutlineIcon />
                                         </IconButton>
