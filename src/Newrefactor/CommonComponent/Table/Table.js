@@ -22,6 +22,7 @@ import * as React from "react";
 import TableChartIcon from "@mui/icons-material/TableChart";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
+import VoyageModal from "../VoyageModal";
 
 export default function Table(props) {
   const {
@@ -40,6 +41,10 @@ export default function Table(props) {
     setSelectedData,
     handleDialogOpen,
   } = props.state;
+
+  const [selectionModel, setSelectionModel] = useState([]);
+  const [voyageOpen, setVoyageOpen] = useState(false);
+  const [voyageId, setVoyageId] = useState(0);
 
   const lengths = useMemo(() => {
     var temp = {};
@@ -66,6 +71,7 @@ export default function Table(props) {
     });
     return temp;
   }, [dataList]);
+
   const defaultColumns = useMemo(() => {
     const result = [];
     default_list.forEach((column) => {
@@ -78,6 +84,8 @@ export default function Table(props) {
             selectedData: selectedData,
             setSelectedData: setSelectedData,
             handleDialogOpen: handleDialogOpen,
+            setVoyageOpen: setVoyageOpen,
+            setVoyageId: setVoyageId,
           }),
         flex: lengths[column]
           ? Math.max(
@@ -181,7 +189,7 @@ export default function Table(props) {
           Toolbar: CustomToolbar,
           Pagination: CustomPagination,
         }}
-        checkboxSelection={checkbox}
+        // pagination
         pagination
         paginationMode="server"
         page={pagination.currPage}
@@ -192,11 +200,30 @@ export default function Table(props) {
         onPageSizeChange={(newPageSize) => {
           setPagination({ ...pagination, rowsPerPage: newPageSize });
         }}
+        // sorting
         sortingMode="server"
         onSortModelChange={(newSortModel) => {
           setSortModel(newSortModel);
         }}
+        // checkbox
+        checkboxSelection={checkbox}
+        keepNonExistentRowsSelected
+        onSelectionModelChange={(newSelectionModel) => {
+          if (newSelectionModel.length <= 10) {
+            // set the maximum number of the selected people
+            setSelectionModel(newSelectionModel);
+            setSelectedData({
+              ...selectedData,
+              type: "slaves",
+              slaves: newSelectionModel,
+            });
+          }
+        }}
+        selectionModel={selectionModel}
       />
+      {voyageOpen && (
+        <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
+      )}
     </div>
   );
 }

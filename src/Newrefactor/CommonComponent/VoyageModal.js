@@ -7,11 +7,11 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Button from "@mui/material/Button";
-import { idxRelation, skeleton } from "./tableVars";
+import { idxRelation, skeleton } from "../Util/tableVars";
 import Grid from "@mui/material/Grid";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import * as options_flat from "../../../util/options.json";
+import * as options_flat from "../VoyageApp/options.json";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -33,8 +33,8 @@ function reducer(state, { type, index }) {
 }
 
 function VoyageModal(props) {
-  const endpoint = props.endpoint;
-  const { open, setOpen, id, setUVOpen, setUrl } = useContext(props.context);
+  const endpoint = "voyage/";
+  const { voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl } = props.info;
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -56,12 +56,12 @@ function VoyageModal(props) {
 
   // Modal
   useEffect(() => {
-    if (id !== 0) {
+    if (voyageId !== 0) {
       var data = new FormData();
       data.append("hierarchical", "False");
       if (endpoint === "voyage/") {
-        data.append("voyage_id", id);
-        data.append("voyage_id", id);
+        data.append("voyage_id", voyageId);
+        data.append("voyage_id", voyageId);
       }
       // if (endpoint === "past/enslaved/"){
       //   data.append("transactions__transaction__voyage__id", id);
@@ -79,9 +79,9 @@ function VoyageModal(props) {
           console.log(error);
         });
     }
-  }, [id, endpoint]);
+  }, [voyageId, endpoint]);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setVoyageOpen(false);
 
   const handleAllExpansion = () => {
     if (isExpanded) {
@@ -105,7 +105,7 @@ function VoyageModal(props) {
   return (
     <div>
       <Modal
-        open={open}
+        open={voyageOpen}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -118,10 +118,10 @@ function VoyageModal(props) {
             component="h2"
           >
             <div>
-              Voyage detail: {id}
+              Voyage detail: {voyageId}
               <IconButton
                 sx={{ float: "right" }}
-                onClick={() => setOpen(false)}
+                onClick={() => setVoyageOpen(false)}
               >
                 <CloseIcon />
               </IconButton>
