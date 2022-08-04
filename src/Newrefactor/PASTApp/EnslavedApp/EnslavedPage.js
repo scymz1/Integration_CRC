@@ -28,10 +28,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Sankey from "../Component/Sankey";
 import Network from "../Component/Network";
 // import Story from './RelationGraph/Story'
-import Grow from "@mui/material/Grow";
-// import Gallery from "./Gallery.js"
-import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
-import TocIcon from "@mui/icons-material/Toc";
+import Grow from '@mui/material/Grow';
+import Gallery from "../Component/Gallery"
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import TocIcon from '@mui/icons-material/Toc';
 import { useWindowSize } from "@react-hook/window-size";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
@@ -54,11 +54,11 @@ function TabPanel(props) {
 }
 
 export default function EnslavedPage(props) {
-  const [width, height] = useWindowSize();
-  const [dataset, setDataset] = useState(1);
+  const [dataset, setDataset] = useState("1");
+  // const [width, height] = useWindowSize();
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [cols, setCols] = useState(enslaved_default_list);
+  // const [cols, setCols] = useState(enslaved_default_list);
   // data response
   const [dataList, setDataList] = useState([]);
   // pagination
@@ -106,6 +106,11 @@ export default function EnslavedPage(props) {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+  const [checked, setChecked] = useState(false);
+  const state_gallery = {filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,dataList,setDataList}
+  function handleGallery(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -150,8 +155,14 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      <Button onClick={handleDialogOpen}>View Connections</Button>
-      <Table
+      {!checked && 
+      <Box>
+        <Grow
+        in={!checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 500 } : {})}
+        >
+          <div><Table
         state={{
           pageType: "enslaved",
           dataList,
@@ -174,9 +185,22 @@ export default function EnslavedPage(props) {
           setSelectedData,
           setDialogOpen,
           handleDialogOpen,
+          handleGallery
         }}
-      />
-      <Dialog
+      /></div>
+        </Grow>
+      </Box>}
+
+      {checked &&
+      <Box>
+        <Grow in={checked}>
+          <div>
+          <Gallery state={state_gallery}/>
+          </div>
+        </Grow>
+      </Box>}
+      
+       <Dialog
         fullScreen
         open={dialogOpen}
         onClose={handleDialogClose}

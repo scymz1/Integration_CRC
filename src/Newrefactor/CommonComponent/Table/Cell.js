@@ -6,6 +6,7 @@ import { TableContext } from "./Table";
 
 export default function Cell(props) {
   const { row, field } = props;
+  // console.log(props)
   const {
     selectedData,
     setSelectedData,

@@ -1,4 +1,4 @@
-import Pivot from "./pivot";
+import Pivot from "./Pivot";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";

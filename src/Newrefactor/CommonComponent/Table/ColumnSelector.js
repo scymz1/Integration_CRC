@@ -13,10 +13,7 @@ import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 export default function ColSelector(props) {
     const [width, height] = useWindowSize();
 
-    const { cols, setCols, variables_tree, options_flat } = props.state
-    const ListItem = styled('li')(({ theme }) => ({
-        margin: theme.spacing(0.5),
-    }));
+    const { columnVisibilityModel, setColumnVisibilityModel, variables_tree, options_flat } = props.state
     const handleClick = (e) => { setAnchorEl(e.currentTarget) }
     const handleClose = () => setAnchorEl(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,17 +35,13 @@ export default function ColSelector(props) {
 
     const handleOptionClick = (option) => {
         console.log("click", option, options_flat[option].flatlabel)
-        if (!cols.find(e=>e.field === option)) {
-            setCols([...cols, {
-                field: option,
-                headerName: options_flat[option].flatlabel,}])
-        }
+        setColumnVisibilityModel({...columnVisibilityModel, [option]: true})
         handleClose();
     }
 
-    const handleDelete = (chipToDelete) => () => {
-        setCols((cols) => cols.filter((col) => col !== chipToDelete))
-    };
+    // const handleDelete = (chipToDelete) => () => {
+    //     setCols((cols) => cols.filter((col) => col !== chipToDelete))
+    // };
 
     const renderTree = (nodes) => {
         return (
