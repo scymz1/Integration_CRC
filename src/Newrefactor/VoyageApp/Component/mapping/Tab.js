@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Pivot from "../pivot";
+import Pivot from "../Pivot";
 import { Grid } from "@mui/material";
 
 // const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" 
@@ -40,9 +40,8 @@ function TabPanel(props) {
 
 
 export default function IntraTabs(props) {
-  const { complete_object, set_complete_object , disembark, setDisembark,layer} = useContext(props.context);
-  const TabContext = React.createContext({});
-  const TabContext2 = React.createContext({});
+  //const { complete_object, set_complete_object , disembark, setDisembark,layer} = useContext(props.context);
+  const { complete_object, set_complete_object , disembark, setDisembark,layer} = props.state;
 
   const state= { complete_object, set_complete_object, dataset: props.dataset } ;
 
@@ -100,18 +99,14 @@ export default function IntraTabs(props) {
             {disembarkDisable?null:<Tab value="disembark" label={props.isRegion?"Region of disembarkation":"Port of disembarkation"} disabled={disembarkDisable}/>}
             </Tabs>
             {embarkDisable?null:
-              <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
-                <TabPanel context={TabContext} value={value} index={"purchase"}>
+                <TabPanel value={value} index={"purchase"}>
                   <Pivot state={state} dispatch={props.dispatch}/>
                 </TabPanel>
-              </TabContext.Provider>
             }
             {disembarkDisable?null:
-              <TabContext2.Provider value={{ complete_object: complete_object2, disembark, setDisembark,layer}}>
-                <TabPanel context={TabContext2} value={value} index={"disembark"}>
+                <TabPanel value={value} index={"disembark"}>
                   <Pivot state={state2} dispatch={props.dispatch} />
                 </TabPanel>
-              </TabContext2.Provider>
             }
           </Box>
         </div>
