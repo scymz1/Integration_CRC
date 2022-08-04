@@ -81,12 +81,12 @@ export default function Table(props) {
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        flex: lengths[column]
-          ? Math.max(
-              options_flat[column].flatlabel.length * 8.8,
-              lengths[column]
-            )
-          : options_flat[column].flatlabel.length,
+        // flex: lengths[column]
+        //   ? Math.max(
+        //       options_flat[column].flatlabel.length * 8.8,
+        //       lengths[column]
+        //     )
+        //   : options_flat[column].flatlabel.length,
         minWidth: lengths[column]
           ? Math.max(
               options_flat[column].flatlabel.length * 8.8,
@@ -96,8 +96,9 @@ export default function Table(props) {
       });
     });
     return result;
-  }, [default_list]);
+  }, [default_list, lengths]);
   const [columns, setColumns] = useState(defaultColumns);
+  //React.useEffect(()=>{setColumns(defaultColumns)}, [defaultColumns]);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Table from "../../CommonComponent/Table/Table";
@@ -9,12 +10,45 @@ import {
 import Cell from "../../CommonComponent/Table/Cell";
 import NavBar from "../../CommonComponent/NavBar";
 import Filter from "../../CommonComponent/Filter/Filter";
-import Button from "@mui/material/Button";
+
+import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide, Grid} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import Sankey from "../Component/Sankey"
+import Network from '../Component/Network'
+// import Story from './RelationGraph/Story'
+import Grow from '@mui/material/Grow';
+// import Gallery from "./Gallery.js"
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import TocIcon from '@mui/icons-material/Toc';
+import { useWindowSize } from "@react-hook/window-size";
+
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 const endpoint = "past/enslavers/";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
+function TabPanel(props) {
+  const {children, value, index} = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      style={{width: '100%'}}
+    >{value === index && (
+      <Box sx={{p: 3}}>
+        {children}
+      </Box>
+    )}
+    </div>
+  );
+}
 
 export default function EnslaverPage(props) {
   const [dataset, setDataset] = useState(0);
@@ -32,6 +66,7 @@ export default function EnslaverPage(props) {
   // sorting
   const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
   // sankey modal
+  const [value, setValue] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedData, setSelectedData] = useState({
     enslaved: [],
@@ -58,6 +93,7 @@ export default function EnslaverPage(props) {
     options_flat,
     variables_tree,
   };
+  const state_graph = {selectedData,endpoint}
   // const defaultColumns = useMemo(() => {
   //   const result = [];
   //   enslaver_default_list.forEach((column) => {
@@ -121,6 +157,9 @@ export default function EnslaverPage(props) {
         {" "}
         Show Selected People
       </Button>
+      <Button onClick={handleDialogOpen}>
+        View Connections
+      </Button>
       <Table
         state={{
           pageType: "enslaver",
@@ -146,6 +185,59 @@ export default function EnslaverPage(props) {
           handleDialogOpen,
         }}
       />
+      <Dialog
+        fullScreen
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        scroll="body"
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+        TransitionComponent={Transition}
+        sx={{width: "100%", height: "100%"}}
+        // ref={windowRef}
+      >
+        <AppBar sx={{ position: 'relative', background: 'white'}}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleDialogClose}
+              aria-label="close"
+            >
+              <CloseIcon color="action"/>
+            </IconButton>
+            <Tabs
+              variant="scrollable"
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue)
+              }}
+              sx={{borderRight: 1, borderColor: 'divider'}}
+            >
+              <Tab label="Sankey"/>
+              <Tab label="Network"/>
+              <Tab label="Story"/>
+            </Tabs>
+          </Toolbar>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <Sankey state={state_graph}/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Network state={state_graph}/>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          {/* <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
+          {queryData["type"] == "slaves" && data.map((item, key) => {
+              return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
+            })}
+          {queryData["type"] != "slaves" && data.map((item, key) => {
+            return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="slaver"/></Grid>
+          })}
+          </Grid> */}
+          Story
+        </TabPanel>
+      </Dialog>
     </div>
   );
 }
