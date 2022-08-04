@@ -119,24 +119,58 @@ export default function Cell(props) {
     return (
       <div
         dangerouslySetInnerHTML={{
-          __html: [...new Set([].concat.apply([], obj))]
-            .join("<br>")
-            .replaceAll("</p>,<p>", "</p><p>"),
+          __html: [...new Set([].concat.apply([], obj))].join(", "),
+          // .replaceAll("</p>,<p>", "</p><p>"),
         }}
       />
     );
   }
 
-  switch (field) {
-    case "gender":
-      return genderCell(row[field]);
-    case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-      return aliasCell(row);
-    case "transactions__transaction__voyage__id":
-      return voyageIdCell(row[field]);
-    case typeof row[field] === "object":
-      return objectCell(row[field]);
-    default:
-      return row[field];
+  // number enslaved cell
+  function numberEnslavedCell(row) {
+    return isNumeric(row.number_enslaved) &&
+      Number(row.number_enslaved) <= 30 ? (
+      <div
+        style={{ color: "blue" }}
+        onClick={(e) =>
+          handleSankeyOpen(
+            e,
+            [
+              ...new Set(
+                row[
+                  "alias__transactions__transaction__enslaved_person__enslaved__id"
+                ].flat(Infinity)
+              ),
+            ],
+            "enslaved"
+          )
+        }
+      >
+        <u>{row.number_enslaved}</u>
+      </div>
+    ) : (
+      row.number_enslaved
+    );
+  }
+
+  if (field === "gender") {
+    // enslaved
+    return genderCell(row[field]);
+  } else if (
+    field ===
+    "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias"
+  ) {
+    // enslaved
+    return aliasCell(row);
+  } else if (field === "transactions__transaction__voyage__id") {
+    // enslaved
+    return voyageIdCell(row[field]);
+  } else if (field === "number_enslaved") {
+    // enslaver
+    return numberEnslavedCell(row);
+  } else if (typeof row[field] === "object") {
+    return objectCell(row[field]);
+  } else {
+    return row[field];
   }
 }

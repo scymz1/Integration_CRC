@@ -43,6 +43,7 @@ export default function Table(props) {
     selectedData,
     setSelectedData,
     handleDialogOpen,
+    handleGallery
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
@@ -65,62 +66,6 @@ export default function Table(props) {
     return result
   }, [variables_tree])
 
-  // const lengths = useMemo(() => {
-  //   var temp = {};
-  //   dataList.forEach((row) => {
-  //     for (const [key, value] of Object.entries(row)) {
-  //       switch (key) {
-  //         case "transactions__transaction__enslavers__enslaver_alias__identity__principal_alias":
-  //           var curlength = value ? value.length * 200 : 200;
-  //           temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
-  //           break;
-  //         case "gender":
-  //           temp[key] = 80;
-  //         default:
-  //           var curlength = 0;
-  //           if (typeof value === "number") {
-  //             curlength = value.toString().length * 20;
-  //           } else if (typeof value === "string") {
-  //             curlength = value.length * 10;
-  //           }
-  //           temp[key] = temp[key] ? Math.max(temp[key], curlength) : curlength;
-  //           break;
-  //       }
-  //     }
-  //   });
-  //   return temp;
-  // }, [dataList]);
-
-  // const defaultColumns = useMemo(() => {
-  //   const result = [];
-  //   const colVisModel = {};
-  //   var_list.forEach((column) => {
-  //     console.log();
-  //     colVisModel[column] = !!default_list.find(e => e === column);
-  //     result.push({
-  //       field: column,
-  //       headerName: options_flat[column].flatlabel,
-  //       renderCell: Cell,
-  //       flex: dataList.length === 0 ? 1 : 1+Math.max(...dataList.map(e=>e[column]? e[column].toString().length: 0)),
-  //       minWidth: options_flat[column].flatlabel*8,
-  //       // flex: lengths[column]
-  //       //   ? Math.max(
-  //       //       options_flat[column].flatlabel.length * 8.8,
-  //       //       lengths[column]
-  //       //     )
-  //       //   : options_flat[column].flatlabel.length,
-  //       // minWidth: lengths[column]
-  //       //   ? Math.max(
-  //       //       options_flat[column].flatlabel.length * 8.8,
-  //       //       lengths[column]
-  //       //     )
-  //       //   : options_flat[column].flatlabel.length * 8.8,
-  //     });
-  //   });
-  //   setColumnVisibilityModel(colVisModel);
-  //   return result;
-  // }, [default_list, dataList]);
-
   const columns = useMemo(()=>{
     const result = [];
     const colVisModel = {};
@@ -137,7 +82,7 @@ export default function Table(props) {
     setColumnVisibilityModel(colVisModel);
     return result;
   }, [dataList])
-  // const [columns, setColumns] = useState(defaultColumns);
+
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -178,6 +123,22 @@ export default function Table(props) {
   }
 
   function CustomToolbar() {
+    if (pageType === "voyage") {
+      return (
+        <GridToolbarContainer>
+          {/*<ColSelector*/}
+          {/*  state={{*/}
+          {/*    cols: columns,*/}
+          {/*    setCols: setColumns,*/}
+          {/*    variables_tree,*/}
+          {/*    options_flat,*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <GridToolbarDensitySelector />
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      );
+    }
     return (
       <GridToolbarContainer>
         <Stack direction={"row"} spacing={1}>

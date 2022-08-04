@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-// import Pivot from "../Result/Pivot/Pivot";
+import Pivot from "../Pivot";
 import { Grid } from "@mui/material";
 
 // const diskey = "voyage_itinerary__imp_principal_port_slave_dis__geo_location__id" 
@@ -44,6 +44,8 @@ export default function IntraTabs(props) {
   const TabContext = React.createContext({});
   const TabContext2 = React.createContext({});
 
+  const state= { complete_object, set_complete_object, dataset: props.dataset } ;
+
   const complete_object2=JSON.parse(JSON.stringify(complete_object));
   delete complete_object2[groupby_fields_region[0]];
   delete complete_object2[groupby_fields_region[1]];
@@ -57,10 +59,14 @@ export default function IntraTabs(props) {
   }
   delete complete_object2["value_field_tuple"];
   complete_object2["value_field_tuple"]=["voyage_slaves_numbers__imp_total_num_slaves_disembarked", "sum"];
+
+  const state2 = { complete_object: complete_object2, set_complete_object, dataset: props.dataset } ;
+
+  console.log("aaaaa", state, state2, props.dataset)
   
   const lat=layer._latlng.lat;
   const lng=layer._latlng.lng;
-  console.log("afafdafd", lat, lng);
+  //console.log("afafdafd", lat, lng);
   const embarkDisable=props.dataset==0?(lng<=-26||lat>=-5.51?true:false):false;
   const disembarkDisable=props.dataset==0?(lng>=-26&&lat<=-5.51?true:false):false;
   const [value, setValue] = React.useState(embarkDisable?'disembark':'purchase');
@@ -96,14 +102,14 @@ export default function IntraTabs(props) {
             {embarkDisable?null:
               <TabContext.Provider value={{ complete_object, set_complete_object , disembark, setDisembark,layer}}>
                 <TabPanel context={TabContext} value={value} index={"purchase"}>
-                  {/* <Pivot context={TabContext} dispatch={props.dispatch}/>  */}
+                  <Pivot state={state} dispatch={props.dispatch}/>
                 </TabPanel>
               </TabContext.Provider>
             }
             {disembarkDisable?null:
               <TabContext2.Provider value={{ complete_object: complete_object2, disembark, setDisembark,layer}}>
                 <TabPanel context={TabContext2} value={value} index={"disembark"}>
-                  {/* <Pivot context={TabContext2} dispatch={props.dispatch} />  */}
+                  <Pivot state={state2} dispatch={props.dispatch} />
                 </TabPanel>
               </TabContext2.Provider>
             }

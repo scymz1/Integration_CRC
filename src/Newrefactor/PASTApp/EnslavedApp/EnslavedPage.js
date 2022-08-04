@@ -10,18 +10,29 @@ import {
 } from "./var";
 import Filter from "../../CommonComponent/Filter/Filter";
 
-import {Box, Button, Card, Tab, Tabs, Typography,Dialog,AppBar,Toolbar,IconButton,Slide, Grid} from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import Sankey from "../Component/Sankey"
-import Network from '../Component/Network'
+import {
+  Box,
+  Button,
+  Card,
+  Tab,
+  Tabs,
+  Typography,
+  Dialog,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Slide,
+  Grid,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import Sankey from "../Component/Sankey";
+import Network from "../Component/Network";
 // import Story from './RelationGraph/Story'
 import Grow from '@mui/material/Grow';
-// import Gallery from "./Gallery.js"
+import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import TocIcon from '@mui/icons-material/Toc';
 import { useWindowSize } from "@react-hook/window-size";
-
-
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -32,20 +43,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
 function TabPanel(props) {
-  const {children, value, index} = props;
+  const { children, value, index } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      style={{width: '100%'}}
-    >{value === index && (
-      <Box sx={{p: 3}}>
-        {children}
-      </Box>
-    )}
+    <div role="tabpanel" hidden={value !== index} style={{ width: "100%" }}>
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -65,7 +68,7 @@ export default function EnslavedPage(props) {
     totalRows: 0,
   });
   // sorting
-  const [sortModel, setSortModel] = useState([{ field: "id", sort: "asc" }]);
+  const [sortModel, setSortModel] = useState([]);
   // sankey modal
   const [value, setValue] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -94,7 +97,7 @@ export default function EnslavedPage(props) {
     options_flat,
     variables_tree,
   };
-  const state_graph = {selectedData}
+  const state_graph = { selectedData };
   // view connections & click popover & click number_slaved
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -102,6 +105,11 @@ export default function EnslavedPage(props) {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+  };
+  const [checked, setChecked] = useState(false);
+  const state_gallery = {filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,dataList,setDataList}
+  function handleGallery(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
   };
 
   useEffect(() => {
@@ -147,10 +155,14 @@ export default function EnslavedPage(props) {
     <div style={{ height: "100%" }}>
       <NavBar state={state} />
       <Filter state={state2} />
-      {/*<Button onClick={handleDialogOpen}>*/}
-      {/*  View Connections*/}
-      {/*</Button>*/}
-      <Table
+      {!checked && 
+      <Box>
+        <Grow
+        in={!checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 500 } : {})}
+        >
+          <div><Table
         state={{
           pageType: "enslaved",
           dataList,
@@ -173,8 +185,21 @@ export default function EnslavedPage(props) {
           setSelectedData,
           setDialogOpen,
           handleDialogOpen,
+          handleGallery
         }}
-      />
+      /></div>
+        </Grow>
+      </Box>}
+
+      {checked &&
+      <Box>
+        <Grow in={checked}>
+          <div>
+          <Gallery state={state_gallery}/>
+          </div>
+        </Grow>
+      </Box>}
+      
        <Dialog
         fullScreen
         open={dialogOpen}
@@ -183,10 +208,10 @@ export default function EnslavedPage(props) {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
         TransitionComponent={Transition}
-        sx={{width: "100%", height: "100%"}}
+        sx={{ width: "100%", height: "100%" }}
         // ref={windowRef}
       >
-        <AppBar sx={{ position: 'relative', background: 'white'}}>
+        <AppBar sx={{ position: "relative", background: "white" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -194,27 +219,27 @@ export default function EnslavedPage(props) {
               onClick={handleDialogClose}
               aria-label="close"
             >
-              <CloseIcon color="action"/>
+              <CloseIcon color="action" />
             </IconButton>
             <Tabs
               variant="scrollable"
               value={value}
               onChange={(event, newValue) => {
-                setValue(newValue)
+                setValue(newValue);
               }}
-              sx={{borderRight: 1, borderColor: 'divider'}}
+              sx={{ borderRight: 1, borderColor: "divider" }}
             >
-              <Tab label="Sankey"/>
-              <Tab label="Network"/>
-              <Tab label="Story"/>
+              <Tab label="Sankey" />
+              <Tab label="Network" />
+              <Tab label="Story" />
             </Tabs>
           </Toolbar>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Sankey state={state_graph}/>
+          <Sankey state={state_graph} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Network state={state_graph}/>
+          <Network state={state_graph} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           {/* <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
