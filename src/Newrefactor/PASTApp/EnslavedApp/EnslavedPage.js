@@ -70,9 +70,9 @@ export default function EnslavedPage(props) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [selectedData, setSelectedData] = useState({
-    slaves: [],
-    type: "slaves",
-    enslavers: [],
+    enslaved: [],
+    type: "enslaved",
+    enslaver: [],
   });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
