@@ -57,7 +57,12 @@ export default function Sankey(props) {
 
   useEffect(() => {
     setIsLoading(true)
-    const targets = selectedData.slaves
+    const targets = (() => {
+        switch (selectedData.type) {
+          case "enslaved": return selectedData.enslaved
+          case "enslaver": return selectedData.enslaver
+        }
+      })()
     const fetchData = async ()=> {
       const promises = targets.map(target => {
         let queryData = new FormData();
@@ -87,7 +92,7 @@ export default function Sankey(props) {
     let links = [];
     
     if(isLoading) return;
-    if (selectedData.type === "enslavers") {
+    if (selectedData.type === "enslaver") {
       data.forEach((item) => {
         let existNode = nodes.find(node => node.id === item.id)
         if(!existNode){
@@ -292,7 +297,7 @@ export default function Sankey(props) {
     nodes.forEach((node) => {
       const result = [];
       var voyagemodal = true;
-      if (node.type === "enslaved" && selectedData.type === "slaves") {
+      if (node.type === "enslaved" && selectedData.type === "enslaved") {
         result.push(
           <table>
           <tbody>
@@ -341,7 +346,7 @@ export default function Sankey(props) {
           node.voyagebutton = <Button size="small" onClick={(event) => handleOpen(event, node.voyage_id, voyagemodal)}>Voyage
             id:{node.voyage_id}</Button>
           // console.log(node.voyage_id)
-          if (selectedData.type === "slaves") {
+          if (selectedData.type === "enslaved") {
             result.push(
               <table>
               <tbody>
@@ -426,7 +431,7 @@ export default function Sankey(props) {
 
   var enslaved = []
   data.forEach((each) => {
-    if(selectedData.type === "enslavers"){
+    if(selectedData.type === "enslaver"){
       enslaved.push(each.principal_alias+" ")
     }
     else{
@@ -498,7 +503,7 @@ export default function Sankey(props) {
                           pointerEvents: 'none',
                         }}
                         open={popOpen === node.id && node.type != "enslaver" && 
-                              (selectedData.type === "enslavers" ? node.type != "enslaved" && node.name != "transportation":true)}
+                              (selectedData.type === "enslaver" ? node.type != "enslaved" && node.name != "transportation":true)}
                         anchorEl={anchorEl}
                         anchorOrigin={{
                           vertical: 'bottom',
