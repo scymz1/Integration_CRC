@@ -304,7 +304,7 @@ export default function NetworkComponent() {
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
           <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
-            <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
+            <Box sx={{height:height*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
                   overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
