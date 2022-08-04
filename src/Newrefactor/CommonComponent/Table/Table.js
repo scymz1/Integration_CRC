@@ -184,6 +184,9 @@ export default function Table(props) {
           autoHeight={true}
           columns={columns}
           columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColumnVisibilityModel(newModel)
+          }
           rows={dataList}
           rowCount={pagination.totalRows}
           loading={isLoading}
