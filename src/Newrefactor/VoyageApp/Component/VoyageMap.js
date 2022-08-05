@@ -90,7 +90,7 @@ export default function MapBoundingBox(props){
                         />
                     </BaseLayer>
                 </LayersControl>
-                <ReadFeature search_object={filter_object} dataset={dataset} filter={false} />
+                <ReadFeature search_object={filter_object} dataset={dataset} filter={false} latlong={[[0,0], [0,0]]}/>
                 
                 {
                     handle.active?

@@ -15,14 +15,16 @@ export default function Auto(props) {
 
     const endpoint = (() => {
         switch (pageType) {
-            case "slaves":
+            case "enslaved  ":
                 return "past/enslaved/"
-            case "enslavers":
+            case "enslaver":
                 return "past/enslavers/"
             default:
                 return "voyage/"
         }
     })()
+
+    console.log("Page Type: ", pageType)
 
     React.useEffect(() => {
         const fetchData = async (key, textInput) => {           // not sure how to put in key (originally labels)
