@@ -75,7 +75,7 @@ function VoyageModal(props) {
           console.log(error);
         });
     }
-  }, [voyageId, endpoint, state]);
+  }, [voyageId, endpoint]);
 
   const handleClose = () => setVoyageOpen(false);
 
