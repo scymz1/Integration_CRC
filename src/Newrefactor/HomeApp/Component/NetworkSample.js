@@ -22,20 +22,23 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function NetworkComponent() {
-  const [width, height] = useWindowSize();
+  const [winwidth, winheight] = useWindowSize();
   const [selectedData, setSelectedData] = useState({
     enslaved: [500002, 500004],
     type: "enslaved",
     enslaver: [],
   });
-  const state = {selectedData};
+
+  let width = winwidth>800 ?"60%":"91%"
+  let height = winheight
+  const state = {selectedData, width, height};
 
   return (
     <div>
       <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
-          <Grid item sx={{maxWidth: width>800 ? "40%": width*0.9}}>
+          <Grid item sx={{maxWidth: winwidth>800 ? "40%": winwidth*0.9}}>
             <Box sx={{height:height*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
                   overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
@@ -63,10 +66,10 @@ export default function NetworkComponent() {
               </CardContent>
             </Box>
           </Grid>
-          <Grid item sx={{width:width>800 ?"60%":"91%"}}>
+          <Grid item sx={{width:winwidth>800 ?"60%":"91%"}}>
           {/* <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column"}}> */}
             <CardContent sx={{flex: "1 0 auto"}}>
-              <Network state={state} width={width}/>
+              <Network state={state}/>
             </CardContent>
           </Grid>
         </Grid>
