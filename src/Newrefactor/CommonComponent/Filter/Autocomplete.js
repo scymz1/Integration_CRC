@@ -15,14 +15,16 @@ export default function Auto(props) {
 
     const endpoint = (() => {
         switch (pageType) {
-            case "slaves":
+            case "enslaved  ":
                 return "past/enslaved/"
-            case "enslavers":
+            case "enslaver":
                 return "past/enslavers/"
             default:
                 return "voyage/"
         }
     })()
+
+    console.log("Page Type: ", pageType)
 
     React.useEffect(() => {
         const fetchData = async (key, textInput) => {           // not sure how to put in key (originally labels)
@@ -41,7 +43,7 @@ export default function Auto(props) {
             fetch(base_url + endpoint + "autocomplete", requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    var newOptions = result[key]
+                    var newOptions = result['results'][0]
                     setautocompleteOptions(newOptions)
                 })
         }

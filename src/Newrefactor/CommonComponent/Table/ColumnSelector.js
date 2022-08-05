@@ -10,7 +10,7 @@ import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 export default function ColSelector(props) {
   const [width, height] = useWindowSize();
 
-  const {columnVisibilityModel, setColumnVisibilityModel, variables_tree, options_flat} = props.state
+  const {columnVisibilityModel, setColumnVisibilityModel, variables_tree, options_flat, toolBarColor} = props.state
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget)
   }
@@ -34,7 +34,6 @@ export default function ColSelector(props) {
   }
 
   const handleOptionClick = (option) => {
-    console.log("click", option, options_flat[option].flatlabel)
     setColumnVisibilityModel({...columnVisibilityModel, [option]: true})
     handleClose();
   }
@@ -74,7 +73,7 @@ export default function ColSelector(props) {
 
   return (
     <div>
-      <Button startIcon={<ViewWeekIcon/>} onClick={handleClick}>Columns</Button>
+      <Button color={toolBarColor} startIcon={<ViewWeekIcon/>} onClick={handleClick}>Columns</Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <TreeView
           aria-label="option menu"
