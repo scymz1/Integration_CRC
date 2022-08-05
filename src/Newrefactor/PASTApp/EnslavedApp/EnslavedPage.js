@@ -165,6 +165,7 @@ export default function EnslavedPage(props) {
           <div><Table
         state={{
           pageType: "enslaved",
+          dataset,
           dataList,
           isLoading,
           checkbox: true,

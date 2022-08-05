@@ -29,6 +29,7 @@ export const TableContext = React.createContext({});
 export default function Table(props) {
   const {
     pageType,
+    dataset,
     dataList,
     pagination,
     setPagination,
@@ -131,10 +132,21 @@ export default function Table(props) {
     );
   }
 
+  const toolBarColor = useMemo(()=>{
+    if(pageType === "enslaver") {
+      return "success"
+    }
+    if(dataset==="0") {
+      return "primary"
+    }else{
+      return "secondary"
+    }
+  }, [pageType, dataset])
   const PastToolbar = () => (
     <GridToolbarContainer>
       <Stack direction={"row"} spacing={1}>
         <Button
+          color={toolBarColor}
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
           onClick={() => {}}
@@ -142,6 +154,7 @@ export default function Table(props) {
           Gallary
         </Button>
         <Button
+          color={toolBarColor}
           startIcon={<HubIcon />}
           disabled={selectionModel.length === 0}
           onClick={handleDialogOpen}
@@ -154,17 +167,18 @@ export default function Table(props) {
             setColumnVisibilityModel,
             variables_tree,
             options_flat,
+            toolBarColor,
           }}
         />
-        <GridToolbarDensitySelector />
-        <GridToolbarExport />
+        <GridToolbarDensitySelector color={toolBarColor}/>
+        <GridToolbarExport color={toolBarColor}/>
         {pageType === "enslaver" ? (
           <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon />}>Enslaved</Button>
+            <Button color={toolBarColor} startIcon={<TableChartIcon />}>Enslaved</Button>
           </Link>
         ) : (
           <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
-            <Button startIcon={<TableChartIcon />}>Enslaver</Button>
+            <Button color={toolBarColor} startIcon={<TableChartIcon />}>Enslaver</Button>
           </Link>
         )}
       </Stack>
