@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -17,24 +17,10 @@ const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
-const initialState = [true, true, true, true, true, true, true];
-
-function reducer(state, { type, index }) {
-  switch (type) {
-    case "expand-all":
-      return [true, true, true, true, true, true, true];
-    case "collapse-all":
-      return [false, false, false, false, false, false, false];
-    case "toggle":
-      return [...state, (state[index] = !state[index])];
-    default:
-      throw new Error();
-  }
-}
-
 function VoyageModal(props) {
   const endpoint = "voyage/";
-  const { voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl } = props.context;
+  const { voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl } =
+    props.context;
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -51,8 +37,14 @@ function VoyageModal(props) {
   };
 
   // Expand/Collapse
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, setState] = useState(
+    new Array(Object.keys(skeleton).length).fill(true)
+  );
+  const [isAllExpanded, setIsAllExpanded] = useState(true);
+
+  // Force Re-render
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
 
   // Modal
   useEffect(() => {
@@ -66,8 +58,6 @@ function VoyageModal(props) {
       axios
         .post("/" + endpoint, data)
         .then(function (response) {
-          //console.log(Object.keys(response.data));
-          //console.log(Object.values(response.data));
           setContent(Object.values(response.data)[Object.keys(response.data)]);
           //console.log("here=",Object.values(response.data)[Object.keys(response.data)].voyage_id)
         })
@@ -79,17 +69,23 @@ function VoyageModal(props) {
 
   const handleClose = () => setVoyageOpen(false);
 
+  // check if the accordion is expanded
+  const isExpanded = (title) => {
+    return state[idxRelation[title]];
+  };
+
   const handleAllExpansion = () => {
-    if (isExpanded) {
-      dispatch({ type: "collapse-all" });
+    if (isAllExpanded) {
+      setState(new Array(Object.keys(skeleton).length).fill(false));
     } else {
-      dispatch({ type: "expand-all" });
+      setState(new Array(Object.keys(skeleton).length).fill(true));
     }
-    setIsExpanded(!isExpanded);
+    setIsAllExpanded(!isAllExpanded);
   };
 
   const handleSingleExpansion = (event, title) => {
-    dispatch({ type: "toggle", index: idxRelation[title] });
+    state[idxRelation[title]] = !state[idxRelation[title]];
+    forceUpdate();
   };
 
   // handle UV modal
@@ -135,110 +131,118 @@ function VoyageModal(props) {
             sx={{ mt: 2 }}
             component={"span"}
           >
-            {Object.keys(skeleton).map((title) => (
-              <div key={title}>
-                <Accordion
-                  expanded={state[idxRelation[title]]}
-                  sx={{ margin: "5px" }}
-                >
-                  <AccordionSummary
-                    sx={{ backgroundColor: "#f2f2f2" }}
-                    onClick={(event) => handleSingleExpansion(event, title)}
+            {Object.keys(skeleton).map((title) => {
+              const isAccordionExpanded = isExpanded(title);
+              return (
+                <div key={title}>
+                  <Accordion
+                    expanded={isAccordionExpanded}
+                    sx={{ margin: "5px" }}
                   >
-                    <Typography sx={{ fontWeight: "bold" }}>{title}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {content.length !== 0 && (
-                      <Typography component={"span"}>
-                        {skeleton[title].map((obj, key) => {
-                          if (
-                            obj === "voyage_sourceconnection__source__full_ref"
-                          ) {
-                            return (
-                              <Grid
-                                container
-                                spacing={2}
-                                columns={16}
-                                key={key}
-                              >
-                                <Grid sx={{ fontWeight: "bold" }} item xs={8}>
-                                  {options_flat[obj].flatlabel}
-                                </Grid>
-                                <Grid item xs={8}>
-                                  {Object.values(
-                                    content["voyage_sourceconnection"]
-                                  ).map((element, ref_key) => {
-                                    if (element["doc"] != null) {
-                                      return (
-                                        <div
-                                          onClick={(e) =>
-                                            handleUV(e, element["doc"]["url"])
-                                          }
-                                          key={"text_ref-" + ref_key}
-                                          style={{ color: "red" }}
-                                        >
+                    <AccordionSummary
+                      sx={{ backgroundColor: "#f2f2f2" }}
+                      onClick={(event) => handleSingleExpansion(event, title)}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {title}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {content.length !== 0 && (
+                        <Typography component={"span"}>
+                          {skeleton[title].map((obj, key) => {
+                            if (
+                              obj ===
+                              "voyage_sourceconnection__source__full_ref"
+                            ) {
+                              return (
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  columns={16}
+                                  key={key}
+                                >
+                                  <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                                    {options_flat[obj].flatlabel}
+                                  </Grid>
+                                  <Grid item xs={8}>
+                                    {Object.values(
+                                      content["voyage_sourceconnection"]
+                                    ).map((element, ref_key) => {
+                                      if (element["doc"] != null) {
+                                        return (
                                           <div
+                                            onClick={(e) =>
+                                              handleUV(e, element["doc"]["url"])
+                                            }
+                                            key={"text_ref-" + ref_key}
+                                            style={{ color: "red" }}
+                                          >
+                                            <div
+                                              dangerouslySetInnerHTML={{
+                                                __html:
+                                                  "<b>" +
+                                                  element["text_ref"] +
+                                                  ":</b> <u>" +
+                                                  element["source"][
+                                                    "full_ref"
+                                                  ] +
+                                                  "</u>",
+                                              }}
+                                            />
+                                          </div>
+                                        );
+                                      } else {
+                                        return (
+                                          <div
+                                            key={"text_ref-" + ref_key}
                                             dangerouslySetInnerHTML={{
                                               __html:
                                                 "<b>" +
                                                 element["text_ref"] +
-                                                ":</b> <u>" +
-                                                element["source"]["full_ref"] +
-                                                "</u>",
+                                                ":</b> " +
+                                                element["source"]["full_ref"],
                                             }}
                                           />
-                                        </div>
-                                      );
-                                    } else {
-                                      return (
-                                        <div
-                                          key={"text_ref-" + ref_key}
-                                          dangerouslySetInnerHTML={{
-                                            __html:
-                                              "<b>" +
-                                              element["text_ref"] +
-                                              ":</b> " +
-                                              element["source"]["full_ref"],
-                                          }}
-                                        />
-                                      );
-                                    }
-                                  })}
+                                        );
+                                      }
+                                    })}
+                                  </Grid>
                                 </Grid>
-                              </Grid>
-                            );
-                          } else {
-                            return (
-                              <Grid
-                                container
-                                spacing={2}
-                                columns={16}
-                                key={key}
-                              >
-                                <Grid sx={{ fontWeight: "bold" }} item xs={8}>
-                                  {options_flat[obj].flatlabel}
+                              );
+                            } else {
+                              return (
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  columns={16}
+                                  key={key}
+                                >
+                                  <Grid sx={{ fontWeight: "bold" }} item xs={8}>
+                                    {options_flat[obj].flatlabel}
+                                  </Grid>
+                                  <Grid item xs={8}>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html:
+                                          typeof content[obj] === "object" &&
+                                          content[obj] != null
+                                            ? content[obj].join("<br>")
+                                            : content[obj],
+                                      }}
+                                    />
+                                  </Grid>
                                 </Grid>
-                                <Grid item xs={8}>
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html:
-                                        typeof content[obj] === "object" &&
-                                        content[obj] != null
-                                          ? content[obj].join("<br>")
-                                          : content[obj],
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                            );
-                          }
-                        })}
-                      </Typography>
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            ))}
+                              );
+                            }
+                          })}
+                        </Typography>
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                </div>
+              );
+            })}
           </Typography>
         </Box>
       </Modal>

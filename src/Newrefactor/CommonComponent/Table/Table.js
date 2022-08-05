@@ -148,7 +148,7 @@ export default function Table(props) {
           color={toolBarColor}
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
-          onClick={() => {}}
+          onClick={() => {handleGallery("story")}}
         >
           Gallary
         </Button>
