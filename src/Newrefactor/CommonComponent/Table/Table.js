@@ -271,7 +271,7 @@ export default function Table(props) {
               (params.row.transactions != null &&
                 params.row.transactions.length !== 0) ||
               (params.row.number_enslaved != null &&
-                params.row.number_enslaved > 0)
+                params.row.number_enslaved > 0) || pageType === "voyage"
             ) {
               return true;
             } else {
