@@ -55,7 +55,7 @@ function TabPanel(props) {
 
 export default function EnslavedPage(props) {
   const [dataset, setDataset] = useState("1");
-  // const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize();
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   // const [cols, setCols] = useState(enslaved_default_list);
@@ -97,7 +97,7 @@ export default function EnslavedPage(props) {
     options_flat,
     variables_tree,
   };
-  const state_graph = { selectedData };
+  const state_graph = { selectedData, width, height };
   // view connections & click popover & click number_slaved
   const handleDialogOpen = () => {
     setDialogOpen(true);

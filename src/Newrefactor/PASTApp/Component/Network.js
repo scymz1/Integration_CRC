@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useMemo, useState} from "react";
 import {CircularProgress} from "@mui/material";
 import Graph from "react-graph-vis";
 import _ from 'lodash';
@@ -11,12 +11,11 @@ const base_url = process.env.REACT_APP_BASEURL;
 
 
 export default function Network(props) {
-  const {selectedData} = props.state
+  const {selectedData, width, height} = props.state
   const [graph, setGraph] = useState(null);
   const [myQueryData, setMyQueryData] = useState({...selectedData});
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
-  const [width, height] = useWindowSize()
   const [voyageOpen, setVoyageOpen] = useState(false);
   const [voyageId, setvoyageId] = useState(0);
   useEffect(() => {
@@ -231,22 +230,16 @@ export default function Network(props) {
       }
     }
   };
-  useEffect(()=>{
-    // console.log(height)
-    window.addEventListener('resize', ()=>setOption(
-      {...options,
-        height: (0.75*height).toString(),
-        width: (0.95*width).toString(),
-    }));
-  }, [])
 
-  const [options, setOption] = useState({
-    physics: {
-      enabled: true,
-    },
-    height: (0.75*height).toString(),
-    width: (0.95*width).toString(),
-  });
+  const options = useMemo(()=>{
+    return {
+      physics: {
+        enabled: true,
+      },
+      height: (0.7*height).toString(),
+      width: (0.9*width).toString(),
+    }
+  }, [width, height])
 
   return (
     <div>
