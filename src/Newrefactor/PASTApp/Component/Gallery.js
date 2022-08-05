@@ -1,16 +1,14 @@
 import * as React from "react";
-import { useEffect } from "react";
+import {useMemo, useEffect } from "react";
 import Story from "./Story";
 import Grid from '@mui/material/Grid';
 import TablePagination from '@mui/material/TablePagination';
 import './styles.css'
-
-
+import Button from '@mui/material/Button'
+import TocIcon from '@mui/icons-material/Toc';
 
 const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
-
-
 
 export default function Gallery(props){
     const [gData, setGData] = React.useState([]);
@@ -19,8 +17,7 @@ export default function Gallery(props){
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
     // const {remoteControl, dataChange, setChipData, data, setData} = props;
-    const {filter_object,pageType,setSelectedData,handleDialogOpen,dataList,setDataList} = props.state
-    console.log(dataList)
+    const {dataset,filter_object,pageType,setSelectedData,handleDialogOpen,handleGallery} = props.state
     // const { search_object, typeForTable } = React.useContext(PASTContext);
 
     function handleChangePage(event, newPage){
@@ -83,14 +80,35 @@ export default function Gallery(props){
         const oldGallery = [];
         //console.log("gData", gData)
         gData.forEach(item => {
-            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} remoteControl = {handleDialogOpen()} dataChange = {setSelectedData} slavery={pageType} data = {dataList} setData = {setDataList}/></Grid>)
+            oldGallery.push(<Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} remoteControl = {handleDialogOpen} dataChange = {setSelectedData} slavery={pageType}/></Grid>)
         })
         setGallery(oldGallery);
     }, [gData])
-    
+  
+    const toolBarColor = useMemo(()=>{
+      if(pageType === "enslaver") {
+        return "success"
+      }
+      if(dataset==="0") {
+        return "primary"
+      }else{
+        return "secondary"
+      }
+    }, [pageType, dataset])
+
   return (
     <div className = "storybackground" margintop ={{ xs: 2, md: 2, lg:4 }} >
-      {/* <button onClick={() => console.log("gallery: ", gallery)}>print</button> */}
+      <Button
+          color={toolBarColor}
+          variant="contained" 
+          startIcon={<TocIcon/>} 
+          size="large"
+          onClick={() => {handleGallery("table")}}
+          sx={{mt:1,ml: 1 }}
+        >
+          Table
+        </Button>
+
     <TablePagination
       component="div"
       count={total}

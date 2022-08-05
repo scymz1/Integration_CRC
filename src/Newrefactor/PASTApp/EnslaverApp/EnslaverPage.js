@@ -30,7 +30,7 @@ import Sankey from "../Component/Sankey";
 import Network from "../Component/Network";
 // import Story from './RelationGraph/Story'
 import Grow from "@mui/material/Grow";
-// import Gallery from "./Gallery.js"
+import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import TocIcon from "@mui/icons-material/Toc";
 import { useWindowSize } from "@react-hook/window-size";
@@ -58,7 +58,7 @@ export default function EnslaverPage(props) {
   const [dataset, setDataset] = useState(0);
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [cols, setCols] = useState(enslaver_default_list);
+  // const [cols, setCols] = useState(enslaver_default_list);
   // data response
   const [dataList, setDataList] = useState([]);
   // pagination
@@ -79,14 +79,27 @@ export default function EnslaverPage(props) {
   });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const state = {
+
+  // view connections & click popover & click number_slaved
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  const [checked, setChecked] = useState(false);
+  function handleGallery(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
+  const state_nav = {
     dataset,
     setDataset,
     drawerOpen,
     setDrawerOpen,
     pageType: "enslaver",
   };
-  const state2 = {
+  const state_filter = {
     filter_obj: filter_object,
     set_filter_obj: set_filter_object,
     dataset,
@@ -97,31 +110,32 @@ export default function EnslaverPage(props) {
     options_flat,
     variables_tree,
   };
+  const state_table ={pageType: "enslaver",
+  dataList,
+  isLoading,
+  checkbox: true,
+  default_list: enslaver_default_list,
+  variables_tree,
+  options_flat,
+  // pagination
+  pagination,
+  setPagination,
+  // sorting
+  sortModel,
+  setSortModel,
+  // filter object
+  filter_object,
+  set_filter_object,
+  // selected ids
+  selectedData,
+  setSelectedData,
+  setDialogOpen,
+  handleDialogOpen,
+  handleDialogClose,
+  handleGallery};
   const state_graph = { selectedData };
-  // const defaultColumns = useMemo(() => {
-  //   const result = [];
-  //   enslaver_default_list.forEach((column) => {
-  //     result.push({
-  //       field: column,
-  //       headerName: options_flat[column].flatlabel,
-  //       renderCell: Cell,
-  //       //minWidth: 160,
-  //       //flex: 1,
-  //       minWidth: options_flat[column].flatlabel.length * 6 + 100,
-  //       maxWidth: 300,
-  //     });
-  //   });
-  //   return result;
-  // }, [enslaver_default_list]);
+  const state_gallery = {filter_object,pageType: "enslaver",setSelectedData,handleDialogOpen,handleGallery}
 
-  // view connections & click popover & click number_slaved
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -155,33 +169,28 @@ export default function EnslaverPage(props) {
 
   return (
     <div style={{ height: "100%" }}>
-      <NavBar state={state} />
-      <Filter state={state2} />
-      <Table
-        state={{
-          pageType: "enslaver",
-          dataList,
-          isLoading,
-          checkbox: true,
-          default_list: enslaver_default_list,
-          variables_tree,
-          options_flat,
-          // pagination
-          pagination,
-          setPagination,
-          // sorting
-          sortModel,
-          setSortModel,
-          // filter object
-          filter_object,
-          set_filter_object,
-          // selected ids
-          selectedData,
-          setSelectedData,
-          setDialogOpen,
-          handleDialogOpen,
-        }}
-      />
+      <NavBar state={state_nav} />
+      <Filter state={state_filter} />
+      {!checked && 
+      <Box>
+        <Grow
+        in={!checked}
+        style={{ transformOrigin: '0 0 0' }}
+        {...(checked ? { timeout: 500 } : {})}
+        >
+          <div><Table
+        state={state_table}/></div>
+        </Grow>
+      </Box>}
+
+      {checked &&
+      <Box>
+        <Grow in={checked}>
+          <div>
+          <Gallery state={state_gallery}/>
+          </div>
+        </Grow>
+      </Box>}
       <Dialog
         fullScreen
         open={dialogOpen}
