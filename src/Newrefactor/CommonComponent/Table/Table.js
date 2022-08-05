@@ -70,15 +70,14 @@ export default function Table(props) {
   const columns = useMemo(() => {
     const result = [];
     const colVisModel = {};
-
     const length = (column) => {
       const defaultLength = Math.max(...dataList.map((e) => e[column] ? e[column].toString().length : 0), options_flat[column].flatlabel.length);
       if(dataList.length === 0) return 1;
-      switch (options_flat[column].flatlabel) {
-        case "Ship Owner Name":
-          return defaultLength;
-      }
-      if(defaultLength > 2 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      // switch (options_flat[column].flatlabel) {
+      //   case "Ship Owner Name":
+      //     return defaultLength;
+      // }
+      if(defaultLength > 7 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
       return defaultLength;
     }
     var_list.forEach((column) => {
@@ -114,10 +113,11 @@ export default function Table(props) {
             onChange={handleChange}
             style={{ height: 30 }}
           >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
+            <MenuItem value={8}>8</MenuItem>
+            <MenuItem value={12}>12</MenuItem>
+            <MenuItem value={16}>16</MenuItem>
             <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={25}>25</MenuItem>
+            <MenuItem value={24}>24</MenuItem>
           </Select>
         </div>
         <div>
@@ -151,7 +151,7 @@ export default function Table(props) {
           startIcon={<DashboardCustomizeIcon />}
           onClick={() => {handleGallery("story")}}
         >
-          Gallary
+          Gallery
         </Button>
         <Button
           color={toolBarColor}

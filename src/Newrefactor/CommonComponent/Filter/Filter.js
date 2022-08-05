@@ -73,23 +73,13 @@ export default function Filter(props) {
         set_filter_obj(temp)
     };
 
-    const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
-    const OpenBoundingBoxFilter = () => {
-        return (
-            <AccordionDetails key={'accordDet' + key}>
-                <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} />
-            </AccordionDetails>
-        )
-
-    }
-
     // const OpenBoundingBoxFilter = (event) => {
     //     if (!labels.some(e => e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")) {
     //         setLabels([...labels, { option: "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type: "<class 'rest_framework.fields.Map'>", label: "" }])
     //     }
     // }
 
-    console.log("Filter Obj: ", filter_obj)
+    // console.log("Filter Obj: ", filter_obj)
 
     return (
         <div>
@@ -125,7 +115,7 @@ export default function Filter(props) {
                 <Toolbar />
                 <Toolbar />
                 <Divider />
-                <Grid container key="top_grid" justifyContent="center" sx={{ mb: "10px" }}>
+                <Grid container key="top_grid" direction="row" justifyContent="center" sx={{ mb: "10px" }}>
                     <Grid container item justifyContent={rightScreen ? "flex-start" : "flex-end"}>
                         <IconButton onClick={handleFilterReset}>
                             <RestartAltIcon />
@@ -137,42 +127,53 @@ export default function Filter(props) {
                             {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
                         </IconButton>
                     </Grid>
-
                     {
                         pageType == 'voyage' ?
-                            <Button variant="contained"
-                                color={color}
-                                onClick={
-                                    () => { setOpenBoundingBox(true) }
+                            <Grid item sx={{mb:openBoundingBox?"10px":"0px"}}>
+                                {
+                                !openBoundingBox?
+                                <Button variant="contained"
+                                    color={color}
+                                    onClick={()=>{setOpenBoundingBox(true)}}
+                                >
+                                    <Typography color="white">Add Visual Filter</Typography>
+                                </Button>
+                                :
+                                <Button variant="contained"
+                                    color={color}
+                                    onClick={()=>{
+                                                    setOpenBoundingBox(false);
+                                                    handleDelete("voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name");
+                                                    handleDelete("voyage_itinerary__imp_principal_port_slave_dis__geo_location__name");
+                                                }}
+                                >
+                                    <Typography color="white">Remove Visual Filter</Typography>
+                                </Button>
                                 }
-                            >
-                                <Typography color="white">Add Visual Filter</Typography>
-                            </Button>
-
+                            </Grid>
                             : null
                     }
                     {
                         openBoundingBox ?
-                            variables_for_map.map(key => {
-
-                                return (
-                                    <Grid container item key={'container' + key} xs={fullScreen ? 5 : 10}>
-                                        <Grid item key={'item1' + key} xs={10}>
-                                            <Accordion>
-                                                <AccordionSummary>
-                                                    <Typography key={'typo'}>
-                                                        {options_flat[key].flatlabel}
-                                                    </Typography>
-                                                </AccordionSummary>
-                                                <AccordionDetails >
-                                                    <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} />
-                                                </AccordionDetails>
-                                            </Accordion>
-                                        
-                                        </Grid>
-                                    </Grid>
-                                )
-                            })
+                            <Grid container item key={'visual_filter_container'} justifyContent="center" spacing={1}>
+                                {variables_for_map.map(key => {
+                                    return (
+                                            <Grid item key={'item' + key} xs={fullScreen ? 5 : 10}>
+                                                <Accordion key={'accord'+key}>
+                                                    <AccordionSummary key={'accordSum'+key}>
+                                                        <Typography key={'typo'+key}>
+                                                            {options_flat[key].flatlabel}
+                                                        </Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails key={'accordDet'+key}>
+                                                        <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} />
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                            
+                                            </Grid>
+                                    )
+                                })}
+                            </Grid>
                             : null
                     }
                 </Grid>

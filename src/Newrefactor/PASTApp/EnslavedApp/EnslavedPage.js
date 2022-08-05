@@ -55,7 +55,7 @@ function TabPanel(props) {
 
 export default function EnslavedPage(props) {
   const [dataset, setDataset] = useState("1");
-  // const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize();
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   // const [cols, setCols] = useState(enslaved_default_list);
@@ -64,7 +64,7 @@ export default function EnslavedPage(props) {
   // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 12,
     totalRows: 0,
   });
   // sorting
@@ -110,6 +110,7 @@ export default function EnslavedPage(props) {
     options_flat,
     variables_tree,
   };
+  const state_graph = { selectedData, width, height };
   const state_table = {pageType: "enslaved",
   dataset,
   dataList,
@@ -134,8 +135,18 @@ export default function EnslavedPage(props) {
   handleDialogOpen,
   handleDialogClose,
   handleGallery}
-  const state_graph = { selectedData };
-  const state_gallery = {dataset,filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
+
+  const state_gallery = {
+    dataList,
+    dataset,
+    filter_object,
+    pageType: "enslaved",
+    setSelectedData,
+    handleDialogOpen,
+    handleGallery,
+    pagination,
+    setPagination,
+  }
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -238,7 +249,7 @@ export default function EnslavedPage(props) {
           </Toolbar>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Sankey state={state_graph} />
+          <Sankey state={state_graph}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network state={state_graph} />
