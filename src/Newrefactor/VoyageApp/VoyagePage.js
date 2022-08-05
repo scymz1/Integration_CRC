@@ -30,7 +30,7 @@ function TabPanel(props) {
 
 export default function VoyagePage() {
   const [filter_object, set_filter_object] = useState({});
-  const [dataset, setDataset] = useState(0);
+  const [dataset, setDataset] = useState("0");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const state = {
     filter_object,
