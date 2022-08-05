@@ -64,7 +64,7 @@ export default function EnslavedPage(props) {
   // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 12,
     totalRows: 0,
   });
   // sorting
@@ -135,7 +135,9 @@ export default function EnslavedPage(props) {
   handleDialogOpen,
   handleDialogClose,
   handleGallery}
+
   const state_gallery = {
+    dataList,
     dataset,
     filter_object,
     pageType: "enslaved",
