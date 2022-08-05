@@ -3,7 +3,7 @@ import { useMemo, useEffect } from "react";
 import Story from "./Story";
 import TablePagination from "@mui/material/TablePagination";
 import "./styles.css";
-import { Button, Box, Stack,Grid } from "@mui/material";
+import {Button, Box, Stack, Grid, LinearProgress} from "@mui/material";
 import TocIcon from "@mui/icons-material/Toc";
 
 export default function Gallery(props) {
@@ -46,21 +46,19 @@ export default function Gallery(props) {
 
   return (
     <div className="storybackground" margintop={{ xs: 2, md: 2, lg: 4 }}>
-      {/* <Stack direction="row"> */}
       <Grid container spacing={2}>
         <Grid item xs={8}>
-        <Button
-          color={toolBarColor}
-          variant="contained"
-          startIcon={<TocIcon />}
-          onClick={() => {
-            handleGallery("table");
-          }}
-          sx={{ mt: 0.75, ml: 0.75 , width: 120, fontSize: 14}}
-        >
-          Table
-        </Button>
-
+          <Button
+            color={toolBarColor}
+            variant="contained"
+            startIcon={<TocIcon />}
+            onClick={() => {
+              handleGallery("table");
+            }}
+            sx={{ mt: 0.75, ml: 0.75 , width: 120, fontSize: 14}}
+          >
+            Table
+          </Button>
         </Grid>
         <Grid item xs={4}>
           <TablePagination
@@ -70,11 +68,11 @@ export default function Gallery(props) {
             onPageChange={(event, newPage)=>setPagination({...pagination, currPage: newPage})}
             rowsPerPage={pagination.rowsPerPage}
             onRowsPerPageChange={(event) => setPagination({...pagination, rowsPerPage: parseInt(event.target.value, 10)})}
-            rowsPerPageOptions={[12, 24, 36, 48, 96]}
+            rowsPerPageOptions={[8, 12, 16, 20, 24]}
           />
         </Grid>
-        </Grid>
-      {/* </Stack> */}
+      </Grid>
+      {dataList.length === 0 ? <LinearProgress/> : null}
       <Grid
         container
         spacing={{ xs: 6, md: 4, lg: 5 }}

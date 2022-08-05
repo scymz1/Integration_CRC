@@ -113,11 +113,11 @@ export default function Table(props) {
             onChange={handleChange}
             style={{ height: 30 }}
           >
+            <MenuItem value={8}>8</MenuItem>
             <MenuItem value={12}>12</MenuItem>
+            <MenuItem value={16}>16</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
             <MenuItem value={24}>24</MenuItem>
-            <MenuItem value={36}>36</MenuItem>
-            <MenuItem value={48}>48</MenuItem>
-            <MenuItem value={96}>96</MenuItem>
           </Select>
         </div>
         <div>
