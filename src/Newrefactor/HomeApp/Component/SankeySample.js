@@ -18,13 +18,15 @@ const featuredPosts = {
 };
 
 function SankeyComponent() {
-  const [width, height] = useWindowSize()
+  const [winwidth, winheight] = useWindowSize()
   const [selectedData, setSelectedData] = useState({
     enslaved: [500002, 500004],
     type: "enslaved",
     enslaver: [],
   });
-  const state = {selectedData};
+  let width = winwidth > 800 ? winwidth*0.6 : winwidth * 0.8
+  let height = winheight
+  const state = {selectedData,width,height};
   return (
     <div>
       <Card sx={{display: "flex"}} style={{background: 'transparent', boxShadow: 'none'}}>
@@ -34,7 +36,7 @@ function SankeyComponent() {
               <Sankey state={state}/>
             </CardContent>
           </Grid>
-          <Grid item sx={{maxWidth: width>800 ? "40%": "100%"}}>
+          <Grid item sx={{maxWidth: winwidth>800 ? "40%": "100%"}}>
             <Box sx={{height:height*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button

@@ -9,7 +9,7 @@ const base_url = process.env.REACT_APP_BASEURL;
 export const DocContext = React.createContext({});
 
 export default function DocApp(props) {
-    const state = {pageType: "documents"};
+    const state = {dataset: "0", pageType: "documents"};
     return (
         <div>
             <Navbar state={state}/>
