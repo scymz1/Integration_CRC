@@ -93,7 +93,13 @@ export default function Table(props) {
     if(!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
     return result;
   }, [dataList]);
-
+  
+  function handledialogPagetype(){
+    setSelectedData({
+      ...selectedData,
+      type: pageType,
+    });
+  }
   function CustomPagination() {
     const apiRef = useGridApiContext();
     const page = useGridSelector(apiRef, gridPageSelector);
@@ -158,7 +164,7 @@ export default function Table(props) {
           color={toolBarColor}
           startIcon={<HubIcon />}
           disabled={selectionModel.length === 0}
-          onClick={handleDialogOpen}
+          onClick={() => {handledialogPagetype();handleDialogOpen()}}
         >
           Connections ({selectionModel.length})
         </Button>
