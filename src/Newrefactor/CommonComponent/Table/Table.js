@@ -23,6 +23,7 @@ import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
 import UVModal from "../UVModal";
 import HubIcon from "@mui/icons-material/Hub";
+import './tableStyle.css'
 
 export const TableContext = React.createContext({});
 
