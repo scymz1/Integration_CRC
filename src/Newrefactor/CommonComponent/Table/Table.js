@@ -151,7 +151,7 @@ export default function Table(props) {
           startIcon={<DashboardCustomizeIcon />}
           onClick={() => {handleGallery("story")}}
         >
-          Gallary
+          Gallery
         </Button>
         <Button
           color={toolBarColor}

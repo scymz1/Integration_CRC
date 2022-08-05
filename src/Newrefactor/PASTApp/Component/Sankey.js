@@ -299,12 +299,12 @@ export default function Sankey(props) {
     }
     ;}
 
-    nodes.forEach((node) => {
+    nodes.forEach((node, index) => {
       const result = [];
       var voyagemodal = true;
       if (node.type === "enslaved" && selectedData.type === "enslaved") {
         result.push(
-          <table>
+          <table key={index}>
           <tbody>
           <tr>
             <th>Age:</th>
@@ -321,7 +321,7 @@ export default function Sankey(props) {
         if (node.voyage_id === null) {
           voyagemodal = false;
           result.push(
-            <table>
+            <table key={index}>
             <tbody>
             <tr>
               <th>Type:</th>
@@ -353,7 +353,7 @@ export default function Sankey(props) {
           // console.log(node.voyage_id)
           if (selectedData.type === "enslaved") {
             result.push(
-              <table>
+              <table key={index}>
               <tbody>
               <tr>
                 <th>Type:</th>

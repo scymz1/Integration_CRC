@@ -18,25 +18,19 @@ export default function Gallery(props) {
     pagination,
     setPagination,
   } = props.state;
-  console.log(dataList)
 
   const gallery = useMemo(()=>{
-    const oldGallery = [];
-    //console.log("gData", gData)
-    dataList.forEach((item) => {
-      oldGallery.push(
-        <Grid item xs={12} sm={6} md={4} lg={3}>
-          <Story
-            target={item}
-            dynamic={true}
-            remoteControl={handleDialogOpen}
-            dataChange={setSelectedData}
-            slavery={pageType}
-          />
-        </Grid>
-      );
-    });
-    return oldGallery
+    return dataList.map((item, index) =>
+      <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+        <Story
+          target={item}
+          dynamic={true}
+          remoteControl={handleDialogOpen}
+          dataChange={setSelectedData}
+          slavery={pageType}
+        />
+      </Grid>
+    );
   }, [dataList])
 
   const toolBarColor = useMemo(() => {

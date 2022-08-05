@@ -142,7 +142,7 @@ export default function EnslaverPage(props) {
     dataList,
     dataset,
     filter_object,
-    pageType: "enslaved",
+    pageType: "enslaver",
     setSelectedData,
     handleDialogOpen,
     handleGallery,

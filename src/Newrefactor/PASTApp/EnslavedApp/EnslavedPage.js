@@ -249,7 +249,7 @@ export default function EnslavedPage(props) {
           </Toolbar>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Sankey state={state_graph} />
+          <Sankey state={state_graph}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network state={state_graph} />
