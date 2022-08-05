@@ -8,7 +8,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid";
-import {Box, Button, LinearProgress, Popper} from "@mui/material";
+import { Box, Button, LinearProgress, Popper } from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
@@ -23,7 +23,7 @@ import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
 import UVModal from "../UVModal";
 import HubIcon from "@mui/icons-material/Hub";
-import './tableStyle.css'
+import "./tableStyle.css";
 
 export const TableContext = React.createContext({});
 
@@ -72,17 +72,21 @@ export default function Table(props) {
     const result = [];
     const colVisModel = {};
     const length = (column) => {
-      const defaultLength = Math.max(...dataList.map((e) => e[column] ? e[column].toString().length : 0), options_flat[column].flatlabel.length);
-      if(dataList.length === 0) return 1;
+      const defaultLength = Math.max(
+        ...dataList.map((e) => (e[column] ? e[column].toString().length : 0)),
+        options_flat[column].flatlabel.length
+      );
+      if (dataList.length === 0) return 1;
       // switch (options_flat[column].flatlabel) {
       //   case "Ship Owner Name":
       //     return defaultLength;
       // }
-      if(defaultLength > 7 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      if (defaultLength > 7 * options_flat[column].flatlabel.length)
+        return options_flat[column].flatlabel.length;
       return defaultLength;
-    }
+    };
     var_list.forEach((column) => {
-      colVisModel[column] = !!default_list.find(e => e === column);
+      colVisModel[column] = !!default_list.find((e) => e === column);
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
@@ -90,7 +94,7 @@ export default function Table(props) {
         width: 10 * length(column),
       });
     });
-    if(!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
+    if (!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
     return result;
   }, [dataList]);
   
@@ -139,16 +143,16 @@ export default function Table(props) {
     );
   }
 
-  const toolBarColor = useMemo(()=>{
-    if(pageType === "enslaver") {
-      return "success"
+  const toolBarColor = useMemo(() => {
+    if (pageType === "enslaver") {
+      return "success";
     }
-    if(dataset==="0") {
-      return "primary"
-    }else{
-      return "secondary"
+    if (dataset === "0") {
+      return "primary";
+    } else {
+      return "secondary";
     }
-  }, [pageType, dataset])
+  }, [pageType, dataset]);
   const PastToolbar = () => (
     <GridToolbarContainer>
       <Stack direction={"row"} spacing={1}>
@@ -156,7 +160,9 @@ export default function Table(props) {
           color={toolBarColor}
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
-          onClick={() => {handleGallery("story")}}
+          onClick={() => {
+            handleGallery("story");
+          }}
         >
           Gallery
         </Button>
@@ -177,15 +183,19 @@ export default function Table(props) {
             toolBarColor,
           }}
         />
-        <GridToolbarDensitySelector color={toolBarColor}/>
-        <GridToolbarExport color={toolBarColor}/>
+        <GridToolbarDensitySelector color={toolBarColor} />
+        <GridToolbarExport color={toolBarColor} />
         {pageType === "enslaver" ? (
           <Link to={"/past/enslaved"} style={{ textDecoration: "none" }}>
-            <Button color={toolBarColor} startIcon={<TableChartIcon />}>Enslaved</Button>
+            <Button color={toolBarColor} startIcon={<TableChartIcon />}>
+              Enslaved
+            </Button>
           </Link>
         ) : (
           <Link to={"/past/enslaver"} style={{ textDecoration: "none" }}>
-            <Button color={toolBarColor} startIcon={<TableChartIcon />}>Enslaver</Button>
+            <Button color={toolBarColor} startIcon={<TableChartIcon />}>
+              Enslaver
+            </Button>
           </Link>
         )}
       </Stack>
@@ -256,6 +266,18 @@ export default function Table(props) {
           // checkbox
           checkboxSelection={checkbox}
           keepNonExistentRowsSelected
+          isRowSelectable={(params) => {
+            if (
+              (params.row.transactions != null &&
+                params.row.transactions.length !== 0) ||
+              (params.row.number_enslaved != null &&
+                params.row.number_enslaved > 0)
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          }}
           onSelectionModelChange={(newSelectionModel) => {
             if (pageType === "voyage") {
               setVoyageId(newSelectionModel[0]);
@@ -274,7 +296,9 @@ export default function Table(props) {
           style={{ zIndex: 0 }}
         />
         {voyageOpen && (
-          <VoyageModal context={{ voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl }} />
+          <VoyageModal
+            context={{ voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl }}
+          />
         )}
         {uvOpen && <UVModal context={{ uvOpen, setUVOpen, url }} />}
       </div>
