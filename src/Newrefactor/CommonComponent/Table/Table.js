@@ -267,7 +267,7 @@ export default function Table(props) {
           style={{ zIndex: 0 }}
         />
         {voyageOpen && (
-          <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl }} />
+          <VoyageModal context={{ voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl }} />
         )}
         {uvOpen && <UVModal context={{ uvOpen, setUVOpen, url }} />}
       </div>
