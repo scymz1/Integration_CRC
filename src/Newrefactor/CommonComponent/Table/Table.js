@@ -8,7 +8,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid";
-import { Button, LinearProgress } from "@mui/material";
+import {Box, Button, LinearProgress, Popper} from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
@@ -67,7 +67,6 @@ export default function Table(props) {
     const result = [];
     const colVisModel = {};
     var_list.forEach((column) => {
-      console.log();
       colVisModel[column] = !!default_list.find(e => e === column);
       result.push({
         field: column,
@@ -76,7 +75,7 @@ export default function Table(props) {
         minWidth: 10 * (dataList.length === 0 ? 1 : Math.max(...dataList.map(e=>e[column]? e[column].toString().length: 0), options_flat[column].flatlabel.length)),
       });
     });
-    setColumnVisibilityModel(colVisModel);
+    if(columnVisibilityModel === {}) setColumnVisibilityModel(colVisModel);
     return result;
   }, [dataList])
 
@@ -131,10 +130,10 @@ export default function Table(props) {
         </Button>
         <Button
           startIcon={<HubIcon />}
-          // variant="outlined"
+          disabled={selectionModel.length === 0}
           onClick={handleDialogOpen}
         >
-          Connections
+          Connections ({selectionModel.length})
         </Button>
         <ColSelector
           state={{
