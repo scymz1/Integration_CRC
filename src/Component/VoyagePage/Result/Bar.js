@@ -68,6 +68,8 @@ export default function Bar(props) {
   const [aggregation, setAgg] = React.useState("sum");
 
   const [showAlert, setAlert] = useState(false);
+
+  const [dataGet, setdataGet] = useState({})
   // const [str, setStr] = useState("")
 
   // console.log("🏀", barData)
@@ -118,59 +120,56 @@ export default function Bar(props) {
         });
       }
 
-
     chips.map( (element) => {
      yfieldArr.push(element)
   
     data.append("groupby_fields", element);
     })
 
-    const promises = () =>{
-      return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
+
+
+   fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
         method: "POST",
         body: data,
         headers: {'Authorization':AUTH_TOKEN}
       }).then(res => res.json())
       .then(function (response) {
+        setdataGet(response)
         console.log("🔥data", response)
-
-        return Object.values(response);
       })
-    }
 
-  
-    const dataGet = await Promise.all(promises)
+      console.log("🦛", dataGet)
+      // console.log("🔍", typeof(dataGet))
+      // console.log( "🐶", yfieldArr)
 
-    console.log("🐻", dataGet[dataGet.length - 1])
-       //  Convert NaN to 0
-    // NaN cause the error: SyntaxError: Unexpected token N in JSON
-    // Object.values(data).forEach(val => {
-    //   if (Number.isNaN(val)) {
-    //     val = 0;
-    //   }
-    // });
- 
-   
-    // setDataFlow([...dataFlow, data[data.length - 1]])
-    // console.log("🐯data is ", data)
-    // console.log("🐷", typeof(data))
-  //  console.log("😷",chips)
-  //  console.log(typeof(chips))
-    
+      // console.log("🐲", Object.keys(dataGet))
+      // console.log("🤔", Object.values(dataGet))
+
    
     let arr = []
 
-    dataGet[dataGet.length - 1].forEach( (dataElement,index) =>{
-      // console.log("🐔 dataElement is ", dataElement)
-      // console.log("type", typeof(Object.values(dataElement)[0]))
-        arr.push({
-          x: Object.keys(dataElement),
-          y: Object.values(dataElement),
+    Object.values(dataGet).forEach((element, index) =>{
+          arr.push({
+          x: Object.keys(element),
+          y: Object.values(element),
           type: "bar",
           name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
           barmode: "group",
         })
+      
     })
+
+    // dataGet.forEach( (dataElement,index) =>{
+    //   console.log("🐔 dataElement is ", dataElement)
+    //   // console.log("type", typeof(Object.values(dataElement)[0]))
+    //     arr.push({
+    //       x: Object.keys(dataElement),
+    //       y: Object.values(dataElement),
+    //       type: "bar",
+    //       name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
+    //       barmode: "group",
+    //     })
+    // })
 
     // tempstr = arr.map(function(elem){
     //     return elem.name ;
