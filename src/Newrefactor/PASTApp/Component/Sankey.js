@@ -12,8 +12,7 @@ const auth_token = process.env.REACT_APP_AUTHTOKEN
 const base_url = process.env.REACT_APP_BASEURL;
 
 export default function Sankey(props) {
-  const [width, height] = useWindowSize();
-  const {selectedData} = props.state
+  const {selectedData, width, height} = props.state
   const [graph, setGraph] = useState(null);
   const [CANVAS_WIDTH, setCANVAS_WIDTH] = useState(700);
   const [CANVAS_HEIGHT, setCANVAS_HEIGHT] = useState(450);
