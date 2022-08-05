@@ -36,7 +36,7 @@ export default function Navbar(props) {
     <>
     <AppBar position="fixed" color={color} elevation={0} style={{ zIndex: 3 }}>
       <Toolbar>
-        <div style={{flexGrow:1}}>
+          <Stack spacing={4} direction={"row"} sx={{ flexGrow: 1}}>
           <Typography
             variant="h5"
             noWrap
@@ -53,44 +53,44 @@ export default function Navbar(props) {
             <Icon>
               <img src={logo} height={30} width={60} />
             </Icon>
-            VOYAGES
+            VOYAGES<small style={{fontWeight: 200, letterSpacing: "0",}}>/{pageType}</small>
           </Typography>
-          <span>/{pageType.toUpperCase()}</span>
-        </div>
+
+            {pageType !== "home" ? (
+              <IconButton
+                aria-label="open drawer"
+                onClick={() => setDrawerOpen(!drawerOpen)}
+              >
+                <FilterAlt sx={{ color: "white" }} />
+                <Typography sx={{ color: "white" }}>Filter</Typography>
+              </IconButton>
+            ) : null}
+          </Stack>
 
 
-        <ThemeProvider theme={switchTheme}>
-            <Stack spacing={4} direction={"row"} sx={{ flexGrow: 1}}>
-        {pageType !== "home" ? (
-          <IconButton
-            aria-label="open drawer"
-            onClick={() => setDrawerOpen(!drawerOpen)}
-          >
-            <FilterAlt sx={{ color: "white" }} />
-            <Typography sx={{ color: "white" }}>Filter</Typography>
-          </IconButton>
-        ) : null}
+        <ThemeProvider theme={switchTheme} >
+          <div style={{flexGrow:1}}>
+            {pageType !== "enslaver" && pageType !== "home" ? (
+              <ToggleButtonGroup
+                color="blackMode"
+                value={dataset}
+                exclusive
+                onChange={(event) => {
+                  setDataset(event.target.value);
+                }}
+                sx={{background: dataset === "0" ? "#42a5f5" : "#ab47bc"}}
+                size={"small"}
+              >
+                <ToggleButton sx={{ background: "#42a5f5" }} value={"0"}>
+                  Trans-Atlantic
+                </ToggleButton>
+                <ToggleButton sx={{ background: "#ab47bc" }} value={"1"}>
+                  Intra-American
+                </ToggleButton>
+              </ToggleButtonGroup>
+            ) : null}
+          </div>
 
-        {pageType !== "enslaver" && pageType !== "home" ? (
-          <ToggleButtonGroup
-            color="blackMode"
-            value={dataset}
-            exclusive
-            onChange={(event) => {
-              setDataset(event.target.value);
-            }}
-            sx={{background: dataset === "0" ? "#42a5f5" : "#ab47bc"}}
-            size={"small"}
-          >
-            <ToggleButton sx={{ background: "#42a5f5" }} value={"0"}>
-              Trans-Atlantic
-            </ToggleButton>
-            <ToggleButton sx={{ background: "#ab47bc" }} value={"1"}>
-              Intra-American
-            </ToggleButton>
-          </ToggleButtonGroup>
-        ) : null}
-        </Stack>
         </ThemeProvider>
 
         <Link to={"/voyage"} style={{ textDecoration: "none" }}>

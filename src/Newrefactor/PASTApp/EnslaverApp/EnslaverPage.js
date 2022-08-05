@@ -191,7 +191,6 @@ export default function EnslaverPage(props) {
           </div>
         </Grow>
       </Box>}
-      
       <Dialog
         fullScreen
         open={dialogOpen}

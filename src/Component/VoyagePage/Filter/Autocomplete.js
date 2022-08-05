@@ -44,11 +44,22 @@ export default function Auto(props) {
         };
         
 
-        fetch(base_url+endpoint+"autocomplete", requestOptions)
+      //   fetch(base_url+endpoint+"autocomplete", requestOptions)
+      //   .then(response => response.json())
+      //   .then(result => {
+      //       console.log("In autocomplete: ",typeof(result[labels.option]))
+      //       var newOptions = result[labels.option]
+      //       //var newOptions = JSON.stringify(result['results'])
+      //       setautocompleteOptions(newOptions) })
+      //       // console.log(autocompleteOptions)s
+      // }
+
+      fetch(base_url+endpoint+"autocomplete", requestOptions)
         .then(response => response.json())
         .then(result => {
-            console.log("In autocomplete: ", labels.option)
-            var newOptions = result[labels.option]
+            console.log("In autocomplete: ",result)
+            var newOptions = result['results'][0]
+            //var newOptions = JSON.stringify(result['results'])
             setautocompleteOptions(newOptions) })
             // console.log(autocompleteOptions)s
       }
