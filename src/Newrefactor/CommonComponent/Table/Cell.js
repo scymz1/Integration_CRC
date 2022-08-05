@@ -13,6 +13,8 @@ export default function Cell(props) {
     handleDialogOpen,
     setVoyageOpen,
     setVoyageId,
+    setUVOpen,
+    setUrl,
   } = useContext(TableContext);
 
   // check if the string is numeric
@@ -36,6 +38,13 @@ export default function Cell(props) {
     setVoyageOpen(true);
     setVoyageId(id);
     event.stopPropagation();
+  };
+
+  // handle UV modal
+  const handleUV = (e, url) => {
+    setUrl(url);
+    setUVOpen(true);
+    e.stopPropagation();
   };
 
   // create popover for enslaver alias in enslaved table
@@ -163,7 +172,7 @@ export default function Cell(props) {
               style={{
                 color: "#f21b42",
               }}
-              onClick={(e) => console.log(element["text_ref"])} //handleUV(e, element["doc"]["url"])
+              onClick={(e) => handleUV(e, element["doc"]["url"])}
             >
               <u>{element["text_ref"]}</u>
             </div>

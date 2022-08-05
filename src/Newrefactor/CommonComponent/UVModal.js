@@ -65,9 +65,7 @@ import React, {
   };
   
   export default function UVModal(props) {
-    const { dataSet, pageType, uvOpen, setUVOpen, url } = useContext(
-      props.context
-    );
+    const { uvOpen, setUVOpen, url } = props.context;
     //const UVContext = React.createContext({});
     const [title, setTitle] = useState(null);
     const [image, setImage] = useState(null);
