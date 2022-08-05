@@ -25,7 +25,9 @@ export default function Filter(props) {
 
     const [openBoundingBox, setOpenBoundingBox] = React.useState(false);
 
-    const variables_for_map = ["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"];
+    const variables_for_map = ["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", 
+    "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"];
+
 
     // Handle Full Screen and Exit
     const handleFullScreen = () => {
@@ -90,6 +92,7 @@ export default function Filter(props) {
     //     }
     // }
 
+    console.log("Filter Obj: ", filter_obj)
 
     return (
         <div>
@@ -143,7 +146,6 @@ export default function Filter(props) {
                             <Button variant="contained"
                                 color={color}
                                 onClick={
-                                    // OpenBoundingBoxFilter
                                     () => { setOpenBoundingBox(true) }
                                 }
                             >
@@ -161,7 +163,9 @@ export default function Filter(props) {
                                         <Grid item key={'item1' + key} xs={10}>
                                             <Accordion>
                                                 <AccordionSummary>
-                                                    <Typography key={'typo'}>{"Bounding Box"}</Typography>
+                                                    <Typography key={'typo'}>
+                                                        {options_flat[key].flatlabel}
+                                                    </Typography>
                                                 </AccordionSummary>
                                                 <AccordionDetails >
                                                     <BoundingBoxFilter state={{ key, filter_obj, set_filter_obj, options_flat, pageType, dataset }} />
