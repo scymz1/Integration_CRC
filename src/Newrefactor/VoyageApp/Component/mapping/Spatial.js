@@ -19,6 +19,7 @@ axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 var nodeLayers = {};
 var linkLayers = {};
 
+
 var groupby_fields_region = [
   "voyage_itinerary__imp_principal_region_of_slave_purchase__geo_location__id",
   "voyage_itinerary__imp_principal_region_slave_dis__geo_location__id",
@@ -56,6 +57,10 @@ L.Marker.prototype.options.icon = customIcon;
 
 // Drawing nodes and edges on the map
 export function ReadFeature(props) {
+
+  console.log("LatLong: ", props.latlong)
+
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRegion, setIsRegion] = useState(true);
 
@@ -209,13 +214,16 @@ export function ReadFeature(props) {
     //filter nodes so that the return nodes are all on the left/right of longitude -23.334960 and are not ocean waypts
     var filterNodes = (feature) => {
       //if embarkation is selected; only show nodes on African side
-      if (props.radio == "embarkation") {
+      // if (props.radio == "embarkation") {
+      if (props.key == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name") {
+        console.log("Filter embarkation locations")
         return (
           feature.geometry.coordinates[0] >= -23.33496 &&
           !feature.properties.name.includes("ocean waypt")
         );
       } else {
         //if disembarkation is selected, only show nodes on American side
+        console.log("Filter Disembarkation locations")
         return (
           feature.geometry.coordinates[0] < -23.33496 &&
           !feature.properties.name.includes("ocean waypt")
@@ -298,12 +306,12 @@ export function ReadFeature(props) {
       popup.update();
     }, true); // Capture the load event, because it does not bubble.
 
-    // let drawbox = L.rectangle(props.latlong, {
-    //   color: "blue",
-    //   weight: 5,
-    //   fillOpacity: 0.0,
-    // });
-    // drawbox.addTo(map);
+    let drawbox = L.rectangle(props.latlong, {
+      color: "red",
+      weight: 3,
+      fillOpacity: 0.0,
+    });
+    drawbox.addTo(map);
   }, [nodes, csv, props.search_object.dataset, complete_object]);
 
   if (isLoading == false) {
