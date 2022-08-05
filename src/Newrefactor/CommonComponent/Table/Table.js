@@ -21,6 +21,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
+import UVModal from "../UVModal";
 import HubIcon from "@mui/icons-material/Hub";
 
 export const TableContext = React.createContext({});
@@ -46,6 +47,8 @@ export default function Table(props) {
   const [selectionModel, setSelectionModel] = useState([]);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
   const [voyageOpen, setVoyageOpen] = useState(false);
+  const [uvOpen, setUVOpen] = useState(false);
+  const [url, setUrl] = useState("");
   const [voyageId, setVoyageId] = useState(0);
 
   const var_list = useMemo(() => {
@@ -190,6 +193,10 @@ export default function Table(props) {
         handleDialogOpen,
         setVoyageOpen,
         setVoyageId,
+        uvOpen,
+        setUVOpen,
+        url,
+        setUrl,
       }}
     >
       <div style={{ width: "100%" }}>
@@ -247,6 +254,7 @@ export default function Table(props) {
         {voyageOpen && (
           <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
         )}
+        {uvOpen && <UVModal context={{ uvOpen, setUVOpen, url }} />}
       </div>
     </TableContext.Provider>
   );
