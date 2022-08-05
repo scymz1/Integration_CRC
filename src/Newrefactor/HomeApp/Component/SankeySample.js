@@ -414,7 +414,7 @@ function SankeyComponent() {
             </CardContent>
           </Grid>
           <Grid item sx={{maxWidth: width>800 ? "40%": "100%"}}>
-            <Box sx={{height:height*0.8,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
+            <Box sx={{height:height*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden", overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
                   variant="text"
