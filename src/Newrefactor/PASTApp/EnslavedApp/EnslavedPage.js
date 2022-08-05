@@ -111,6 +111,7 @@ export default function EnslavedPage(props) {
     variables_tree,
   };
   const state_table = {pageType: "enslaved",
+  dataset,
   dataList,
   isLoading,
   checkbox: true,
@@ -134,7 +135,7 @@ export default function EnslavedPage(props) {
   handleDialogClose,
   handleGallery}
   const state_graph = { selectedData };
-  const state_gallery = {filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
+  const state_gallery = {dataset,filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
 
   useEffect(() => {
     //console.log("fetching...", pagination);

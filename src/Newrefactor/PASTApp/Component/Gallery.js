@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import {useMemo, useEffect } from "react";
 import Story from "./Story";
 import Grid from '@mui/material/Grid';
 import TablePagination from '@mui/material/TablePagination';
@@ -17,7 +17,7 @@ export default function Gallery(props){
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
     // const {remoteControl, dataChange, setChipData, data, setData} = props;
-    const {filter_object,pageType,setSelectedData,handleDialogOpen,handleGallery} = props.state
+    const {dataset,filter_object,pageType,setSelectedData,handleDialogOpen,handleGallery} = props.state
     // const { search_object, typeForTable } = React.useContext(PASTContext);
 
     function handleChangePage(event, newPage){
@@ -84,10 +84,22 @@ export default function Gallery(props){
         })
         setGallery(oldGallery);
     }, [gData])
-    
+  
+    const toolBarColor = useMemo(()=>{
+      if(pageType === "enslaver") {
+        return "success"
+      }
+      if(dataset==="0") {
+        return "primary"
+      }else{
+        return "secondary"
+      }
+    }, [pageType, dataset])
+
   return (
     <div className = "storybackground" margintop ={{ xs: 2, md: 2, lg:4 }} >
       <Button
+          color={toolBarColor}
           variant="contained" 
           startIcon={<TocIcon/>} 
           size="large"
@@ -96,7 +108,7 @@ export default function Gallery(props){
         >
           Table
         </Button>
-      {/* <button onClick={() => console.log("gallery: ", gallery)}>print</button> */}
+
     <TablePagination
       component="div"
       count={total}
