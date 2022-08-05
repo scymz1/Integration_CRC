@@ -204,7 +204,7 @@ export default function Table(props) {
         <DataGrid
           autoHeight={true}
           columns={columns}
-          // columnVisibilityModel={columnVisibilityModel}
+          columnVisibilityModel={columnVisibilityModel}
           onColumnVisibilityModelChange={(newModel) =>
             setColumnVisibilityModel(newModel)
           }
