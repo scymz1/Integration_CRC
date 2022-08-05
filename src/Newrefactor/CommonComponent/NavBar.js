@@ -33,7 +33,8 @@ export default function Navbar(props) {
     }, [pageType, dataset])
 
   return (
-    <AppBar position="sticky" color={color} elevation={0} style={{ zIndex: 3 }}>
+    <>
+    <AppBar position="fixed" color={color} elevation={0} style={{ zIndex: 3 }}>
       <Toolbar>
         <div style={{flexGrow:1}}>
           <Typography
@@ -52,8 +53,9 @@ export default function Navbar(props) {
             <Icon>
               <img src={logo} height={30} width={60} />
             </Icon>
-            {pageType.toUpperCase()}
+            VOYAGES
           </Typography>
+          <span>/{pageType.toUpperCase()}</span>
         </div>
 
 
@@ -105,5 +107,7 @@ export default function Navbar(props) {
 
       </Toolbar>
     </AppBar>
+    <Toolbar />
+    </>
   );
 }

@@ -8,7 +8,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
 } from "@mui/x-data-grid";
-import { Button, LinearProgress } from "@mui/material";
+import {Box, Button, LinearProgress, Popper} from "@mui/material";
 import { useMemo, useState } from "react";
 import Cell from "./Cell";
 import Pagination from "@mui/material/Pagination";
@@ -21,6 +21,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import ColSelector from "./ColumnSelector";
 import VoyageModal from "../VoyageModal";
+import UVModal from "../UVModal";
 import HubIcon from "@mui/icons-material/Hub";
 
 export const TableContext = React.createContext({});
@@ -40,46 +41,56 @@ export default function Table(props) {
     selectedData,
     setSelectedData,
     handleDialogOpen,
-    handleGallery
+    handleGallery,
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState({});
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState(null);
   const [voyageOpen, setVoyageOpen] = useState(false);
+  const [uvOpen, setUVOpen] = useState(false);
+  const [url, setUrl] = useState("");
   const [voyageId, setVoyageId] = useState(0);
 
-  const var_list = useMemo(()=>{
-    let result = []
-    const buildVarList = (node)=>{
-      Object.keys(node).forEach((key)=>{
-        if(node[key]){
-          buildVarList(node[key])
-        }else{
-          result.push(key)
+  const var_list = useMemo(() => {
+    let result = [];
+    const buildVarList = (node) => {
+      Object.keys(node).forEach((key) => {
+        if (node[key]) {
+          buildVarList(node[key]);
+        } else {
+          result.push(key);
         }
-      })
-    }
-    buildVarList(variables_tree)
-    return result
-  }, [variables_tree])
+      });
+    };
+    buildVarList(variables_tree);
+    return result;
+  }, [variables_tree]);
 
-  const columns = useMemo(()=>{
+  const columns = useMemo(() => {
     const result = [];
     const colVisModel = {};
     var_list.forEach((column) => {
-      console.log();
       colVisModel[column] = !!default_list.find(e => e === column);
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        minWidth: 10 * (dataList.length === 0 ? 1 : Math.max(...dataList.map(e=>e[column]? e[column].toString().length: 0), options_flat[column].flatlabel.length)),
+        minWidth:
+          10 *
+          (dataList.length === 0
+            ? 1
+            : Math.max(
+                ...dataList.map((e) =>
+                  e[column] ? e[column].toString().length : 0
+                ),
+                options_flat[column].flatlabel.length
+              )),
       });
     });
-    setColumnVisibilityModel(colVisModel);
+    console.log(columnVisibilityModel)
+    if(!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
     return result;
-  }, [dataList])
-
+  }, [dataList]);
 
   function CustomPagination() {
     const apiRef = useGridApiContext();
@@ -119,8 +130,8 @@ export default function Table(props) {
     );
   }
 
-  const PastToolbar = ()=>
-    (<GridToolbarContainer>
+  const PastToolbar = () => (
+    <GridToolbarContainer>
       <Stack direction={"row"} spacing={1}>
         <Button
           variant="contained"
@@ -131,16 +142,18 @@ export default function Table(props) {
         </Button>
         <Button
           startIcon={<HubIcon />}
-          // variant="outlined"
+          disabled={selectionModel.length === 0}
           onClick={handleDialogOpen}
         >
-          Connections
+          Connections ({selectionModel.length})
         </Button>
         <ColSelector
           state={{
             columnVisibilityModel,
             setColumnVisibilityModel,
-            variables_tree, options_flat,}}
+            variables_tree,
+            options_flat,
+          }}
         />
         <GridToolbarDensitySelector />
         <GridToolbarExport />
@@ -154,20 +167,23 @@ export default function Table(props) {
           </Link>
         )}
       </Stack>
-    </GridToolbarContainer>)
+    </GridToolbarContainer>
+  );
 
-  const VoyageToolbar = ()=>
-    (<GridToolbarContainer>
+  const VoyageToolbar = () => (
+    <GridToolbarContainer>
       <ColSelector
         state={{
           columnVisibilityModel,
           setColumnVisibilityModel,
           variables_tree,
-          options_flat,}}
+          options_flat,
+        }}
       />
       <GridToolbarDensitySelector />
       <GridToolbarExport />
-    </GridToolbarContainer>)
+    </GridToolbarContainer>
+  );
 
   return (
     <TableContext.Provider
@@ -177,6 +193,10 @@ export default function Table(props) {
         handleDialogOpen,
         setVoyageOpen,
         setVoyageId,
+        uvOpen,
+        setUVOpen,
+        url,
+        setUrl,
       }}
     >
       <div style={{ width: "100%" }}>
@@ -215,7 +235,10 @@ export default function Table(props) {
           checkboxSelection={checkbox}
           keepNonExistentRowsSelected
           onSelectionModelChange={(newSelectionModel) => {
-            if (newSelectionModel.length <= 10) {
+            if (pageType === "voyage") {
+              setVoyageId(newSelectionModel[0]);
+              setVoyageOpen(true);
+            } else if (newSelectionModel.length <= 10) {
               // set the maximum number of the selected people
               setSelectionModel(newSelectionModel);
               setSelectedData({
@@ -229,8 +252,9 @@ export default function Table(props) {
           style={{ zIndex: 0 }}
         />
         {voyageOpen && (
-          <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />
+          <VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl }} />
         )}
+        {uvOpen && <UVModal context={{ uvOpen, setUVOpen, url }} />}
       </div>
     </TableContext.Provider>
   );
