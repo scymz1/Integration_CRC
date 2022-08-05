@@ -1,5 +1,6 @@
 import { Grid, Button, IconButton, AppBar, Toolbar, Drawer, Divider } from "@mui/material";
 import * as React from 'react';
+import { useMemo } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -19,6 +20,17 @@ import BoundingBoxFilter from "../../VoyageApp/Component/BoundingBoxFilter";
 export default function Filter(props) {
 
     const { filter_obj, set_filter_obj, variables_tree, options_flat, drawerOpen, setDrawerOpen, pageType, dataset } = props.state;
+
+    const color = useMemo(() =>{
+        if(pageType === "enslaver") {
+          return "success"
+        }
+        if(dataset==="0") {
+          return "primary"
+        }else{
+          return "secondary"
+        }
+      }, [pageType, dataset])
 
     const [fullScreen, setFullScreen] = React.useState(false);
     const [rightScreen, setRightScreen] = React.useState(false);
@@ -57,21 +69,6 @@ export default function Filter(props) {
         set_filter_obj(temp)
     };
 
-    const color = (() =>{
-        if(pageType === "voyage") {
-          if(dataset==="0") {
-            return "voyageTrans"
-          }else{
-            return "voyageIntra"
-          }
-        }
-        if(dataset==="0") {
-          return "primary"
-        }else{
-          return "secondary"
-        }
-      })()
-
     const key = "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name"
     const OpenBoundingBoxFilter = ()=>{
         return (
@@ -96,7 +93,7 @@ export default function Filter(props) {
                     position="fixed" 
                     color={color} 
                     elevation={0} 
-                    style={{ zIndex: 3, marginTop: "68px" }}
+                    style={{ zIndex: 3, marginTop: "64px" }}
                 >
                     <Toolbar key="menu_toolbar">
                         <Grid container key="menu_items" direction="row" spacing={1}>
