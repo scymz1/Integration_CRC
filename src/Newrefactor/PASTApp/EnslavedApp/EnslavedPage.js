@@ -33,6 +33,7 @@ import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import TocIcon from '@mui/icons-material/Toc';
 import { useWindowSize } from "@react-hook/window-size";
+import StoryInPAST from "../Component/StoryInPAST";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -249,7 +250,7 @@ export default function EnslavedPage(props) {
               return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="enslaved"/></Grid>
             })}
           </Grid> */}
-          Story
+          <StoryInPAST selectedData = {selectedData}/>
         </TabPanel>
       </Dialog>
     </div>
