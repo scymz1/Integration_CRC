@@ -57,7 +57,6 @@ export default function Sankey(props) {
 
   useEffect(() => {
     setIsLoading(true)
-    console.log(selectedData)
     const endpoint = (() => {
         switch (selectedData.type) {
           case "enslaved": return "past/enslaved/"

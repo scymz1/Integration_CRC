@@ -136,7 +136,7 @@ export default function Table(props) {
         <Button
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
-          onClick={() => {}}
+          onClick={() => {handleGallery("story")}}
         >
           Gallary
         </Button>
