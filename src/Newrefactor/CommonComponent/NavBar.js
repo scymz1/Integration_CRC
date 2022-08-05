@@ -53,8 +53,9 @@ export default function Navbar(props) {
             <Icon>
               <img src={logo} height={30} width={60} />
             </Icon>
-            {pageType.toUpperCase()}
+            VOYAGES
           </Typography>
+          <span>/{pageType.toUpperCase()}</span>
         </div>
 
 
