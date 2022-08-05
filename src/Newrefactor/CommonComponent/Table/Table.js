@@ -113,10 +113,11 @@ export default function Table(props) {
             onChange={handleChange}
             style={{ height: 30 }}
           >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={25}>25</MenuItem>
+            <MenuItem value={12}>12</MenuItem>
+            <MenuItem value={24}>24</MenuItem>
+            <MenuItem value={36}>36</MenuItem>
+            <MenuItem value={48}>48</MenuItem>
+            <MenuItem value={96}>96</MenuItem>
           </Select>
         </div>
         <div>
@@ -150,7 +151,7 @@ export default function Table(props) {
           startIcon={<DashboardCustomizeIcon />}
           onClick={() => {handleGallery("story")}}
         >
-          Gallary
+          Gallery
         </Button>
         <Button
           color={toolBarColor}

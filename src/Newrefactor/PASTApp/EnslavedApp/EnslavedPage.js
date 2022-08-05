@@ -65,7 +65,7 @@ export default function EnslavedPage(props) {
   // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 12,
     totalRows: 0,
   });
   // sorting
@@ -136,7 +136,18 @@ export default function EnslavedPage(props) {
   handleDialogOpen,
   handleDialogClose,
   handleGallery}
-  const state_gallery = {dataset,filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
+
+  const state_gallery = {
+    dataList,
+    dataset,
+    filter_object,
+    pageType: "enslaved",
+    setSelectedData,
+    handleDialogOpen,
+    handleGallery,
+    pagination,
+    setPagination,
+  }
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -239,7 +250,7 @@ export default function EnslavedPage(props) {
           </Toolbar>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Sankey state={state_graph} />
+          <Sankey state={state_graph}/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Network state={state_graph} />

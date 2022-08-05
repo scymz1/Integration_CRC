@@ -56,7 +56,7 @@ export default function Navbar(props) {
             VOYAGES<small style={{fontWeight: 200, letterSpacing: "0",}}>/{pageType}</small>
           </Typography>
 
-            {pageType !== "home" ? (
+            {pageType !== "home" && pageType !== "documents" ? (
               <IconButton
                 aria-label="open drawer"
                 onClick={() => setDrawerOpen(!drawerOpen)}
@@ -70,7 +70,7 @@ export default function Navbar(props) {
 
         <ThemeProvider theme={switchTheme} >
           <div style={{flexGrow:1}}>
-            {pageType !== "enslaver" && pageType !== "home" ? (
+            {pageType !== "enslaver" && pageType !== "home" && pageType !== "documents"? (
               <ToggleButtonGroup
                 color="blackMode"
                 value={dataset}
