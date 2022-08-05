@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -34,7 +34,7 @@ function reducer(state, { type, index }) {
 
 function VoyageModal(props) {
   const endpoint = "voyage/";
-  const { voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl } = props.info;
+  const { voyageOpen, setVoyageOpen, voyageId, setUVOpen, setUrl } = props.context;
   const [content, setContent] = useState([]);
   const modalStyle = {
     position: "absolute",
@@ -63,10 +63,6 @@ function VoyageModal(props) {
         data.append("voyage_id", voyageId);
         data.append("voyage_id", voyageId);
       }
-      // if (endpoint === "past/enslaved/"){
-      //   data.append("transactions__transaction__voyage__id", id);
-      //   data.append("transactions__transaction__voyage__id", id);
-      // }
       axios
         .post("/" + endpoint, data)
         .then(function (response) {
