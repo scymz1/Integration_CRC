@@ -24,7 +24,7 @@ import {
 import ArchiveHome from "./ArchiveHome";
 import SankeyComponent from "./Component/SankeySample";
 import NetworkComponent from "./Component/NetworkSample";
-
+import TableComponent from "./Component/TableSample";
 
 export default function Home() {
   const [width, height] = useWindowSize()
@@ -38,7 +38,7 @@ export default function Home() {
 
   const dataset = "0";
   const state = { dataset, pageType: "home" };
-  const sample = [<SankeyComponent/>, <BarComponent />, <PieComponent />, <ScatterComponent/>];
+  const sample = [<SankeyComponent/>, <BarComponent />, <PieComponent />, <ScatterComponent/>, <TableComponent/>];
   return (
     <div>
       <Navbar state={state} />

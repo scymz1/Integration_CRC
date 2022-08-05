@@ -77,7 +77,7 @@ export default function Table(props) {
       //   case "Ship Owner Name":
       //     return defaultLength;
       // }
-      if(defaultLength > 5 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      if(defaultLength > 7 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
       return defaultLength;
     }
     var_list.forEach((column) => {
