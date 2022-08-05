@@ -13,18 +13,18 @@ const base_url = process.env.REACT_APP_BASEURL;
 export default function StoryInPAST (props) {
     const {selectedData} = props
     const [src, setSrc] = React.useState([]);
-    console.log("selectedData: ",selectedData);
+    // console.log("selectedData: ",selectedData);
 
     useEffect(() => {
         const endpoint = selectedData.type  == "enslaved" ? "past/enslaved/" : "past/enslavers/";
         const targets = (() => {
           switch (selectedData.type) {
             case "enslaved": return selectedData.enslaved;
-            case "enslavers": return selectedData.enslaver; // here check
+            case "enslaver": return selectedData.enslaver; // here check
           }
         })()
-        console.log("targets: ", targets);
-        console.log("endpoint: ", endpoint);
+        // console.log("targets: ", targets);
+        // console.log("endpoint: ", endpoint);
         const fetchData = async ()=> {
           const promises = targets.map(target => {
             let queryData = new FormData();

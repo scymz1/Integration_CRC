@@ -36,7 +36,7 @@ export default function Story (props) {
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
-  const {target, type, dynamic = false , remoteControl = null, dataChange, slavery, setData, data} = props;
+  const {target, type, dynamic = false , remoteControl, dataChange, slavery, setData, data, canRemote = false} = props;
   const isMale = _.get(target, "gender", "1") != 2;
   const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
   const [expand, setExpand] = new React.useState(false);
@@ -47,6 +47,7 @@ export default function Story (props) {
   })
 
   const onclick = () => {
+    if(!canRemote) return;
     if(slavery == "enslaved"){
       dataChange(preData =>({
         enslaver:[...preData.enslaver],
@@ -63,7 +64,7 @@ export default function Story (props) {
     // setChipData({
     //   [_.get(target, "id", "No Record")] : _.get(target, ["documented_name"], "Unknown Enslaved Person")
     // })
-    if(remoteControl != null)remoteControl();
+    remoteControl();
   }
 
   const handleExpandClick = () => {
@@ -74,22 +75,22 @@ export default function Story (props) {
 
   function checkEnslaver(enslaver){
     var esName = _.get(enslaver, ["enslaver_alias", "alias"], "unentified person")
-    var esDate = _.get(enslaver, )
+    // var esDate = _.get(enslaver, )
     switch(_.get(enslaver, ["role", "role"], "NA")){
       case "captain":
-        return `transported by {esName}(captain) on `;
+        return `transported by ${esName}(captain) on `;
       case "investor":
-        return `invested by {esName}`;
+        return `invested by ${esName}`;
       case "buyer":
-        return `bought by {esName}`;
+        return `bought by ${esName}`;
       case "seller":
-        return `sold by {esName}`;
+        return `sold by ${esName}`;
       case "owner":
-        return `owned by {esName}`;
+        return `owned by ${esName}`;
       case "shipper":
-        return `shipped by {esName}(shipper)`;
+        return `shipped by ${esName}(shipper)`;
       case "consignor":
-        return `consigned by {esName}`
+        return `consigned by ${esName}`
       default:
         return "";
     }

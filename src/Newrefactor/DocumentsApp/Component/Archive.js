@@ -147,9 +147,9 @@ export default function Archive() {
     //     }).then(res => setPics(...pics, res.image))
     // }
 
-    // if(itemData.length < 30){
-    //   return <CircularProgress />
-    // }
+    if(itemData.length < 20){
+      return <CircularProgress />
+    }
     return (
         // <div>
         //     <TablePagination
@@ -204,7 +204,6 @@ export default function Archive() {
         //     </Modal>
         // </div>
       <div>
-        <button onClick={() => console.log("itemData: ", itemData)}>print</button>
         {/* <Gallery itemData={itemData} scrollPosition={window.scrollY} handleOpen={handleOpen}/> */}
         <Grid  container spacing={{ xs: 2, md: 2, lg:2}} padding={{ xs: 4, md: 3, lg:4 }}>
         {itemData.map(item => {
