@@ -17,7 +17,7 @@ export default function Gallery(props){
     const [total, setTotal] = React.useState(0);
     const [gallery, setGallery] = React.useState([]);
     // const {remoteControl, dataChange, setChipData, data, setData} = props;
-    const {dataset,filter_object,pageType,setSelectedData,handleDialogOpen,handleGallery} = props.state
+    const {dataset,filter_object,pageType,setSelectedData,handleDialogOpen,handleGallery, pagination, setPagination,} = props.state
     // const { search_object, typeForTable } = React.useContext(PASTContext);
 
     function handleChangePage(event, newPage){
@@ -111,11 +111,11 @@ export default function Gallery(props){
 
     <TablePagination
       component="div"
-      count={total}
-      page={page}
-      onPageChange={handleChangePage}
-      rowsPerPage={resPerPage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
+      count={pagination.totalRows}
+      page={pagination.currPage}
+      onPageChange={(event, newPage)=>setPagination({...pagination, currPage: newPage})}
+      rowsPerPage={pagination.rowsPerPage}
+      onRowsPerPageChange={(event) => setPagination({...pagination, rowsPerPage: parseInt(event.target.value, 10)})}
       rowsPerPageOptions={[12, 24, 36, 48, 96]}
     />
 

@@ -135,7 +135,16 @@ export default function EnslavedPage(props) {
   handleDialogOpen,
   handleDialogClose,
   handleGallery}
-  const state_gallery = {dataset,filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
+  const state_gallery = {
+    dataset,
+    filter_object,
+    pageType: "enslaved",
+    setSelectedData,
+    handleDialogOpen,
+    handleGallery,
+    pagination,
+    setPagination,
+  }
 
   useEffect(() => {
     //console.log("fetching...", pagination);
