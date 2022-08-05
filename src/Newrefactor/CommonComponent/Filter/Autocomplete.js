@@ -41,7 +41,7 @@ export default function Auto(props) {
             fetch(base_url + endpoint + "autocomplete", requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    var newOptions = result[key]
+                    var newOptions = result['results'][0]
                     setautocompleteOptions(newOptions)
                 })
         }

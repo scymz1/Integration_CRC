@@ -69,25 +69,26 @@ export default function Table(props) {
   const columns = useMemo(() => {
     const result = [];
     const colVisModel = {};
+
+    const length = (column) => {
+      const defaultLength = Math.max(...dataList.map((e) => e[column] ? e[column].toString().length : 0), options_flat[column].flatlabel.length);
+      if(dataList.length === 0) return 1;
+      switch (options_flat[column].flatlabel) {
+        case "Ship Owner Name":
+          return defaultLength;
+      }
+      if(defaultLength > 2 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      return defaultLength;
+    }
     var_list.forEach((column) => {
       colVisModel[column] = !!default_list.find(e => e === column);
       result.push({
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        minWidth:
-          10 *
-          (dataList.length === 0
-            ? 1
-            : Math.max(
-                ...dataList.map((e) =>
-                  e[column] ? e[column].toString().length : 0
-                ),
-                options_flat[column].flatlabel.length
-              )),
+        width: 10 * length(column),
       });
     });
-    console.log(columnVisibilityModel)
     if(!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
     return result;
   }, [dataList]);
