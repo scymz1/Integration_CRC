@@ -252,7 +252,7 @@ export default function Network(props) {
           options={options}
           events={events}
         />}
-        {voyageOpen && (<VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />)} 
+        {voyageOpen && (<VoyageModal context={{ voyageOpen, setVoyageOpen, voyageId }} />)} 
     </div>
   )
 }
