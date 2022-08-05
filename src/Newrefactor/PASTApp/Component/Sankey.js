@@ -553,7 +553,7 @@ export default function Sankey(props) {
           </svg>
       }
 
-   {voyageOpen && (<VoyageModal info={{ voyageOpen, setVoyageOpen, voyageId }} />)
+   {voyageOpen && (<VoyageModal context={{ voyageOpen, setVoyageOpen, voyageId }} />)
    }      
     </div>
   )
