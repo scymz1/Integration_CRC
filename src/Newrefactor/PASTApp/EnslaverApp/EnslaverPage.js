@@ -134,7 +134,7 @@ export default function EnslaverPage(props) {
   handleDialogClose,
   handleGallery};
   const state_graph = { selectedData };
-  const state_gallery = {filter_object,pageType: "enslaver",setSelectedData,handleDialogOpen,handleGallery}
+  const state_gallery = {dataList,filter_object,pageType: "enslaver",setSelectedData,handleDialogOpen,handleGallery}
 
 
   useEffect(() => {
