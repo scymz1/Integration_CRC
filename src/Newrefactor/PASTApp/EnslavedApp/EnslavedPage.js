@@ -27,7 +27,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Sankey from "../Component/Sankey";
 import Network from "../Component/Network";
-// import Story from './RelationGraph/Story'
+import Story from "../Component/Story";
 import Grow from '@mui/material/Grow';
 import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
@@ -55,7 +55,7 @@ function TabPanel(props) {
 
 export default function EnslavedPage(props) {
   const [dataset, setDataset] = useState("1");
-  // const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize();
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   // const [cols, setCols] = useState(enslaved_default_list);
@@ -79,14 +79,27 @@ export default function EnslavedPage(props) {
   });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const state = {
+  
+  // view connections & click popover & click number_slaved
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+  const [checked, setChecked] = useState(false);
+  function handleGallery(e) {
+    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
+  };
+  const state_nav = {
     dataset,
     setDataset,
     drawerOpen,
     setDrawerOpen,
     pageType: "enslaved",
   };
-  const state2 = {
+  const state_filter = {
     filter_obj: filter_object,
     set_filter_obj: set_filter_object,
     dataset,
@@ -97,20 +110,32 @@ export default function EnslavedPage(props) {
     options_flat,
     variables_tree,
   };
-  const state_graph = { selectedData };
-  // view connections & click popover & click number_slaved
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
-  const [checked, setChecked] = useState(false);
-  const state_gallery = {filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,dataList,setDataList}
-  function handleGallery(e) {
-    if((e == "table" && checked) || (e =="story" && !checked)) setChecked((prev) => !prev);
-  };
+  const state_graph = { selectedData, width, height };
+  const state_table = {pageType: "enslaved",
+  dataset,
+  dataList,
+  isLoading,
+  checkbox: true,
+  default_list: enslaved_default_list,
+  variables_tree,
+  options_flat,
+  // pagination
+  pagination,
+  setPagination,
+  // sorting
+  sortModel,
+  setSortModel,
+  // filter object
+  filter_object,
+  set_filter_object,
+  // selected ids
+  selectedData,
+  setSelectedData,
+  setDialogOpen,
+  handleDialogOpen,
+  handleDialogClose,
+  handleGallery}
+  const state_gallery = {dataset,filter_object,pageType: "enslaved",setSelectedData,handleDialogOpen,handleGallery}
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -153,8 +178,8 @@ export default function EnslavedPage(props) {
 
   return (
     <div style={{ height: "100%" }}>
-      <NavBar state={state} />
-      <Filter state={state2} />
+      <NavBar state={state_nav} />
+      <Filter state={state_filter} />
       {!checked && 
       <Box>
         <Grow
@@ -163,32 +188,8 @@ export default function EnslavedPage(props) {
         {...(checked ? { timeout: 500 } : {})}
         >
           <div><Table
-        state={{
-          pageType: "enslaved",
-          dataset,
-          dataList,
-          isLoading,
-          checkbox: true,
-          default_list: enslaved_default_list,
-          variables_tree,
-          options_flat,
-          // pagination
-          pagination,
-          setPagination,
-          // sorting
-          sortModel,
-          setSortModel,
-          // filter object
-          filter_object,
-          set_filter_object,
-          // selected ids
-          selectedData,
-          setSelectedData,
-          setDialogOpen,
-          handleDialogOpen,
-          handleGallery
-        }}
-      /></div>
+        state={state_table}/>
+        </div>
         </Grow>
       </Box>}
 
@@ -244,12 +245,9 @@ export default function EnslavedPage(props) {
         </TabPanel>
         <TabPanel value={value} index={2}>
           {/* <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
-          {queryData["type"] == "slaves" && data.map((item, key) => {
-              return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true}/></Grid>
+          {dataList.map((item, key) => {
+              return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="enslaved"/></Grid>
             })}
-          {queryData["type"] != "slaves" && data.map((item, key) => {
-            return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="slaver"/></Grid>
-          })}
           </Grid> */}
           Story
         </TabPanel>

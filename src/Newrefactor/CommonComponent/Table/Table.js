@@ -70,15 +70,14 @@ export default function Table(props) {
   const columns = useMemo(() => {
     const result = [];
     const colVisModel = {};
-
     const length = (column) => {
       const defaultLength = Math.max(...dataList.map((e) => e[column] ? e[column].toString().length : 0), options_flat[column].flatlabel.length);
       if(dataList.length === 0) return 1;
-      switch (options_flat[column].flatlabel) {
-        case "Ship Owner Name":
-          return defaultLength;
-      }
-      if(defaultLength > 2 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      // switch (options_flat[column].flatlabel) {
+      //   case "Ship Owner Name":
+      //     return defaultLength;
+      // }
+      if(defaultLength > 7 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
       return defaultLength;
     }
     var_list.forEach((column) => {
@@ -149,7 +148,7 @@ export default function Table(props) {
           color={toolBarColor}
           variant="contained"
           startIcon={<DashboardCustomizeIcon />}
-          onClick={() => {}}
+          onClick={() => {handleGallery("story")}}
         >
           Gallary
         </Button>
