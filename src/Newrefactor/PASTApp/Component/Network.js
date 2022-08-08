@@ -19,13 +19,13 @@ export default function Network(props) {
   const [voyageOpen, setVoyageOpen] = useState(false);
   const [voyageId, setvoyageId] = useState(0);
   useEffect(() => {
-    // console.log("myQueryData", myQueryData)
+    console.log("myQueryData", myQueryData)
     setIsLoading(true)
     const endpoint = (() => {
         switch (myQueryData.type) {
           case "enslaved":
             return "past/enslaved/"
-          case "enslaver":
+          case "enslavers":
             return "past/enslavers/"
         }
       })()
@@ -33,11 +33,12 @@ export default function Network(props) {
         switch (myQueryData.type) {
           case "enslaved":
             return myQueryData.enslaved
-          case "enslaver":
-            return myQueryData.enslaver
+          case "enslavers":
+            return myQueryData.enslavers
         }
       })()
     const fetchData = async () => {
+      console.log("target", targets)
       const promises = targets.map(target => {
         let selected = new FormData();
         selected.append("id", target.toString());
@@ -81,11 +82,11 @@ export default function Network(props) {
       };
       setIsLoading(true)
       //enslavers
-      if (myQueryData.type === "enslaver") {
+      if (myQueryData.type === "enslavers") {
         // console.log("data", data)
         data.forEach((item, index) => {
           //self
-          const self = tmp.addNode(item.id, item.principal_alias, "enslaver", "#1ee893")
+          const self = tmp.addNode(item.id, item.principal_alias, "enslavers", "#1ee893")
           self.font = {size: height * 0.03}
           // slaves
           item.alias.forEach((alias) => {
@@ -97,7 +98,7 @@ export default function Network(props) {
                 tmp.link(transactionData.voyage, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
-                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "#ffaca3")
+                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "enslaved", "#ffaca3")
                   tmp.link(slave.enslaved.id, transactionData.voyage, "")
                 })
               } else if (transactionData.relation_type.relation_type === "transaction") {
@@ -105,7 +106,7 @@ export default function Network(props) {
                 tmp.link(transactionData.id, item.id, transaction.role.role)
                 //enslaved
                 transactionData.enslaved_person.forEach(slave => {
-                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "slave", "#ffaca3")
+                  tmp.addNode(slave.enslaved.id, slave.enslaved.documented_name, "enslaved", "#ffaca3")
                   tmp.link(slave.enslaved.id, transactionData.id, "")
                 })
               }
@@ -120,7 +121,7 @@ export default function Network(props) {
       //slave
       data.forEach((item, index) => {
         //self
-        const self = tmp.addNode(item.id, item.documented_name, "slave", "#ffaca3")
+        const self = tmp.addNode(item.id, item.documented_name, "enslaved", "#ffaca3")
         self.font = {size: height * 0.03}
         //transaction
         item.transactions.forEach((transaction) => {
@@ -134,8 +135,8 @@ export default function Network(props) {
             const enslavers = _.get(transactionData, ["enslavers"])
             if (enslavers) {
               enslavers.forEach((enslaver) => {
-                // console.log("enslaver", enslaver.enslaver_alias.id)
-                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "#1ee893")
+                // console.log("enslavers", enslaver.enslaver_alias.id)
+                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslavers", "#1ee893")
                 tmp.link(transactionData.voyage.id, enslaver.enslaver_alias.id, enslaver.role.role)
               })
             }
@@ -148,8 +149,8 @@ export default function Network(props) {
             const enslavers = _.get(transactionData, ["enslavers"])
             if (enslavers) {
               enslavers.forEach((enslaver) => {
-                // console.log("enslaver", enslaver.enslaver_alias.id)
-                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslaver", "#1ee893")
+                // console.log("enslavers", enslaver.enslaver_alias.id)
+                tmp.addNode(enslaver.enslaver_alias.id, enslaver.enslaver_alias.alias, "enslavers", "#1ee893")
                 tmp.link(transactionData.id, enslaver.enslaver_alias.id, enslaver.role.role)
               })
             }
@@ -176,8 +177,8 @@ export default function Network(props) {
         data.forEach((item, dataIndex) => {
           item.transactions.forEach((transaction, transactionIndex) => {
             slaveOnSameVoyage[dataIndex][transactionIndex].forEach((slave) => {
-              // console.log("slave", slave.id)
-              tmp.addNode(slave.id, slave.documented_name, "slave", "#ffaca3")
+              // console.log("enslaved", slave.id)
+              tmp.addNode(slave.id, slave.documented_name, "enslaved", "#ffaca3")
               if (item.id !== slave.id) {
                 if (transaction.transaction.relation_type.relation_type === "transportation") {
                   tmp.link(transaction.transaction.voyage.id, slave.id, "peer")
@@ -203,14 +204,14 @@ export default function Network(props) {
       // console.log("nodeId" ,nodeId)
       const node = graph.nodes.find(e => e.id === nodeId[0])
       switch (node && node.type) {
-        case "slave":
+        case "enslaved":
           setMyQueryData({
             ...myQueryData,
-            type: "slaves",
+            type: "enslaved",
             slaves: nodeId
           })
           break;
-        case "enslaver":
+        case "enslavers":
           setMyQueryData({
             ...myQueryData,
             type: "enslavers",
