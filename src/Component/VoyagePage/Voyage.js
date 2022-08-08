@@ -1,84 +1,160 @@
+import { Box, Tab, Tabs, Typography, Grid, Toolbar } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import { useParams } from "react-router-dom";
+import ResponsiveAppBar from "../NavBar";
 import Filter from "./Filter/Filter";
-import Result from "./Result/Result";
-// import {useState} from "react";
-// import React from "react";
-// import {Container} from "@mui/material";
+import Scatter from "./Result/Scatter";
+import Bar from "./Result/Bar";
+import Pie from "./Result/Pie";
+import TableApp from "./Result/Table/TableApp";
+import PivotApp from "./Result/Pivot/PivotApp";
+import Map from "./Result/Map";
+import { VoyageContext } from "./VoyageApp";
+import SankeyExample from "./Sankey/CircularExample";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import FormLabel from "@mui/material/FormLabel";
+import {
+  useWindowSize,
+} from '@react-hook/window-size'
 
-// export default function Voyage() {
-//     return (
-//         <Container sx={{border: 1}}>
-//             <h1>Voyage</h1>
-//             {/*<SideBar/>*/}
-//             <Filter />
-//             <Result />
-//         </Container>
-//     )
-// }
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
-import {Box, Tab, Tabs, Typography} from "@mui/material";
-import {useState} from "react";
 import { Container } from "@mui/system";
-// import Scatter from "../viz/Scatter";
-// import Pie from "../viz/Pie";
-// import Bar from "../viz/Bar";
-// import Wraper from './Wraper';
 
 function TabPanel(props) {
-  const { children, value, index} = props;
+  const { children, value, index } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      style={{width:'100%'}}
-      // id={`vertical-tabpanel-${index}`}
-      // aria-labelledby={`vertical-tab-${index}`}
-      // {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} style={{ width: "100%" }}>
       {value === index && (
-        // <Container>
         <Box sx={{ p: 3 }}>
-          <Filter />
-          <Typography>{children}</Typography>
+          <Typography component={"span"}>{children}</Typography>
         </Box>
-        // {/* </Container> */}
       )}
     </div>
   );
 }
 
-export default function VerticalTabs() {
+export default function Voyage() {
+  const [width, height] = useWindowSize()
   const [value, setValue] = React.useState(0);
+  const [showSankey, setShowSankey] = React.useState(false);
+  const { id } = useParams();
+  const { typeForTable, setTypeForTable, search_object, set_search_object, drawerOpen, dataSet, setDataSet} = React.useContext(VoyageContext)
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+
+  React.useEffect(() => {
+    switch (id) {
+      case "Scatter":
+        setValue(0);
+        break;
+      case "Bar":
+        setValue(1);
+        break;
+      case "Pie":
+        setValue(2);
+        break;
+      case "Table":
+        setValue(3);
+        break;
+      case "Pivot":
+        setValue(4);
+        break;
+      case "Map":
+        setValue(5);
+        break;
+      default:
+        setValue(0);
+    }
+    //setValue(id?id:"Scatter")
+  }, []);
 
   return (
     <div>
-
-      
-      <Box
-        sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex'}}
-      >
-      <Tabs
+      <ResponsiveAppBar context={VoyageContext}/>
+      <Filter context={VoyageContext}/>
+      {drawerOpen ? <Toolbar />: null}
+      <Box sx={{bgcolor: 'background.paper', display:'flex', width:width}}>
+        <Tabs
           orientation="vertical"
           variant="scrollable"
           value={value}
-          onChange={handleChange}
-          sx={{ borderRight: 1, borderColor: 'divider' }}
-      >
-          <Tab label="Scatter"/>
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+          sx={{ borderRight: 1, borderColor: "divider" }}
+          style={{ minWidth:width<1100 ? "20%": "5%" }}
+        >
+          <Tab label="Scatter" />
           <Tab label="Bar" />
           <Tab label="Pie" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-          <Result/>
-      </TabPanel>
+          <Tab label="Table" />
+          <Tab label="Pivot" />
+          <Tab label="Map" />
+        </Tabs>
+        <TabPanel value={value} index={0}>
+          <Scatter context={VoyageContext} />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Bar context={VoyageContext} />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <Pie context={VoyageContext} />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <TableApp context={VoyageContext} />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <PivotApp context={VoyageContext} />
+        </TabPanel>
+        <TabPanel value={value} index={5}>
+        <Grid container justifyContent="flex-end">
+          {/* <FormLabel id="boundingBoxFilter">Components Display</FormLabel> */}
+          <Stack spacing={2} direction="row">
+            <Button variant="contained" onClick={()=>setShowSankey(false)}>
+              Map Only
+            </Button>
+            <Button variant="outlined" onClick={()=>setShowSankey(true)}>Map + Aggregation </Button>
+          </Stack>
+          </Grid>
+
+         
+              {showSankey ? (
+                 <Grid
+                 container
+                 spacing={2}
+                 columns={16}
+                 alignItems="center"
+                 justify="center"
+               >
+                <Grid item xs={10}>
+                <Map context={VoyageContext} />
+              </Grid>
+                <Grid item xs={6}>
+                   <SankeyExample
+                  width={960}
+                  height={500}
+                  context={VoyageContext}
+                />
+                </Grid>
+                </Grid>
+              ):
+              <Grid
+              container
+              spacing={2}
+              columns={16}
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={16}>
+                 <Map context={VoyageContext} />
+              </Grid>
+              </Grid>
+              }
+        
+        </TabPanel>
       </Box>
     </div>
-
   );
 }
