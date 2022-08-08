@@ -202,11 +202,7 @@ function PivotTable(props) {
                     </RadioGroup>
                 </FormControl>
             </div>
-            <div>
-
-                <Pivot state={{ complete_object, set_complete_object, dataset }} />
-
-            </div>
+                <Pivot state={{ complete_object, set_complete_object, dataset, width: width > 500 ? width * 0.9 : width * 0.7, height }} />
         </div>
     );
 }

@@ -43,7 +43,9 @@ export default function IntraTabs(props) {
   //const { complete_object, set_complete_object , disembark, setDisembark,layer} = useContext(props.context);
   const { complete_object, set_complete_object , disembark, setDisembark,layer} = props.state;
 
-  const state= { complete_object, set_complete_object, dataset: props.dataset } ;
+  let width = 800
+  let height = 500
+  const state= { complete_object, set_complete_object, dataset: props.dataset, width, height } ;
 
   const complete_object2=JSON.parse(JSON.stringify(complete_object));
   delete complete_object2[groupby_fields_region[0]];
@@ -59,7 +61,7 @@ export default function IntraTabs(props) {
   delete complete_object2["value_field_tuple"];
   complete_object2["value_field_tuple"]=["voyage_slaves_numbers__imp_total_num_slaves_disembarked", "sum"];
 
-  const state2 = { complete_object: complete_object2, set_complete_object, dataset: props.dataset } ;
+  const state2 = { complete_object: complete_object2, set_complete_object, dataset: props.dataset, width, height } ;
 
   console.log("aaaaa", state, state2, props.dataset)
   
@@ -100,12 +102,12 @@ export default function IntraTabs(props) {
             </Tabs>
             {embarkDisable?null:
                 <TabPanel value={value} index={"purchase"}>
-                  <Pivot state={state} dispatch={props.dispatch}/>
+                  <Pivot state={state} dispatch={props.dispatch} popup={true}/>
                 </TabPanel>
             }
             {disembarkDisable?null:
                 <TabPanel value={value} index={"disembark"}>
-                  <Pivot state={state2} dispatch={props.dispatch} />
+                  <Pivot state={state2} dispatch={props.dispatch} popup={true}/>
                 </TabPanel>
             }
           </Box>

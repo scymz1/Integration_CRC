@@ -34,6 +34,7 @@ import Gallery from "../Component/Gallery"
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import TocIcon from "@mui/icons-material/Toc";
 import { useWindowSize } from "@react-hook/window-size";
+import StoryInPAST from "../Component/StoryInPAST";
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
@@ -58,13 +59,14 @@ export default function EnslaverPage(props) {
   const [dataset, setDataset] = useState(0);
   const [filter_object, set_filter_object] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [width, height] = useWindowSize();
   // const [cols, setCols] = useState(enslaver_default_list);
   // data response
   const [dataList, setDataList] = useState([]);
   // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 12,
     totalRows: 0,
   });
   // sorting
@@ -99,6 +101,7 @@ export default function EnslaverPage(props) {
     setDrawerOpen,
     pageType: "enslaver",
   };
+
   const state_filter = {
     filter_obj: filter_object,
     set_filter_obj: set_filter_object,
@@ -110,6 +113,7 @@ export default function EnslaverPage(props) {
     options_flat,
     variables_tree,
   };
+
   const state_table ={pageType: "enslaver",
   dataList,
   isLoading,
@@ -133,9 +137,19 @@ export default function EnslaverPage(props) {
   handleDialogOpen,
   handleDialogClose,
   handleGallery};
-  const state_graph = { selectedData };
-  const state_gallery = {filter_object,pageType: "enslaver",setSelectedData,handleDialogOpen,handleGallery}
 
+  const state_graph = { selectedData, width, height };
+  const state_gallery = {
+    dataList,
+    dataset,
+    filter_object,
+    pageType: "enslaver",
+    setSelectedData,
+    handleDialogOpen,
+    handleGallery,
+    pagination,
+    setPagination,
+  }
 
   useEffect(() => {
     //console.log("fetching...", pagination);
@@ -241,7 +255,7 @@ export default function EnslaverPage(props) {
             return <Grid key={'grid-' + key}item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery="slaver"/></Grid>
           })}
           </Grid> */}
-          Story
+          <StoryInPAST selectedData = {selectedData}/>
         </TabPanel>
       </Dialog>
     </div>

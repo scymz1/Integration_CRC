@@ -14,10 +14,10 @@ axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
 
 function Pivot(props) {
-  const [width, height] = useWindowSize();
+  // const [width, height] = useWindowSize();
 
-  const { complete_object, set_complete_object, dataset } = props.state
-  console.log("pivot complete object", complete_object)
+  const { complete_object, set_complete_object, dataset, width, height } = props.state
+  console.log("pivot complete object", props.state)
 
   //console.log(complete_object);
   // Responses
@@ -142,10 +142,10 @@ function Pivot(props) {
 
   return (
     <div>
-      <div>
-        <Grid item sx={{ width: width > 800 ? width * 0.9 : width * 0.7 }}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        {/* <Grid item sx={{ width: props.popup ? "120%" : (width > 800 ? width * 0.9 : width * 0.7) }}> */}
+        <Grid item sx={{ }}>
+          <TableContainer component={Paper} sx={{}}>
+            <Table aria-label="simple table">
               <TableHead>
                 <TableRow sx={{ backgroundColor: "#f2f2f2" }}>
                   {cols.map((col, key) => (
@@ -180,7 +180,6 @@ function Pivot(props) {
             </Table>
           </TableContainer>
         </Grid>
-      </div>
     </div>
   );
 }

@@ -79,7 +79,7 @@ export default function Filter(props) {
     //     }
     // }
 
-    console.log("Filter Obj: ", filter_obj)
+    // console.log("Filter Obj: ", filter_obj)
 
     return (
         <div>
