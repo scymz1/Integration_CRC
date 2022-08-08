@@ -113,29 +113,30 @@ export default function EnslavedPage(props) {
   };
   const state_graph = { selectedData, width, height };
   const state_table = {pageType: "enslaved",
-  dataset,
-  dataList,
-  isLoading,
-  checkbox: true,
-  default_list: enslaved_default_list,
-  variables_tree,
-  options_flat,
-  // pagination
-  pagination,
-  setPagination,
-  // sorting
-  sortModel,
-  setSortModel,
-  // filter object
-  filter_object,
-  set_filter_object,
-  // selected ids
-  selectedData,
-  setSelectedData,
-  setDialogOpen,
-  handleDialogOpen,
-  handleDialogClose,
-  handleGallery}
+    dataset,
+    dataList,
+    isLoading,
+    checkbox: true,
+    default_list: enslaved_default_list,
+    variables_tree,
+    options_flat,
+    // pagination
+    pagination,
+    setPagination,
+    // sorting
+    sortModel,
+    setSortModel,
+    // filter object
+    filter_object,
+    set_filter_object,
+    // selected ids
+    selectedData,
+    setSelectedData,
+    setDialogOpen,
+    handleDialogOpen,
+    handleDialogClose,
+    setDrawerOpen,
+    handleGallery}
 
   const state_gallery = {
     dataList,

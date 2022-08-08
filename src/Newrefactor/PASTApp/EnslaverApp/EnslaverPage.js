@@ -115,28 +115,30 @@ export default function EnslaverPage(props) {
   };
 
   const state_table ={pageType: "enslaver",
-  dataList,
-  isLoading,
-  checkbox: true,
-  default_list: enslaver_default_list,
-  variables_tree,
-  options_flat,
-  // pagination
-  pagination,
-  setPagination,
-  // sorting
-  sortModel,
-  setSortModel,
-  // filter object
-  filter_object,
-  set_filter_object,
-  // selected ids
-  selectedData,
-  setSelectedData,
-  setDialogOpen,
-  handleDialogOpen,
-  handleDialogClose,
-  handleGallery};
+    dataList,
+    isLoading,
+    checkbox: true,
+    default_list: enslaver_default_list,
+    variables_tree,
+    options_flat,
+    // pagination
+    pagination,
+    setPagination,
+    // sorting
+    sortModel,
+    setSortModel,
+    // filter object
+    filter_object,
+    set_filter_object,
+    // selected ids
+    selectedData,
+    setSelectedData,
+    setDialogOpen,
+    handleDialogOpen,
+    handleDialogClose,
+    handleGallery,
+    setDrawerOpen,
+  };
 
   const state_graph = { selectedData, width, height };
   const state_gallery = {
