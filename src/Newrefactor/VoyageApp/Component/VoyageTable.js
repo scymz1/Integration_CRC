@@ -16,7 +16,7 @@ export default function VoyageTable(props) {
   // pagination
   const [pagination, setPagination] = useState({
     currPage: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 12,
     totalRows: 0,
   });
   // sorting
