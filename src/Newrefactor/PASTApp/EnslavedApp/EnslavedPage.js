@@ -194,14 +194,10 @@ export default function EnslavedPage(props) {
       <Filter state={state_filter} />
       {!checked && 
       <Box>
-        <Grow
-        in={!checked}
-        style={{ transformOrigin: '0 0 0' }}
-        {...(checked ? { timeout: 500 } : {})}
-        >
-          <div><Table
-        state={state_table}/>
-        </div>
+        <Grow in={!checked}>
+          <div>
+            <Table state={state_table}/>
+          </div>
         </Grow>
       </Box>}
 
@@ -209,7 +205,7 @@ export default function EnslavedPage(props) {
       <Box>
         <Grow in={checked}>
           <div>
-          <Gallery state={state_gallery}/>
+            <Gallery state={state_gallery}/>
           </div>
         </Grow>
       </Box>}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import {Box, Button, Card, CardContent, Typography,Grid, Popover, CircularProgress} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
@@ -29,9 +29,7 @@ export default function NetworkComponent() {
     enslaver: [],
   });
 
-  let width = winwidth>800 ?"60%":"91%"
-  let height = winheight
-  const state = {selectedData, width, height};
+  const state = {selectedData, width: winwidth>800 ?0.6*winwidth:0.91*winwidth, height: winheight};
 
   return (
     <div>
@@ -39,7 +37,7 @@ export default function NetworkComponent() {
         <Grid container>
           {/* <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}> */}
           <Grid item sx={{maxWidth: winwidth>800 ? "40%": winwidth*0.9}}>
-            <Box sx={{height:height*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
+            <Box sx={{height:winheight*0.9,boxShadow: 4, margin: 2, padding:2, borderRadius: '10px', overflow: "hidden",
                   overflowY: "scroll"}} style={{backgroundColor: "#f1f1f1"}}>
               <CardContent sx={{flex: "1 0 auto"}}>
                 <Button
