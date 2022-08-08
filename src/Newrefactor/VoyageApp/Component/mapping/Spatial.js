@@ -285,7 +285,7 @@ export function ReadFeature(props) {
             // L.marker(layer["_latlng"]).addTo(map).bindPopup(container, {
             //   maxWidth: "auto",
             // });
-            markers.addLayer(layer).bindPopup(container, { maxWidth: "auto", maxHeight: "auto" });
+            markers.addLayer(layer).bindPopup(container, { maxWidth: "800", maxHeight: "300" });
             // var popup = L.popup();
             // layer.on('click', (e)=> {
             //   popup.setContent(container, {maxWidth:"auto"}).setLatLng(e.target.getLatLng()).addTo(map)
