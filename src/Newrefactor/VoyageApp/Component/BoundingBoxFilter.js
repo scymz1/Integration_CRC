@@ -61,14 +61,6 @@ export default function BoundingBoxFilter(props) {
     const noBorder_old = `https://api.mapbox.com/styles/v1/alisonqiu/cl4wvvno1004o15pygzcxghf7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxpc29ucWl1IiwiYSI6ImNsNHQyaThvazByaXozY28wazQ1bTlwd2wifQ.qOAlN-DL8JH6mXOzbRFdLw`
     const mapping_specialists = "https://api.mapbox.com/styles/v1/jcm10/cl5v6xvhf001b14o4tdjxm8vh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamNtMTAiLCJhIjoiY2wyOTcyNjJsMGY5dTNwbjdscnljcGd0byJ9.kZvEfo7ywl2yLbztc_SSjw"
 
-    // const SwitchBoundingBoxSelection = (event) => {
-
-    //     console.log("Event target: ", event.target.value)
-    //     onChangeRadioOption(event.target.value)
-
-    //     setSelectMode(true);
-    // }
-
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -120,10 +112,10 @@ export default function BoundingBoxFilter(props) {
                         {key==="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name" ? "Select Embarkation Location" : "Select Disembarkation Location"}
                     </Typography>
                     <Button variant="contained" color="grey" startIcon={<Avatar src={emb_icon} size="20" />} value='embarkation' onClick={() => { setSelectMode(true) }}>
-                        Select Area
+                        {key==="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name" ? "Select Embarkation Area" : "Select Disembarkation Area"}
                     </Button>
                     <Button variant="contained" color="grey" startIcon={<RestartAltIcon />} value='reset' onClick={ resetBox }>
-                        Reset Selection
+                    {key==="voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name" ? "Remove Embarkation Filter" : "Remove Disembarkation Filter"}
                     </Button>
 
                     <br /> <br />
