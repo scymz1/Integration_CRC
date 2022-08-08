@@ -28,6 +28,7 @@ export default function Gallery(props) {
           remoteControl={handleDialogOpen}
           dataChange={setSelectedData}
           slavery={pageType}
+          canRemote={true}
         />
       </Grid>
     );
