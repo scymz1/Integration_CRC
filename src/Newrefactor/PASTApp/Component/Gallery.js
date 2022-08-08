@@ -28,7 +28,8 @@ export default function Gallery(props) {
           remoteControl={handleDialogOpen}
           dataChange={setSelectedData}
           slavery={pageType}
-          canRemote={true}
+          canRemote={dataset === "1" || pageType === "enslaver"?true:false}
+          dataset={dataset}
         />
       </Grid>
     );
@@ -56,7 +57,7 @@ export default function Gallery(props) {
             onClick={() => {
               handleGallery("table");
             }}
-            sx={{ mt: 0.75, ml: 0.75 , width: 120, fontSize: 14}}
+            sx={{ mt: 0.6, ml: 0.6 , width:115, height:37, fontSize: 16}}
           >
             Table
           </Button>
