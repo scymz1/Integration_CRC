@@ -78,7 +78,7 @@ export default function Table(props) {
       //   case "Ship Owner Name":
       //     return defaultLength;
       // }
-      if(defaultLength > 7 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
+      if(defaultLength > 5 * options_flat[column].flatlabel.length) return options_flat[column].flatlabel.length;
       return defaultLength;
     }
     var_list.forEach((column) => {
@@ -87,7 +87,7 @@ export default function Table(props) {
         field: column,
         headerName: options_flat[column].flatlabel,
         renderCell: Cell,
-        width: 10 * length(column),
+        width: 10 * length(column)+10,
       });
     });
     if(!columnVisibilityModel) setColumnVisibilityModel(colVisModel);
@@ -157,7 +157,7 @@ export default function Table(props) {
         <Button
           color={toolBarColor}
           startIcon={<HubIcon />}
-          disabled={selectionModel.length === 0}
+          disabled={selectionModel.length === 0 || dataset === "0"}
           onClick={handleDialogOpen}
         >
           Connections ({selectionModel.length})
