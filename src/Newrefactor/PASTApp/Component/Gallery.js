@@ -28,7 +28,8 @@ export default function Gallery(props) {
           remoteControl={handleDialogOpen}
           dataChange={setSelectedData}
           slavery={pageType}
-          canRemote={true}
+          canRemote={dataset === "1" || pageType === "enslaver"?true:false}
+          dataset={dataset}
         />
       </Grid>
     );

@@ -36,7 +36,7 @@ export default function Story (props) {
   //Story做为比Sankey，Network更小一级的component，和Sankey，Network的数据不同步,
   //调用时使用： <Story target={[target_id1, target_id2]} type="your type"/>
   //target: the character of the popover story
-  const {target, type, dynamic = false , remoteControl, dataChange, slavery, setData, data, canRemote = false} = props;
+  const {target, type, dynamic = false , remoteControl, dataChange, slavery, setData, data, canRemote = false, dataset} = props;
   const isMale = _.get(target, "gender", "1") != 2;
   const prefix = _.get(target, ["documented_name"], "Unknown Slave") == 'Unknown' ? "This slave" : _.get(target, ["documented_name"], "Unknown Slave")
   const [expand, setExpand] = new React.useState(false);
@@ -161,8 +161,10 @@ export default function Story (props) {
       </CardContent>
 
       <CardActions disableSpacing>
-        <Button aria-label="see personal network" size="large" startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={onclick} />}>
+      <div hidden={dataset === "0"?true:false}>
+        <Button aria-label="see personal network" size="large" hidden={true} startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={onclick} />}>
         </Button>
+        </div>
         <ExpandMore
           expand={expand}
           onClick={handleExpandClick}
@@ -216,8 +218,10 @@ export default function Story (props) {
       </CardContent>
 
       <CardActions disableSpacing>
+        <div hidden={dataset === "0"?true:false}>
         <Button aria-label="see personal network" size="large" startIcon={<ManageSearchIcon color="disabled" sx={{ color: grey[800]}} onClick={onclick} />}>
         </Button>
+        </div>
         <ExpandMore
           expand={expand}
           onClick={handleExpandClick}
