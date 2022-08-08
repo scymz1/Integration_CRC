@@ -53,7 +53,8 @@ export default function Filter(props) {
 
     // Handle Filter Reset Action
     const handleFilterReset = () => {
-        set_filter_obj({})
+        set_filter_obj({});
+        setOpenBoundingBox(false);
     };
 
 
