@@ -8,7 +8,7 @@ import * as options_flat from "../options.json";
 import Table from "../../CommonComponent/Table/Table";
 
 export default function VoyageTable(props) {
-  const { filter_object, dataset, pageType } = props.state;
+  const { filter_object, dataset, pageType, setDrawerOpen } = props.state;
   const [isLoading, setIsLoading] = useState(false);
   const [cols, setCols] = useState(voyage_default_list);
   // data response
@@ -79,6 +79,7 @@ export default function VoyageTable(props) {
           setSortModel,
           // filter object
           filter_object,
+          setDrawerOpen,
         }}
       />
     </div>

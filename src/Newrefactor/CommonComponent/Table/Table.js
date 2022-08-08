@@ -7,6 +7,10 @@ import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarExport,
+  GridColumnMenuContainer,
+  SortGridMenuItems,
+  HideGridColMenuItem,
+  GridFilterMenuItem,
 } from "@mui/x-data-grid";
 import { Box, Button, LinearProgress, Popper } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -44,6 +48,7 @@ export default function Table(props) {
     setSelectedData,
     handleDialogOpen,
     handleGallery,
+    setDrawerOpen,
   } = props.state;
 
   const [selectionModel, setSelectionModel] = useState([]);
@@ -103,6 +108,7 @@ export default function Table(props) {
       type: pageType,
     });
   }
+
   function CustomPagination() {
     const apiRef = useGridApiContext();
     const page = useGridSelector(apiRef, gridPageSelector);
@@ -152,6 +158,7 @@ export default function Table(props) {
       return "secondary";
     }
   }, [pageType, dataset]);
+
   const PastToolbar = () => (
     <GridToolbarContainer>
       <Stack direction={"row"} spacing={1}>
@@ -216,6 +223,19 @@ export default function Table(props) {
     </GridToolbarContainer>
   );
 
+  const ColumnMenu = (props)=>{
+    const { hideMenu, currentColumn, open } = props;
+    return (
+      <GridColumnMenuContainer hideMenu={hideMenu} currentColumn={currentColumn} open={open}>
+        <SortGridMenuItems column={currentColumn} onClick={hideMenu}/>
+        <HideGridColMenuItem column={currentColumn} onClick={hideMenu}/>
+        <MenuItem onClick={(event)=> {
+          hideMenu(event)
+          setDrawerOpen(true)
+        }}>Filter</MenuItem>
+      </GridColumnMenuContainer>
+  )}
+
   return (
     <TableContext.Provider
       value={{
@@ -245,6 +265,7 @@ export default function Table(props) {
             LoadingOverlay: LinearProgress,
             Toolbar: pageType === "voyage" ? VoyageToolbar : PastToolbar,
             Pagination: CustomPagination,
+            ColumnMenu: ColumnMenu
           }}
           // pagination
           pagination
