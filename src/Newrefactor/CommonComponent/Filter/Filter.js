@@ -57,13 +57,12 @@ export default function Filter(props) {
     };
 
 
-    const handleDelete = (key) => {
+    const handleDelete = (key, boundingBox) => {
         let temp = { ...filter_obj };
-        if (key === "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name") {
+        if (boundingBox & (key === "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name" 
+            || key === "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name")) {
             delete temp["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__latitude"];
             delete temp["voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__longitude"];
-        }
-        else if (key === "voyage_itinerary__imp_principal_port_slave_dis__geo_location__name") {
             delete temp["voyage_itinerary__imp_principal_port_slave_dis__geo_location__latitude"];
             delete temp["voyage_itinerary__imp_principal_port_slave_dis__geo_location__longitude"];
         }
@@ -73,13 +72,7 @@ export default function Filter(props) {
         set_filter_obj(temp)
     };
 
-    // const OpenBoundingBoxFilter = (event) => {
-    //     if (!labels.some(e => e.option == "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name")) {
-    //         setLabels([...labels, { option: "voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", type: "<class 'rest_framework.fields.Map'>", label: "" }])
-    //     }
-    // }
-
-    // console.log("Filter Obj: ", filter_obj)
+    console.log("Filter Obj: ", filter_obj)
 
     return (
         <div>
@@ -143,8 +136,8 @@ export default function Filter(props) {
                                     color={color}
                                     onClick={()=>{
                                                     setOpenBoundingBox(false);
-                                                    handleDelete("voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name");
-                                                    handleDelete("voyage_itinerary__imp_principal_port_slave_dis__geo_location__name");
+                                                    handleDelete("voyage_itinerary__imp_principal_place_of_slave_purchase__geo_location__name", true);
+                                                    handleDelete("voyage_itinerary__imp_principal_port_slave_dis__geo_location__name", true);
                                                 }}
                                 >
                                     <Typography color="white">Remove Visual Filter</Typography>
@@ -214,7 +207,7 @@ export default function Filter(props) {
                                         </Accordion>
                                     </Grid>
                                     <Grid item key={'item2' + key} align="center" xs={2}>
-                                        <IconButton key={'iconB' + key} onClick={() => { handleDelete(key) }}>
+                                        <IconButton key={'iconB' + key} onClick={() => { handleDelete(key, false) }}>
                                             <RemoveCircleOutlineIcon />
                                         </IconButton>
                                     </Grid>
