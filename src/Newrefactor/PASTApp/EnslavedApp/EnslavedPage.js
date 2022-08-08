@@ -116,7 +116,7 @@ export default function EnslavedPage(props) {
   dataset,
   dataList,
   isLoading,
-  checkbox: true,
+  checkbox: false,
   default_list: enslaved_default_list,
   variables_tree,
   options_flat,
