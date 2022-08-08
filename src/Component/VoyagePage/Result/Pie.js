@@ -207,4 +207,3 @@ function Pie (props) {
 
 export default Pie;
 
-
