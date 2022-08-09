@@ -5,12 +5,21 @@ import React, { useState, useEffect } from "react";
 import { useMap } from "react-leaflet";
 //import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
+
 import * as d3 from "d3";
 import axios from "axios";
 import ReactDOM from "react-dom/client";
 import IntraTabs from "./Tab";
 import _ from "lodash";
 import { set } from "lodash";
+
+import "./Style.css"
+import "leaflet/dist/leaflet.css";
+
+import 'leaflet.markercluster';
+import '@elfalem/leaflet-curve';
+import 'leaflet-area-select';
+
 
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
