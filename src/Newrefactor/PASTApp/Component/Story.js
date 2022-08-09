@@ -188,20 +188,20 @@ export default function Story (props) {
     </Card>}
 
     {/*slaver*/}
-    {!dynamic && slavery != "enslaved" && <Card 
+    {!dynamic && slavery == "enslaver" && <Card 
     className="enslaver_story"
     >
       <CardHeader
         title={`Story of {_.get(target, ["principal_alias"], "Unknown Slaver")}`}
       />
       <CardContent>
-        <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year {_.get(target, "first_active_year", "NA")}, and out of record at {_.get(target, "last_active_year", "NA")}</Div>
-        <Div>He has enslaved {_.get(target, "number_enslaved", "NA")} people  doing trading business most in {_.get(target, ["principal_location", "geo_location", "name"], "NA")} area</Div>
+        <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded in {_.get(target, "first_active_year", "NA")}, and last in {_.get(target, "last_active_year", "NA")}</Div>
+        <Div>He has enslaved {_.get(target, "number_enslaved", "0")} {parseInt(_.get(target, "number_enslaved", "0")) < 2 ? "person" : "people"} { _.get(target, ["principal_location", "geo_location", "name"], "NA") == "NA" ? "." : `, trading principally in ${_.get(target, ["principal_location", "geo_location", "name"], "NA")} area`}</Div>
       </CardContent>
 
     </Card>}
 
-    {dynamic && slavery != "enslaved" && <Card className="enslaver_story_func">
+    {dynamic && slavery == "enslaver" && <Card className="enslaver_story_func">
       <CardHeader
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
         title = {_.get(target, ["principal_alias"], "Unknown Slaver")}
@@ -234,7 +234,7 @@ export default function Story (props) {
       <Collapse in={expand} timeout="auto" unmountOnExit>
         <CardContent>
           <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year {_.get(target, "first_active_year", "NA")}, and out of record at {_.get(target, "last_active_year", "NA")}</Div>
-          <Div>He has enslaved {_.get(target, "number_enslaved", "NA")} people,  doing trading business often in {_.get(target, ["principal_location", "geo_location", "name"], "NA")} area</Div>
+          <Div>He has enslaved {_.get(target, "number_enslaved", "0")} {parseInt(_.get(target, "number_enslaved", "0")) < 2 ? "person" : "people"}{ _.get(target, ["principal_location", "geo_location", "name"], "NA") == "NA" ? "." : `, trading principally in ${_.get(target, ["principal_location", "geo_location", "name"], "NA")} area`}</Div>
         </CardContent>
       </Collapse>
       
