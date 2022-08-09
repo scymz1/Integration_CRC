@@ -97,7 +97,7 @@ export default function Network(props) {
           }
         }
       };
-      setIsLoading(true)
+      // setIsLoading(true)
       //enslavers
       if (myQueryData.type === "enslaver") {
         // console.log("data", data)
@@ -135,6 +135,7 @@ export default function Network(props) {
         // console.log("tmp", tmp)
         return;
       }
+
       //slave
       data.forEach((item, index) => {
         //self
@@ -148,6 +149,13 @@ export default function Network(props) {
             tmp.link(item.id, transactionData.voyage.id, `from ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_place_of_slave_purchase", "geo_location", "name"], "No Data")} 
         to ${_.get(transactionData, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "No Data")} 
         at ${_.get(transactionData, ["voyage", "voyage_dates", "imp_arrival_at_port_of_dis"], "No Data")}`)
+            //peer
+            transactionData.enslaved_person.forEach((peer) => {
+              if(peer.id !== item.id) {
+                tmp.addNode(peer.id, peer.enslaved.documented_name, "enslaved", "#ffaca3")
+                tmp.link(transactionData.voyage.id, peer.id, "peer")
+              }
+            })
             //enslaver
             const enslavers = _.get(transactionData, ["enslavers"])
             if (enslavers) {
@@ -162,6 +170,13 @@ export default function Network(props) {
             tmp.link(item.id, transactionData.id, `sold in ${_.get(transactionData, ["place", "geo_location", "name"], "No Data")} 
           for ${_.get(transactionData, ["amount"], "No Data")}
           on ${_.get(transactionData, ["date"], "No Data")}`)
+            //peer
+            transactionData.enslaved_person.forEach((peer) => {
+              if(peer.id !== item.id) {
+                tmp.addNode(peer.id, peer.enslaved.documented_name, "enslaved", "#ffaca3")
+                tmp.link(transactionData.id, peer.id, "peer")
+              }
+            })
             //enslaver
             const enslavers = _.get(transactionData, ["enslavers"])
             if (enslavers) {
@@ -174,43 +189,47 @@ export default function Network(props) {
           }
         })
       })
-      const fetchData = async () => {
-        const promises = data.map(item =>
-          item.transactions.map((transaction) => {
-            let formdata = new FormData();
-            formdata.append("transactions__transaction__id", transaction.transaction.id);
-            formdata.append("transactions__transaction__id", transaction.transaction.id);
-            const endpoint = "past/enslaved/"
-            return fetch(base_url + endpoint, {
-              method: 'POST',
-              headers: {'Authorization': auth_token},
-              body: formdata,
-            }).then(response => response.json())
-          })
-        )
 
-        const slaveOnSameVoyage = await Promise.all(promises.map((promise) => Promise.all(promise)))
-        // console.log("slaveOnSameVoyage", slaveOnSameVoyage)
-        data.forEach((item, dataIndex) => {
-          item.transactions.forEach((transaction, transactionIndex) => {
-            slaveOnSameVoyage[dataIndex][transactionIndex].forEach((slave) => {
-              // console.log("enslaved", slave.id)
-              tmp.addNode(slave.id, slave.documented_name, "enslaved", "#ffaca3")
-              if (item.id !== slave.id) {
-                if (transaction.transaction.relation_type.relation_type === "transportation") {
-                  tmp.link(transaction.transaction.voyage.id, slave.id, "peer")
-                }else{
-                  tmp.link(transaction.transaction.id, slave.id, "peer")
-                }
-              }
-            })
-          })
-        })
-        setGraph(tmp)
-        setIsLoading(false)
-        // console.log("tmp", tmp)
-      }
-      fetchData().catch(console.error);
+      // const fetchData = async () => {
+      //   const promises = data.map(item =>
+      //     item.transactions.map((transaction) => {
+      //       let formdata = new FormData();
+      //       formdata.append("transactions__transaction__id", transaction.transaction.id);
+      //       formdata.append("transactions__transaction__id", transaction.transaction.id);
+      //       const endpoint = "past/enslaved/"
+      //       return fetch(base_url + endpoint, {
+      //         method: 'POST',
+      //         headers: {'Authorization': auth_token},
+      //         body: formdata,
+      //       }).then(response => response.json())
+      //     })
+      //   )
+      //
+      //   const slaveOnSameVoyage = await Promise.all(promises.map((promise) => Promise.all(promise)))
+      //   // console.log("slaveOnSameVoyage", slaveOnSameVoyage)
+      //   data.forEach((item, dataIndex) => {
+      //     item.transactions.forEach((transaction, transactionIndex) => {
+      //       slaveOnSameVoyage[dataIndex][transactionIndex].forEach((slave) => {
+      //         // console.log("enslaved", slave.id)
+      //         tmp.addNode(slave.id, slave.documented_name, "enslaved", "#ffaca3")
+      //         if (item.id !== slave.id) {
+      //           if (transaction.transaction.relation_type.relation_type === "transportation") {
+      //             tmp.link(transaction.transaction.voyage.id, slave.id, "peer")
+      //           }else{
+      //             tmp.link(transaction.transaction.id, slave.id, "peer")
+      //           }
+      //         }
+      //       })
+      //     })
+      //   })
+      //   setGraph(tmp)
+      //   setIsLoading(false)
+      //   // console.log("tmp", tmp)
+      // }
+      // fetchData().catch(console.error);
+
+      setGraph(tmp)
+      setIsLoading(false)
     }
     fetchData().catch(console.error);
   }, [myQueryData])
