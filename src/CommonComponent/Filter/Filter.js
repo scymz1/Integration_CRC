@@ -73,7 +73,7 @@ export default function Filter(props) {
         set_filter_obj(temp)
     };
 
-    console.log("Filter Obj: ", filter_obj)
+    // console.log("Filter Obj: ", filter_obj)
 
     return (
         <div>
