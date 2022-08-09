@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs, Grid, Stack, Button } from "@mui/material";
 import VoyageScatter from "./Component/VoyageScatter";
 import VoyageBar from "./Component/VoyageBar";
 import VoyagePie from "./Component/VoyagePie";
@@ -12,11 +12,15 @@ import { useWindowSize } from "@react-hook/window-size";
 import * as options_flat from "../Util/options.json";
 import { columnOptions } from "../Util/tableVars";
 
+import SankeyExample from "./Component/mapping/sankey/CircularExample"
+
 import Filter from "../CommonComponent/Filter/Filter";
 
 function TabPanel(props) {
   const { children, value, index } = props;
   const [width, height] = useWindowSize();
+
+
   return (
     <div
       role="tabPanel"
@@ -32,6 +36,9 @@ export default function VoyagePage() {
   const [filter_object, set_filter_object] = useState({});
   const [dataset, setDataset] = useState("0");
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const [showSankey, setShowSankey] = React.useState(false);
+
   const state = {
     filter_object,
     set_filter_object,
@@ -91,9 +98,58 @@ export default function VoyagePage() {
         <TabPanel value={value} index={4}>
           <PivotTable state={state} />
         </TabPanel>
-        <TabPanel value={value} index={5}>
+        {/* <TabPanel value={value} index={5}>
           <MapBoundingBox state={state} />
+        </TabPanel> */}
+
+        <TabPanel value={value} index={5}>
+          <Grid container justifyContent="flex-end">
+            {/* <FormLabel id="boundingBoxFilter">Components Display</FormLabel> */}
+            <Stack spacing={2} direction="row">
+              <Button variant="contained" onClick={() => setShowSankey(false)}>
+                Map Only
+              </Button>
+              <Button variant="outlined" onClick={() => setShowSankey(true)}> Map + Aggregation </Button>
+            </Stack>
+          </Grid>
+
+
+          {showSankey ? (
+            <Grid
+              container
+              spacing={2}
+              columns={16}
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={10}>
+                <MapBoundingBox state={state} />
+              </Grid>
+              <Grid item xs={6}>
+                <SankeyExample
+                  width={960}
+                  height={500}
+                  state={state2}
+                />
+              </Grid>
+            </Grid>
+          ) :
+            <Grid
+              container
+              spacing={2}
+              columns={16}
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={16}>
+                <MapBoundingBox state={state} />
+              </Grid>
+            </Grid>
+          }
+
         </TabPanel>
+
+
       </Box>
     </div>
   );
