@@ -99,7 +99,7 @@ export default function Story (props) {
   function makePastStage(props){
     var index = 1;
     props.transactions.map(ts => {
-    pastStage.push(`[transaction ${index}]` )
+    pastStage.push(<b>[record{index}] </b>)
       var res = "";
       ts.transaction.enslavers.map(enslaver => {
         res += checkEnslaver(enslaver) + "; ";
@@ -128,11 +128,11 @@ export default function Story (props) {
         title={`Story of {_.get(target, ["documented_name"], "Unknown Enslaved Person")}`}
       />
       <CardContent>
-        <Div>{prefix} was {_.get(target, ["captive_fate", "name"], "not recorded with date")}, transported on voyage {_.get(target, ["voyage", "id"], "* target NA *")}</Div>
-        <Div>The voyage took {isMale ? "him" : "her"} from {_.get(target, ["voyage", "voyage_itinerary", "imp_port_voyage_begin", "geo_location", "name"], "unknown embarking place") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_region_voyage_begin", "geo_location", "name"], "unknown embarking region") + ")"} to {_.get(target, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "unknown destination") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_principal_region_slave_dis", "geo_location", "name"], "unknown parent regoin") + ") "} in {_.get(target, ["voyage", "voyage_dates", "date_departed_africa_yyyy"], "unkown year")}</Div>
-	      <Div>The ship, {_.get(target, ["voyage", "voyage_ship", "ship_name"], "which has not verified")}, was owned by {_.get(target, ["voyage", "voyage_captainconnection", 0, "captain", "name"], "unknown captain")}</Div>
-        <Div>{pastStage}</Div>
-        {makePastStage(target)}
+          <Div>{prefix} was {_.get(target, ["captive_fate__name"], "not recorded with date")}, transported on voyage {_.get(target, ["voyage__voyage_id"], "* target NA *")}</Div>
+          <Div>The voyage took {isMale ? "him" : "her"} from {_.get(target, ["voyage_voyage_itinerary_imp_port_voyage_begin_geo_location_name"], "unknown embarking place") + " (" + _.get(target, ["voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"], "unknown embarking region") + " region)"} to {_.get(target, ["voyage__voyage_itinerary_imp_principal_port_slave_dis_geo_location_name"], "unknown destination") + " (" + _.get(target, ["voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name"], "unknown parent regoin") + " region) "} in {_.get(target, ["voyage__voyage_dates__date_departed_africa_yyyy"], "unkown year")}</Div>
+          <Div>The ship, {_.get(target, ["voyage__voyage_ship__ship_name"], "which has not verified")}, was owned by {_.get(target, ["voyage__voyage_captainconnection", 0, "captain", "name"], "unknown captain")}</Div>
+          {makePastStage(target)}
+          <Div>{pastStage}</Div>
       </CardContent>
 
     </Card>}
@@ -151,7 +151,7 @@ export default function Story (props) {
           <ListItem  disablePadding={true}><ListItemText primary="Mordern Name" secondary={(_.get(target, ["modern_name"], "No Record") == null) || (_.get(target, ["modern_name"], "No Record") == "") ? "No Record" : _.get(target, ["modern_name"], "No Record") }/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Gender" secondary={_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 2 ? "Female" : "No Record"}/></ListItem>
           <ListItem  disablePadding={true}><ListItemText primary="Age" secondary={_.get(target, ["age"], "No Record")}/></ListItem>
-          <ListItem  disablePadding={true}><ListItemText primary="Fate" secondary={_.get(target, ["captive_fate", "name"], "No Record")}/></ListItem>
+          <ListItem  disablePadding={true}><ListItemText primary="Fate" secondary={_.get(target, ["captive_fate__name"], "No Record")}/></ListItem>
         </List>
         {/* <Grid>Mordern Name: {_.get(target, ["modern_name"], "No Record")}</Grid>
         <Grid>Sex: {_.get(target, "gender") == 1 ? "Male" : _.get(target, "gender") == 0 ? "Female" : "No Record"}</Grid>
@@ -176,9 +176,9 @@ export default function Story (props) {
       </CardActions>
       <Collapse in={expand} timeout="auto" unmountOnExit>
         <CardContent>
-          <Div>{prefix} was {_.get(target, ["captive_fate", "name"], "not recorded with date")}, transported on voyage {_.get(target, ["voyage", "id"], "* target NA *")}</Div>
-          <Div>The voyage took {isMale ? "him" : "her"} from {_.get(target, ["voyage", "voyage_itinerary", "imp_port_voyage_begin", "geo_location", "name"], "unknown embarking place") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_region_voyage_begin", "geo_location", "name"], "unknown embarking region") + ")"} to {_.get(target, ["voyage", "voyage_itinerary", "imp_principal_port_slave_dis", "geo_location", "name"], "unknown destination") + " (" + _.get(target, ["voyage", "voyage_itinerary", "imp_principal_region_slave_dis", "geo_location", "name"], "unknown parent regoin") + ") "} in {_.get(target, ["voyage", "voyage_dates", "date_departed_africa_yyyy"], "unkown year")}</Div>
-          <Div>The ship, {_.get(target, ["voyage", "voyage_ship", "ship_name"], "which has not verified")}, was owned by {_.get(target, ["voyage", "voyage_captainconnection", 0, "captain", "name"], "unknown captain")}</Div>
+          <Div>{prefix} was {_.get(target, ["captive_fate__name"], "not recorded with date")}, transported on voyage {_.get(target, ["voyage__voyage_id"], "* target NA *")}</Div>
+          <Div>The voyage took {isMale ? "him" : "her"} from {_.get(target, ["voyage_voyage_itinerary_imp_port_voyage_begin_geo_location_name"], "unknown embarking place") + " (" + _.get(target, ["voyage__voyage_itinerary__imp_principal_port_slave_dis__geo_location__name"], "unknown embarking region") + " region)"} to {_.get(target, ["voyage__voyage_itinerary_imp_principal_port_slave_dis_geo_location_name"], "unknown destination") + " (" + _.get(target, ["voyage__voyage_itinerary__imp_principal_region_slave_dis__geo_location__name"], "unknown parent regoin") + " region) "} in {_.get(target, ["voyage__voyage_dates__date_departed_africa_yyyy"], "unkown year")}</Div>
+          <Div>The ship, {_.get(target, ["voyage__voyage_ship__ship_name"], "which has not verified")}, was owned by {_.get(target, ["voyage__voyage_captainconnection", 0, "captain", "name"], "unknown captain")}</Div>
           {makePastStage(target)}
           <Div>{pastStage}</Div>
         </CardContent>
@@ -188,20 +188,23 @@ export default function Story (props) {
     </Card>}
 
     {/*slaver*/}
-    {!dynamic && slavery != "enslaved" && <Card 
+    {!dynamic && slavery == "enslaver" && <Card 
     className="enslaver_story"
     >
       <CardHeader
-        title={`Story of {_.get(target, ["principal_alias"], "Unknown Slaver")}`}
-      />
+      titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
+      title = {_.get(target, ["principal_alias"], "Unknown Slaver")}
+      className = "enslaver_story_func_head"
+      sx={{pr: 3, pt:3}}
+    />
       <CardContent>
-        <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year {_.get(target, "first_active_year", "NA")}, and out of record at {_.get(target, "last_active_year", "NA")}</Div>
-        <Div>He has enslaved {_.get(target, "number_enslaved", "NA")} people  doing trading business most in {_.get(target, ["principal_location", "geo_location", "name"], "NA")} area</Div>
+        <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded in {_.get(target, "first_active_year", "NA")}, and last in {_.get(target, "last_active_year", "NA")}</Div>
+        <Div>He has enslaved {_.get(target, "number_enslaved", "0")} {parseInt(_.get(target, "number_enslaved", "0")) < 2 ? "person" : "people"} { _.get(target, ["principal_location", "geo_location", "name"], "NA") == "NA" ? "." : `, trading principally in ${_.get(target, ["principal_location", "geo_location", "name"], "NA")} area`}</Div>
       </CardContent>
 
     </Card>}
 
-    {dynamic && slavery != "enslaved" && <Card className="enslaver_story_func">
+    {dynamic && slavery == "enslaver" && <Card className="enslaver_story_func">
       <CardHeader
         titleTypographyProps = {{ pb:0, typography: 'h3.Heading', variant:"", fontStyle: 'italic', fontSize:35, textAlign: 'right'}}
         title = {_.get(target, ["principal_alias"], "Unknown Slaver")}
@@ -234,7 +237,7 @@ export default function Story (props) {
       <Collapse in={expand} timeout="auto" unmountOnExit>
         <CardContent>
           <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year {_.get(target, "first_active_year", "NA")}, and out of record at {_.get(target, "last_active_year", "NA")}</Div>
-          <Div>He has enslaved {_.get(target, "number_enslaved", "NA")} people,  doing trading business often in {_.get(target, ["principal_location", "geo_location", "name"], "NA")} area</Div>
+          <Div>He has enslaved {_.get(target, "number_enslaved", "0")} {parseInt(_.get(target, "number_enslaved", "0")) < 2 ? "person" : "people"}{ _.get(target, ["principal_location__geo_location__name"], "NA") === "NA" ? "." : `, trading principally in ${_.get(target, ["principal_location", "geo_location", "name"], "NA")} area`}</Div>
         </CardContent>
       </Collapse>
       
