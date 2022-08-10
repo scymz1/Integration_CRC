@@ -189,45 +189,6 @@ export default function Network(props) {
           }
         })
       })
-
-      // const fetchData = async () => {
-      //   const promises = data.map(item =>
-      //     item.transactions.map((transaction) => {
-      //       let formdata = new FormData();
-      //       formdata.append("transactions__transaction__id", transaction.transaction.id);
-      //       formdata.append("transactions__transaction__id", transaction.transaction.id);
-      //       const endpoint = "past/enslaved/"
-      //       return fetch(base_url + endpoint, {
-      //         method: 'POST',
-      //         headers: {'Authorization': auth_token},
-      //         body: formdata,
-      //       }).then(response => response.json())
-      //     })
-      //   )
-      //
-      //   const slaveOnSameVoyage = await Promise.all(promises.map((promise) => Promise.all(promise)))
-      //   // console.log("slaveOnSameVoyage", slaveOnSameVoyage)
-      //   data.forEach((item, dataIndex) => {
-      //     item.transactions.forEach((transaction, transactionIndex) => {
-      //       slaveOnSameVoyage[dataIndex][transactionIndex].forEach((slave) => {
-      //         // console.log("enslaved", slave.id)
-      //         tmp.addNode(slave.id, slave.documented_name, "enslaved", "#ffaca3")
-      //         if (item.id !== slave.id) {
-      //           if (transaction.transaction.relation_type.relation_type === "transportation") {
-      //             tmp.link(transaction.transaction.voyage.id, slave.id, "peer")
-      //           }else{
-      //             tmp.link(transaction.transaction.id, slave.id, "peer")
-      //           }
-      //         }
-      //       })
-      //     })
-      //   })
-      //   setGraph(tmp)
-      //   setIsLoading(false)
-      //   // console.log("tmp", tmp)
-      // }
-      // fetchData().catch(console.error);
-
       setGraph(tmp)
       setIsLoading(false)
     }
