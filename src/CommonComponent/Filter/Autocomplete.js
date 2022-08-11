@@ -14,8 +14,11 @@ export default function Auto(props) {
     const [autocompleteOptions, setautocompleteOptions] = React.useState([]);
 
     const endpoint = (() => {
+
+        console.log("Page Type: ", pageType)
+
         switch (pageType) {
-            case "enslaved  ":
+            case "enslaved":
                 return "past/enslaved/"
             case "enslaver":
                 return "past/enslavers/"
@@ -23,6 +26,7 @@ export default function Auto(props) {
                 return "voyage/"
         }
     })()
+    
 
     console.log("Page Type: ", pageType)
 
