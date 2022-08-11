@@ -46,16 +46,16 @@ const UV = ({ manifest, parentWidth }) => {
     }
   );
   return <div ref={el} 
-              className="uv" 
-              style={{
-                        width: "50vw",
-                        height: "50vh"
-                    }}/>;
+          className="uv" 
+          style={{
+            width: "50vw",
+            height: "50vh"
+          }}
+          />;
 };
 function curImage(src){
   var arr1 = src.split("medium");
   return arr1[0] + "square" + arr1[1];
-  
 }
 
 
@@ -83,7 +83,8 @@ export default function Archive() {
 
     const handleOpen = (manifest) => {
       setOpen(true);
-      setManifest(manifest)}
+      setManifest(manifest);
+    }
     const handleClose = () => setOpen(false);
     const modalStyle = {
         position: "absolute",
@@ -109,8 +110,8 @@ export default function Archive() {
         var data = new FormData();
         data.append("hierarchical", "False");
         data.append("selected_fields", 'url');
-        data.append("results_per_page", 300);
-        data.append("results_page", page + 1);
+        data.append("results_per_page", total);
+        // data.append("results_page", page + 1);
         const res = await fetch('https://voyages3-api.crc.rice.edu/docs/',{
           method: 'POST',
           body: data,
@@ -120,7 +121,7 @@ export default function Archive() {
         setapiurl(result)
       }
         fetchData().catch(console.error);
-      },[page,rowsPerPage])
+      },[total])
 
       useEffect(() => {
         const fetchData = async ()=> {
@@ -147,9 +148,9 @@ export default function Archive() {
     //     }).then(res => setPics(...pics, res.image))
     // }
 
-    if(itemData.length < 20){
-      return <CircularProgress />
-    }
+    // if(itemData.length < 20){
+    //   return <CircularProgress />
+    // }
     return (
         // <div>
         //     <TablePagination
@@ -206,8 +207,11 @@ export default function Archive() {
       <div>
         {/* <Gallery itemData={itemData} scrollPosition={window.scrollY} handleOpen={handleOpen}/> */}
         <Grid  container spacing={{ xs: 2, md: 2, lg:2}} padding={{ xs: 4, md: 3, lg:4 }}>
-        {itemData.map(item => {
+        {/* {itemData.map(item => {
           return <ArchiveItem image ={item.image} title={item.title} uri={item.uri} scrollPosition={window.scrollY} handleOpen={handleOpen}/>
+        })} */}
+        {apiUrl.map((item,index) => {
+          return <ArchiveItem key={index} iifUrl={item} scrollPosition={window.scrollY} handleOpen={handleOpen}/>
         })}
         </Grid>
         <Modal
