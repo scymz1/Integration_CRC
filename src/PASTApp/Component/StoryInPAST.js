@@ -28,6 +28,7 @@ export default function StoryInPAST (props) {
         const fetchData = async ()=> {
           const promises = targets.map(target => {
             let queryData = new FormData();
+            queryData.append("hierarchical", "False");
             queryData.append("id", target.toString());
             queryData.append("id", target.toString());
             return fetch(base_url + endpoint, {
@@ -44,8 +45,8 @@ export default function StoryInPAST (props) {
 
     return(
         <Grid  container spacing={{ xs: 6, md: 4, lg:5}} padding={{ xs: 4, md: 3, lg:4 }} paddingTop={{ xs: 0, md: 0, lg:0 }}  >
-        {src.map(item => {
-            return <Grid item xs={12} sm={6} md={4} lg={3}><Story target={item} dynamic={true} slavery={selectedData.type}/></Grid>
+        {src.map((item, index) => {
+            return <Grid item xs={12} sm={6} md={4} lg={3} key={index}><Story target={item} dynamic={true} slavery={selectedData.type}/></Grid>
         })}
         </Grid>
     )
