@@ -1,24 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, { useState, useEffect } from "react";
 // import { Form, Input, InputNumber, Radio, Modal, Cascader ,Tree} from 'antd'
 import axios from "axios";
-import Plot from "../../../node_modules/react-plotly.js/react-plotly";
-import {FormControlLabel, Grid, RadioGroup} from "@mui/material";
+import Plot from "react-plotly.js";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { FormControlLabel, RadioGroup } from "@mui/material";
 import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
-import {bar_x_vars, bar_y_vars} from "../var";
-import * as options_flat from "../options.json";
-import {useWindowSize} from "@react-hook/window-size";
-import {useTheme} from "@mui/material/styles";
+import { bar_x_vars, bar_y_vars } from "../var";
+import { Grid, Paper } from "@mui/material";
+import * as options_flat from "../../Util/options.json";
+import { useWindowSize } from "@react-hook/window-size";
+import { useTheme } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { ConstructionOutlined } from "@mui/icons-material";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-
+import { set } from "lodash";
 const AUTH_TOKEN = process.env.REACT_APP_AUTHTOKEN;
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 axios.defaults.headers.common["Authorization"] = AUTH_TOKEN;
@@ -99,18 +101,15 @@ export default function Bar(props) {
     });
   }
 
-  let tempstr = ""
 
   useEffect(() => {
     setIsLoading(true);
     setAlert(false)
-    // var value = option.value;
+ 
     let yfieldArr = []
-    let currentData = {}
+
     const fetchData = async () => {
-      const promises = chips.map(element => {
         var data = new FormData();
-        yfieldArr.push(element)
 
         for (var property in filter_object) {
           filter_object[property].forEach((v) => {
@@ -120,76 +119,67 @@ export default function Bar(props) {
           });
         }
 
-        data.append("hierarchical", "False");
-        data.append("groupby_fields", option.field);
-        data.append("groupby_fields", element);
         data.append("agg_fn", aggregation);
         data.append("dataset", dataset);
         data.append("dataset", dataset);
+        data.append("groupby_fields", option.field);
+        data.append("cachename", "voyage_bar_and_donut_charts");
+
+        chips.map( (element) => {
+          data.append("groupby_fields", element);
+         yfieldArr.push(element)
+         console.log("🚀[chips]: ", yfieldArr)
+          // myMap1.set(index,element)
+        })
+
+       
         // console.log("option_value🍕", typeof(option.value))
         // console.log("element🍔",element)
         // console.log("agg_fn🥤", aggregation)
-        data.append("cachename", "voyage_export");
-        return fetch('https://voyages3-api.crc.rice.edu/voyage/groupby', {
+   
+        fetch('https://voyages3-api.crc.rice.edu/voyage/groupby',{
           method: "POST",
           body: data,
-          headers: {'Authorization': AUTH_TOKEN}
+          headers: {'Authorization':AUTH_TOKEN}
         }).then(res => res.json())
+        .then(function (response) {
+          console.log("{🔥data}", response)
 
-          .then(function (response) {
-            // console.log("🔥data", response)
-            return Object.values(response)[0];
+        let arr = []
+
+          Object.values(response).forEach((element,index) =>{
+            console.log("💰Object.keys(element)", Object.keys(element))
+            console.log("💰Object.values(element", Object.values(element))
+      
+                arr.push({
+                x: Object.keys(element),
+                y: Object.values(element),
+                type: "bar",
+                name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
+                barmode: "group",
+              })
           })
+
+          if (Object.values(response).indexOf('false') > -1) {
+      // window.alert(`Sorry, this combination can't work:
+      //       ${str}
+      // `);
+      // window.location.reload(true);
+      setAlert(true)
+   }
+
+   setBarData(
+    arr
+   )
+
+   console.log("[🌲arr]", arr)
       })
-
-      const data = await Promise.all(promises)
-      // setDataFlow([...dataFlow, data[data.length - 1]])
-      // console.log("🐯data is ", data)
-      // console.log("🐷", typeof(data))
-      console.log("😷", chips)
-      console.log(typeof (chips))
-
-
-      let arr = []
-
-      data.forEach((dataElement, index) => {
-        // console.log("🐔 dataElement is ", dataElement)
-        // console.log("type", typeof(Object.values(dataElement)[0]))
-        arr.push({
-          x: Object.keys(dataElement),
-          y: Object.values(dataElement),
-          type: "bar",
-          name: `aggregation: ${aggregation} label: ${options_flat[yfieldArr[index]].flatlabel}`,
-          barmode: "group",
-        })
-      })
-
-      tempstr = arr.map(function (elem) {
-        return elem.name;
-      }).join("\n");
-
-      setStr(tempstr)
-
-      if (Object.values(data).indexOf('false') > -1) {
-        // window.alert(`Sorry, this combination can't work:
-        //       ${str}
-        // `);
-        // window.location.reload(true);
-        setAlert(true)
-      }
-
-      // console.log("arr value🎫", arr[0].name)
-      setBarData(
-        arr
-      )
     }
-
     setIsLoading(false)
+
     fetchData().catch(console.error)
   }, [chips, option.field, aggregation, filter_object, dataset]);
 
-
-  console.log("str🍌", str)
 
   const alertBar = () => {
     if (showAlert) {

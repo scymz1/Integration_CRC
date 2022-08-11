@@ -138,28 +138,31 @@ export default function Cell(props) {
   // number enslaved cell
   function numberEnslavedCell(row) {
     return isNumeric(row.number_enslaved) &&
-      Number(row.number_enslaved) <= 30 ? (
-      <div
-        style={{ color: "blue" }}
-        onClick={(e) =>
-          handleSankeyOpen(
-            e,
-            [
-              ...new Set(
-                row[
-                  "alias__transactions__transaction__enslaved_person__enslaved__id"
-                ].flat(Infinity)
-              ),
-            ],
-            "enslaved"
-          )
-        }
-      >
-        <u>{row.number_enslaved}</u>
-      </div>
-    ) : (
-      row.number_enslaved
-    );
+      <Chip label={row.number_enslaved}
+        onClick={(e)=>handleSankeyOpen(e, [row.id], "enslaver")}/>
+
+    //   Number(row.number_enslaved) <= 30 ? (
+    //   <div
+    //     style={{ color: "blue" }}
+    //     onClick={(e) =>
+    //       handleSankeyOpen(
+    //         e,
+    //         [
+    //           ...new Set(
+    //             row[
+    //               "alias__transactions__transaction__enslaved_person__enslaved__id"
+    //             ].flat(Infinity)
+    //           ),
+    //         ],
+    //         "enslaved"
+    //       )
+    //     }
+    //   >
+    //     <u>{row.number_enslaved}</u>
+    //   </div>
+    // ) : (
+    //   row.number_enslaved
+    // );
   }
 
   // text ref cell
