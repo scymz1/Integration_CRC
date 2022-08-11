@@ -58,11 +58,7 @@ export default function Gallery(props) {
             onClick={() => {
               handleGallery("table");
             }}
-<<<<<<< HEAD:src/Newrefactor/PASTApp/Component/Gallery.js
-            sx={{ mt: 0.75, ml: 0.75, width: 120, fontSize: 14 }}
-=======
             sx={{ mt: 0.6, ml: 0.6 , width:115, height:37, fontSize: 16}}
->>>>>>> 4123f92964cc0ff90977ec04a41b8e7515915c8e:src/PASTApp/Component/Gallery.js
           >
             Table
           </Button>
