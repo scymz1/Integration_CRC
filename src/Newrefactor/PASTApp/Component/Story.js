@@ -125,7 +125,7 @@ export default function Story (props) {
     className="enslaved_story"
     >
       <CardHeader
-        title={`Story of {_.get(target, ["documented_name"], "Unknown Enslaved Person")}`}
+        title={_.get(target, ["documented_name"], "Unknown Enslaved Person")}
       />
       <CardContent>
         <Div>{prefix} was {_.get(target, ["captive_fate", "name"], "not recorded with date")}, transported on voyage {_.get(target, ["voyage", "id"], "* target NA *")}</Div>
@@ -192,7 +192,7 @@ export default function Story (props) {
     className="enslaver_story"
     >
       <CardHeader
-        title={`Story of {_.get(target, ["principal_alias"], "Unknown Slaver")}`}
+        title={_.get(target, ["principal_alias"], "Unknown Slaver")}
       />
       <CardContent>
         <Div>{_.get(target, ["principal_alias"], "Unknown Slaver")}, {slaverAlias.length > 1 && "also name as kk"} was first recorded at year {_.get(target, "first_active_year", "NA")}, and out of record at {_.get(target, "last_active_year", "NA")}</Div>
