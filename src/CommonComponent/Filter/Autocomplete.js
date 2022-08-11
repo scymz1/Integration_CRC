@@ -18,7 +18,7 @@ export default function Auto(props) {
         console.log("Page Type: ", pageType)
 
         switch (pageType) {
-            case "enslaved  ":
+            case "enslaved":
                 return "past/enslaved/"
             case "enslaver":
                 return "past/enslavers/"
